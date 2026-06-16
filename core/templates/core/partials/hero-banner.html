@@ -1,0 +1,33 @@
+{% load static %}
+<section class="relative w-full h-[614px] min-h-[500px] flex items-center justify-center overflow-hidden bg-surface-container-highest">
+  
+  <div class="absolute inset-0 z-0">
+    <img class="w-full h-full object-cover" 
+         alt="{{ title }}" 
+         src="{% static '' %}{{ bg_image }}"/>
+    
+    <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-transparent"></div>
+    
+    <div class="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#f9f9f8] via-[#f9f9f8]/60 to-transparent"></div>
+  </div>
+
+  <div class="relative z-10 text-center max-w-4xl px-margin-mobile md:px-0 text-surface-white">
+    
+    {% if subtitle %}
+    <span class="font-label-caps text-label-caps text-primary-fixed tracking-widest uppercase mb-4 block drop-shadow-md">
+      {{ subtitle }}
+    </span>
+    {% endif %}
+
+    <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-surface-white drop-shadow-lg leading-tight {% if desc %}mb-6{% endif %}">
+      {{ title }}
+    </h1>
+
+    {% if desc %}
+    <p class="font-body-lg text-body-lg text-surface-white/90 mx-auto max-w-2xl leading-relaxed drop-shadow-sm">
+      {{ desc }}
+    </p>
+    {% endif %}
+
+  </div>
+</section>

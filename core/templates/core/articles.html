@@ -1,0 +1,97 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Artikel & Wawasan - PT Bhumi Pasa Hijau{% endblock %}
+
+{% block content %}
+<main class="flex-grow pt-[80px] bg-background">
+  
+  {% include 'core/partials/hero-banner.html' with title="Artikel & Wawasan" subtitle="News & Insights" desc="Kumpulan pemikiran teknis, analisis data sekuestrasi karbon, laporan audit, dan panduan praktis manajemen lingkungan berkelanjutan." bg_image="images/forest-services.jpg" %}
+
+  <section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-16 pb-section-gap">
+    
+    <div id="container-semua-artikel" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      {% for post in articles %}
+      <div class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+        <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+          <img alt="{{ post.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{{ post.image.url }}" />
+        </div>
+        <div class="p-6 flex-1 flex flex-col">
+          <p class="text-xs text-text-muted font-medium tracking-wide mb-2">
+            {{ post.created_at|date:"d F Y" }} <span class="mx-1">•</span> Oleh {{ post.author }}
+          </p>
+          <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">
+            {{ post.title }}
+          </h3>
+          <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">
+            {{ post.excerpt }}
+          </p>
+          <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
+            <span class="relative inline-block pb-1 after:pointer-events-none after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
+              Baca Selengkapnya
+            </span>
+            <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
+          </span>
+        </div>
+      </div>
+      {% empty %}
+      
+      <div class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+        <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+          <img alt="Restorasi Lahan" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/artikel1.jpg' %}" />
+          <div class="absolute top-4 left-4 flex flex-wrap gap-1.5 z-10">
+            <span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">Konservasi</span>
+          </div>
+        </div>
+        <div class="p-6 flex-1 flex flex-col">
+          <p class="text-xs text-text-muted font-medium tracking-wide mb-2">26 Juni 2026 <span class="mx-1">•</span> Oleh Admin BPH</p>
+          <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">Aksi Kecil, Dampak Besar: Panduan Praktis Restorasi Lahan Kritis</h3>
+          <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">Memahami bagaimana intervensi skala mikro dan keterlibatan komunitas lokal dapat membawa perubahan signifikan pada ekosistem hutan yang terdegradasi.</p>
+          <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors"><span>Baca Selengkapnya</span><span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
+        </div>
+      </div>
+
+      <div class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+        <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+          <img alt="Analisis Karbon" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/artikel2.jpg' %}" />
+          <div class="absolute top-4 left-4 flex flex-wrap gap-1.5 z-10">
+            <span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">Riset</span>
+          </div>
+        </div>
+        <div class="p-6 flex-1 flex flex-col">
+          <p class="text-xs text-text-muted font-medium tracking-wide mb-2">24 Juni 2026 <span class="mx-1">•</span> Oleh Tim Ahli BPH</p>
+          <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">Analisis Kapasitas Penyerapan Karbon Hutan Hujan Tropis 2026</h3>
+          <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">Eksplorasi mendalam mengenai data sekuestrasi karbon terkini di kawasan hutan hujan primer Sumatera Timur dan perannya dalam menekan pemanasan global.</p>
+          <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors"><span>Baca Selengkapnya</span><span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
+        </div>
+      </div>
+
+      <div class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+        <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+          <img alt="Regulasi Air" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/artikel3.jpg' %}" />
+          <div class="absolute top-4 left-4 flex flex-wrap gap-1.5 z-10">
+            <span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">Kebijakan</span>
+          </div>
+        </div>
+        <div class="p-6 flex-1 flex flex-col">
+          <p class="text-xs text-text-muted font-medium tracking-wide mb-2">22 Juni 2026 <span class="mx-1">•</span> Oleh Legal & Kawasan</p>
+          <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">Regulasi Air Bersih & Batasan Tegas Kegiatan Industri Hilir</h3>
+          <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">Menilik kembali implementasi kebijakan daerah aliran sungai (DAS) terbaru guna meminimalkan polusi limbah industri cair pada perairan masyarakat.</p>
+          <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors"><span>Baca Selengkapnya</span><span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
+        </div>
+      </div>
+
+      {% endfor %}
+
+    </div>
+
+    <div class="flex justify-center mt-16">
+      <button class="font-label-caps text-label-caps px-8 py-3 bg-transparent border-2 border-primary text-primary rounded-lg hover:bg-forest-deep hover:text-surface-white hover:-translate-y-[2px] transition-all duration-300 cursor-pointer">
+        Muat Artikel Lebih Banyak
+      </button>
+    </div>
+  </section>
+
+</main>
+{% endblock %}

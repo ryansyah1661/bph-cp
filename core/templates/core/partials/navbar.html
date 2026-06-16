@@ -1,0 +1,99 @@
+{% load static %}
+<nav
+  class="fixed top-0 left-0 w-full z-50 py-2.5 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl border-b border-border-subtle dark:border-outline-variant transition-all duration-300"
+  id="main-nav">
+  <div class="w-full max-w-container-max mx-auto flex justify-between items-center px-margin-mobile md:px-margin-desktop">
+    
+    <div class="cursor-pointer flex items-center">
+      <a href="{% url 'homepage' %}">
+        <img 
+          src="{% static 'images/logo-bph.png' %}" 
+          alt="Logo BPH" 
+          class="h-14 md:h-20 w-auto object-contain block transform-gpu transition-transform duration-300 hover:scale-105" />
+      </a>
+    </div>
+
+    <div class="hidden md:flex space-x-1 items-center">
+      
+      <a href="{% url 'homepage' %}"
+         class="font-label-caps text-[15px] font-medium transition-all duration-300 px-4 py-2 block rounded-full
+         {% if request.path == '/' or 'beranda' in request.path %}
+           bg-primary/10 text-primary dark:bg-inverse-primary/15 dark:text-inverse-primary font-bold
+         {% else %}
+           text-on-surface-variant dark:text-surface-variant hover:bg-primary/5 hover:text-primary dark:hover:bg-white/5 dark:hover:text-inverse-primary
+         {% endif %}">
+         Beranda
+      </a>
+      
+      <a href="{% url 'about' %}"
+         class="font-label-caps text-[15px] font-medium transition-all duration-300 px-4 py-2 block rounded-full
+         {% if 'about' in request.path or 'tentang' in request.path %}
+           bg-primary/10 text-primary dark:bg-inverse-primary/15 dark:text-inverse-primary font-bold
+         {% else %}
+           text-on-surface-variant dark:text-surface-variant hover:bg-primary/5 hover:text-primary dark:hover:bg-white/5 dark:hover:text-inverse-primary
+         {% endif %}">
+         Tentang BPH
+      </a>
+      
+      <a href="{% url 'services' %}"
+         class="font-label-caps text-[15px] font-medium transition-colors duration-300 px-4 py-2 block rounded-full
+         {% if 'services' in request.path or 'layanan' in request.path %}
+           bg-primary/10 text-primary dark:bg-inverse-primary/15 dark:text-inverse-primary font-bold
+         {% else %}
+           text-on-surface-variant dark:text-surface-variant hover:bg-primary/5 hover:text-primary dark:hover:bg-white/5 dark:hover:text-inverse-primary
+         {% endif %}">
+         Layanan
+      </a>
+      
+      <a href="{% url 'experience' %}"
+         class="font-label-caps text-[15px] font-medium transition-colors duration-300 px-4 py-2 block rounded-full
+         {% if 'experience' in request.path or 'pengalaman' in request.path %}
+           bg-primary/10 text-primary dark:bg-inverse-primary/15 dark:text-inverse-primary font-bold
+         {% else %}
+           text-on-surface-variant dark:text-surface-variant hover:bg-primary/5 hover:text-primary dark:hover:bg-white/5 dark:hover:text-inverse-primary
+         {% endif %}">
+         Pengalaman
+      </a>
+      
+      <a href="{% url 'gallery' %}"
+         class="font-label-caps text-[15px] font-medium transition-colors duration-300 px-4 py-2 block rounded-full
+         {% if 'gallery' in request.path or 'galeri' in request.path %}
+           bg-primary/10 text-primary dark:bg-inverse-primary/15 dark:text-inverse-primary font-bold
+         {% else %}
+           text-on-surface-variant dark:text-surface-variant hover:bg-primary/5 hover:text-primary dark:hover:bg-white/5 dark:hover:text-inverse-primary
+         {% endif %}">
+         Galeri
+      </a>
+
+    </div>
+
+    <div class="flex items-center gap-5">
+      
+      <div class="hidden sm:flex items-center gap-2 border border-black/10 dark:border-white/15 rounded-full px-3 py-1.5 font-label-caps text-xs tracking-widest select-none text-on-surface-variant/60 dark:text-surface-variant/60">
+        <span class="material-symbols-outlined text-[16px] shrink-0 opacity-70">language</span>
+        
+        <a href="?lang=id" 
+           class="transition-colors duration-200 {% if request.GET.lang == 'en' %}hover:text-primary dark:hover:text-inverse-primary font-medium{% else %}text-primary dark:text-inverse-primary font-bold{% endif %}">
+          ID
+        </a>
+        
+        <span class="opacity-30 text-[10px]">|</span>
+        
+        <a href="?lang=en" 
+           class="transition-colors duration-200 {% if request.GET.lang == 'en' %}text-primary dark:text-inverse-primary font-bold{% else %}hover:text-primary dark:hover:text-inverse-primary font-medium{% endif %}">
+          EN
+        </a>
+      </div>
+
+      <a href="{% url 'contact' %}"
+         class="inline-flex items-center justify-center bg-primary text-surface-white font-bold text-[11px] tracking-widest uppercase px-7 py-3 rounded-full shadow-[0_6px_20px_rgba(0,107,41,0.3)] hover:bg-forest-deep hover:shadow-[0_4px_10px_rgba(0,107,41,0.2)] hover:translate-y-[1px] transition-all duration-300">
+        Kontak
+      </a>
+
+      <button aria-label="Menu" class="md:hidden text-primary">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+    </div>
+
+  </div>
+</nav>

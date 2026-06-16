@@ -1,0 +1,209 @@
+<!doctype html>
+<html class="light" lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>{% block title %}Bhumi Pasa Hijau{% endblock %}</title>
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed-variant": "#474744",
+              "on-secondary": "#ffffff",
+              "tertiary-fixed": "#ffdea8",
+              "surface-container-high": "#e7e8e7",
+              "on-error-container": "#93000a",
+              "outline": "#6e7a6c",
+              "primary-container": "#008736",
+              "background": "#f9f9f8",
+              "surface-container-low": "#f3f4f3",
+              "surface-bright": "#f9f9f8",
+              "surface-container": "#edeeed",
+              "on-background": "#191c1c",
+              "on-tertiary-fixed": "#271900",
+              "surface-container-highest": "#e1e3e2",
+              "on-secondary-fixed": "#1c1c1a",
+              "surface-dim": "#d9dad9",
+              "outline-variant": "#bdcaba",
+              "primary-fixed": "#84fb95",
+              "secondary": "#5f5e5c",
+              "on-tertiary-fixed-variant": "#5e4200",
+              "inverse-primary": "#68de7c",
+              "on-primary-fixed": "#002108",
+              "tertiary-container": "#986d00",
+              "inverse-on-surface": "#f0f1f0",
+              "secondary-fixed": "#e5e2de",
+              "surface": "#f9f9f8",
+              "error-container": "#ffdad6",
+              "on-surface": "#191c1c",
+              "on-secondary-container": "#656461",
+              "tertiary": "#795600",
+              "on-primary-container": "#f7fff2",
+              "tertiary-fixed-dim": "#ffba20",
+              "on-primary-fixed-variant": "#00531e",
+              "text-muted": "#575757",
+              "surface-white": "#FFFFFF",
+              "surface-tint": "#006e2a",
+              "on-tertiary": "#ffffff",
+              "primary-fixed-dim": "#68de7c",
+              "primary": "#006b29",
+              "on-surface-variant": "#3e4a3d",
+              "on-tertiary-container": "#fffbff",
+              "border-subtle": "#E2E8E2",
+              "secondary-container": "#e5e2de",
+              "surface-variant": "#e1e3e2",
+              "surface-container-lowest": "#ffffff",
+              "inverse-surface": "#2e3131",
+              "error": "#ba1a1a",
+              "on-primary": "#ffffff",
+              "secondary-fixed-dim": "#c8c6c3",
+              "on-error": "#ffffff",
+              "forest-deep": "#045C26",
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+            spacing: {
+              "margin-mobile": "16px",
+              "stack-sm": "8px",
+              "container-max": "1280px",
+              gutter: "24px",
+              "margin-desktop": "64px",
+              "stack-lg": "32px",
+              "stack-md": "16px",
+              "section-gap": "120px",
+            },
+            fontFamily: {
+              "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+              "body-sm": ["Plus Jakarta Sans", "sans-serif"],
+              "display-lg-mobile": ["Plus Jakarta Sans", "sans-serif"],
+              "body-lg": ["Plus Jakarta Sans", "sans-serif"],
+              "body-md": ["Plus Jakarta Sans", "sans-serif"],
+              "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+              "display-lg": ["Plus Jakarta Sans", "sans-serif"],
+              "headline-xl": ["Plus Jakarta Sans", "sans-serif"],
+              "label-caps": ["Plus Jakarta Sans", "sans-serif"],
+            },
+            fontSize: {
+              "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+              "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+              "display-lg-mobile": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "700" }],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "600" }],
+              "display-lg": ["64px", { lineHeight: "72px", letterSpacing: "-0.02em", fontWeight: "700" }],
+              "headline-xl": ["48px", { lineHeight: "56px", letterSpacing: "-0.01em", fontWeight: "600" }],
+              "label-caps": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "700" }],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .material-symbols-outlined.fill {
+        font-variation-settings: "FILL" 1;
+      }
+      @keyframes kenburns {
+        0% { transform: scale(1); }
+        100% { transform: scale(1.05); }
+      }
+      .animate-kenburns {
+        animation: kenburns 20s ease-out infinite alternate;
+      }
+      .typewriter-cursor {
+        border-right: 2px solid theme("colors.primary");
+        animation: blink 0.75s step-end infinite;
+      }
+      @keyframes blink {
+        from, to { border-color: transparent; }
+        50% { border-color: theme("colors.primary"); }
+      }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+  </head>
+  
+  <body class="bg-background text-on-background font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container relative">
+    
+    <div class="overflow-x-hidden flex flex-col min-h-screen">
+      
+      {% include 'core/partials/navbar.html' %}
+
+      <main>
+        {% block content %} {% endblock %}
+      </main>
+
+      {% include 'core/partials/footer.html' %}
+
+      <button 
+        id="back-to-top" 
+        aria-label="Kembali ke atas"
+        class="fixed bottom-6 right-6 z-50 p-3.5 rounded-full bg-primary text-surface-white shadow-[0_4px_14px_rgba(0,107,41,0.3)] opacity-0 translate-y-6 pointer-events-none transition-all duration-300 hover:bg-forest-deep hover:-translate-y-1 active:translate-y-0">
+        <span class="material-symbols-outlined block text-xl font-bold">arrow_upward</span>
+      </button>
+
+    </div>
+
+    <script>
+      const nav = document.getElementById("main-nav");
+      const backToTopBtn = document.getElementById("back-to-top");
+      let lastScrollY = window.scrollY;
+
+      // Listener Scroll Bar Native (Ringan, Stabil, Tanpa Lag)
+      window.addEventListener("scroll", () => {
+        const currentScrollY = window.scrollY;
+
+        // 1. Logika Efek Shadow Navbar
+        if (currentScrollY > 50) {
+          if(nav) nav.classList.add("shadow-[0px_4px_20px_rgba(0,0,0,0.05)]");
+        } else {
+          if(nav) nav.classList.remove("shadow-[0px_4px_20px_rgba(0,0,0,0.05)]");
+        }
+
+        // 2. RESTORED: Logika Efek Navbar Naik Turun (Hide on Scroll Down, Show on Scroll Up)
+        if (currentScrollY > lastScrollY && currentScrollY > 150) {
+          if(nav) nav.classList.add("-translate-y-full");
+        } else {
+          if(nav) nav.classList.remove("-translate-y-full");
+        }
+
+        // 3. Logika Munculin Tombol Back to Top
+        if (currentScrollY > 400) {
+          backToTopBtn.classList.remove("opacity-0", "translate-y-6", "pointer-events-none");
+        } else {
+          backToTopBtn.classList.add("opacity-0", "translate-y-6", "pointer-events-none");
+        }
+
+        lastScrollY = currentScrollY;
+      });
+
+      backToTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    </script>
+
+    {% block extra_js %} {% endblock %}
+  </body>
+</html>

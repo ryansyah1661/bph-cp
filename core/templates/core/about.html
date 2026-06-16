@@ -1,0 +1,196 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Tentang BPH - Bhumi Pasa Hijau{% endblock %}
+
+{% block content %}
+<main class="flex-grow pt-[80px]">
+
+  {% include 'core/partials/hero-banner.html' with title="Tentang Kami" bg_image="images/about-hero.jpg" %}
+
+  <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-section-gap">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center">
+      <div class="md:col-span-5 md:col-start-1">
+        <h2 class="font-headline-xl text-headline-xl text-on-surface mb-stack-lg">
+          Membangun Masa Depan Keberlanjutan
+        </h2>
+        <p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-md leading-relaxed">
+          Bhumi Pasa Hijau (BPH) didirikan dengan kesadaran mendalam akan pentingnya keseimbangan antara kemajuan industri dan pelestarian lingkungan. Sebagai firma manajemen lingkungan strategis, kami berdedikasi untuk menyediakan solusi berbasis data yang akurat dan dapat dipertanggungjawabkan.
+        </p>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          Sejak awal mula, komitmen kami adalah menjadi penghubung antara kebijakan lingkungan global dan implementasi praktis di lapangan, memastikan bahwa setiap langkah pembangunan membawa dampak positif yang terukur bagi ekosistem.
+        </p>
+      </div>
+      <div class="md:col-span-6 md:col-start-7 mt-12 md:mt-0 relative group">
+        <div class="overflow-hidden rounded-xl bg-surface-container-low border border-border-subtle aspect-[4/3]">
+          <img class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
+               alt="A professional team of environmental scientists and corporate strategists collaborating." 
+               src="{% static 'images/about-section.jpg' %}"/>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-surface-container-lowest border-y border-border-subtle py-section-gap">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+        
+        <div class="bg-surface-white border border-border-subtle rounded-xl p-8 md:p-12 hover:shadow-[0_20px_40px_rgba(0,0,0,0.04)] transition-shadow duration-500 flex flex-col h-full">
+          <div class="mb-stack-md text-primary">
+            <span class="material-symbols-outlined text-[48px]" style="font-variation-settings: 'FILL' 1;">visibility</span>
+          </div>
+          <h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">Visi Kami</h3>
+          <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed flex-grow">
+            Menjadi mitra strategis terpercaya yang memimpin dalam inovasi manajemen lingkungan, mengintegrasikan sains, kebijakan, and praktik terbaik untuk mewujudkan pelestarian alam berskala global.
+          </p>
+        </div>
+        
+        <div class="bg-surface-white border border-border-subtle rounded-xl p-8 md:p-12 hover:shadow-[0_20px_40px_rgba(0,0,0,0.04)] transition-shadow duration-500 flex flex-col h-full">
+          <div class="mb-stack-md text-primary">
+            <span class="material-symbols-outlined text-[48px]" style="font-variation-settings: 'FILL' 1;">track_changes</span>
+          </div>
+          <h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">Misi Kami</h3>
+          <ul class="font-body-md text-body-md text-on-surface-variant space-y-stack-sm flex-grow">
+            <li class="flex items-start">
+              <span class="material-symbols-outlined text-primary mr-3 mt-1 text-[20px]">check_circle</span>
+              <span>Mengurangi dampak lingkungan industri melalui audit dan strategi mitigasi yang presisi.</span>
+            </li>
+            <li class="flex items-start">
+              <span class="material-symbols-outlined text-primary mr-3 mt-1 text-[20px]">check_circle</span>
+              <span>Menyediakan solusi berbasis pengetahuan and data empiris untuk pengambilan keputusan.</span>
+            </li>
+            <li class="flex items-start">
+              <span class="material-symbols-outlined text-primary mr-3 mt-1 text-[20px]">check_circle</span>
+              <span>Mendorong tata kelola perusahaan yang baik (Good Corporate Governance) berwawasan lingkungan.</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-section-gap">
+    
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <h2 class="font-headline-xl text-headline-xl text-on-surface mb-stack-md">Tim Ahli Kami</h2>
+      <p class="font-body-lg text-body-lg text-on-surface-variant">
+        Dedikasi profesional kami digerakkan oleh para ahli di bidang ekologi, manajemen strategis, dan kebijakan lingkungan.
+      </p>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-12">
+      <button data-target="advisor" class="tab-btn px-6 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-300 bg-primary text-surface-white shadow-md">
+        Advisors
+      </button>
+      <button data-target="executive" class="tab-btn px-6 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-300 bg-surface-container text-on-surface-variant hover:bg-primary/10 hover:text-primary">
+        Executives
+      </button>
+      <button data-target="staff" class="tab-btn px-6 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-300 bg-surface-container text-on-surface-variant hover:bg-primary/10 hover:text-primary">
+        Staff
+      </button>
+      <button data-target="associate" class="tab-btn px-6 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-300 bg-surface-container text-on-surface-variant hover:bg-primary/10 hover:text-primary">
+        Associates
+      </button>
+    </div>
+
+    <div class="relative min-h-[400px]">
+      
+      <div id="tab-advisor" class="tab-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter transition-all duration-500 transform opacity-100 translate-y-0">
+        <div class="group">
+          <div class="aspect-[3/4] mb-stack-md overflow-hidden bg-surface-container-highest rounded-lg">
+            <img class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" 
+                 alt="Diana Puspita Headshot" 
+                 src="{% static 'images/team-4.jpg' %}"/>
+          </div>
+          <h4 class="font-headline-md text-headline-md text-on-surface mb-1">Diana Puspita, S.H.</h4>
+          <p class="font-body-md text-body-md text-primary">Penasihat Kebijakan Lingkungan</p>
+        </div>
+      </div>
+
+      <div id="tab-executive" class="tab-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter transition-all duration-500 transform opacity-0 translate-y-4 hidden">
+        <div class="group">
+          <div class="aspect-[3/4] mb-stack-md overflow-hidden bg-surface-container-highest rounded-lg">
+            <img class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" 
+                 alt="Dr. Budi Santoso Headshot" 
+                 src="{% static 'images/team-1.jpg' %}"/>
+          </div>
+          <h4 class="font-headline-md text-headline-md text-on-surface mb-1">Dr. Budi Santoso</h4>
+          <p class="font-body-md text-body-md text-primary">Direktur Utama</p>
+        </div>
+        <div class="group">
+          <div class="aspect-[3/4] mb-stack-md overflow-hidden bg-surface-container-highest rounded-lg">
+            <img class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" 
+                 alt="Anisa Rahmawati Headshot" 
+                 src="{% static 'images/team-2.jpg' %}"/>
+          </div>
+          <h4 class="font-headline-md text-headline-md text-on-surface mb-1">Anisa Rahmawati, M.Sc</h4>
+          <p class="font-body-md text-body-md text-primary">Kepala Konservasi Strategis</p>
+        </div>
+      </div>
+
+      <div id="tab-staff" class="tab-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter transition-all duration-500 transform opacity-0 translate-y-4 hidden">
+        <div class="group">
+          <div class="aspect-[3/4] mb-stack-md overflow-hidden bg-surface-container-highest rounded-lg">
+            <img class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" 
+                 alt="Reza Pratama Headshot" 
+                 src="{% static 'images/team-3.jpg' %}"/>
+          </div>
+          <h4 class="font-headline-md text-headline-md text-on-surface mb-1">Reza Pratama</h4>
+          <p class="font-body-md text-body-md text-primary">Analis Data Lingkungan</p>
+        </div>
+      </div>
+
+      <div id="tab-associate" class="tab-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter transition-all duration-500 transform opacity-0 translate-y-4 hidden">
+        <div class="group">
+          <div class="aspect-[3/4] mb-stack-md overflow-hidden bg-surface-container-highest rounded-lg">
+            <img class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" 
+                 alt="Associate Placeholder Headshot" 
+                 src="{% static 'images/team-2.jpg' %}"/>
+          </div>
+          <h4 class="font-headline-md text-headline-md text-on-surface mb-1">Ahmad Hidayat, M.Ling</h4>
+          <p class="font-body-md text-body-md text-primary">Associate Ekologi Hutan</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // SCRIPT LOGIKA PERPINDAHAN TAB TIM (Tetap Dipertahankan)
+  document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.tab-btn');
+    const contents = document.querySelectorAll('.tab-content');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
+
+        buttons.forEach(b => {
+          b.classList.remove('bg-primary', 'text-surface-white', 'shadow-md');
+          b.classList.add('bg-surface-container', 'text-on-surface-variant', 'hover:bg-primary/10', 'hover:text-primary');
+        });
+
+        btn.classList.add('bg-primary', 'text-surface-white', 'shadow-md');
+        btn.classList.remove('bg-surface-container', 'text-on-surface-variant', 'hover:bg-primary/10', 'hover:text-primary');
+
+        contents.forEach(content => {
+          if (content.id === `tab-${targetId}`) {
+            content.classList.remove('hidden');
+            setTimeout(() => {
+              content.classList.remove('opacity-0', 'translate-y-4');
+              content.classList.add('opacity-100', 'translate-y-0');
+            }, 50);
+          } else {
+            content.classList.add('hidden', 'opacity-0', 'translate-y-4');
+            content.classList.remove('opacity-100', 'translate-y-0');
+          }
+        });
+      });
+    });
+  });
+</script>
+{% endblock %}

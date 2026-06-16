@@ -1,0 +1,195 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}{{ project.title|default:"Detail Studi Kasus Proyek" }} - PT Bhumi Pasa Hijau{% endblock %}
+
+{% block content %}
+<main class="flex-grow pt-[80px] bg-background">
+  
+  {% if project.bg_image %}
+    {% include 'core/partials/hero-banner.html' with title=project.title|default:"Analisis & Restorasi Ekosistem Strategis" subtitle="Studi Kasus Proyek" bg_image=project.bg_image %}
+  {% else %}
+    {% include 'core/partials/hero-banner.html' with title=project.title|default:"Analisis & Restorasi Ekosistem Strategis" subtitle="Studi Kasus Proyek" bg_image="images/about-hero.jpg" %}
+  {% endif %}
+
+  <section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      
+      <div class="lg:col-span-8 space-y-10">
+        
+        <div class="prose max-w-none text-on-background">
+          <p class="text-on-surface-variant text-xl leading-relaxed text-justify md:text-left font-medium">
+            {{ project.intro|default:"Implementasi strategi pemulihan ekosistem komprehensif yang dirancang untuk mengatasi degradasi lingkungan, mengoptimalkan kapasitas penyerapan karbon, serta memastikan kepatuhan regulasi hijau berjalan selaras dengan target operasional jangka panjang mitra strategis di lapangan." }}
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          <div class="flex items-center gap-3 text-primary">
+            <span class="material-symbols-outlined text-2xl font-bold">warning</span>
+            <h2 class="font-headline-lg text-xl md:text-2xl font-bold text-on-surface">Tantangan & Kondisi Awal</h2>
+          </div>
+          <p class="font-body-md text-sm md:text-base text-on-surface-variant leading-relaxed text-justify md:text-left">
+            {{ project.challenge|default:"Kawasan kerja ini awalnya mengalami tekanan ekologis yang cukup signifikan akibat perubahan tata guna lahan, penurunan kualitas hidrologi air, serta fragmentasi habitat vegetasi endemik. Ketiadaan data pemetaan spasial yang presisi pada fase awal membuat pemantauan laju degradasi lingkungan menjadi sulit diprediksi secara konvensional." }}
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          <div class="flex items-center gap-3 text-primary">
+            <span class="material-symbols-outlined text-2xl font-bold">biotech</span>
+            <h2 class="font-headline-lg text-xl md:text-2xl font-bold text-on-surface">Pendekatan & Metodologi Kerja</h2>
+          </div>
+          <p class="font-body-md text-sm md:text-base text-on-surface-variant leading-relaxed text-justify md:text-left">
+            {{ project.methodology|default:"Tim ahli PT Bhumi Pasa Hijau menerapkan kombinasi metode audit ekologis terpadu. Kami melakukan sampling fisik kualitas tanah dan air, sensor densitas vegetasi lapangan, serta pemetaan spasial area berbasis citra satelit resolusi tinggi. Seluruh data tersebut kemudian diolah ke dalam sistem informasi pemodelan iklim mikro guna merumuskan zonasi restorasi yang akurat." }}
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          <div class="flex items-center gap-3 text-primary">
+            <span class="material-symbols-outlined text-2xl font-bold">task_alt</span>
+            <h2 class="font-headline-lg text-xl md:text-2xl font-bold text-on-surface">Hasil & Dampak Ekologis Terukur</h2>
+          </div>
+          <p class="font-body-md text-sm md:text-base text-on-surface-variant leading-relaxed text-justify md:text-left">
+            {{ project.result|default:"Melalui intervensi berkala dan penerapan strategi mitigasi berbasis data empiris, kawasan ini berhasil menunjukkan pemulihan indikator lingkungan yang masif. Struktur hidrologi wilayah aliran sungai kembali stabil, indeks keanekaragaman hayati lokal merangkak naik, dan mitra kami berhasil mengamankan sertifikasi kepatuhan tata kelola lingkungan hidup nasional." }}
+          </p>
+        </div>
+
+        <div class="bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)] mt-8">
+          <div class="bg-surface-container px-6 py-4 border-b border-border-subtle">
+            <h3 class="font-headline-md text-sm font-bold text-on-surface uppercase tracking-wider">Matriks Capaian Kinerja Proyek</h3>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-surface border-b border-border-subtle text-xs font-bold uppercase tracking-wider text-on-surface-variant">
+                  <th class="p-4 pl-6">Parameter Monitoring</th>
+                  <th class="p-4">Target Awal</th>
+                  <th class="p-4 pr-6">Realisasi Akhir Lapangan</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-border-subtle font-body-md text-sm text-on-surface-variant">
+                {% for metric in project.metrics.all %}
+                <tr class="hover:bg-surface/50 transition-colors">
+                  <td class="p-4 pl-6 font-medium text-on-surface">{{ metric.parameter }}</td>
+                  <td class="p-4">{{ metric.target }}</td>
+                  <td class="p-4 pr-6 text-primary font-bold">{{ metric.actual }}</td>
+                </tr>
+                {% empty %}
+                <tr class="hover:bg-surface/50 transition-colors">
+                  <td class="p-4 pl-6 font-medium text-on-surface">Tingkat Kelangsungan Hidup Vegetasi Endemik</td>
+                  <td class="p-4">85% Kelangsungan</td>
+                  <td class="p-4 pr-6 text-primary font-bold">92% Berhasil Tumbuh</td>
+                </tr>
+                <tr class="hover:bg-surface/50 transition-colors">
+                  <td class="p-4 pl-6 font-medium text-on-surface">Akurasi Pemetaan Sensor Spasial Lahan</td>
+                  <td class="p-4">Batas Toleransi Batas &lt; 5%</td>
+                  <td class="p-4 pr-6 text-primary font-bold">Tingkat Eror Hanya 2.1%</td>
+                </tr>
+                <tr class="hover:bg-surface/50 transition-colors">
+                  <td class="p-4 pl-6 font-medium text-on-surface">Kerapatan Titik Sampling Area Pemantauan</td>
+                  <td class="p-4">100 Titik Koordinat</td>
+                  <td class="p-4 pr-6 text-primary font-bold">125 Titik Koordinat Terbaca</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-[100px]">
+        
+        <div class="bg-surface-white border border-border-subtle rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.01)] space-y-5">
+          <h3 class="font-headline-lg text-base font-bold text-on-surface border-b border-border-subtle pb-3">
+            Ringkasan Proyek
+          </h3>
+          
+          <div class="space-y-4 font-body-sm text-sm">
+            <div>
+              <span class="text-text-muted block text-xs uppercase tracking-wider font-bold">Mitra / Klien</span>
+              <span class="text-on-surface font-semibold text-base mt-0.5 block">{{ project.client|default:"Kemitraan Strategis BPH" }}</span>
+            </div>
+            
+            <div>
+              <span class="text-text-muted block text-xs uppercase tracking-wider font-bold">Lokasi Wilayah</span>
+              <span class="text-on-surface font-semibold mt-0.5 block flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-primary">location_on</span>
+                {{ project.location|default:"Kawasan Kerja Lapangan Indonesia" }}
+              </span>
+            </div>
+
+            <div>
+              <span class="text-text-muted block text-xs uppercase tracking-wider font-bold">Tahun Pelaksanaan</span>
+              <span class="text-on-surface font-semibold mt-0.5 block">{{ project.year|default:"2026" }}</span>
+            </div>
+
+            <div>
+              <span class="text-text-muted block text-xs uppercase tracking-wider font-bold">Fokus Bidang</span>
+              <span class="inline-block bg-primary/10 text-primary font-bold text-xs px-2.5 py-1 rounded mt-1 uppercase tracking-wide">
+                {{ project.category|default:"NRM / NRU" }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <a href="{% url 'experience' %}" 
+           class="w-full inline-flex items-center justify-center gap-2 border-2 border-border-subtle text-on-surface-variant font-label-caps text-xs font-bold uppercase tracking-wider py-3.5 rounded-xl hover:border-primary hover:text-primary transition-all duration-300">
+          <span class="material-symbols-outlined text-sm">arrow_back</span>
+          <span>Kembali ke Pengalaman</span>
+        </a>
+
+      </aside>
+
+    </div>
+  </section>
+
+  <section class="w-full bg-surface border-t border-border-subtle py-20">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-12 gap-gutter items-center">
+      
+      <div class="md:col-span-4 lg:col-span-3 max-w-[260px] mx-auto md:mx-0">
+        <div class="relative aspect-[3/4] bg-surface-white border border-border-subtle rounded-xl overflow-hidden shadow-md group">
+          {% if project.pdf_cover %}
+            <img src="{% static '' %}{{ project.pdf_cover }}" alt="Sampul Modul PDF" class="w-full h-full object-cover">
+          {% else %}
+            <div class="w-full h-full bg-gradient-to-br from-primary/10 to-forest-deep/20 flex flex-col items-center justify-center p-6 text-center border border-primary/20">
+              <span class="material-symbols-outlined text-primary text-5xl fill mb-2">menu_book</span>
+              <span class="text-on-surface font-bold text-xs tracking-wide uppercase">BPH Technical Report</span>
+            </div>
+          {% endif %}
+          <div class="absolute inset-0 bg-black/5"></div>
+          <div class="absolute top-3 right-3 bg-white/90 p-2 rounded-lg shadow-sm text-primary">
+            <span class="material-symbols-outlined text-lg block font-bold">description</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="md:col-span-7 md:col-start-6 lg:col-span-8 lg:col-start-5 mt-8 md:mt-0 flex flex-col items-start">
+        <span class="font-label-caps text-[11px] font-bold tracking-widest text-primary uppercase bg-primary/10 px-3 py-1 rounded-full mb-4">
+          Dokumen Publikasi
+        </span>
+        <h2 class="font-headline-xl text-2xl md:text-3xl font-bold text-on-surface mb-3 leading-tight">
+          Unduh Modul Laporan Teknis Resmi
+        </h2>
+        <p class="font-body-md text-sm md:text-base text-on-surface-variant mb-6 leading-relaxed text-justify md:text-left">
+          Laporan komprehensif ini mencakup data mentah hasil pengujian lapangan, analisis spasial peta citra satelit, serta rekomendasi kebijakan lingkungan jangka panjang yang diserahkan secara resmi kepada mitra terkait.
+        </p>
+        
+        {% if project.pdf_file %}
+          <a class="group inline-flex items-center gap-2 bg-primary text-surface-white px-7 py-4 rounded-xl font-label-caps text-xs font-bold uppercase tracking-wider hover:bg-forest-deep hover:-translate-y-[1px] active:translate-y-0 transition-all duration-300 shadow-md cursor-pointer"
+             href="{{ project.pdf_file.url }}" target="_blank">
+            <span>Buka & Baca Modul (PDF)</span>
+            <span class="material-symbols-outlined text-sm font-bold">download</span>
+          </a>
+        {% else %}
+          <button type="button" class="inline-flex items-center gap-2 bg-primary text-surface-white px-7 py-4 rounded-xl font-label-caps text-xs font-bold uppercase tracking-wider hover:bg-forest-deep hover:-translate-y-[1px] active:translate-y-0 transition-all duration-300 shadow-md cursor-pointer">
+            <span>Buka & Baca Modul (PDF)</span>
+            <span class="material-symbols-outlined text-sm font-bold">download</span>
+          </button>
+        {% endif %}
+      </div>
+
+    </div>
+  </section>
+
+</main>
+{% endblock %}

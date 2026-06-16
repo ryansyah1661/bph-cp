@@ -1,0 +1,243 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Pengalaman Kami - Bhumi Pasa Hijau{% endblock %}
+
+{% block content %}
+<main class="flex-grow pt-[80px] bg-background">
+  
+  {% include 'core/partials/hero-banner.html' with title="Pengalaman Kami" subtitle="Our Track Record" desc="Rekam jejak proyek strategis kami dalam menghadirkan solusi pelestarian lingkungan yang terukur, berfokus pada data, dan berdampak nyata secara global." bg_image="images/about-hero.jpg" %}
+
+  <div class="sticky top-[80px] w-full bg-background z-40 border-t border-border-subtle">
+    <section class="w-full px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-stack-md">
+        
+        <div class="flex flex-wrap gap-stack-sm" id="filter-btn-container">
+          <button data-filter="all" class="filter-btn px-5 py-2 bg-primary text-on-primary font-label-caps text-label-caps rounded-full transition-all duration-300 shadow-sm">
+            Semua
+          </button>
+          <button data-filter="nrm" class="filter-btn px-5 py-2 bg-transparent border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary font-label-caps text-label-caps rounded-full transition-all duration-300">
+            NRM
+          </button>
+          <button data-filter="nru" class="filter-btn px-5 py-2 bg-transparent border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary font-label-caps text-label-caps rounded-full transition-all duration-300">
+            NRU
+          </button>
+          <button data-filter="pelatihan" class="filter-btn px-5 py-2 bg-transparent border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary font-label-caps text-label-caps rounded-full transition-all duration-300">
+            Pelatihan
+          </button>
+        </div>
+
+        <div class="relative inline-block text-left w-44" id="custom-dropdown-container">
+          <button type="button" id="dropdown-toggle" class="flex items-center justify-between w-full bg-surface-white border border-border-subtle text-on-surface font-body-sm text-body-sm rounded-lg px-4 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary cursor-pointer select-none">
+            <span id="dropdown-label">Semua Tahun</span>
+            <span id="dropdown-icon" class="material-symbols-outlined text-on-surface-variant transition-transform duration-200 pointer-events-none">expand_more</span>
+          </button>
+          
+          <div id="dropdown-menu" class="hidden absolute right-0 mt-1.5 w-full rounded-lg bg-surface-white border border-border-subtle shadow-[0_10px_25px_rgba(0,0,0,0.08)] z-50 overflow-hidden py-1">
+            <div data-value="all" class="dropdown-item px-4 py-2.5 text-sm text-on-surface hover:bg-primary hover:text-surface-white cursor-pointer transition-colors duration-150">Semua Tahun</div>
+            <div data-value="2024" class="dropdown-item px-4 py-2.5 text-sm text-on-surface hover:bg-primary hover:text-surface-white cursor-pointer transition-colors duration-150">2024</div>
+            <div data-value="2023" class="dropdown-item px-4 py-2.5 text-sm text-on-surface hover:bg-primary hover:text-surface-white cursor-pointer transition-colors duration-150">2023</div>
+            <div data-value="2022" class="dropdown-item px-4 py-2.5 text-sm text-on-surface hover:bg-primary hover:text-surface-white cursor-pointer transition-colors duration-150">2022</div>
+          </div>
+          
+          <input type="hidden" id="year-filter" value="all">
+        </div>
+        
+      </div>
+    </section>
+  </div>
+
+  <section class="w-full px-margin-mobile md:px-margin-desktop py-stack-lg pb-section-gap max-w-container-max mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter" id="project-grid">
+      
+      <article data-category="nrm" data-year="2024" 
+               onclick="window.location.href='{% url 'detail-experience' slug='proyek-rehabilitasi-hutan-kalimantan' %}'"
+               class="project-card transition-all duration-300 opacity-100 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
+        <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
+          <img alt="Aerial view of dense tropical rainforest" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/experience-1.jpg' %}">
+          <div class="absolute top-4 left-4 flex gap-2 z-10">
+            <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-xs font-bold uppercase tracking-wider">NRM</span>
+            <span class="bg-surface-white/90 text-on-surface px-2.5 py-1 rounded font-label-caps text-xs font-bold">2024</span>
+          </div>
+        </div>
+        <div class="p-6 flex flex-col flex-grow">
+          <div class="flex items-center gap-2 text-text-muted font-body-sm text-sm mb-3">
+            <span class="material-symbols-outlined text-base">location_on</span>
+            <span>Kalimantan Barat</span>
+          </div>
+          <h3 class="font-headline-md text-lg font-bold text-on-background mb-3 line-clamp-2 group-hover:text-primary transition-colors">Proyek Rehabilitasi Hutan Kalimantan</h3>
+          <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">
+            Implementasi strategi pemulihan ekosistem komprehensif pada lahan kritis seluas 50.000 hektar, berfokus pada reboisasi spesies endemik dan pemberdayaan masyarakat lokal.
+          </p>
+          <a class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider group/link hover:text-forest-deep transition-colors" 
+             href="{% url 'detail-experience' slug='proyek-rehabilitasi-hutan-kalimantan' %}">
+            <span>Lihat Detail</span>
+            <span class="material-symbols-outlined text-sm transform group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
+          </a>
+        </div>
+      </article>
+
+      <article data-category="nru" data-year="2023" 
+               onclick="window.location.href='{% url 'detail-experience' slug='restorasi-ekosistem-mangrove-terpadu' %}'"
+               class="project-card transition-all duration-300 opacity-100 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
+        <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
+          <img alt="Pristine coastal mangrove ecosystem" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/experience-2.jpg' %}">
+          <div class="absolute top-4 left-4 flex gap-2 z-10">
+            <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-xs font-bold uppercase tracking-wider">NRU</span>
+            <span class="bg-surface-white/90 text-on-surface px-2.5 py-1 rounded font-label-caps text-xs font-bold">2023</span>
+          </div>
+        </div>
+        <div class="p-6 flex flex-col flex-grow">
+          <div class="flex items-center gap-2 text-text-muted font-body-sm text-sm mb-3">
+            <span class="material-symbols-outlined text-base">location_on</span>
+            <span>Pesisir Utara Jawa</span>
+          </div>
+          <h3 class="font-headline-md text-lg font-bold text-on-background mb-3 line-clamp-2 group-hover:text-primary transition-colors">Restorasi Ekosistem Mangrove Terpadu</h3>
+          <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">
+            Pengembangan and restorasi sabuk hijau pesisir untuk mitigasi abrasi and peningkatan keanekaragaman hayati biru, bekerja sama dengan pemerintah daerah.
+          </p>
+          <a class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider group/link hover:text-forest-deep transition-colors" 
+             href="{% url 'detail-experience' slug='restorasi-ekosistem-mangrove-terpadu' %}">
+            <span>Lihat Detail</span>
+            <span class="material-symbols-outlined text-sm transform group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
+          </a>
+        </div>
+      </article>
+
+      <article data-category="pelatihan" data-year="2023" 
+               onclick="window.location.href='{% url 'detail-experience' slug='program-sertifikasi-rimbawan-muda' %}'"
+               class="project-card transition-all duration-300 opacity-100 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
+        <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
+          <img alt="Hands holding a small seedling in rich soil" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/experience-3.jpg' %}">
+          <div class="absolute top-4 left-4 flex gap-2 z-10">
+            <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-xs font-bold uppercase tracking-wider">Pelatihan</span>
+            <span class="bg-surface-white/90 text-on-surface px-2.5 py-1 rounded font-label-caps text-xs font-bold">2023</span>
+          </div>
+        </div>
+        <div class="p-6 flex flex-col flex-grow">
+          <div class="flex items-center gap-2 text-text-muted font-body-sm text-sm mb-3">
+            <span class="material-symbols-outlined text-base">location_on</span>
+            <span>Bogor, Jawa Barat</span>
+          </div>
+          <h3 class="font-headline-md text-lg font-bold text-on-background mb-3 line-clamp-2 group-hover:text-primary transition-colors">Program Sertifikasi Rimbawan Muda</h3>
+          <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">
+            Pelatihan intensif berbasis kompetensi untuk 500 kader lingkungan, membekali mereka dengan keterampilan manajemen sumber daya alam modern and analisis spasial.
+          </p>
+          <a class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider group/link hover:text-forest-deep transition-colors" 
+             href="{% url 'detail-experience' slug='program-sertifikasi-rimbawan-muda' %}">
+            <span>Lihat Detail</span>
+            <span class="material-symbols-outlined text-sm transform group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
+          </a>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="mt-stack-lg text-center">
+      <button class="inline-flex items-center justify-center px-6 py-3 bg-transparent border-2 border-primary text-primary font-label-caps text-label-caps rounded hover:bg-forest-deep hover:text-surface-white hover:-translate-y-[2px] transition-all duration-300">
+        Muat Lebih Banyak
+      </button>
+    </div>
+  </section>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const yearInput = document.getElementById('year-filter');
+    const cards = document.querySelectorAll('.project-card');
+
+    const dropdownToggle = document.getElementById('dropdown-toggle');
+    const dropdownMenu = document.getElementById('dropdown-menu');
+    const dropdownLabel = document.getElementById('dropdown-label');
+    const dropdownIcon = document.getElementById('dropdown-icon');
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+    // Jendela Dropdown Toggle
+    dropdownToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownMenu.classList.toggle('hidden');
+      dropdownIcon.classList.toggle('rotate-180');
+    });
+
+    document.addEventListener('click', () => {
+      dropdownMenu.classList.add('hidden');
+      dropdownIcon.classList.remove('rotate-180');
+    });
+
+    // Item Tahun Klik Listener
+    dropdownItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const val = item.getAttribute('data-value');
+        const text = item.textContent;
+
+        yearInput.value = val;
+        dropdownLabel.textContent = text;
+        
+        applyFilters(); 
+      });
+    });
+
+    // Kalkulator Filter Data Instan
+    function applyFilters() {
+      const activeBtn = document.querySelector('.filter-btn.bg-primary');
+      const selectedCategory = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
+      const selectedYear = yearInput.value;
+
+      cards.forEach(card => {
+        const cardCategory = card.getAttribute('data-category');
+        const cardYear = card.getAttribute('data-year');
+
+        const matchCategory = (selectedCategory === 'all' || cardCategory === selectedCategory);
+        const matchYear = (selectedYear === 'all' || cardYear === selectedYear);
+
+        if (matchCategory && matchYear) {
+          card.classList.remove('hidden');
+          setTimeout(() => {
+            card.classList.remove('opacity-0');
+            card.classList.add('opacity-100');
+          }, 10);
+        } else {
+          card.classList.add('hidden', 'opacity-0');
+          card.classList.remove('opacity-100');
+        }
+      });
+    }
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        // Prevent click trigger bubble up ke element article parent saat filter diklik
+        e.stopPropagation();
+        
+        filterButtons.forEach(b => {
+          b.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+          b.classList.add('bg-transparent', 'border', 'border-outline-variant', 'text-on-surface-variant');
+        });
+        btn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+        btn.classList.remove('bg-transparent', 'border', 'border-outline-variant', 'text-on-surface-variant');
+        applyFilters();
+      });
+    });
+
+    // Stop propagation khusus dropdown area agar tidak memicu deteksi onclick link detail milik parent article
+    const customDropdown = document.getElementById('custom-dropdown-container');
+    if (customDropdown) {
+      customDropdown.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const URLFilterValue = urlParams.get('filter');
+
+    if (URLFilterValue) {
+      const targetButton = document.querySelector(`.filter-btn[data-filter="${URLFilterValue.toLowerCase()}"]`);
+      if (targetButton) {
+        targetButton.click();
+      }
+    }
+  });
+</script>
+{% endblock %}
