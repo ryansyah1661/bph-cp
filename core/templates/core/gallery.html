@@ -6,167 +6,309 @@
 {% block content %}
 <main class="flex-grow pt-[80px] bg-background">
   
-  {% include 'core/partials/hero-banner.html' with title="Galeri Kegiatan" subtitle="Visual Documentation" desc="Mendokumentasikan upaya pelestarian lingkungan, pelatihan, dan pengelolaan sumber daya alam yang berkelanjutan." bg_image="images/forest-services.jpg" %}
+  {% include 'core/partials/hero-banner.html' with title="Galeri &amp; Publikasi" subtitle="Visual &amp; Knowledge Hub" desc="Mendokumentasikan upaya pelestarian lingkungan, rilis riset ilmiah, rilis berita, serta cerita aksi nyata tim BPH langsung dari lapangan." bg_image="images/forest-services.jpg" %}
 
-  <section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto pt-16 mb-8">
-    <div class="text-center max-w-xl mx-auto mb-8">
-      <h2 class="font-headline-lg text-2xl font-bold text-on-surface mb-2">Arsip Dokumentasi Visual</h2>
-      <p class="font-body-md text-sm text-on-surface-variant">Filter dokumentasi berdasarkan fokus bidang kerja lapangan kami.</p>
-    </div>
-
-    <div class="flex flex-wrap justify-center gap-4" id="gallery-filter-container">
-      <button class="font-label-caps text-label-caps px-6 py-2 rounded-full bg-primary text-surface-white transition-all duration-300 shadow-sm">All</button>
-      <button class="font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">NRM</button>
-      <button class="font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">NRU</button>
-      <button class="font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">Training</button>
-      <button class="font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">Others</button>
-    </div>
-  </section>
-
-  <section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto pb-16">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      
-      <div class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
-        <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-          <img alt="Environmental restoration" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services1.jpg' %}">
-          <div class="absolute top-4 left-4 z-10">
-            <span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">NRM</span>
-          </div>
-        </div>
-        <div class="p-6 flex-1 flex flex-col">
-          <h3 class="font-headline-md text-lg font-bold text-on-surface mb-2 group-hover:text-primary transition-colors duration-300">
-            Restorasi Hutan Tropis
-          </h3>
-          <p class="text-sm text-on-surface-variant leading-relaxed line-clamp-3">
-            Pemulihan ekosistem hutan hujan tropis secara berkala melalui penanaman kembali bibit pohon endemik di area kritis pasca-degradasi.
-          </p>
-        </div>
-      </div>
-
-      <div class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
-        <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-          <img alt="Field training" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/experience-1.jpg' %}">
-          <div class="absolute top-4 left-4 z-10">
-            <span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">Training</span>
-          </div>
-        </div>
-        <div class="p-6 flex-1 flex flex-col">
-          <h3 class="font-headline-md text-lg font-bold text-on-surface mb-2 group-hover:text-primary transition-colors duration-300">
-            Pelatihan Pemetaan Area
-          </h3>
-          <p class="text-sm text-on-surface-variant leading-relaxed line-clamp-3">
-            Membekali tim lapangan dan kader lingkungan dengan keterampilan navigasi GPS tingkat lanjut serta pemetaan wilayah spasial berbasis digital.
-          </p>
-        </div>
-      </div>
-
-      <div class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
-        <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-          <img alt="Mountain landscape" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services7.jpg' %}">
-          <div class="absolute top-4 left-4 z-10">
-            <span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">NRU</span>
-          </div>
-        </div>
-        <div class="p-6 flex-1 flex flex-col">
-          <h3 class="font-headline-md text-lg font-bold text-on-surface mb-2 group-hover:text-primary transition-colors duration-300">
-            Survei Dataran Tinggi
-          </h3>
-          <p class="text-sm text-on-surface-variant leading-relaxed line-clamp-3">
-            Pengumpulan data lapangan terpadu mengenai indeks keanekaragaman hayati vegetasi flora dan pergerakan fauna di ekosistem pegunungan.
-          </p>
-        </div>
-      </div>
-
-      <div class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
-        <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-          <img alt="River conservation" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services9.jpg' %}">
-          <div class="absolute top-4 left-4 z-10">
-            <span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">NRM</span>
-          </div>
-        </div>
-        <div class="p-6 flex-1 flex flex-col">
-          <h3 class="font-headline-md text-lg font-bold text-on-surface mb-2 group-hover:text-primary transition-colors duration-300">
-            Konservasi Daerah Aliran Sungai
-          </h3>
-          <p class="text-sm text-on-surface-variant leading-relaxed line-clamp-3">
-            Upaya mitigasi dan restorasi vegetasi sempadan sungai guna menahan laju erosi tanah sekaligus menjaga baku mutu siklus hidrologi air.
-          </p>
-        </div>
-      </div>
-
-      <div class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
-        <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-          <img alt="Data collection" src="{% static 'images/services2.jpg' %}">
-          <div class="absolute top-4 left-4 z-10">
-            <span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">Others</span>
-          </div>
-        </div>
-        <div class="p-6 flex-1 flex flex-col">
-          <h3 class="font-headline-md text-lg font-bold text-on-surface mb-2 group-hover:text-primary transition-colors duration-300">
-            Pengumpulan Data Lapangan
-          </h3>
-          <p class="text-sm text-on-surface-variant leading-relaxed line-clamp-3">
-            Proses sampling parameter fisik tanah tanah, pengukuran sampel udara, serta wawancara langsung sosial-ekonomi masyarakat lokal.
-          </p>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="flex justify-center mt-12">
-      <button class="font-label-caps text-label-caps px-8 py-3 bg-transparent border-2 border-primary text-primary rounded-lg hover:bg-forest-deep hover:text-surface-white hover:-translate-y-[2px] transition-all duration-300">
-        Muat Lebih Banyak
-      </button>
-    </div>
-  </section>
-
-  <section class="w-full bg-surface border-t border-border-subtle py-20">
+  <section class="w-full bg-surface py-16 border-b border-border-subtle/40">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-      
-      <div class="mb-12">
-        <span class="font-label-caps text-[11px] font-bold tracking-widest text-primary uppercase bg-primary/10 px-3 py-1 rounded-full mb-4 inline-block">
-          Resource Center
-        </span>
-        <h2 class="font-headline-xl text-2xl md:text-3xl font-bold text-on-surface leading-tight">
-          Modul Dokumentasi Strategis
-        </h2>
-        <p class="font-body-md text-sm md:text-base text-on-surface-variant max-w-2xl mt-2">
-          Akses rangkuman teknis and dokumentasi formal dari berbagai inisiatif keberlanjutan yang telah kami selesaikan.
-        </p>
+      <div class="max-w-2xl mb-8 text-left">
+        <h2 class="font-headline-lg text-2xl font-bold text-on-surface mb-2">Dokumentasi Aksi Lapangan</h2>
+        <p class="font-body-md text-sm text-on-surface-variant">Filter dokumentasi berdasarkan fokus bidang kerja lapangan kami.</p>
+      </div>
+
+      <div class="flex flex-wrap justify-start gap-4 mb-8" id="gallery-filter-container">
+        <button class="font-label-caps text-label-caps px-6 py-2 rounded-full bg-primary text-surface-white transition-all duration-300 shadow-sm">All</button>
+        <button class="font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">NRM</button>
+        <button class="font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">NRU</button>
+        <button class="font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">Training</button>
+        <button class="font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">Others</button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
+          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+            <img alt="Environmental restoration" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services1.jpg' %}">
+            <div class="absolute top-4 left-4 z-10"><span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">NRM</span></div>
+          </div>
+          <div class="p-6 flex-1 flex flex-col">
+            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-2 group-hover:text-primary transition-colors">Restorasi Hutan Tropis</h3>
+            <p class="text-sm text-on-surface-variant leading-relaxed line-clamp-3">Pemulihan ekosistem hutan hujan tropis secara berkala melalui penanaman kembali bibit pohon endemik.</p>
+          </div>
+        </div>
+        <div class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
+          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+            <img alt="Field training" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/experience-1.jpg' %}">
+            <div class="absolute top-4 left-4 z-10"><span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">Training</span></div>
+          </div>
+          <div class="p-6 flex-1 flex flex-col">
+            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-2 group-hover:text-primary transition-colors">Pelatihan Pemetaan Area</h3>
+            <p class="text-sm text-on-surface-variant leading-relaxed line-clamp-3">Membekali tim lapangan dan kader lingkungan dengan keterampilan navigasi GPS tingkat lanjut.</p>
+          </div>
+        </div>
+        <div class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
+          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+            <img alt="Mountain landscape" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services7.jpg' %}">
+            <div class="absolute top-4 left-4 z-10"><span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">NRU</span></div>
+          </div>
+          <div class="p-6 flex-1 flex flex-col">
+            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-2 group-hover:text-primary transition-colors">Survei Dataran Tinggi</h3>
+            <p class="text-sm text-on-surface-variant leading-relaxed line-clamp-3">Pengumpulan data lapangan terpadu mengenai indeks keanekaragaman hayati vegetasi flora.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="artikel" class="w-full bg-surface-container-lowest border-t border-b border-border-subtle/50 py-20 scroll-mt-[80px]">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+      <div class="max-w-2xl mb-12 text-left">
+        <h2 class="font-headline-xl text-2xl md:text-3xl font-bold text-on-surface">Artikel &amp; Wawasan Teknis</h2>
+        <p class="font-body-md text-sm text-on-surface-variant mt-2">Kumpulan pemikiran rilis riset, data karbon, dan panduan praktis lingkungan berkelanjutan.</p>
+      </div>
+
+      <div id="article-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="article-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+            <img src="{% static 'images/services1.jpg' %}" alt="Riset" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          </div>
+          <div class="p-6 flex-1 flex flex-col">
+            <p class="text-xs text-text-muted font-medium mb-2">26 Juni 2026 • Oleh Admin BPH</p>
+            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Aksi Kecil, Dampak Besar: Restorasi Lahan Kritis</h3>
+            <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Intervensi skala mikro dan keterlibatan komunitas lokal bawa perubahan ekosistem.</p>
+            <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
+          </div>
+        </div>
+        <div class="article-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+            <img src="{% static 'images/services7.jpg' %}" alt="Riset" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          </div>
+          <div class="p-6 flex-1 flex flex-col">
+            <p class="text-xs text-text-muted font-medium mb-2">24 Juni 2026 • Oleh Tim Ahli BPH</p>
+            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Analisis Sekuestrasi Karbon Hutan Hujan Tropis 2026</h3>
+            <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Eksplorasi data penyerapan karbon dalam menekan pemanasan global ekosistem pulau.</p>
+            <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
+          </div>
+        </div>
+        <div class="article-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+            <img src="{% static 'images/services9.jpg' %}" alt="Riset" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          </div>
+          <div class="p-6 flex-1 flex flex-col">
+            <p class="text-xs text-text-muted font-medium mb-2">22 Juni 2026 • Oleh Legal Kawasan</p>
+            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Regulasi Air Bersih &amp; Batasan Kegiatan Industri Hilir</h3>
+            <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Implementasi kebijakan daerah aliran sungai guna meminimalkan polusi limbah cair.</p>
+            <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
+          </div>
+        </div>
+        <div class="article-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300">
+          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+            <img src="{% static 'images/services2.jpg' %}" alt="Riset" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6 flex-1 flex flex-col">
+            <p class="text-xs text-text-muted font-medium mb-2">15 Mei 2026 • Oleh Tim Data</p>
+            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Penerapan GIS Spasial Pada Pemetaan Vegetasi</h3>
+            <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Pemanfaatan foto citra satelit resolusi tinggi untuk memantau laju deforestasi.</p>
+            <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-12 flex justify-start gap-4">
+        <button id="article-less-btn" class="hidden font-label-caps text-label-caps px-8 py-3 bg-surface-white border-2 border-primary text-primary rounded-lg hover:bg-forest-deep hover:text-surface-white hover:-translate-y-[2px] transition-all duration-300 cursor-pointer">Muat Lebih Sedikit</button>
+        <button id="article-more-btn" class="hidden font-label-caps text-label-caps px-8 py-3 bg-transparent border-2 border-primary text-primary rounded-lg hover:bg-forest-deep hover:text-surface-white hover:-translate-y-[2px] transition-all duration-300 cursor-pointer">Muat Artikel Lebih Banyak</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="cerita" class="w-full bg-surface py-20 border-b border-border-subtle/40 scroll-mt-[80px]">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+      <div class="max-w-2xl mb-12 text-left">
+        <h2 class="font-headline-xl text-2xl md:text-3xl font-bold text-on-surface">Cerita Dari Lapang</h2>
+        <p class="font-body-md text-sm text-on-surface-variant mt-2">Narasi humanis, catatan perjalanan rimbawan, dan tantangan konservasi riil dari jantung hutan.</p>
+      </div>
+
+      <div id="story-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="story-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+            <img src="{% static 'images/experience-1.jpg' %}" alt="Cerita" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          </div>
+          <div class="p-6 flex-1 flex flex-col">
+            <p class="text-xs text-text-muted font-medium mb-2">12 Juni 2026 • Oleh Rimbawan BPH</p>
+            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Menembus Kabut Gunung Barat: Jejak Macan Dahan</h3>
+            <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Catatan perjalanan tim lapangan memasang camera trap di pedalaman rimba primer.</p>
+            <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
+          </div>
+        </div>
+        <div class="story-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+            <img src="{% static 'images/experience-2.jpg' %}" alt="Cerita" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          </div>
+          <div class="p-6 flex-1 flex flex-col">
+            <p class="text-xs text-text-muted font-medium mb-2">05 Juni 2026 • Oleh Kader Mangrove</p>
+            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Senyum Pesisir: Menanam Masa Depan Bersama Nelayan</h3>
+            <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Bagaimana bibit mangrove kecil menyatukan visi ekonomi warga dan kelestarian pantai.</p>
+            <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
+          </div>
+        </div>
+        <div class="story-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+            <img src="{% static 'images/experience-3.jpg' %}" alt="Cerita" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          </div>
+          <div class="p-6 flex-1 flex flex-col">
+            <p class="text-xs text-text-muted font-medium mb-2">29 Mei 2026 • Oleh Koordinator Site</p>
+            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Bertahan Di Tengah Badai Tropis Saat Sampling Data</h3>
+            <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Suka duka perjuangan tim teknis mengamankan sampel fisik tanah di bawah guyuran hujan deras.</p>
+            <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
+          </div>
+        </div>
+        <div class="story-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+            <img src="{% static 'images/services1.jpg' %}" alt="Cerita" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6 flex-1 flex flex-col">
+            <p class="text-xs text-text-muted font-medium mb-2">10 April 2026 • Oleh Fasilitator Desa</p>
+            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Agroforestri Madu: Harmoni Lebah dan Penjaga Hutan</h3>
+            <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Kisah sukses warga beralih profesi dari perambah kayu menjadi peternak madu hutan lestari.</p>
+            <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-12 flex justify-start gap-4">
+        <button id="story-less-btn" class="hidden font-label-caps text-label-caps px-8 py-3 bg-surface-white border-2 border-primary text-primary rounded-lg hover:bg-forest-deep hover:text-surface-white hover:-translate-y-[2px] transition-all duration-300 cursor-pointer">Muat Lebih Sedikit</button>
+        <button id="story-more-btn" class="hidden font-label-caps text-label-caps px-8 py-3 bg-transparent border-2 border-primary text-primary rounded-lg hover:bg-forest-deep hover:text-surface-white hover:-translate-y-[2px] transition-all duration-300 cursor-pointer">Muat Cerita Lebih Banyak</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="w-full bg-surface-container-lowest border-t border-border-subtle py-20">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+      <div class="mb-12 text-left">
+        <h2 class="font-headline-xl text-2xl md:text-3xl font-bold text-on-surface leading-tight">Modul Dokumentasi Strategis</h2>
+        <p class="font-body-md text-sm md:text-base text-on-surface-variant max-w-2xl mt-2">Akses rangkuman teknis, panduan formal, dan data publikasi berkala dari tim ahli BPH yang dirilis secara independen.</p>
       </div>
 
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        
-        <div class="group cursor-pointer" onclick="window.location.href='{% url 'detail-experience' slug='proyek-rehabilitasi-hutan-kalimantan' %}'">
+        <div class="group cursor-pointer">
           <div class="relative aspect-[3/4] bg-surface-white border border-border-subtle rounded-xl overflow-hidden shadow-sm transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
-            <img src="{% static 'images/services1.jpg' %}" alt="Cover Modul Audit Ekologis" class="w-full h-full object-cover">
+            <img src="{% static 'images/services1.jpg' %}" alt="Cover Modul Audit" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
             <div class="absolute top-3 right-3 bg-white/90 p-1.5 rounded-lg shadow-sm text-primary">
               <span class="material-symbols-outlined text-sm block font-bold">description</span>
             </div>
           </div>
-          <div class="mt-4">
-            <h3 class="font-headline-md text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Audit Ekologis Sofifi 2024</h3>
-            <p class="text-[12px] text-on-surface-variant mt-1">NRM & Restoration</p>
+          <div class="mt-4 text-left">
+            <h3 class="font-headline-md text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Audit Ekologis Kawasan Sofifi 2026</h3>
+            <p class="text-[12px] text-on-surface-variant mt-1">NRM &amp; Ecosystem Restoration</p>
           </div>
         </div>
-
-        <div class="group cursor-pointer" onclick="window.location.href='{% url 'detail-experience' slug='restorasi-ekosistem-mangrove-terpadu' %}'">
+        <div class="group cursor-pointer">
           <div class="relative aspect-[3/4] bg-surface-white border border-border-subtle rounded-xl overflow-hidden shadow-sm transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
-            <img src="{% static 'images/services7.jpg' %}" alt="Cover Modul Pemetaan Karbon" class="w-full h-full object-cover">
+            <img src="{% static 'images/services7.jpg' %}" alt="Cover Modul Karbon" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
             <div class="absolute top-3 right-3 bg-white/90 p-1.5 rounded-lg shadow-sm text-primary">
               <span class="material-symbols-outlined text-sm block font-bold">description</span>
             </div>
           </div>
-          <div class="mt-4">
-            <h3 class="font-headline-md text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Pemetaan Karbon Sumatera</h3>
-            <p class="text-[12px] text-on-surface-variant mt-1">NRU & Data Analysis</p>
+          <div class="mt-4 text-left">
+            <h3 class="font-headline-md text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Metodologi Pemetaan Karbon Spasial</h3>
+            <p class="text-[12px] text-on-surface-variant mt-1">NRU &amp; Data Spasial Analysis</p>
           </div>
         </div>
-
       </div>
     </div>
   </section>
+
 </main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    
+    // Artikel Pagination
+    const articleCards = document.querySelectorAll('.article-card');
+    const articleMoreBtn = document.getElementById('article-more-btn');
+    const articleLessBtn = document.getElementById('article-less-btn');
+    let articleLimit = 3;
+
+    function calculateArticles() {
+      articleCards.forEach((card, idx) => {
+        if (idx < articleLimit) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+      
+      if (articleCards.length > articleLimit) {
+        articleMoreBtn.classList.remove('hidden');
+      } else {
+        articleMoreBtn.classList.add('hidden');
+      }
+
+      if (articleLimit > 3) {
+        articleLessBtn.classList.remove('hidden');
+      } else {
+        articleLessBtn.classList.add('hidden');
+      }
+    }
+
+    articleMoreBtn.addEventListener('click', () => {
+      articleLimit += 3;
+      calculateArticles();
+    });
+
+    articleLessBtn.addEventListener('click', () => {
+      if (articleLimit > 3) {
+        articleLimit -= 3;
+        calculateArticles();
+        document.getElementById('article-grid').scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }
+    });
+
+    // Cerita Lapangan Pagination
+    const storyCards = document.querySelectorAll('.story-card');
+    const storyMoreBtn = document.getElementById('story-more-btn');
+    const storyLessBtn = document.getElementById('story-less-btn');
+    let storyLimit = 3;
+
+    function calculateStories() {
+      storyCards.forEach((card, idx) => {
+        if (idx < storyLimit) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      if (storyCards.length > storyLimit) {
+        storyMoreBtn.classList.remove('hidden');
+      } else {
+        storyMoreBtn.classList.add('hidden');
+      }
+
+      if (storyLimit > 3) {
+        storyLessBtn.classList.remove('hidden');
+      } else {
+        storyLessBtn.classList.add('hidden');
+      }
+    }
+
+    storyMoreBtn.addEventListener('click', () => {
+      storyLimit += 3;
+      calculateStories();
+    });
+
+    storyLessBtn.addEventListener('click', () => {
+      if (storyLimit > 3) {
+        storyLimit -= 3;
+        calculateStories();
+        document.getElementById('story-grid').scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }
+    });
+
+    calculateArticles();
+    calculateStories();
+  });
+</script>
 {% endblock %}
