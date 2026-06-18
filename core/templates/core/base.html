@@ -8,7 +8,8 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
 
     <script id="tailwind-config">
@@ -17,6 +18,14 @@
         theme: {
           extend: {
             colors: {
+              // ================= FIXED BRAND COLORS (SESUAI BRAND GUIDELINES BPH) =================
+              "primary": "#308935",                // Grass (Primary Color resmi BPH)
+              "forest-deep": "#077944",             // Naughty Green (Optional Accent resmi BPH)
+              "tertiary": "#FFC000",               // Amber (Tertiary Color resmi BPH)
+              "gray-melange": "#CDCACA",           // Gray Melange (Optional Color resmi BPH)
+              "surface-white": "#FFFFFF",          // White (Secondary Color resmi BPH)
+              
+              // Kolom penunjang sistem dashboard UI layout tetap dipertahankan murni
               "on-secondary-fixed-variant": "#474744",
               "on-secondary": "#ffffff",
               "tertiary-fixed": "#ffdea8",
@@ -36,7 +45,7 @@
               "outline-variant": "#bdcaba",
               "primary-fixed": "#84fb95",
               "secondary": "#5f5e5c",
-              "on-tertiary-fixed-variant": "#5e4200",
+              "on-tertiary-fixed-dim": "#5e4200",
               "inverse-primary": "#68de7c",
               "on-primary-fixed": "#002108",
               "tertiary-container": "#986d00",
@@ -46,16 +55,13 @@
               "error-container": "#ffdad6",
               "on-surface": "#191c1c",
               "on-secondary-container": "#656461",
-              "tertiary": "#795600",
               "on-primary-container": "#f7fff2",
               "tertiary-fixed-dim": "#ffba20",
               "on-primary-fixed-variant": "#00531e",
               "text-muted": "#575757",
-              "surface-white": "#FFFFFF",
               "surface-tint": "#006e2a",
               "on-tertiary": "#ffffff",
               "primary-fixed-dim": "#68de7c",
-              "primary": "#006b29",
               "on-surface-variant": "#3e4a3d",
               "on-tertiary-container": "#fffbff",
               "border-subtle": "#E2E8E2",
@@ -67,7 +73,6 @@
               "on-primary": "#ffffff",
               "secondary-fixed-dim": "#c8c6c3",
               "on-error": "#ffffff",
-              "forest-deep": "#045C26",
             },
             borderRadius: {
               DEFAULT: "0.125rem",
@@ -85,16 +90,19 @@
               "stack-md": "16px",
               "section-gap": "120px",
             },
+            // ================= FIXED FONT FAMILY MAPS (SESUAI ATURAN PANDUAN HALAMAN 8) =================
             fontFamily: {
-              "headline-md": ["Plus Jakarta Sans", "sans-serif"],
-              "body-sm": ["Plus Jakarta Sans", "sans-serif"],
-              "display-lg-mobile": ["Plus Jakarta Sans", "sans-serif"],
-              "body-lg": ["Plus Jakarta Sans", "sans-serif"],
-              "body-md": ["Plus Jakarta Sans", "sans-serif"],
-              "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
-              "display-lg": ["Plus Jakarta Sans", "sans-serif"],
-              "headline-xl": ["Plus Jakarta Sans", "sans-serif"],
-              "label-caps": ["Plus Jakarta Sans", "sans-serif"],
+              "display-lg": ["Plus Jakarta Sans", "sans-serif"],        // Heading token
+              "display-lg-mobile": ["Plus Jakarta Sans", "sans-serif"], // Heading token
+              "headline-xl": ["Plus Jakarta Sans", "sans-serif"],       // Heading token
+              "headline-lg": ["Plus Jakarta Sans", "sans-serif"],       // Heading token
+              
+              "headline-md": ["Poppins", "sans-serif"],                 // Sub Heading token
+              
+              "body-lg": ["Inter", "sans-serif"],                       // Text / Body token
+              "body-md": ["Inter", "sans-serif"],                       // Text / Body token
+              "body-sm": ["Inter", "sans-serif"],                       // Text / Body token
+              "label-caps": ["Inter", "sans-serif"],                    // Text / Body token
             },
             fontSize: {
               "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
@@ -112,8 +120,9 @@
       };
     </script>
     <style>
+      /* FIXED: Default fallback font utama text / body menggunakan Inter */
       body {
-        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-family: 'Inter', sans-serif;
       }
       .material-symbols-outlined {
         font-variation-settings:

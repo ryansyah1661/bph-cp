@@ -1,12 +1,9 @@
 {% load static %}
 
-<!-- Footer -->
-<footer class="bg-inverse-surface dark:bg-on-background w-full pt-16 pb-8 px-margin-mobile md:px-margin-desktop text-surface-variant font-sans selection:bg-primary/30">
+<footer class="bg-inverse-surface dark:bg-on-background w-full pt-16 pb-8 px-margin-mobile md:px-margin-desktop text-surface-variant font-body-md selection:bg-primary/30">
   
-  <!-- Grid Utama -->
-  <div class="max-w-container-max mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-8 md:gap-gutter mb-16">
+  <div class="w-full max-w-container-max mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-8 md:gap-gutter mb-16">
     
-    <!-- Kolom 1: Brand, Deskripsi, & Sosmed Outline -->
     <div class="flex flex-col items-start">
       <div class="flex items-center mb-4">
         <img 
@@ -14,14 +11,13 @@
           alt="Logo BPH Footer" 
           class="h-14 md:h-16 w-auto object-contain block" />
       </div>
-      <div class="text-base md:text-lg font-bold text-surface-white tracking-wide mb-3">
+      <div class="font-headline-md text-base md:text-lg font-bold text-surface-white tracking-wide mb-3">
         PT Bhumi Pasa Hijau
       </div>
       <p class="text-sm text-surface-variant/70 leading-relaxed max-w-[280px] text-justify md:text-left italic">
-        Specializing in Natural Resources Management and Understanding.
+        Specializing in Natural Resources Management and Understanding[cite: 4].
       </p>
       
-      <!-- SOSIAL MEDIA -->
       <div class="flex items-center gap-3 mt-6">
         <a href="#" aria-label="LinkedIn" class="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-surface-variant/70 hover:border-primary hover:text-primary hover:bg-primary/5 hover:scale-105 transition-all duration-300">
           <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -41,18 +37,16 @@
       </div>
     </div>
     
-    <!-- Kolom 2: PROFIL -->
     <div class="flex flex-col items-start gap-4">
-      <h4 class="text-xs md:text-sm font-semibold tracking-widest uppercase text-surface-white/90">
+      <h4 class="font-headline-md text-xs md:text-sm font-semibold tracking-widest uppercase text-surface-white/90">
         Profil
       </h4>
       <div class="flex flex-col gap-3 w-full">
-        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="#">Tentang BPH</a>
-        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="#">Layanan</a>
-        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="#">Pengalaman</a>
-        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="#">Galeri</a>
+        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'about' %}">Tentang BPH</a>
+        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'services' %}">Layanan</a>
+        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'experience' %}">Pengalaman</a>
+        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'gallery' %}">Galeri</a>
         
-        <!-- Pembatas Transparan & Unduh Profil (FIXED: Garis bawah dihilangkan) -->
         <div class="border-t border-white/5 pt-3 mt-1">
           <a class="group inline-flex items-center gap-2 text-sm md:text-base font-medium text-surface-white hover:text-primary transition-colors duration-300" href="#">
             <span class="material-symbols-outlined text-[18px] text-surface-white/40 group-hover:text-primary transition-colors duration-300">download</span>
@@ -62,26 +56,22 @@
       </div>
     </div>
     
-    <!-- Kolom 3 & 4: HUBUNGI KAMI (FIXED: mt-[5px] untuk keselarasan presisi di baris pertama) -->
     <div class="flex flex-col items-start gap-4 md:col-span-2 md:pl-8">
-      <h4 class="text-xs md:text-sm font-semibold tracking-widest uppercase text-surface-white/90">
+      <h4 class="font-headline-md text-xs md:text-sm font-semibold tracking-widest uppercase text-surface-white/90">
         Hubungi Kami
       </h4>
       <div class="flex flex-col gap-4 w-full max-w-md">
         
-        <!-- Alamat (Diturunkan sedikit ke mt-[5px] agar lurus sempurna dengan kata "Jalan") -->
         <div class="flex gap-3 items-start text-sm md:text-base text-surface-variant/70">
           <span class="material-symbols-outlined text-[18px] md:text-[20px] text-surface-white/40 shrink-0 mt-[5px]">location_on</span>
-          <p class="leading-relaxed">Jalan Mawar Raya No. 16, Perumahan Taman Yasmin, Bogor Barat, 16115</p>
+          <p class="leading-relaxed">Jalan Mawar Raya No. 16, Perumahan Taman Yasmin, Bogor Barat, 16115 [cite: 144]</p>
         </div>
         
-        <!-- Email -->
         <a href="mailto:info@bhumipasahijau.com" class="flex gap-3 items-center text-sm md:text-base text-surface-variant/70">
           <span class="material-symbols-outlined text-[18px] md:text-[20px] text-surface-white/40 shrink-0">mail</span>
           <span class="truncate">info@bhumipasahijau.com</span>
         </a>
         
-        <!-- WhatsApp -->
         <a href="#" class="flex gap-3 items-center text-sm md:text-base text-surface-variant/70">
           <span class="material-symbols-outlined text-[18px] md:text-[20px] text-surface-white/40 shrink-0">call</span>
           <span>+62 812-XXXX-XXXX</span>
@@ -92,9 +82,8 @@
 
   </div>
 
-  <!-- Garis Bawah Pembatas & Copyright -->
   <div class="w-full max-w-container-max mx-auto border-t border-white/5 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-surface-variant/40">
-    <p>© 2026 Bhumi Pasa Hijau. All rights reserved.</p>
+    <p>© 2026 PT Bhumi Pasa Hijau. All rights reserved.</p>
   </div>
 
 </footer>

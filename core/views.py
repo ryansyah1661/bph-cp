@@ -22,12 +22,16 @@ def articles(request):
     return render(request, 'core/articles.html')
 
 def detail_experience(request, slug):
-    # Jika pakai database asli:
-    # project = get_object_or_404(Project, slug=slug)
-    # return render(request, 'core/detail_pengalaman.html', {'project': project})
-    
     # Jika sementara masih pakai data dummy / statis biar ga error:
     return render(request, 'core/detail-experience.html')
+
+# FIXED: Menambahkan fungsi detail artikel independen agar melempar ke file template detail_artikel.html
+def detail_article(request, slug):
+    # Jika pakai database asli kedepannya tinggal un-comment baris bawah:
+    # article = get_object_or_404(Article, slug=slug)
+    # return render(request, 'core/detail_artikel.html', {'artikel': article})
+    
+    return render(request, 'core/detail-articles.html')
 
 # Fungsi Detail Layanan Dinamis
 def service_detail(request, slug):
@@ -37,7 +41,6 @@ def service_detail(request, slug):
         'rehabilitasi-hutan': {
             'portfolio': 'NRM',
             'title': 'Rehabilitasi Hutan & Lahan',
-            # UPDATED: Menggunakan services1.jpg (urutan NRM ke-1)
             'bg_image': 'images/services1.jpg',
             'intro': 'Layanan Rehabilitasi Hutan dan Lahan (RHL) kami dirancang untuk memulihkan, mempertahankan, dan meningkatkan fungsi hutan...',
             'approach': 'Kami menerapkan pendekatan holistik yang mengintegrasikan aspek ekologi, sosial, dan ekonomi. Proses rehabilitasi bukan sekadar penanaman pohon, melainkan pemulihan ekosistem secara utuh.',
@@ -50,7 +53,6 @@ def service_detail(request, slug):
         'inventarisasi-lahan': {
             'portfolio': 'NRM',
             'title': 'Inventarisasi Sumberdaya Lahan',
-            # UPDATED: Menggunakan services2.jpg (urutan NRM ke-2)
             'bg_image': 'images/services2.jpg',
             'intro': 'Layanan Inventarisasi Sumberdaya Lahan kami menyediakan pemetaan komprehensif serta pengumpulan aset data spasial...',
             'approach': 'Melalui survei terestrial modern dan pemodelan kartografi tingkat tinggi untuk memastikan akurasi zonasi wilayah kerja Anda.',
@@ -61,7 +63,6 @@ def service_detail(request, slug):
         'penguatan-kelembagaan': {
             'portfolio': 'NRM',
             'title': 'Penguatan Kelembagaan',
-            # UPDATED: Menggunakan services3.jpg (urutan NRM ke-3)
             'bg_image': 'images/services3.jpg',
             'intro': 'Membangun kerangka kerja kelembagaan yang kokoh untuk mendukung tata kelola lingkungan yang efektif.',
             'approach': 'Menyelaraskan regulasi korporasi dengan kepatuhan kebijakan hukum lingkungan nasional secara berkelanjutan.',
@@ -72,7 +73,6 @@ def service_detail(request, slug):
         'perencanaan-sda': {
             'portfolio': 'NRM',
             'title': 'Perencanaan SDA & Lingkungan',
-            # UPDATED: Menggunakan services4.jpg (urutan NRM ke-4)
             'bg_image': 'images/services4.jpg',
             'intro': 'Cetak biru strategis pemanfaatan sumber daya alam yang menyeimbangkan target ekonomi dengan batas ekologis.',
             'approach': 'Analisis daya dukung lingkungan jangka panjang demi kelangsungan operasional bisnis yang ramah alam.',
@@ -83,7 +83,6 @@ def service_detail(request, slug):
         'pengelolaan-tanaman': {
             'portfolio': 'NRM',
             'title': 'Pengelolaan Kesehatan Tanaman',
-            # UPDATED: Menggunakan services5.jpg (urutan NRM ke-5)
             'bg_image': 'images/services5.jpg',
             'intro': 'Manajemen terpadu pengendalian hama dan penyakit vegetasi hutan komersial maupun kawasan konservasi.',
             'approach': 'Penerapan bioteknologi ramah lingkungan tanpa merusak ekosistem mikro tanah di sekitarnya.',
@@ -94,7 +93,6 @@ def service_detail(request, slug):
         'perizinan-lingkungan': {
             'portfolio': 'NRM',
             'title': 'Perizinan Lingkungan',
-            # UPDATED: Menggunakan services6.jpg (urutan NRM ke-6)
             'bg_image': 'images/services6.jpg',
             'intro': 'Amanat regulasi perizinan AMDAL, UKL-UPL, dan clearances regulatif di tingkat daerah maupun pusat.',
             'approach': 'Asistensi teknis dokumen lingkungan hidup agar proses kelayakan usaha berjalan lancar dan legal.',
@@ -107,7 +105,6 @@ def service_detail(request, slug):
         'penilaian-keanekaragaman': {
             'portfolio': 'NRU',
             'title': 'Penilaian Keanekaragaman Hayati',
-            # UPDATED: Menggunakan services7.jpg (urutan NRU ke-1)
             'bg_image': 'images/services7.jpg',
             'intro': 'Survei dasar (baseline) tingkat tinggi terhadap indeks populasi flora dan fauna lokal dilindungi.',
             'approach': 'Metode sampling ilmiah berstandar internasional untuk menghitung kekayaan taksonomi ekosistem.',
@@ -118,7 +115,6 @@ def service_detail(request, slug):
         'penilaian-sosial': {
             'portfolio': 'NRU',
             'title': 'Penilaian Sosial',
-            # UPDATED: Menggunakan services8.jpg (urutan NRU ke-2)
             'bg_image': 'images/services8.jpg',
             'intro': 'Evaluasi dampak sosial ekonomi dari keberadaan proyek lingkungan terhadap dinamika masyarakat lingkar hutan.',
             'approach': 'FGD interaktif dan mediasi konflik komunitas lokal demi terciptanya jaminan sosial sosiologis.',
@@ -129,7 +125,6 @@ def service_detail(request, slug):
         'tanah-hidrologi': {
             'portfolio': 'NRU',
             'title': 'Kajian Tanah & Hidrologi',
-            # UPDATED: Menggunakan services9.jpg (urutan NRU ke-3)
             'bg_image': 'images/services9.jpg',
             'intro': 'Analisis mekanika tanah, infiltrasi, dan siklus air daerah aliran sungai untuk mencegah bahaya erosi.',
             'approach': 'Pemetaan hidrologis terkomputerisasi untuk mengelola daerah tangkapan air hulu secara presisi.',
@@ -140,7 +135,6 @@ def service_detail(request, slug):
         'kajian-iklim': {
             'portfolio': 'NRU',
             'title': 'Kajian Iklim',
-            # UPDATED: Menggunakan services10.jpg (urutan NRU ke-4)
             'bg_image': 'images/services10.jpg',
             'intro': 'Pemodelan perubahan iklim mikro dan makro guna merumuskan strategi adaptasi bisnis berkelanjutan.',
             'approach': 'Proyeksi data cuaca historis untuk membaca anomali pergeseran musim industri agrikultur.',
@@ -151,7 +145,6 @@ def service_detail(request, slug):
         'kesehatan-tanaman-nru': {
             'portfolio': 'NRU',
             'title': 'Penilaian Kesehatan Tanaman (NRU)',
-            # UPDATED: Menggunakan services11.jpg (urutan NRU ke-5)
             'bg_image': 'images/services11.jpg',
             'intro': 'Evaluasi diagnostik indikator kesehatan ekosistem hutan primer secara berkala.',
             'approach': 'Menggunakan pemindaian sensor multispektoral drone udara untuk melihat klorofil vegetasi skala luas.',
@@ -162,7 +155,6 @@ def service_detail(request, slug):
         'energi-terbarukan': {
             'portfolio': 'NRU',
             'title': 'Energi Terbarukan',
-            # UPDATED: Menggunakan services12.jpg (urutan NRU ke-6)
             'bg_image': 'images/services12.jpg',
             'intro': 'Studi kelayakan teknis dan analisis dampak lingkungan untuk infrastruktur energi bersih baru terbarukan.',
             'approach': 'Penilaian komparatif potensi pasokan biomassa, hidro mikro, atau solar panel pedesaan.',
@@ -172,14 +164,9 @@ def service_detail(request, slug):
         },
     }
 
-    # Ambil data dari gudang berdasarkan parameter slug di URL
     service_data = DATA_LAYANAN.get(slug)
-    
-    # Proteksi: Jika user mengetik slug sembarangan, kembalikan ke halaman daftar layanan
     if not service_data:
         return redirect('services')
 
-    context = {
-        'service': service_data
-    }
+    context = { 'service': service_data }
     return render(request, 'core/detail-services.html', context)

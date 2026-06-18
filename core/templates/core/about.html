@@ -6,7 +6,7 @@
 {% block content %}
 <main class="flex-grow pt-[80px]">
 
-  {% include 'core/partials/hero-banner.html' with title="Tentang Kami" bg_image="images/about-hero.jpg" %}
+  {% include 'core/partials/hero-banner.html' with title="Tentang Kami" subtitle="Corporate Profile" desc="Bhumi Pasa Hijau (BPH) didirikan oleh para profesional muda di Bogor sebagai firma konsultan strategis yang berfokus pada pemahaman dan tata kelola sumber daya alam, lingkungan, serta sosial berkelanjutan." bg_image="images/about-hero.jpg" %}
 
   <section class="max-w-container-max bg-surface mx-auto px-margin-mobile md:px-margin-desktop py-section-gap">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center">
@@ -160,7 +160,6 @@
 
 {% block extra_js %}
 <script>
-  // SCRIPT LOGIKA PERPINDAHAN TAB TIM (Tetap Dipertahankan)
   document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.tab-btn');
     const contents = document.querySelectorAll('.tab-content');
