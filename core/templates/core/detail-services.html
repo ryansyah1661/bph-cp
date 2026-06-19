@@ -1,7 +1,7 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block title %}{{ service.title }} - PT Bhumi Pasa Hijau{% endblock %}
+{% block title %} {{ service.title }} - Bhumi Pasa Hijau {% endblock %}
 
 {% block content %}
 <main class="flex-grow pt-[80px]">
@@ -56,34 +56,34 @@
           </h3>
           <nav class="space-y-1 pl-2 border-l border-border-subtle/80">
             
-            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Rehabilitasi Hutan & Lahan' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
+            <a href="{% url 'detail-services' slug='rehabilitasi-hutan' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Rehabilitasi Hutan & Lahan' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
               <span>Rehabilitasi Hutan &amp; Lahan</span>
               <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Rehabilitasi Hutan & Lahan' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
             </a>
             
-            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-medium transition-all leading-snug text-on-surface-variant hover:bg-surface hover:text-primary">
+            <a href="{% url 'detail-services' slug='inventarisasi-lahan' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Inventarisasi Sumberdaya Lahan' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
               <span>Inventarisasi Sumberdaya Lahan</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2">arrow_forward_ios</span>
+              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Inventarisasi Sumberdaya Lahan' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
             </a>
             
-            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-medium transition-all leading-snug text-on-surface-variant hover:bg-surface hover:text-primary">
+            <a href="{% url 'detail-services' slug='penguatan-kelembagaan' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Penguatan Kelembagaan' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
               <span>Penguatan Kelembagaan</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2">arrow_forward_ios</span>
+              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Penguatan Kelembagaan' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
             </a>
 
-            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-medium transition-all leading-snug text-on-surface-variant hover:bg-surface hover:text-primary">
+            <a href="{% url 'detail-services' slug='perencanaan-sda' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Perencanaan SDA & Lingkungan' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
               <span>Perencanaan SDA &amp; Lingkungan</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2">arrow_forward_ios</span>
+              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Perencanaan SDA & Lingkungan' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
             </a>
 
-            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-medium transition-all leading-snug text-on-surface-variant hover:bg-surface hover:text-primary">
+            <a href="{% url 'detail-services' slug='pengelolaan-tanaman' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Pengelolaan Kesehatan Tanaman' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
               <span>Pengelolaan Kesehatan Tanaman</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2">arrow_forward_ios</span>
+              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Pengelolaan Kesehatan Tanaman' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
             </a>
 
-            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-medium transition-all leading-snug text-on-surface-variant hover:bg-surface hover:text-primary">
+            <a href="{% url 'detail-services' slug='perizinan-lingkungan' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Perizinan Lingkungan' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
               <span>Perizinan Lingkungan</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2">arrow_forward_ios</span>
+              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Perizinan Lingkungan' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
             </a>
             
           </nav>
@@ -96,34 +96,34 @@
           </h3>
           <nav class="space-y-1 pl-2 border-l border-border-subtle/80">
             
-            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-medium transition-all leading-snug text-on-surface-variant hover:bg-surface hover:text-primary">
+            <a href="{% url 'detail-services' slug='penilaian-keanekaragaman' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Penilaian Keanekaragaman Hayati' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
               <span>Penilaian Keanekaragaman Hayati</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2">arrow_forward_ios</span>
+              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Penilaian Keanekaragaman Hayati' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
             </a>
             
-            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-medium transition-all leading-snug text-on-surface-variant hover:bg-surface hover:text-primary">
+            <a href="{% url 'detail-services' slug='penilaian-sosial' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Penilaian Sosial' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
               <span>Penilaian Sosial</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2">arrow_forward_ios</span>
+              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Penilaian Sosial' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
             </a>
             
-            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-medium transition-all leading-snug text-on-surface-variant hover:bg-surface hover:text-primary">
+            <a href="{% url 'detail-services' slug='tanah-hidrologi' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Kajian Tanah &amp; Hidrologi' or service.title == 'Kajian Tanah & Hidrologi' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
               <span>Kajian Tanah &amp; Hidrologi</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2">arrow_forward_ios</span>
+              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Kajian Tanah &amp; Hidrologi' or service.title == 'Kajian Tanah & Hidrologi' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
             </a>
 
-            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-medium transition-all leading-snug text-on-surface-variant hover:bg-surface hover:text-primary">
+            <a href="{% url 'detail-services' slug='kajian-iklim' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Kajian Iklim' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
               <span>Kajian Iklim</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2">arrow_forward_ios</span>
+              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Kajian Iklim' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
             </a>
 
-            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-medium transition-all leading-snug text-on-surface-variant hover:bg-surface hover:text-primary">
+            <a href="{% url 'detail-services' slug='kesehatan-tanaman-nru' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Penilaian Kesehatan Tanaman (NRU)' or service.title == 'Penilaian Kesehatan Tanaman' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
               <span>Penilaian Kesehatan Tanaman</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2">arrow_forward_ios</span>
+              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Penilaian Kesehatan Tanaman (NRU)' or service.title == 'Penilaian Kesehatan Tanaman' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
             </a>
 
-            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-medium transition-all leading-snug text-on-surface-variant hover:bg-surface hover:text-primary">
+            <a href="{% url 'detail-services' slug='energi-terbarukan' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Energi Terbarukan' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
               <span>Energi Terbarukan</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2">arrow_forward_ios</span>
+              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Energi Terbarukan' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
             </a>
             
           </nav>
@@ -152,7 +152,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        <div onclick="window.location.href='{% url 'experience' %}'" class="flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 transition-all duration-300 cursor-pointer group">
+        <a href="{% url 'experience' %}" class="flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 transition-all duration-300 block group">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container-low">
             <img alt="Proyek Lapangan BPH" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services1.jpg' %}">
             <div class="absolute top-4 left-4 flex gap-2 z-10">
@@ -166,9 +166,9 @@
             </div>
             <h4 class="font-headline-md text-base font-bold text-on-background line-clamp-2 group-hover:text-primary transition-colors">Implementasi Lapangan Proyek Strategis {{ service.portfolio }}</h4>
           </div>
-        </div>
+        </a>
 
-        <div onclick="window.location.href='{% url 'experience' %}'" class="flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 transition-all duration-300 cursor-pointer group">
+        <a href="{% url 'experience' %}" class="flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 transition-all duration-300 block group">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container-low">
             <img alt="Proyek Lapangan BPH" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services2.jpg' %}">
             <div class="absolute top-4 left-4 flex gap-2 z-10">
@@ -182,9 +182,9 @@
             </div>
             <h4 class="font-headline-md text-base font-bold text-on-background line-clamp-2 group-hover:text-primary transition-colors">Pengumpulan Aset Data Teknis Lapangan</h4>
           </div>
-        </div>
+        </a>
 
-        <div onclick="window.location.href='{% url 'experience' %}'" class="flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 transition-all duration-300 cursor-pointer group">
+        <a href="{% url 'experience' %}" class="flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 transition-all duration-300 block group">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container-low">
             <img alt="Proyek Lapangan BPH" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static '' %}{{ service.bg_image }}">
             <div class="absolute top-4 left-4 flex gap-2 z-10">
@@ -198,7 +198,7 @@
             </div>
             <h4 class="font-headline-md text-base font-bold text-on-background line-clamp-2 group-hover:text-primary transition-colors">Analisis Dampak &amp; Evaluasi Kepatuhan Ekosistem</h4>
           </div>
-        </div>
+        </a>
 
       </div>
     </div>

@@ -1,7 +1,7 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block title %}Galeri Kegiatan - PT Bhumi Pasa Hijau{% endblock %}
+{% block title %}Galeri Kegiatan - Bhumi Pasa Hijau{% endblock %}
 
 {% block content %}
 <main class="flex-grow pt-[80px] bg-background">
@@ -11,20 +11,20 @@
   <section class="w-full bg-surface py-16 border-b border-border-subtle/40">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
       <div class="max-w-2xl mb-8 text-left">
-        <h2 class="font-headline-lg text-2xl font-bold text-on-surface mb-2">Dokumentasi Aksi Lapangan</h2>
+        <h2 class="font-headline-xl text-2xl md:text-3xl font-bold text-on-surface mb-2">Dokumentasi Aksi Lapangan</h2>
         <p class="font-body-md text-sm text-on-surface-variant">Filter dokumentasi berdasarkan fokus bidang kerja lapangan kami.</p>
       </div>
 
       <div class="flex flex-wrap justify-start gap-4 mb-8" id="gallery-filter-container">
-        <button class="font-label-caps text-label-caps px-6 py-2 rounded-full bg-primary text-surface-white transition-all duration-300 shadow-sm">All</button>
-        <button class="font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">NRM</button>
-        <button class="font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">NRU</button>
-        <button class="font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">Training</button>
-        <button class="font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">Others</button>
+        <button data-filter="all" class="gallery-filter-btn font-label-caps text-label-caps px-6 py-2 rounded-full bg-primary text-surface-white transition-all duration-300 shadow-sm hover:text-surface-white">All</button>
+        <button data-filter="nrm" class="gallery-filter-btn font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">NRM</button>
+        <button data-filter="nru" class="gallery-filter-btn font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">NRU</button>
+        <button data-filter="training" class="gallery-filter-btn font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">Training</button>
+        <button data-filter="others" class="gallery-filter-btn font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">Others</button>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="gallery-card-grid">
+        <div data-tags="nrm" class="gallery-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img alt="Environmental restoration" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services1.jpg' %}">
             <div class="absolute top-4 left-4 z-10"><span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">NRM</span></div>
@@ -34,7 +34,7 @@
             <p class="text-sm text-on-surface-variant leading-relaxed line-clamp-3">Pemulihan ekosistem hutan hujan tropis secara berkala melalui penanaman kembali bibit pohon endemik.</p>
           </div>
         </div>
-        <div class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
+        <div data-tags="training" class="gallery-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img alt="Field training" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/experience-1.jpg' %}">
             <div class="absolute top-4 left-4 z-10"><span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">Training</span></div>
@@ -44,9 +44,9 @@
             <p class="text-sm text-on-surface-variant leading-relaxed line-clamp-3">Membekali tim lapangan dan kader lingkungan dengan keterampilan navigasi GPS tingkat lanjut.</p>
           </div>
         </div>
-        <div class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
+        <div data-tags="nru" class="gallery-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img alt="Mountain landscape" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services7.jpg' %}">
+            <img alt="Mountain landscape" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services7.jpg' %}" />
             <div class="absolute top-4 left-4 z-10"><span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">NRU</span></div>
           </div>
           <div class="p-6 flex-1 flex flex-col">
@@ -66,7 +66,7 @@
       </div>
 
       <div id="article-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div class="article-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+        <a href="{% url 'detail-articles' slug='aksi-kecil-dampak-besar-restorasi-lahan-kritis' %}" class="article-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img src="{% static 'images/services1.jpg' %}" alt="Riset" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
           </div>
@@ -76,8 +76,8 @@
             <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Intervensi skala mikro dan keterlibatan komunitas lokal bawa perubahan ekosistem.</p>
             <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
           </div>
-        </div>
-        <div class="article-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+        </a>
+        <a href="{% url 'detail-articles' slug='analisis-sekuestrasi-karbon-hutan-hujan-tropis-2026' %}" class="article-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img src="{% static 'images/services7.jpg' %}" alt="Riset" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
           </div>
@@ -87,8 +87,8 @@
             <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Eksplorasi data penyerapan karbon dalam menekan pemanasan global ekosistem pulau.</p>
             <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
           </div>
-        </div>
-        <div class="article-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+        </a>
+        <a href="{% url 'detail-articles' slug='regulasi-air-bersih-batasan-kegiatan-industri-hilir' %}" class="article-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img src="{% static 'images/services9.jpg' %}" alt="Riset" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
           </div>
@@ -98,7 +98,7 @@
             <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Implementasi kebijakan daerah aliran sungai guna meminimalkan polusi limbah cair.</p>
             <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
           </div>
-        </div>
+        </a>
         <div class="article-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img src="{% static 'images/services2.jpg' %}" alt="Riset" class="w-full h-full object-cover">
@@ -127,7 +127,7 @@
       </div>
 
       <div id="story-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div class="story-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+        <a href="{% url 'detail-story' slug='menembus-kabut-gunung-barat-jejak-macan-dahan' %}" class="story-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img src="{% static 'images/experience-1.jpg' %}" alt="Cerita" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
           </div>
@@ -137,8 +137,8 @@
             <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Catatan perjalanan tim lapangan memasang camera trap di pedalaman rimba primer.</p>
             <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
           </div>
-        </div>
-        <div class="story-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+        </a>
+        <a href="{% url 'detail-story' slug='senyum-pesisir-menanam-masa-depan-bersama-nelayan' %}" class="story-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img src="{% static 'images/experience-2.jpg' %}" alt="Cerita" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
           </div>
@@ -148,8 +148,8 @@
             <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Bagaimana bibit mangrove kecil menyatukan visi ekonomi warga dan kelestarian pantai.</p>
             <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
           </div>
-        </div>
-        <div class="story-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+        </a>
+        <a href="{% url 'detail-story' slug='bertahan-di-tengah-badai-tropis-saat-sampling-data' %}" class="story-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img src="{% static 'images/experience-3.jpg' %}" alt="Cerita" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
           </div>
@@ -159,8 +159,8 @@
             <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Suka duka perjuangan tim teknis mengamankan sampel fisik tanah di bawah guyuran hujan deras.</p>
             <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
           </div>
-        </div>
-        <div class="story-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+        </a>
+        <div class="story-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img src="{% static 'images/services1.jpg' %}" alt="Cerita" class="w-full h-full object-cover">
           </div>
@@ -188,7 +188,7 @@
       </div>
 
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        <div class="group cursor-pointer">
+        <a href="{% url 'experience' %}" class="group">
           <div class="relative aspect-[3/4] bg-surface-white border border-border-subtle rounded-xl overflow-hidden shadow-sm transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
             <img src="{% static 'images/services1.jpg' %}" alt="Cover Modul Audit" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
@@ -200,8 +200,8 @@
             <h3 class="font-headline-md text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Audit Ekologis Kawasan Sofifi 2026</h3>
             <p class="text-[12px] text-on-surface-variant mt-1">NRM &amp; Ecosystem Restoration</p>
           </div>
-        </div>
-        <div class="group cursor-pointer">
+        </a>
+        <a href="{% url 'experience' %}" class="group">
           <div class="relative aspect-[3/4] bg-surface-white border border-border-subtle rounded-xl overflow-hidden shadow-sm transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
             <img src="{% static 'images/services7.jpg' %}" alt="Cover Modul Karbon" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
@@ -209,11 +209,11 @@
               <span class="material-symbols-outlined text-sm block font-bold">description</span>
             </div>
           </div>
-          <div class="mt-4 text-left">
+          <div class="max-w-[587px] mt-4 text-left">
             <h3 class="font-headline-md text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Metodologi Pemetaan Karbon Spasial</h3>
             <p class="text-[12px] text-on-surface-variant mt-1">NRU &amp; Data Spasial Analysis</p>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   </section>
@@ -225,7 +225,32 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     
-    // Artikel Pagination
+    const galleryButtons = document.querySelectorAll('.gallery-filter-btn');
+    const galleryCards = document.querySelectorAll('.gallery-card');
+
+    galleryButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filterValue = btn.getAttribute('data-filter');
+
+        galleryButtons.forEach(b => {
+          b.classList.remove('bg-primary', 'text-surface-white', 'shadow-sm', 'hover:text-surface-white');
+          b.classList.add('border', 'border-border-subtle', 'text-on-surface-variant', 'hover:border-primary', 'hover:text-primary');
+        });
+
+        btn.classList.add('bg-primary', 'text-surface-white', 'shadow-sm', 'hover:text-surface-white');
+        btn.classList.remove('border', 'border-border-subtle', 'text-on-surface-variant', 'hover:border-primary', 'hover:text-primary');
+
+        galleryCards.forEach(card => {
+          const cardTags = card.getAttribute('data-tags');
+          if (filterValue === 'all' || cardTags === filterValue) {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+      });
+    });
+    
     const articleCards = document.querySelectorAll('.article-card');
     const articleMoreBtn = document.getElementById('article-more-btn');
     const articleLessBtn = document.getElementById('article-less-btn');
@@ -266,7 +291,6 @@
       }
     });
 
-    // Cerita Lapangan Pagination
     const storyCards = document.querySelectorAll('.story-card');
     const storyMoreBtn = document.getElementById('story-more-btn');
     const storyLessBtn = document.getElementById('story-less-btn');

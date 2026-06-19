@@ -25,6 +25,10 @@ def detail_experience(request, slug):
     # Jika sementara masih pakai data dummy / statis biar ga error:
     return render(request, 'core/detail-experience.html')
 
+def detail_story(request, slug):
+    # Jika sementara masih pakai data dummy / statis biar ga error:
+    return render(request, 'core/detail-story.html')
+
 # FIXED: Menambahkan fungsi detail artikel independen agar melempar ke file template detail_artikel.html
 def detail_article(request, slug):
     # Jika pakai database asli kedepannya tinggal un-comment baris bawah:

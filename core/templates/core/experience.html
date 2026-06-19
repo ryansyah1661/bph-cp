@@ -75,7 +75,7 @@
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter" id="project-grid">
         
-        <article data-category="konservasi" data-year="2024" onclick="window.location.href='{% url 'detail-experience' slug='proyek-rehabilitasi-hutan-kalimantan' %}'" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
+        <a href="{% url 'detail-experience' slug='proyek-rehabilitasi-hutan-kalimantan' %}" data-category="konservasi" data-year="2024" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
           <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
             <img alt="Rehabilitasi Hutan" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/experience-1.jpg' %}">
             <div class="absolute top-4 left-4 flex gap-2 z-10">
@@ -89,9 +89,9 @@
             <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">Implementasi strategi pemulihan ekosistem komprehensif pada lahan kritis seluas 50.000 hektar.</p>
             <span class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider">Lihat Detail <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
           </div>
-        </article>
+        </a>
 
-        <article data-category="riset" data-year="2023" onclick="window.location.href='{% url 'detail-experience' slug='restorasi-ekosistem-mangrove-terpadu' %}'" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
+        <a href="{% url 'detail-experience' slug='restorasi-ekosistem-mangrove-terpadu' %}" data-category="riset" data-year="2023" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
           <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
             <img alt="Mangrove" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/experience-2.jpg' %}">
             <div class="absolute top-4 left-4 flex gap-2 z-10">
@@ -105,9 +105,9 @@
             <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">Pengembangan sabuk hijau pesisir untuk mitigasi abrasi dan pemetaan karbon biru.</p>
             <span class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider">Lihat Detail <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
           </div>
-        </article>
+        </a>
 
-        <article data-category="sosial" data-year="2023" onclick="window.location.href='{% url 'detail-experience' slug='program-sertifikasi-rimbawan-muda' %}'" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
+        <a href="{% url 'detail-experience' slug='program-sertifikasi-rimbawan-muda' %}" data-category="sosial" data-year="2023" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
           <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
             <img alt="Rimbawan" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/experience-3.jpg' %}">
             <div class="absolute top-4 left-4 flex gap-2 z-10">
@@ -121,7 +121,7 @@
             <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">Pelatihan intensif berbasis kompetensi teknis kehutanan untuk 500 kader lingkungan.</p>
             <span class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider">Lihat Detail <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
           </div>
-        </article>
+        </a>
 
         <article data-category="konservasi" data-year="2024" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
           <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
@@ -553,10 +553,12 @@
         e.stopPropagation();
         
         filterButtons.forEach(b => {
-          b.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+          b.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm', 'hover:text-surface-white');
           b.classList.add('bg-transparent', 'border', 'border-outline-variant', 'text-on-surface-variant');
         });
-        btn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+        
+        // FIXED: Ditambahkan class 'hover:text-surface-white' agar tulisan button kategori aktif tetap putih saat disorot kursor
+        btn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm', 'hover:text-surface-white');
         btn.classList.remove('bg-transparent', 'border', 'border-outline-variant', 'text-on-surface-variant');
         
         visibleLimit = 6; 

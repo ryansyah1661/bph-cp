@@ -16,4 +16,5 @@ urlpatterns = [
     
     # FIXED: Mendaftarkan rute dinamis baru khusus untuk detail rilis artikel & cerita lapangan BPH
     path('articles/<slug:slug>/', views.detail_article, name='detail-articles'),
+    path('stories/<slug:slug>/', views.detail_story, name='detail-story'),
 ]

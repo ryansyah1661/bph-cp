@@ -17,7 +17,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         
-        <div onclick="window.location.href='{% url 'detail-services' slug='rehabilitasi-hutan' %}'" 
+        <a href="{% url 'detail-services' slug='rehabilitasi-hutan' %}" 
              class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img alt="Rehabilitasi Hutan" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services1.jpg' %}" />
@@ -41,9 +41,9 @@
               <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
             </span>
           </div>
-        </div>
+        </a>
 
-        <div onclick="window.location.href='{% url 'detail-services' slug='inventarisasi-lahan' %}'" 
+        <a href="{% url 'detail-services' slug='inventarisasi-lahan' %}" 
              class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img alt="Inventarisasi Lahan" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services2.jpg' %}" />
@@ -67,9 +67,9 @@
               <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
             </span>
           </div>
-        </div>
+        </a>
 
-        <div onclick="window.location.href='{% url 'detail-services' slug='penguatan-kelembagaan' %}'" 
+        <a href="{% url 'detail-services' slug='penguatan-kelembagaan' %}" 
              class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img alt="Penguatan Kelembagaan" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services3.jpg' %}" />
@@ -93,9 +93,9 @@
               <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
             </span>
           </div>
-        </div>
+        </a>
 
-        <div onclick="window.location.href='{% url 'detail-services' slug='perencanaan-sda' %}'" 
+        <a href="{% url 'detail-services' slug='perencanaan-sda' %}" 
              class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img alt="Perencanaan SDA" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services4.jpg' %}" />
@@ -119,9 +119,9 @@
               <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
             </span>
           </div>
-        </div>
+        </a>
 
-        <div onclick="window.location.href='{% url 'detail-services' slug='pengelolaan-tanaman' %}'" 
+        <a href="{% url 'detail-services' slug='pengelolaan-tanaman' %}" 
              class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img alt="Kesehatan Tanaman" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services5.jpg' %}" />
@@ -145,9 +145,9 @@
               <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
             </span>
           </div>
-        </div>
+        </a>
 
-        <div onclick="window.location.href='{% url 'detail-services' slug='perizinan-lingkungan' %}'" 
+        <a href="{% url 'detail-services' slug='perizinan-lingkungan' %}" 
              class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img alt="Perizinan Lingkungan" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services6.jpg' %}" />
@@ -165,13 +165,13 @@
               Navigating complex regulatory landscapes to secure necessary environmental clearances and permits.
             </p>
             <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
-              <span class="relative inline-block pb-1 after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
+              <span class="relative inline-block pb-1 after:pointer-events-none after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
                 Baca Selengkapnya
               </span>
               <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
             </span>
           </div>
-        </div>
+        </a>
 
       </div>
     </div>
@@ -186,7 +186,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         
-        <div onclick="window.location.href='{% url 'detail-services' slug='penilaian-keanekaragaman' %}'" 
+        <a href="{% url 'detail-services' slug='penilaian-keanekaragaman' %}" 
              class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img alt="Keanekaragaman Hayati" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services7.jpg' %}" />
@@ -203,16 +203,16 @@
             <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">
               Rigorous baseline surveys and impact assessments for local flora and fauna populations.
             </p>
-            <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-primary group-hover:text-forest-deep transition-colors duration-300 font-label-caps">
+            <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
               <span class="relative inline-block pb-1 after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
                 Baca Selengkapnya
               </span>
               <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
             </span>
           </div>
-        </div>
+        </a>
 
-        <div onclick="window.location.href='{% url 'detail-services' slug='penilaian-sosial' %}'" 
+        <a href="{% url 'detail-services' slug='penilaian-sosial' %}" 
              class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img alt="Penilaian Sosial" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services8.jpg' %}" />
@@ -236,9 +236,9 @@
               <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
             </span>
           </div>
-        </div>
+        </a>
 
-        <div onclick="window.location.href='{% url 'detail-services' slug='tanah-hidrologi' %}'" 
+        <a href="{% url 'detail-services' slug='tanah-hidrologi' %}" 
              class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img alt="Tanah &amp; Hidrologi" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services9.jpg' %}" />
@@ -262,9 +262,9 @@
               <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
             </span>
           </div>
-        </div>
+        </a>
 
-        <div onclick="window.location.href='{% url 'detail-services' slug='kajian-iklim' %}'" 
+        <a href="{% url 'detail-services' slug='kajian-iklim' %}" 
              class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img alt="Kajian Iklim" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services10.jpg' %}" />
@@ -288,9 +288,9 @@
               <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
             </span>
           </div>
-        </div>
+        </a>
 
-        <div onclick="window.location.href='{% url 'detail-services' slug='kesehatan-tanaman-nru' %}'" 
+        <a href="{% url 'detail-services' slug='kesehatan-tanaman-nru' %}" 
              class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img alt="Kesehatan Tanaman" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services11.jpg' %}" />
@@ -308,15 +308,15 @@
               Diagnostic evaluations of ecosystem health indicators to monitor long-term conservation success.
             </p>
             <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
-              <span class="relative inline-block pb-1 after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
+              <span class="relative inline-block pb-1 after:pointer-events-none after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
                 Baca Selengkapnya
               </span>
               <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
             </span>
           </div>
-        </div>
+        </a>
 
-        <div onclick="window.location.href='{% url 'detail-services' slug='energi-terbarukan' %}'" 
+        <a href="{% url 'detail-services' slug='energi-terbarukan' %}" 
              class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             <img alt="Energi Terbarukan" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services12.jpg' %}" />
@@ -334,13 +334,13 @@
               Feasibility studies and environmental impact assessments for clean energy infrastructure projects.
             </p>
             <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
-              <span class="relative inline-block pb-1 after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
+              <span class="relative inline-block pb-1 after:pointer-events-none after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
                 Baca Selengkapnya
               </span>
               <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
             </span>
           </div>
-        </div>
+        </a>
 
       </div>
     </div>
