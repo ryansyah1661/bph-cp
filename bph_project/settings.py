@@ -31,6 +31,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin', #---template admin jazzmin
+    # 'admin_interface',  #----template admin interface
+    # 'colorfield', #----template admin interface
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,7 +58,7 @@ ROOT_URLCONF = 'bph_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates',],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -121,3 +124,62 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# ==============================================================================
+# KONFIGURASI TEMA JAZZMIN (DIEDIT DI SINI UNTUK HUBUNGKAN FONT/WARNA DARI PDF)
+# ==============================================================================
+
+JAZZMIN_SETTINGS = {
+    "site_title": "BPH Admin",
+    "site_header": "Bhumi Pasa Hijau",
+    "site_brand": "Bhumi Pasa Hijau",
+    "copyright": "Bhumi Pasa Hijau",
+    "welcome_sign": "Selamat Datang di Dashboard Bhumi Pasa Hijau",
+
+    "usermenu_links": [{"name": "Bhumi Pasa Hijau", "url": "/", "new_window": True}],
+    "show_sidebar": True,
+    "topmenu_links": [{"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]}], # <-- Tambah ini bro
+    
+    # --------------------------------------------------------------------------
+    # CARA CUSTOM: Daftarkan file CSS custom biar warna & font presisi 100% dari PDF.
+    # Buat filenya nanti di: core/static/core/css/custom_admin.css
+    # (Hapus/Komentari baris di bawah ini jika lu cuma pengen tes cara instan dulu)
+    # --------------------------------------------------------------------------
+    "custom_css": "core/css/custom_admin.css",
+    "custom_js": "core/js/custom_admin.js",
+    "icons": {
+        "auth.user": "fas fa-user-cog",
+        "auth.Group": "fas fa-users",
+        "core.Category": "fas fa-tags",
+        "core.Service": "fas fa-hand-holding-heart",
+        "core.ServiceStep": "fas fa-list-ol",
+        "core.Location": "fas fa-map-marker-alt",
+        "core.Client": "fas fa-handshake",
+        "core.Project": "fas fa-project-diagram",
+        "core.Story": "fas fa-book-open",
+        "core.Article": "fas fa-newspaper",
+    },
+    "order_with_respect_to": [
+        "auth", 
+        "core.Service", 
+        "core.ServiceStep", 
+        "core.Category", 
+        "core.Location", 
+        "core.Client", 
+        "core.Project", 
+        "core.Story", 
+        "core.Article"
+    ],
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar": "navbar-success navbar-dark", 
+    "sidebar": "sidebar-dark-success",     
+    
+    # --------------------------------------------------------------------------
+    # CARA INSTAN: Ganti "theme" di bawah ini pake nama Bootswatch buat tes rasa instan.
+    # Pilihan rasa instan yang ijo atau mirip font PDF: "minty", "flatly", "lux", "simplex"
+    # --------------------------------------------------------------------------
+    "theme": "flatly",  # Pilihan rasa instan yang ijo atau mirip font PDF: "minty", "flatly", "lux", "simplex"
+}
