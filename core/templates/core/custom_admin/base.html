@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard Admin | Bhumi Pasa Hijau{% endblock %}</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700&display=swap');
+
+        body, h1, h2, h3, h4, h5, h6, p, td, th, a, input, select, button, textarea {
+            font-family: 'Inter', -apple-system, sans-serif !important;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+        }
+
+        /* NAVBAR STYLE */
+        #bph-navbar {
+            height: 72px;
+            background: #308935;
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            position: relative;
+            z-index: 10;
+        }
+
+        #bph-navbar .bph-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .bph-username {
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* SPLIT LAYOUT WRAPPER */
+        .bph-layout-wrapper {
+            display: flex;
+            height: calc(100vh - 72px);
+            width: 100%;
+        }
+
+        /* SIDEBAR INDEPENDENT SCROLL */
+        .bph-sidebar-container {
+            width: 295px;
+            height: 100%;
+            overflow-y: auto;
+            background: #f8faf9;
+            border-right: 1px solid #eef2f5;
+            padding: 30px 20px 30px 35px;
+        }
+
+        .bph-sidebar-left {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            border: 1px solid #eef2f5;
+        }
+
+        .bph-group-heading {
+            font-size: 12px;
+            color: #1b4332;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            border-bottom: 2px solid #308935;
+            padding-bottom: 6px;
+            margin-top: 15px;
+            margin-bottom: 14px;
+        }
+
+        .bph-group-heading:first-of-type { margin-top: 0; }
+
+        .bph-model-list { list-style: none; padding: 0; margin: 0; }
+        .bph-model-item { margin-bottom: 4px; }
+        
+        .bph-model-link {
+            display: block;
+            padding: 9px 12px;
+            color: #495057;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .bph-model-link:hover {
+            background-color: #f1f8f4;
+            color: #308935;
+            font-weight: 600;
+            padding-left: 16px;
+        }
+
+        /* MAIN CONTENT SCROLL MANDIRI */
+        .bph-main-content-container {
+            flex: 1;
+            height: 100%;
+            overflow-y: auto;
+            padding: 30px 40px;
+            background: #ffffff;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <nav id="bph-navbar">
+        <a href="{% url 'custom_dashboard' %}" class="bph-brand">
+            <img src="{% static 'images/logo-bph-white.png' %}" alt="Logo" style="height: 40px;">
+            <span>Bhumi Pasa Hijau</span>
+        </a>
+        <div class="bph-username">👤 {{ request.user.username }}</div>
+    </nav>
+
+    <div class="bph-layout-wrapper">
+        <div class="bph-sidebar-container">
+            <div class="bph-sidebar-left">
+                <div class="bph-group-heading">📑 Konten Publikasi</div>
+                <ul class="bph-model-list">
+                    <li class="bph-model-item"><a href="{% url 'article_list' %}" class="bph-model-link">Artikel & Wawasan Teknis</a></li>
+                    <li class="bph-model-item"><a href="{% url 'story_list' %}" class="bph-model-link">Cerita Lapangan</a></li>
+                </ul>
+
+                <div class="bph-group-heading">🌿 Layanan & Proyek</div>
+                <ul class="bph-model-list">
+                    <li class="bph-model-item"><a href="{% url 'client_list' %}" class="bph-model-link">Klien / Mitra Kolaborasi</a></li>
+                    <li class="bph-model-item"><a href="{% url 'service_list' %}" class="bph-model-link">Layanan (Services)</a></li>
+                    <li class="bph-model-item"><a href="{% url 'location_list' %}" class="bph-model-link">Lokasi Wilayah</a></li>
+                    <li class="bph-model-item"><a href="{% url 'project_list' %}" class="bph-model-link">Proyek (Experience)</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="bph-main-content-container">
+            {% block admin_content %}{% endblock %}
+        </div>
+    </div>
+
+</body>
+</html>

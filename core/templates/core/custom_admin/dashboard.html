@@ -1,0 +1,87 @@
+{% extends "core/custom_admin/base.html" %}
+
+{% block admin_content %}
+<div style="display: flex; flex-direction: column; height: 100%;">
+    <style>
+        .bph-cards-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
+        .bph-stat-card { background: #ffffff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); border: 1px solid #eef2f5; }
+        .bph-stat-card .bph-label { font-size: 11px; color: #6c757d; font-weight: 700; text-transform: uppercase; }
+        .bph-stat-card .bph-value { font-size: 32px; font-weight: 700; color: #1b4332; margin: 6px 0; }
+        .bph-stat-card .bph-link { font-size: 12px; color: #308935; font-weight: 600; text-decoration: none; }
+        
+        .bph-tables-twin-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; flex: 1; min-height: 0; }
+        .bph-data-box { background: #ffffff; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); border: 1px solid #eef2f5; display: flex; flex-direction: column; }
+        .bph-box-header { padding: 15px 20px; border-bottom: 1px solid #eef2f5; display: flex; justify-content: space-between; align-items: center; }
+        .bph-box-header h3 { margin: 0; font-size: 14px; color: #1b4332; }
+        .bph-box-body { flex: 1; overflow-y: auto; }
+        
+        .bph-custom-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .bph-custom-table td { padding: 14px 20px; border-top: 1px solid #f1f3f5; }
+    </style>
+
+    <div class="bph-cards-grid">
+        <div class="bph-stat-card">
+            <div class="bph-label">Total Artikel Aktif</div>
+            <div class="bph-value">{{ total_articles }}</div>
+            <a href="{% url 'article_list' %}" class="bph-link">Artikel terbit →</a>
+        </div>
+        <div class="bph-stat-card">
+            <div class="bph-label">Total Proyek</div>
+            <div class="bph-value">{{ total_projects }}</div>
+            <a href="{% url 'project_list' %}" class="bph-link">Portofolio →</a>
+        </div>
+        <div class="bph-stat-card">
+            <div class="bph-label">Mitra Kolaborasi</div>
+            <div class="bph-value">{{ total_clients }}</div>
+            <a href="{% url 'client_list' %}" class="bph-link">Instansi →</a>
+        </div>
+        <div class="bph-stat-card">
+            <div class="bph-label">Cerita Lapangan</div>
+            <div class="bph-value">{{ total_stories }}</div>
+            <a href="{% url 'story_list' %}" class="bph-link">Kegiatan →</a>
+        </div>
+    </div>
+
+    <div class="bph-tables-twin-grid">
+        <div class="bph-data-box">
+            <div class="bph-box-header">
+                <h3>Artikel Terbaru</h3>
+                <a href="{% url 'article_list' %}" class="bph-btn-link" style="font-size: 11px; color: #308935; text-decoration: none; font-weight: 600;">Lihat Semua</a>
+            </div>
+            <div class="bph-box-body">
+                <table class="bph-custom-table">
+                    <tbody>
+                        {% for article in recent_articles %}
+                        <tr>
+                            <td><a href="{% url 'article_edit' article.id %}" style="font-weight: 600; color: #2d6a4f; text-decoration: none;">{{ article.judul }}</a></td>
+                        </tr>
+                        {% empty %}
+                        <tr><td style="text-align: center; color: #adb5bd; padding: 30px;">Belum ada artikel.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="bph-data-box">
+            <div class="bph-box-header">
+                <h3>Proyek Terbaru</h3>
+                <a href="{% url 'project_list' %}" class="bph-btn-link" style="font-size: 11px; color: #308935; text-decoration: none; font-weight: 600;">Lihat Semua</a>
+            </div>
+            <div class="bph-box-body">
+                <table class="bph-custom-table">
+                    <tbody>
+                        {% for project in recent_projects %}
+                        <tr>
+                            <td><a href="{% url 'project_edit' project.id %}" style="font-weight: 600; color: #2d6a4f; text-decoration: none;">{{ project.name }}</a></td>
+                        </tr>
+                        {% empty %}
+                        <tr><td style="text-align: center; color: #adb5bd; padding: 30px;">Belum ada proyek.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
