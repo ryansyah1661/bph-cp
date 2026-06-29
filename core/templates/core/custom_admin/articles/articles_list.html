@@ -1,0 +1,51 @@
+{% extends "core/custom_admin/base.html" %}
+
+{% block admin_content %}
+<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+    <div class="flex justify-between items-center border-b border-gray-100 pb-4 mb-6">
+        <div>
+            <h2 class="text-xl font-bold text-emerald-900">Manajemen Artikel & Wawasan Teknis</h2>
+            <p class="text-xs text-gray-500 mt-1">Kelola seluruh publikasi artikel informasi Bhumi Pasa Hijau.</p>
+        </div>
+        <a href="{% url 'article_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-lg uppercase tracking-wider transition">
+            + Tambah Artikel
+        </a>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-sm">
+            <thead>
+                <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
+                    <th class="p-3 font-semibold">Gambar</th>
+                    <th class="p-3 font-semibold">Judul Artikel</th>
+                    <th class="p-3 font-semibold">Slug</th>
+                    <th class="p-3 font-semibold text-center">Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700 divide-y divide-gray-50">
+                {% for article in articles %}
+                <tr>
+                    <td class="p-3">
+                        {% if article.gambar %}
+                            <img src="{{ article.gambar.url }}" class="w-12 h-12 object-cover rounded-md">
+                        {% else %}
+                             <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded">No Image</span>
+                        {% endif %}
+                    </td>
+                    <td class="p-3 font-medium text-emerald-700">{{ article.judul }}</td>
+                    <td class="p-3 text-gray-400 text-xs">{{ article.slug }}</td>
+                    <td class="p-3 text-center space-x-2">
+                        <a href="{% url 'article_update' article.pk %}" class="text-amber-600 hover:underline font-semibold">Edit</a>
+                        <a href="{% url 'article_delete' article.pk %}" class="text-red-600 hover:underline font-semibold">Hapus</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="p-8 text-center text-gray-400 font-medium">Belum ada data artikel.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

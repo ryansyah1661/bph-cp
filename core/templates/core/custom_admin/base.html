@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Dashboard Admin | Bhumi Pasa Hijau{% endblock %}</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
         body, h1, h2, h3, h4, h5, h6, p, td, th, a, input, select, button, textarea {
             font-family: 'Inter', -apple-system, sans-serif !important;
@@ -31,7 +32,7 @@
             justify-content: space-between;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
             position: relative;
-            z-index: 10;
+            z-index: 100;
         }
 
         #bph-navbar .bph-brand {
@@ -44,10 +45,110 @@
             font-weight: 700;
         }
 
-        .bph-username {
+        /* REPLIKA PROFILE DROPDOWN KAWUNG PITU */
+        .bph-profile-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .bph-profile-check {
+            display: none;
+        }
+
+        .bph-username-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .bph-nav-name {
             color: #ffffff;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        /* Avatar Bulat Inisial Huruf */
+        .bph-avatar-circle {
+            width: 40px;
+            height: 40px;
+            background: #000000;
+            color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Box Dropdown Melayang Bergaya Kawung Pitu */
+        .bph-nav-dropdown {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: -8px;
+            width: 240px;
+            background: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eef2f5;
+            padding: 8px;
+            display: none;
+            z-index: 200;
+        }
+
+        /* Row 1: Info Nama User di Dalam Dropdown */
+        .bph-dropdown-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            color: #495057;
             font-size: 14px;
             font-weight: 600;
+            border-bottom: 1px solid #f1f3f5;
+            margin-bottom: 4px;
+        }
+        
+        .bph-dropdown-info .info-icon {
+            color: #8a929a;
+            font-size: 20px;
+        }
+
+        /* Row 2: Tombol Keluar (Diubah Jadi Button Trigger Modal) */
+        .bph-dropdown-item-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            color: #495057;
+            font-size: 14px;
+            font-weight: 600;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .bph-dropdown-item-btn:hover {
+            background: #f8faf9;
+            color: #308935;
+        }
+        
+        .bph-dropdown-item-btn .logout-icon {
+            color: #8a929a;
+            font-size: 20px;
+        }
+
+        /* Trigger Tampil Pas Checkbox Di-klik */
+        .bph-profile-check:checked ~ .bph-nav-dropdown {
+            display: block;
         }
 
         /* SPLIT LAYOUT WRAPPER */
@@ -57,58 +158,118 @@
             width: 100%;
         }
 
-        /* SIDEBAR INDEPENDENT SCROLL */
+        /* SIDEBAR CONTAINER */
         .bph-sidebar-container {
             width: 295px;
             height: 100%;
             overflow-y: auto;
             background: #f8faf9;
             border-right: 1px solid #eef2f5;
-            padding: 30px 20px 30px 35px;
+            padding: 30px 20px 30px 25px;
         }
 
         .bph-sidebar-left {
             background: #ffffff;
             border-radius: 12px;
-            padding: 24px 20px;
+            padding: 16px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.04);
             border: 1px solid #eef2f5;
         }
 
-        .bph-group-heading {
-            font-size: 12px;
+        /* STYLE UNTUK MENU POLOSAN (DASHBOARD & USER) */
+        .bph-menu-flat {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px 14px;
+            background: #ffffff;
+            border: 1px solid #f1f3f5;
+            border-radius: 10px;
             color: #1b4332;
+            font-size: 13px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
-            border-bottom: 2px solid #308935;
-            padding-bottom: 6px;
-            margin-top: 15px;
-            margin-bottom: 14px;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
         }
 
-        .bph-group-heading:first-of-type { margin-top: 0; }
+        .bph-menu-flat:hover {
+            background-color: #f1f8f4;
+            border-color: #cce3d1;
+            color: #308935;
+        }
 
-        .bph-model-list { list-style: none; padding: 0; margin: 0; }
-        .bph-model-item { margin-bottom: 4px; }
-        
+        /* ACCORDION SIDEBAR STYLE */
+        .bph-menu-group { margin-bottom: 8px; }
+        .bph-menu-group:last-child { margin-bottom: 0; }
+        .bph-dropdown-check { display: none; }
+
+        .bph-menu-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 12px 14px;
+            background: #ffffff;
+            border: 1px solid #f1f3f5;
+            border-radius: 10px;
+            color: #1b4332;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .bph-menu-toggle:hover {
+            background-color: #f1f8f4;
+            border-color: #cce3d1;
+        }
+
+        .bph-menu-toggle .arrow-icon {
+            font-size: 18px;
+            transition: transform 0.2s ease;
+            color: #308935;
+        }
+
+        .bph-dropdown-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.25s ease-out;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .bph-model-item { margin-top: 4px; padding-left: 8px; }
         .bph-model-link {
-            display: block;
-            padding: 9px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
             color: #495057;
             font-size: 13px;
             font-weight: 500;
             text-decoration: none;
-            border-radius: 6px;
+            border-radius: 8px;
             transition: all 0.2s;
         }
 
         .bph-model-link:hover {
-            background-color: #f1f8f4;
+            background-color: #f8faf9;
             color: #308935;
             font-weight: 600;
             padding-left: 16px;
         }
+
+        .bph-dropdown-check:checked ~ .bph-menu-toggle { background-color: #e6f2ea; border-color: #badcc3; }
+        .bph-dropdown-check:checked ~ .bph-menu-toggle .arrow-icon { transform: rotate(90deg); }
+        .bph-dropdown-check:checked ~ .bph-dropdown-content { max-height: 250px; margin-top: 4px; }
 
         /* MAIN CONTENT SCROLL MANDIRI */
         .bph-main-content-container {
@@ -118,8 +279,44 @@
             padding: 30px 40px;
             background: #ffffff;
         }
+
+        /* MODAL STYLING SYSTEM */
+        .bph-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .bph-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .bph-modal-box {
+            background: #ffffff;
+            border-radius: 18px;
+            max-w: 380px;
+            width: 100%;
+            padding: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid #eef2f5;
+            text-align: center;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .bph-modal-overlay.active .bph-modal-box {
+            transform: scale(1);
+        }
     </style>
     {% block extra_css %}{% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body>
 
@@ -128,25 +325,99 @@
             <img src="{% static 'images/logo-bph-white.png' %}" alt="Logo" style="height: 40px;">
             <span>Bhumi Pasa Hijau</span>
         </a>
-        <div class="bph-username">👤 {{ request.user.username }}</div>
+        
+        <div class="bph-profile-wrapper">
+            <input type="checkbox" id="nav-profile-toggle" class="bph-profile-check">
+            <label for="nav-profile-toggle" class="bph-username-toggle">
+                <span class="bph-nav-name">Admin Bhumi Pasa Hijau</span>
+                <div class="bph-avatar-circle">
+                    {{ request.user.username|slice:":2" }}
+                </div>
+            </label>
+            
+            <div class="bph-nav-dropdown">
+                <div class="bph-dropdown-info">
+                    <span class="material-symbols-outlined info-icon">account_circle</span>
+                    <span>Admin Bhumi Pasa Hijau</span>
+                </div>
+                <button type="button" id="trigger-logout-modal" class="bph-dropdown-item-btn">
+                    <span class="material-symbols-outlined logout-icon">logout</span>
+                    <span>Keluar</span>
+                </button>
+            </div>
+        </div>
     </nav>
 
     <div class="bph-layout-wrapper">
         <div class="bph-sidebar-container">
             <div class="bph-sidebar-left">
-                <div class="bph-group-heading">📑 Konten Publikasi</div>
-                <ul class="bph-model-list">
-                    <li class="bph-model-item"><a href="{% url 'article_list' %}" class="bph-model-link">Artikel & Wawasan Teknis</a></li>
-                    <li class="bph-model-item"><a href="{% url 'story_list' %}" class="bph-model-link">Cerita Lapangan</a></li>
-                </ul>
+                
+                <!-- MENU 1: DASHBOARD (POLOSAN) -->
+                <a href="{% url 'custom_dashboard' %}" class="bph-menu-flat">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">dashboard</span>
+                    <span>Dashboard</span>
+                </a>
 
-                <div class="bph-group-heading">🌿 Layanan & Proyek</div>
-                <ul class="bph-model-list">
-                    <li class="bph-model-item"><a href="{% url 'client_list' %}" class="bph-model-link">Klien / Mitra Kolaborasi</a></li>
-                    <li class="bph-model-item"><a href="{% url 'service_list' %}" class="bph-model-link">Layanan (Services)</a></li>
-                    <li class="bph-model-item"><a href="{% url 'location_list' %}" class="bph-model-link">Lokasi Wilayah</a></li>
-                    <li class="bph-model-item"><a href="{% url 'project_list' %}" class="bph-model-link">Proyek (Experience)</a></li>
-                </ul>
+                <!-- MENU 2: MANAJEMEN USER (POLOSAN) -->
+                <a href="#" class="bph-menu-flat">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">group</span>
+                    <span>User</span>
+                </a>
+
+                <!-- Pembatas Garis Tipis Halus -->
+                <div style="height: 1px; background-color: #f1f3f5; margin: 12px 0 12px 0;"></div>
+                
+                <!-- ACCORDION GRUP 1: KONTEN PUBLIKASI -->
+                <div class="bph-menu-group">
+                    <input type="checkbox" id="drop-publikasi" class="bph-dropdown-check" checked>
+                    <label for="drop-publikasi" class="bph-menu-toggle">
+                        <span style="display: flex; align-items: center; gap: 8px;">📑 Konten Publikasi</span>
+                        <span class="material-symbols-outlined arrow-icon">chevron_right</span>
+                    </label>
+                    <ul class="bph-dropdown-content">
+                        <li class="bph-model-item">
+                            <a href="{% url 'article_list' %}" class="bph-model-link">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">description</span>Artikel & Wawasan Teknis
+                            </a>
+                        </li>
+                        <li class="bph-model-item">
+                            <a href="{% url 'story_list' %}" class="bph-model-link">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">explore</span>Cerita Lapangan
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bph-menu-group">
+                    <input type="checkbox" id="drop-layanan" class="bph-dropdown-check" checked>
+                    <label for="drop-layanan" class="bph-menu-toggle">
+                        <span style="display: flex; align-items: center; gap: 8px;">🌿 Layanan & Proyek</span>
+                        <span class="material-symbols-outlined arrow-icon">chevron_right</span>
+                    </label>
+                    <ul class="bph-dropdown-content">
+                        <li class="bph-model-item">
+                            <a href="{% url 'client_list' %}" class="bph-model-link">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">corporate_fare</span>Klien / Mitra Kolaborasi
+                            </a>
+                        </li>
+                        <li class="bph-model-item">
+                            <a href="{% url 'service_list' %}" class="bph-model-link">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">handyman</span>Layanan (Services)
+                            </a>
+                        </li>
+                        <li class="bph-model-item">
+                            <a href="{% url 'location_list' %}" class="bph-model-link">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">location_on</span>Lokasi Wilayah
+                            </a>
+                        </li>
+                        <li class="bph-model-item">
+                            <a href="{% url 'project_list' %}" class="bph-model-link">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">assignment</span>Proyek (Experience)
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
             </div>
         </div>
 
@@ -154,6 +425,81 @@
             {% block admin_content %}{% endblock %}
         </div>
     </div>
+
+    <!-- MODAL KUSTOM POP-UP LOGOUT THEME BPH -->
+    <div id="logout-alert-modal" class="bph-modal-overlay" style="padding: 16px;">
+        <div class="bph-modal-box" style="max-width: 440px; width: 100%; padding: 32px 24px; position: relative;">
+            
+            <button type="button" id="btn-modal-x" class="absolute top-4 right-4 text-neutral-400 hover:text-neutral-600 transition-colors cursor-pointer bg-none border-none p-1 flex items-center justify-center rounded-lg">
+                <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+            </button>
+
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-emerald-50 text-emerald-600 mb-4" style="border: none;">
+                <span class="material-symbols-outlined" style="font-size: 24px;">logout</span>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-neutral-900 tracking-tight" style="font-size: 18px;">Keluar Aplikasi</h3>
+                <p class="text-sm text-neutral-400 mt-2 leading-relaxed" style="font-size: 14px; font-weight: 500;">
+                    Apakah Anda yakin ingin keluar dari Admin Panel Bhumi Pasa Hijau?
+                </p>
+            </div>
+
+            <div class="flex gap-3" style="display: flex; gap: 12px;">
+                <button type="button" id="btn-modal-cancel" class="flex-1 py-2.5 px-4 rounded-xl border border-neutral-200 text-sm font-semibold text-neutral-600 hover:bg-neutral-50 transition-colors cursor-pointer bg-white" style="flex: 1; border-radius: 8px;">
+                    Batal
+                </button>
+                <button type="button" id="btn-modal-confirm" class="flex-1 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-sm font-bold text-white shadow-md shadow-emerald-600/10 active:scale-[0.98] transition-all cursor-pointer border-none" style="flex: 1; border-radius: 8px; background-color: #dc2626;"> 
+                    Konfirmasi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <form id="hidden-logout-form" action="{% url 'admin_logout' %}" method="post" style="display: none;">
+        {% csrf_token %}
+    </form>
+
+    <script>
+        const triggerLogoutBtn = document.getElementById('trigger-logout-modal');
+        const logoutAlertModal = document.getElementById('logout-alert-modal');
+        const btnModalCancel = document.getElementById('btn-modal-cancel');
+        const btnModalConfirm = document.getElementById('btn-modal-confirm');
+        const btnModalX = document.getElementById('btn-modal-x');
+        const hiddenLogoutForm = document.getElementById('hidden-logout-form');
+        const profileDropdownCheck = document.getElementById('nav-profile-toggle');
+
+        // 1. Tampilkan modal pop-up pas menu "Keluar" diklik
+        if (triggerLogoutBtn) {
+            triggerLogoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (profileDropdownCheck) profileDropdownCheck.checked = false;
+                logoutAlertModal.classList.add('active');
+            });
+        }
+
+        // 2. Fungsi Penutupan Modal (Klik Batal / Tombol Silang)
+        function closeLogoutModal() {
+            logoutAlertModal.classList.remove('active');
+        }
+
+        if (btnModalCancel) btnModalCancel.addEventListener('click', closeLogoutModal);
+        if (btnModalX) btnModalX.addEventListener('click', closeLogoutModal);
+
+        // Tutup modal otomatis kalau user klik area luar box
+        logoutAlertModal.addEventListener('click', function(e) {
+            if (e.target === logoutAlertModal) {
+                closeLogoutModal();
+            }
+        });
+
+        // 3. Tembak Form POST Logout
+        if (btnModalConfirm) {
+            btnModalConfirm.addEventListener('click', function() {
+                hiddenLogoutForm.submit();
+            });
+        }
+    </script>
 
 </body>
 </html>

@@ -34,7 +34,7 @@ def detail_articles_view(request, slug):
     return render(request, 'core/detail-articles.html', {'article': article_data})
 
 def detail_experience_view(request, slug):
-    project_data = get_object_or_404(Project, slug=slug) # Sesuaikan jika field di model bernama slug
+    project_data = get_object_or_404(Project, slug=slug)
     return render(request, 'core/detail-experience.html', {'project': project_data})
 
 def detail_services_view(request, slug):
@@ -70,24 +70,24 @@ class AdminRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
 # ==========================================
 class ArticleListView(AdminRequiredMixin, ListView):
     model = Article
-    template_name = 'core/custom_admin/article_list.html'
+    template_name = 'core/custom_admin/articles/articles_list.html'
     context_object_name = 'articles'
 
 class ArticleCreateView(AdminRequiredMixin, CreateView):
     model = Article
-    template_name = 'core/custom_admin/article_form.html'
+    template_name = 'core/custom_admin/articles/articles_form.html'
     fields = '__all__'
     success_url = reverse_lazy('article_list')
 
 class ArticleUpdateView(AdminRequiredMixin, UpdateView):
     model = Article
-    template_name = 'core/custom_admin/article_form.html'
+    template_name = 'core/custom_admin/articles/articles_form.html'
     fields = '__all__'
     success_url = reverse_lazy('article_list')
 
 class ArticleDeleteView(AdminRequiredMixin, DeleteView):
     model = Article
-    template_name = 'core/custom_admin/article_confirm_delete.html'
+    template_name = 'core/custom_admin/articles/article_confirm_delete.html'
     success_url = reverse_lazy('article_list')
 
 # ==========================================
@@ -95,24 +95,24 @@ class ArticleDeleteView(AdminRequiredMixin, DeleteView):
 # ==========================================
 class ProjectListView(AdminRequiredMixin, ListView):
     model = Project
-    template_name = 'core/custom_admin/project_list.html'
+    template_name = 'core/custom_admin/experience/experience_list.html'
     context_object_name = 'projects'
 
 class ProjectCreateView(AdminRequiredMixin, CreateView):
     model = Project
-    template_name = 'core/custom_admin/project_form.html'
+    template_name = 'core/custom_admin/experience/experience_form.html'
     fields = '__all__'
     success_url = reverse_lazy('project_list')
 
 class ProjectUpdateView(AdminRequiredMixin, UpdateView):
     model = Project
-    template_name = 'core/custom_admin/project_form.html'
+    template_name = 'core/custom_admin/experience/experience_form.html'
     fields = '__all__'
     success_url = reverse_lazy('project_list')
 
 class ProjectDeleteView(AdminRequiredMixin, DeleteView):
     model = Project
-    template_name = 'core/custom_admin/project_confirm_delete.html'
+    template_name = 'core/custom_admin/experience/experience_confirm_delete.html'
     success_url = reverse_lazy('project_list')
 
 # ==========================================
@@ -120,24 +120,24 @@ class ProjectDeleteView(AdminRequiredMixin, DeleteView):
 # ==========================================
 class StoryListView(AdminRequiredMixin, ListView):
     model = Story
-    template_name = 'core/custom_admin/story_list.html'
+    template_name = 'core/custom_admin/story/story_list.html'
     context_object_name = 'stories'
 
 class StoryCreateView(AdminRequiredMixin, CreateView):
     model = Story
-    template_name = 'core/custom_admin/story_form.html'
+    template_name = 'core/custom_admin/story/story_form.html'
     fields = '__all__'
     success_url = reverse_lazy('story_list')
 
 class StoryUpdateView(AdminRequiredMixin, UpdateView):
     model = Story
-    template_name = 'core/custom_admin/story_form.html'
+    template_name = 'core/custom_admin/story/story_form.html'
     fields = '__all__'
-    success_url = network = reverse_lazy('story_list')
+    success_url = reverse_lazy('story_list')
 
 class StoryDeleteView(AdminRequiredMixin, DeleteView):
     model = Story
-    template_name = 'core/custom_admin/story_confirm_delete.html'
+    template_name = 'core/custom_admin/story/story_confirm_delete.html'
     success_url = reverse_lazy('story_list')
 
 # ==========================================
@@ -145,24 +145,24 @@ class StoryDeleteView(AdminRequiredMixin, DeleteView):
 # ==========================================
 class ClientListView(AdminRequiredMixin, ListView):
     model = Client
-    template_name = 'core/custom_admin/client_list.html'
+    template_name = 'core/custom_admin/klien/client_list.html'
     context_object_name = 'clients'
 
 class ClientCreateView(AdminRequiredMixin, CreateView):
     model = Client
-    template_name = 'core/custom_admin/client_form.html'
+    template_name = 'core/custom_admin/klien/client_form.html'
     fields = '__all__'
     success_url = reverse_lazy('client_list')
 
 class ClientUpdateView(AdminRequiredMixin, UpdateView):
     model = Client
-    template_name = 'core/custom_admin/client_form.html'
+    template_name = 'core/custom_admin/klien/client_form.html'
     fields = '__all__'
     success_url = reverse_lazy('client_list')
 
 class ClientDeleteView(AdminRequiredMixin, DeleteView):
     model = Client
-    template_name = 'core/custom_admin/client_confirm_delete.html'
+    template_name = 'core/custom_admin/klien/client_confirm_delete.html'
     success_url = reverse_lazy('client_list')
 
 # ==========================================
@@ -170,24 +170,24 @@ class ClientDeleteView(AdminRequiredMixin, DeleteView):
 # ==========================================
 class ServiceListView(AdminRequiredMixin, ListView):
     model = Service
-    template_name = 'core/custom_admin/service_list.html'
+    template_name = 'core/custom_admin/layanan/service_list.html'
     context_object_name = 'services'
 
 class ServiceCreateView(AdminRequiredMixin, CreateView):
     model = Service
-    template_name = 'core/custom_admin/service_form.html'
+    template_name = 'core/custom_admin/layanan/service_form.html'
     fields = '__all__'
     success_url = reverse_lazy('service_list')
 
 class ServiceUpdateView(AdminRequiredMixin, UpdateView):
     model = Service
-    template_name = 'core/custom_admin/service_form.html'
+    template_name = 'core/custom_admin/layanan/service_form.html'
     fields = '__all__'
     success_url = reverse_lazy('service_list')
 
 class ServiceDeleteView(AdminRequiredMixin, DeleteView):
     model = Service
-    template_name = 'core/custom_admin/service_confirm_delete.html'
+    template_name = 'core/custom_admin/layanan/service_confirm_delete.html'
     success_url = reverse_lazy('service_list')
 
 # ==========================================
@@ -195,22 +195,22 @@ class ServiceDeleteView(AdminRequiredMixin, DeleteView):
 # ==========================================
 class LocationListView(AdminRequiredMixin, ListView):
     model = Location
-    template_name = 'core/custom_admin/location_list.html'
+    template_name = 'core/custom_admin/lokasi/location_list.html'
     context_object_name = 'locations'
 
 class LocationCreateView(AdminRequiredMixin, CreateView):
     model = Location
-    template_name = 'core/custom_admin/location_form.html'
+    template_name = 'core/custom_admin/lokasi/location_form.html'
     fields = '__all__'
     success_url = reverse_lazy('location_list')
 
 class LocationUpdateView(AdminRequiredMixin, UpdateView):
     model = Location
-    template_name = 'core/custom_admin/location_form.html'
+    template_name = 'core/custom_admin/lokasi/location_form.html'
     fields = '__all__'
     success_url = reverse_lazy('location_list')
 
 class LocationDeleteView(AdminRequiredMixin, DeleteView):
     model = Location
-    template_name = 'core/custom_admin/location_confirm_delete.html'
+    template_name = 'core/custom_admin/lokasi/location_confirm_delete.html'
     success_url = reverse_lazy('location_list')

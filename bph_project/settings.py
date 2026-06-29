@@ -84,8 +84,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Konfigurasi pengalihan setelah logout kustom lu
-LOGOUT_REDIRECT_URL = '/admin/login/'
-
+# =============================================================
+# REDIRECTION ALUR LOGIN & LOGOUT CUSTOM ADMIN PANEL BPH
+# =============================================================
 LOGIN_URL = '/bph-panel/login/'
+LOGIN_REDIRECT_URL = '/bph-panel/'
 LOGOUT_REDIRECT_URL = '/bph-panel/login/'

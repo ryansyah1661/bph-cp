@@ -27,7 +27,7 @@ admin.site.index = custom_admin_index
 
 
 # ==============================================================================
-# REGISTRASI MODEL ADMIN BAWAAN LU (TETAP SAMA)
+# REGISTRASI MODEL ADMIN
 # ==============================================================================
 class ServiceStepInline(admin.TabularInline):
     model = ServiceStep
