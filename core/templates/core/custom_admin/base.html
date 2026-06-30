@@ -176,17 +176,14 @@
             border: 1px solid #eef2f5;
         }
 
-        /* STYLE UNTUK MENU POLOSAN (DASHBOARD & USER) */
+        /* MASTER SYSTEM STYLE SIDEBAR (BASE & ACTIVE CONFIGURATION) */
         .bph-menu-flat {
             display: flex;
             align-items: center;
             gap: 10px;
             width: 100%;
             padding: 12px 14px;
-            background: #ffffff;
-            border: 1px solid #f1f3f5;
             border-radius: 10px;
-            color: #1b4332;
             font-size: 13px;
             font-weight: 700;
             text-transform: uppercase;
@@ -194,49 +191,83 @@
             text-decoration: none;
             margin-bottom: 8px;
             transition: all 0.2s ease;
+            border: 1px solid transparent;
         }
 
-        .bph-menu-flat:hover {
+        /* State Default Non-Aktif */
+        .bph-menu-flat.menu-idle {
+            background: #ffffff;
+            border-color: #f1f3f5;
+            color: #495057;
+        }
+        .bph-menu-flat.menu-idle:hover {
             background-color: #f1f8f4;
             border-color: #cce3d1;
             color: #308935;
         }
 
+        /* State Sakral Pas Menu Aktif (Highlight Hijau BPH) */
+        .bph-menu-flat.menu-active {
+            background: #e6f2ea;
+            border-color: #badcc3;
+            color: #1b4332;
+        }
+
         /* ACCORDION SIDEBAR STYLE */
-        .bph-menu-group { margin-bottom: 8px; }
-        .bph-menu-group:last-child { margin-bottom: 0; }
-        .bph-dropdown-check { display: none; }
+        .bph-menu-group { 
+            margin-bottom: 4px; 
+        }
+        .bph-menu-group:last-child { 
+            margin-bottom: 0; 
+        }
+        .bph-dropdown-check { 
+            display: none; 
+        }
 
         .bph-menu-toggle {
             display: flex;
             align-items: center;
             justify-content: space-between;
             width: 100%;
-            padding: 12px 14px;
-            background: #ffffff;
-            border: 1px solid #f1f3f5;
+            padding: 10px 14px;
             border-radius: 10px;
-            color: #1b4332;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
             cursor: pointer;
             transition: all 0.2s ease;
             user-select: none;
+            border: 1px solid transparent;
         }
-
-        .bph-menu-toggle:hover {
-            background-color: #f1f8f4;
-            border-color: #cce3d1;
+        
+        /* Modifikasi transparan tanpa background/border kaku penumpuk kotak */
+        .bph-menu-toggle.toggle-idle {
+            background: transparent;
+            color: #64748b; /* Abu-abu adem */
+        }
+        .bph-menu-toggle.toggle-idle:hover {
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        
+        /* Modifikasi pas sub-menu aktif: highlight lembut minimalis tanpa double kotak border */
+        .bph-menu-toggle.toggle-has-active {
+            background: #f4f8f5; 
+            border-color: transparent;
+            color: #1b4332;
         }
 
         .bph-menu-toggle .arrow-icon {
-            font-size: 18px;
+            font-size: 16px;
             transition: transform 0.2s ease;
+            color: #94a3b8;
+        }
+        .bph-menu-toggle.toggle-has-active .arrow-icon {
             color: #308935;
         }
 
+        /* Style Konten Anak Menu */
         .bph-dropdown-content {
             max-height: 0;
             overflow: hidden;
@@ -246,30 +277,43 @@
             margin: 0;
         }
 
-        .bph-model-item { margin-top: 4px; padding-left: 8px; }
+        .bph-model-item { 
+            margin-top: 2px; 
+            padding-left: 6px; 
+        }
+        
         .bph-model-link {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px 12px;
-            color: #495057;
+            gap: 10px;
+            padding: 10px 14px;
             font-size: 13px;
-            font-weight: 500;
             text-decoration: none;
             border-radius: 8px;
             transition: all 0.2s;
         }
-
-        .bph-model-link:hover {
-            background-color: #f8faf9;
-            color: #308935;
-            font-weight: 600;
-            padding-left: 16px;
+        .bph-model-link.link-idle {
+            color: #475569;
+            font-weight: 500;
+        }
+        .bph-model-link.link-idle:hover {
+            background-color: #f1f5f9;
+            color: #0f172a;
+            padding-left: 18px;
+        }
+        .bph-model-link.link-active {
+            background-color: #e6f2ea;
+            color: #1b4332;
+            font-weight: 700;
+            padding-left: 18px; /* Indentasi menjorok ke dalam agar hierarkinya pas */
         }
 
-        .bph-dropdown-check:checked ~ .bph-menu-toggle { background-color: #e6f2ea; border-color: #badcc3; }
+        /* Berikan jarak napas/gap seimbang di antara menu induk dan sub-menu saat terbuka */
+        .bph-dropdown-check:checked ~ .bph-dropdown-content { 
+            max-height: 250px; 
+            margin-top: 8px; 
+        }
         .bph-dropdown-check:checked ~ .bph-menu-toggle .arrow-icon { transform: rotate(90deg); }
-        .bph-dropdown-check:checked ~ .bph-dropdown-content { max-height: 250px; margin-top: 4px; }
 
         /* MAIN CONTENT SCROLL MANDIRI */
         .bph-main-content-container {
@@ -352,66 +396,68 @@
         <div class="bph-sidebar-container">
             <div class="bph-sidebar-left">
                 
-                <!-- MENU 1: DASHBOARD (POLOSAN) -->
-                <a href="{% url 'custom_dashboard' %}" class="bph-menu-flat">
+                <a href="{% url 'custom_dashboard' %}" class="bph-menu-flat {% if request.resolver_match.url_name == 'custom_dashboard' %}menu-active{% else %}menu-idle{% endif %}">
                     <span class="material-symbols-outlined" style="font-size: 18px;">dashboard</span>
                     <span>Dashboard</span>
                 </a>
 
-                <!-- MENU 2: MANAJEMEN USER (POLOSAN) -->
-                <a href="#" class="bph-menu-flat">
+                <a href="#" class="bph-menu-flat menu-idle">
                     <span class="material-symbols-outlined" style="font-size: 18px;">group</span>
                     <span>User</span>
                 </a>
 
-                <!-- Pembatas Garis Tipis Halus -->
                 <div style="height: 1px; background-color: #f1f3f5; margin: 12px 0 12px 0;"></div>
                 
                 <!-- ACCORDION GRUP 1: KONTEN PUBLIKASI -->
                 <div class="bph-menu-group">
                     <input type="checkbox" id="drop-publikasi" class="bph-dropdown-check" checked>
-                    <label for="drop-publikasi" class="bph-menu-toggle">
+                    
+                    <label for="drop-publikasi" class="bph-menu-toggle {% if request.resolver_match.url_name == 'article_list' or request.resolver_match.url_name == 'article_create' or request.resolver_match.url_name == 'article_update' or request.resolver_match.url_name == 'story_list' or request.resolver_match.url_name == 'story_create' or request.resolver_match.url_name == 'story_update' %}toggle-has-active{% else %}toggle-idle{% endif %}">
                         <span style="display: flex; align-items: center; gap: 8px;">📑 Konten Publikasi</span>
                         <span class="material-symbols-outlined arrow-icon">chevron_right</span>
                     </label>
+                    
                     <ul class="bph-dropdown-content">
                         <li class="bph-model-item">
-                            <a href="{% url 'article_list' %}" class="bph-model-link">
+                            <a href="{% url 'article_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'article_list' or request.resolver_match.url_name == 'article_create' or request.resolver_match.url_name == 'article_update' %}link-active{% else %}link-idle{% endif %}">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">description</span>Artikel & Wawasan Teknis
                             </a>
                         </li>
                         <li class="bph-model-item">
-                            <a href="{% url 'story_list' %}" class="bph-model-link">
+                            <a href="{% url 'story_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'story_list' or request.resolver_match.url_name == 'story_create' or request.resolver_match.url_name == 'story_update' %}link-active{% else %}link-idle{% endif %}">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">explore</span>Cerita Lapangan
                             </a>
                         </li>
                     </ul>
                 </div>
 
+                <!-- ACCORDION GRUP 2: LAYANAN & PROYEK -->
                 <div class="bph-menu-group">
                     <input type="checkbox" id="drop-layanan" class="bph-dropdown-check" checked>
-                    <label for="drop-layanan" class="bph-menu-toggle">
+                    
+                    <label for="drop-layanan" class="bph-menu-toggle {% if request.resolver_match.url_name == 'client_list' or request.resolver_match.url_name == 'client_create' or request.resolver_match.url_name == 'client_update' or request.resolver_match.url_name == 'service_list' or request.resolver_match.url_name == 'service_create' or request.resolver_match.url_name == 'service_update' or request.resolver_match.url_name == 'location_list' or request.resolver_match.url_name == 'location_create' or request.resolver_match.url_name == 'location_update' or request.resolver_match.url_name == 'project_list' or request.resolver_match.url_name == 'project_create' or request.resolver_match.url_name == 'project_update' %}toggle-has-active{% else %}toggle-idle{% endif %}">
                         <span style="display: flex; align-items: center; gap: 8px;">🌿 Layanan & Proyek</span>
                         <span class="material-symbols-outlined arrow-icon">chevron_right</span>
                     </label>
+                    
                     <ul class="bph-dropdown-content">
                         <li class="bph-model-item">
-                            <a href="{% url 'client_list' %}" class="bph-model-link">
+                            <a href="{% url 'client_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'client_list' or request.resolver_match.url_name == 'client_create' or request.resolver_match.url_name == 'client_update' %}link-active{% else %}link-idle{% endif %}">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">corporate_fare</span>Klien / Mitra Kolaborasi
                             </a>
                         </li>
                         <li class="bph-model-item">
-                            <a href="{% url 'service_list' %}" class="bph-model-link">
+                            <a href="{% url 'service_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'service_list' or request.resolver_match.url_name == 'service_create' or request.resolver_match.url_name == 'service_update' %}link-active{% else %}link-idle{% endif %}">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">handyman</span>Layanan (Services)
                             </a>
                         </li>
                         <li class="bph-model-item">
-                            <a href="{% url 'location_list' %}" class="bph-model-link">
+                            <a href="{% url 'location_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'location_list' or request.resolver_match.url_name == 'location_create' or request.resolver_match.url_name == 'location_update' %}link-active{% else %}link-idle{% endif %}">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">location_on</span>Lokasi Wilayah
                             </a>
                         </li>
                         <li class="bph-model-item">
-                            <a href="{% url 'project_list' %}" class="bph-model-link">
+                            <a href="{% url 'project_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'project_list' or request.resolver_match.url_name == 'project_create' or request.resolver_match.url_name == 'project_update' %}link-active{% else %}link-idle{% endif %}">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">assignment</span>Proyek (Experience)
                             </a>
                         </li>
@@ -469,7 +515,6 @@
         const hiddenLogoutForm = document.getElementById('hidden-logout-form');
         const profileDropdownCheck = document.getElementById('nav-profile-toggle');
 
-        // 1. Tampilkan modal pop-up pas menu "Keluar" diklik
         if (triggerLogoutBtn) {
             triggerLogoutBtn.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -478,7 +523,6 @@
             });
         }
 
-        // 2. Fungsi Penutupan Modal (Klik Batal / Tombol Silang)
         function closeLogoutModal() {
             logoutAlertModal.classList.remove('active');
         }
@@ -486,14 +530,12 @@
         if (btnModalCancel) btnModalCancel.addEventListener('click', closeLogoutModal);
         if (btnModalX) btnModalX.addEventListener('click', closeLogoutModal);
 
-        // Tutup modal otomatis kalau user klik area luar box
         logoutAlertModal.addEventListener('click', function(e) {
             if (e.target === logoutAlertModal) {
                 closeLogoutModal();
             }
         });
 
-        // 3. Tembak Form POST Logout
         if (btnModalConfirm) {
             btnModalConfirm.addEventListener('click', function() {
                 hiddenLogoutForm.submit();

@@ -4,8 +4,8 @@
 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
     <div class="flex justify-between items-center border-b border-gray-100 pb-4 mb-6">
         <div>
-            <h2 class="text-xl font-bold text-emerald-900">Manajemen Layanan (Services)</h2>
-            <p class="text-xs text-gray-500 mt-1">Layanan konsultasi kehutanan dan pertanian Bhumi Pasa Hijau.</p>
+            <h2 class="text-xl font-bold text-emerald-900">Layanan Komoditas (Services)</h2>
+            <p class="text-xs text-gray-500 mt-1">Atur jenis penawaran layanan kehutanan & pertanian komersial instansi.</p>
         </div>
         <a href="{% url 'service_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-lg uppercase tracking-wider transition">
             + Tambah Layanan
@@ -16,14 +16,24 @@
         <table class="w-full text-left border-collapse text-sm">
             <thead>
                 <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
+                    <th class="p-3 font-semibold">Ikon/Gambar</th>
                     <th class="p-3 font-semibold">Nama Layanan</th>
+                    <th class="p-3 font-semibold">Slug</th>
                     <th class="p-3 font-semibold text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody class="text-gray-700 divide-y divide-gray-50">
                 {% for service in services %}
                 <tr>
+                    <td class="p-3">
+                        {% if service.icon %}
+                            <img src="{{ service.icon.url }}" class="w-10 h-10 object-cover rounded-md">
+                        {% else %}
+                             <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded">No Icon</span>
+                        {% endif %}
+                    </td>
                     <td class="p-3 font-medium text-emerald-700">{{ service.nama }}</td>
+                    <td class="p-3 text-gray-400 text-xs">{{ service.slug }}</td>
                     <td class="p-3 text-center space-x-2">
                         <a href="{% url 'service_update' service.pk %}" class="text-amber-600 hover:underline font-semibold">Edit</a>
                         <a href="{% url 'service_delete' service.pk %}" class="text-red-600 hover:underline font-semibold">Hapus</a>
@@ -31,7 +41,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="2" class="p-8 text-center text-gray-400 font-medium">Belum ada data layanan.</td>
+                    <td colspan="4" class="p-8 text-center text-gray-400 font-medium">Belum ada data sektor layanan instansi.</td>
                 </tr>
                 {% endfor %}
             </tbody>

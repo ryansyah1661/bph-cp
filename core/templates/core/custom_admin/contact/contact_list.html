@@ -1,0 +1,44 @@
+{% extends "core/custom_admin/base.html" %}
+
+{% block admin_content %}
+<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+    <div class="border-b border-gray-100 pb-4 mb-6">
+        <h2 class="text-xl font-bold text-emerald-900">Kotak Masuk Pesan Kontak</h2>
+        <p class="text-xs text-gray-500 mt-1">Daftar kiriman pesan, pertanyaan, dan proposal kerja sama dari pengunjung halaman kontak website.</p>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-sm">
+            <thead>
+                <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
+                    <th class="p-3 font-semibold">Pengirim</th>
+                    <th class="p-3 font-semibold">Subjek / Nama Instansi</th>
+                    <th class="p-3 font-semibold">Isi Pesan Masuk</th>
+                    <th class="p-3 font-semibold text-center">Waktu Kirim</th>
+                    <th class="p-3 font-semibold text-center">Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700 divide-y divide-gray-50">
+                {% for msg in messages %}
+                <tr>
+                    <td class="p-3">
+                        <div class="font-semibold text-emerald-800">{{ msg.nama_lengkap }}</div>
+                        <div class="text-xs text-gray-400 mt-0.5">{{ msg.email }}</div>
+                    </td>
+                    <td class="p-3 font-medium text-gray-700">{{ msg.subjek }}</td>
+                    <td class="p-3 text-gray-500 max-w-md leading-relaxed whitespace-pre-line">{{ msg.pesan }}</td>
+                    <td class="p-3 text-center text-gray-400 text-xs font-medium">{{ msg.tanggal_kirim|date:"d M Y, H:i" }} WIB</td>
+                    <td class="p-3 text-center">
+                        <a href="{% url 'contact_delete' msg.pk %}" class="text-red-600 hover:underline font-semibold">Hapus</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="p-8 text-center text-gray-400 font-medium">Belum ada pesan atau pertanyaan masuk dari halaman kontak.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from .models import Article, Project, Client, Story, Service, Location
+from .models import Article, Project, Client, Story, Service, Location, Category, Modul, ContactMessage, Gallery
 
 # ==========================================
 # JALUR FRONTEND WEBSITE (NAVBAR & MENUS)
@@ -55,6 +55,9 @@ def custom_dashboard(request):
         'total_projects': Project.objects.count(),
         'total_clients': Client.objects.count(),
         'total_stories': Story.objects.count(),
+        'total_documents': Modul.objects.count(),  
+        'total_messages': ContactMessage.objects.count(),
+        'total_gallery': Gallery.objects.count(),
         'recent_articles': Article.objects.order_by('-id')[:5],
         'recent_projects': Project.objects.order_by('-id')[:5],
     }
@@ -145,24 +148,24 @@ class StoryDeleteView(AdminRequiredMixin, DeleteView):
 # ==========================================
 class ClientListView(AdminRequiredMixin, ListView):
     model = Client
-    template_name = 'core/custom_admin/klien/client_list.html'
+    template_name = 'core/custom_admin/client/client_list.html'
     context_object_name = 'clients'
 
 class ClientCreateView(AdminRequiredMixin, CreateView):
     model = Client
-    template_name = 'core/custom_admin/klien/client_form.html'
+    template_name = 'core/custom_admin/client/client_form.html'
     fields = '__all__'
     success_url = reverse_lazy('client_list')
 
 class ClientUpdateView(AdminRequiredMixin, UpdateView):
     model = Client
-    template_name = 'core/custom_admin/klien/client_form.html'
+    template_name = 'core/custom_admin/client/client_form.html'
     fields = '__all__'
     success_url = reverse_lazy('client_list')
 
 class ClientDeleteView(AdminRequiredMixin, DeleteView):
     model = Client
-    template_name = 'core/custom_admin/klien/client_confirm_delete.html'
+    template_name = 'core/custom_admin/client/client_confirm_delete.html'
     success_url = reverse_lazy('client_list')
 
 # ==========================================
@@ -170,24 +173,24 @@ class ClientDeleteView(AdminRequiredMixin, DeleteView):
 # ==========================================
 class ServiceListView(AdminRequiredMixin, ListView):
     model = Service
-    template_name = 'core/custom_admin/layanan/service_list.html'
+    template_name = 'core/custom_admin/services/services_list.html'
     context_object_name = 'services'
 
 class ServiceCreateView(AdminRequiredMixin, CreateView):
     model = Service
-    template_name = 'core/custom_admin/layanan/service_form.html'
+    template_name = 'core/custom_admin/services/services_form.html'
     fields = '__all__'
     success_url = reverse_lazy('service_list')
 
 class ServiceUpdateView(AdminRequiredMixin, UpdateView):
     model = Service
-    template_name = 'core/custom_admin/layanan/service_form.html'
+    template_name = 'core/custom_admin/services/services_form.html'
     fields = '__all__'
     success_url = reverse_lazy('service_list')
 
 class ServiceDeleteView(AdminRequiredMixin, DeleteView):
     model = Service
-    template_name = 'core/custom_admin/layanan/service_confirm_delete.html'
+    template_name = 'core/custom_admin/services/services_confirm_delete.html'
     success_url = reverse_lazy('service_list')
 
 # ==========================================
@@ -195,22 +198,104 @@ class ServiceDeleteView(AdminRequiredMixin, DeleteView):
 # ==========================================
 class LocationListView(AdminRequiredMixin, ListView):
     model = Location
-    template_name = 'core/custom_admin/lokasi/location_list.html'
+    template_name = 'core/custom_admin/location/location_list.html'
     context_object_name = 'locations'
 
 class LocationCreateView(AdminRequiredMixin, CreateView):
     model = Location
-    template_name = 'core/custom_admin/lokasi/location_form.html'
+    template_name = 'core/custom_admin/location/location_form.html'
     fields = '__all__'
     success_url = reverse_lazy('location_list')
 
 class LocationUpdateView(AdminRequiredMixin, UpdateView):
     model = Location
-    template_name = 'core/custom_admin/lokasi/location_form.html'
+    template_name = 'core/custom_admin/location/location_form.html'
     fields = '__all__'
     success_url = reverse_lazy('location_list')
 
 class LocationDeleteView(AdminRequiredMixin, DeleteView):
     model = Location
-    template_name = 'core/custom_admin/lokasi/location_confirm_delete.html'
+    template_name = 'core/custom_admin/location/location_confirm_delete.html'
     success_url = reverse_lazy('location_list')
+
+# ==========================================
+# 7. MANAGEMENT KATEGORI
+# ==========================================
+class CategoryListView(AdminRequiredMixin, ListView):
+    model = Category
+    template_name = 'core/custom_admin/category/category_list.html'
+    context_object_name = 'categories'
+
+class CategoryCreateView(AdminRequiredMixin, CreateView):
+    model = Category
+    template_name = 'core/custom_admin/category/category_form.html'
+    fields = '__all__'
+    success_url = reverse_lazy('category_list')
+
+class CategoryDeleteView(AdminRequiredMixin, DeleteView):
+    model = Category
+    template_name = 'core/custom_admin/category/category_confirm_delete.html'
+    success_url = reverse_lazy('category_list')
+
+# ==========================================
+# 8. MANAGEMENT MODUL DOKUMEN
+# ==========================================
+class DocumentListView(AdminRequiredMixin, ListView):
+    model = Modul  
+    template_name = 'core/custom_admin/modul/modul_list.html'
+    context_object_name = 'documents'
+
+class DocumentCreateView(AdminRequiredMixin, CreateView):
+    model = Modul
+    template_name = 'core/custom_admin/modul/modul_form.html'
+    fields = '__all__'
+    success_url = reverse_lazy('document_list')
+
+class DocumentUpdateView(AdminRequiredMixin, UpdateView):
+    model = Modul
+    template_name = 'core/custom_admin/modul/modul_form.html'
+    fields = '__all__'
+    success_url = reverse_lazy('document_list')
+
+class DocumentDeleteView(AdminRequiredMixin, DeleteView):
+    model = Modul
+    template_name = 'core/custom_admin/modul/modul_confirm_delete.html'
+    success_url = reverse_lazy('document_list')
+
+# ==========================================
+# 9. MANAGEMENT KONTAK / PESAN MASUK
+# ==========================================
+class ContactListView(AdminRequiredMixin, ListView):
+    model = ContactMessage
+    template_name = 'core/custom_admin/contact/contact_list.html'
+    context_object_name = 'messages'
+
+class ContactDeleteView(AdminRequiredMixin, DeleteView):
+    model = ContactMessage
+    template_name = 'core/custom_admin/contact/contact_confirm_delete.html'
+    success_url = reverse_lazy('contact_list')
+
+# ==========================================
+# 10. MANAGEMENT GALERI DOKUMENTASI
+# ==========================================
+class GalleryListView(AdminRequiredMixin, ListView):
+    model = Gallery
+    template_name = 'core/custom_admin/gallery/gallery_list.html'
+    context_object_name = 'items'
+
+class GalleryCreateView(AdminRequiredMixin, CreateView):
+    model = Gallery
+    template_name = 'core/custom_admin/gallery/gallery_form.html'
+    fields = '__all__'
+    success_url = reverse_lazy('gallery_admin_list')
+
+class GalleryUpdateView(AdminRequiredMixin, UpdateView):
+    model = Gallery
+    template_name = 'core/custom_admin/gallery/gallery_form.html'
+    fields = '__all__'
+    success_url = reverse_lazy('gallery_admin_list')
+
+class GalleryDeleteView(AdminRequiredMixin, DeleteView):
+    model = Gallery
+    template_name = 'core/custom_admin/gallery/gallery_confirm_delete.html'
+    success_url = reverse_lazy('gallery_admin_list')

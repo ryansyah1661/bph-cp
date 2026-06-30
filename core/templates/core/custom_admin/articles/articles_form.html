@@ -8,12 +8,11 @@
     <p class="text-xs text-gray-500 mt-1">Isi formulir di bawah ini dengan lengkap.</p>
 </div>
 
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" id="article-form">
     {% csrf_token %}
 
     <div class="flex gap-6 items-start">
 
-        <!-- KOLOM KIRI: Field Utama -->
         <div class="flex-1 space-y-5">
 
             <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-5">
@@ -37,7 +36,6 @@
                 </div>
             </div>
 
-            <!-- Isi Artikel / Quill -->
             <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
                 <label class="block text-sm font-semibold text-slate-700 mb-3">Isi Artikel <span class="text-red-500">*</span></label>
                 {{ form.deskripsi }}
@@ -46,33 +44,29 @@
 
         </div>
 
-        <!-- KOLOM KANAN: Sidebar -->
         <div class="w-72 space-y-5 flex-shrink-0">
 
-            <!-- Tanggal -->
             <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
                 <label class="block text-sm font-semibold text-slate-700 mb-1">Tanggal Terbit</label>
                 {{ form.tanggal }}
             </div>
 
-            <!-- Gambar -->
             <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
                 <h3 class="text-sm font-bold text-slate-700 border-b border-gray-100 pb-3 mb-4">Gambar</h3>
                 <label class="block text-sm font-semibold text-slate-600 mb-2">Foto Utama Artikel</label>
 
-                {% if object.gambar %}
-                    <img src="{{ object.gambar.url }}" class="w-full h-36 object-cover rounded-lg mb-3">
-                {% endif %}
+                <div id="preview-container" class="{% if not object.gambar %}hidden{% endif %} mb-3">
+                    <img id="image-preview" src="{% if object.gambar %}{{ object.gambar.url }}{% endif %}" class="w-full h-36 object-cover rounded-lg border">
+                </div>
 
                 <label for="id_gambar" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition" id="drop-zone">
                     <span class="material-symbols-outlined text-gray-400 text-3xl mb-1">upload_file</span>
                     <span class="text-sm text-gray-400">Seret & Jatuhkan atau <span class="text-emerald-600 font-semibold">Jelajahi</span></span>
                 </label>
-                <div id="file-name-display" class="text-xs text-gray-400 mt-2 text-center"></div>
+                <div id="file-name-display" class="text-xs text-gray-400 mt-2 text-center font-medium"></div>
                 <div style="display:none;">{{ form.gambar }}</div>
             </div>
 
-            <!-- Tombol Aksi -->
             <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex gap-3">
                 <a href="{% url 'article_list' %}" class="flex-1 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm text-center font-semibold hover:bg-gray-50 transition">Batal</a>
                 <button type="submit" class="flex-1 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700 transition">Simpan Data</button>
@@ -84,42 +78,89 @@
 
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <script>
+    // --- 1. INITIALIZE QUILL RICH TEXT EDITOR ---
     var quill = new Quill('#quill-editor', { theme: 'snow' });
+    var descTextarea = document.querySelector('textarea[name="deskripsi"]');
+    
+    if (descTextarea && descTextarea.value) {
+        quill.root.innerHTML = descTextarea.value;
+    }
 
-    var existing = document.querySelector('textarea[name="deskripsi"]').value;
-    if (existing) quill.root.innerHTML = existing;
-
-    document.querySelector('form').addEventListener('submit', function() {
-        document.querySelector('textarea[name="deskripsi"]').value = quill.root.innerHTML;
+    // --- 2. FIX TOMBOL SIMPAN MACET (Pindah data Quill ke Textarea asli sebelum submit) ---
+    var formElement = document.getElementById('article-form');
+    formElement.addEventListener('submit', function(e) {
+        if (descTextarea) {
+            descTextarea.value = quill.root.innerHTML;
+        }
     });
 
-    // File name display & drag drop
+    // --- 3. FIX KALENDER DATE PICKER ---
+    var tanggalInput = document.querySelector('input[name="tanggal"]');
+    if (tanggalInput) {
+        tanggalInput.setAttribute('type', 'date');
+    }
+
+    // --- 4. FIX AUTO GENERATE SLUG DARI JUDUL ---
+    var judulInput = document.querySelector('input[name="judul"]');
+    var slugInput = document.querySelector('input[name="slug"]');
+    
+    if (judulInput && slugInput) {
+        judulInput.addEventListener('input', function() {
+            var slugify = judulInput.value
+                .toLowerCase()
+                .trim()
+                .replace(/[^\w\s-]/g, '')     // Hapus karakter non-alphanumeric
+                .replace(/[\s_]+/g, '-')       // Ganti spasi jadi tanda hubung (-)
+                .replace(/^-+|-+$/g, '');      // Bersihkan tanda hubung di awal/akhir
+            slugInput.value = slugify;
+        });
+    }
+
+    // --- 5. FIX REAL-TIME IMAGE PREVIEW & DRAG DROP ---
     const fileInput = document.getElementById('id_gambar');
     const fileNameDisplay = document.getElementById('file-name-display');
     const dropZone = document.getElementById('drop-zone');
+    const imagePreview = document.getElementById('image-preview');
+    const previewContainer = document.getElementById('preview-container');
 
-    fileInput.addEventListener('change', function() {
-        if (this.files[0]) fileNameDisplay.textContent = this.files[0].name;
-    });
-
-    dropZone.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        this.classList.add('border-emerald-400', 'bg-emerald-50');
-    });
-
-    dropZone.addEventListener('dragleave', function() {
-        this.classList.remove('border-emerald-400', 'bg-emerald-50');
-    });
-
-    dropZone.addEventListener('drop', function(e) {
-        e.preventDefault();
-        this.classList.remove('border-emerald-400', 'bg-emerald-50');
-        const files = e.dataTransfer.files;
-        if (files[0]) {
-            fileInput.files = files;
-            fileNameDisplay.textContent = files[0].name;
+    function handleImageFile(file) {
+        if (file) {
+            fileNameDisplay.textContent = file.name;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                previewContainer.classList.remove('hidden');
+            }
+            reader.readAsDataURL(file);
         }
-    });
+    }
+
+    if (fileInput) {
+        fileInput.addEventListener('change', function() {
+            if (this.files[0]) handleImageFile(this.files[0]);
+        });
+    }
+
+    if (dropZone) {
+        dropZone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('border-emerald-400', 'bg-emerald-50');
+        });
+
+        dropZone.addEventListener('dragleave', function() {
+            this.classList.remove('border-emerald-400', 'bg-emerald-50');
+        });
+
+        dropZone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('border-emerald-400', 'bg-emerald-50');
+            const files = e.dataTransfer.files;
+            if (files[0] && fileInput) {
+                fileInput.files = files;
+                handleImageFile(files[0]);
+            }
+        });
+    }
 </script>
 
 <style>
@@ -127,7 +168,6 @@
 
     form input[type="text"],
     form input[type="date"],
-    form input[type="email"],
     form textarea,
     form select {
         width: 100%;
@@ -146,5 +186,4 @@
     .ql-toolbar { border-radius: 8px 8px 0 0; border-color: #e2e8f0 !important; }
     .ql-container { border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important; font-size: 14px; }
 </style>
-
 {% endblock %}

@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 
-# ===1. TABEL MASTER KATEGORI===
+# === 1. TABEL MASTER KATEGORI ===
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name="Nama Kategori")
     slug = models.SlugField(unique=True, blank=True)
@@ -17,7 +17,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
-# ===2. TABEL LAYANAN (Services)===
+# === 2. TABEL LAYANAN (Services) ===
 class Service(models.Model):
     PORTFOLIO_CHOICES = [
         ('NRM', 'Natural Resources Management (NRM)'),
@@ -45,7 +45,7 @@ class Service(models.Model):
     def __str__(self):
         return self.title
     
-# ===3. TABEL TAHAPAN PELAKSANAAN LAYANAN (Service Steps)===
+# === 3. TABEL TAHAPAN PELAKSANAAN LAYANAN (Service Steps) ===
 class ServiceStep(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='steps', verbose_name="Untuk Layanan")
     icon = models.CharField(max_length=50, help_text="Nama icon Material Symbols, misal: 'forest', 'ecg', 'map'", verbose_name="Nama Icon")
@@ -58,17 +58,23 @@ class ServiceStep(models.Model):
     def __str__(self):
         return f"{self.service.title} - {self.title}"
     
-# ===4. TABEL LOKASI (Locations)===
+# === 4. TABEL LOKASI (Locations) ===
 class Location(models.Model):
     nama_provinsi = models.CharField(max_length=150, verbose_name="Nama Provinsi")
+    slug = models.SlugField(unique=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Lokasi Wilayah"
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.nama_provinsi)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.nama_provinsi
     
-# ===5. TABEL KLIEN (Clients)===
+# === 5. TABEL KLIEN (Clients) ===
 class Client(models.Model):
     nama = models.CharField(max_length=200, verbose_name="Nama Instansi/Perusahaan")
     alamat = models.TextField(blank=True)
@@ -81,7 +87,7 @@ class Client(models.Model):
     def __str__(self):
         return self.nama
     
-# ===6. TABEL PROYEK (Experiences)===
+# === 6. TABEL PROYEK (Experiences) ===
 class Project(models.Model):
     name = models.CharField(max_length=250, verbose_name="Nama Proyek")
     slug = models.SlugField(unique=True, blank=True)
@@ -108,7 +114,7 @@ class Project(models.Model):
     def __str__(self):
         return self.name
     
-# ===7. TABEL CERITA LAPANGAN (Stories)===
+# === 7. TABEL CERITA LAPANGAN (Stories) ===
 class Story(models.Model):
     judul = models.CharField(max_length=250)
     slug = models.SlugField(unique=True, blank=True)
@@ -132,7 +138,7 @@ class Story(models.Model):
     def __str__(self):
         return self.judul
     
-# ===8. TABEL ARTIKEL (Articles)===
+# === 8. TABEL ARTIKEL (Articles) ===
 class Article(models.Model):
     judul = models.CharField(max_length=250)
     slug = models.SlugField(unique=True, blank=True)
@@ -152,3 +158,44 @@ class Article(models.Model):
 
     def __str__(self):
         return self.judul
+
+# === 9. TABEL MODUL DOKUMENTASI STRATEGIS (Modul) ===
+class Modul(models.Model):
+    judul = models.CharField(max_length=200, verbose_name="Judul Dokumen Publikasi")
+    file_dokumen = models.FileField(upload_to='documents/', verbose_name="Berkas File (PDF/Docs)")
+    tanggal_rilis = models.DateField(auto_now_add=True, verbose_name="Tanggal Unggah")
+
+    class Meta:
+        verbose_name_plural = "Modul Dokumentasi"
+
+    def __str__(self):
+        return self.judul
+
+# === 10. TABEL PESAN KONTAK (Contact Messages) ===
+class ContactMessage(models.Model):
+    nama_lengkap = models.CharField(max_length=150, verbose_name="Nama Lengkap")
+    email = models.EmailField(verbose_name="Alamat Email")
+    subjek = models.CharField(max_length=200, verbose_name="Subjek / Nama Instansi")
+    pesan = models.TextField(verbose_name="Detail Pesan / Pertanyaan")
+    tanggal_kirim = models.DateTimeField(auto_now_add=True, verbose_name="Waktu Kirim")
+
+    class Meta:
+        verbose_name_plural = "Pesan Masuk Kontak"
+
+    def __str__(self):
+        return f"Pesan dari {self.nama_lengkap} - {self.subjek}"
+    
+# === 11. TABEL GALERI DOKUMENTASI (Gallery) ===
+class Gallery(models.Model):
+    caption = models.CharField(max_length=250, verbose_name="Keterangan Foto / Caption")
+    gambar = models.ImageField(upload_to='gallery/', verbose_name="File Foto")
+    
+    # Hubungkan ke master Kategori biar filternya (NRM, NRU, dll) jalan dinamis di FE
+    kategori = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='galleries', verbose_name="Kategori Filter")
+    tanggal_upload = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Galeri Dokumentasi"
+
+    def __str__(self):
+        return self.caption

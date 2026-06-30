@@ -90,3 +90,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/bph-panel/login/'
 LOGIN_REDIRECT_URL = '/bph-panel/'
 LOGOUT_REDIRECT_URL = '/bph-panel/login/'
+
+# =============================================================
+# KONFIGURASI KEAMANAN SESSION LOGIN (KICK PAS BROWSER CLOSE)
+# =============================================================
+# Memaksa cookie session hangus begitu semua tab/window browser ditutup
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Membatasi umur cookie aktif maksimal 1 jam (3600 detik) demi keamanan idle
+SESSION_COOKIE_AGE = 3600

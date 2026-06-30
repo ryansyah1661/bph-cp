@@ -1,0 +1,49 @@
+{% extends "core/custom_admin/base.html" %}
+
+{% block admin_content %}
+<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+    <div class="flex justify-between items-center border-b border-gray-100 pb-4 mb-6">
+        <div>
+            <h2 class="text-xl font-bold text-emerald-900">Klien / Mitra Kolaborasi</h2>
+            <p class="text-xs text-gray-500 mt-1">Kelola logo dan arsip data instansi mitra strategis.</p>
+        </div>
+        <a href="{% url 'client_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-lg uppercase tracking-wider transition">
+            + Tambah Mitra
+        </a>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-sm">
+            <thead>
+                <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
+                    <th class="p-3 font-semibold">Logo</th>
+                    <th class="p-3 font-semibold">Nama Instansi / Mitra</th>
+                    <th class="p-3 font-semibold text-center">Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700 divide-y divide-gray-50">
+                {% for client in clients %}
+                <tr>
+                    <td class="p-3">
+                        {% if client.logo %}
+                            <img src="{{ client.logo.url }}" class="w-16 h-10 object-contain rounded bg-gray-50 p-1">
+                        {% else %}
+                             <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded">No Logo</span>
+                        {% endif %}
+                    </td>
+                    <td class="p-3 font-medium text-emerald-700">{{ client.nama }}</td>
+                    <td class="p-3 text-center space-x-2">
+                        <a href="{% url 'client_update' client.pk %}" class="text-amber-600 hover:underline font-semibold">Edit</a>
+                        <a href="{% url 'client_delete' client.pk %}" class="text-red-600 hover:underline font-semibold">Hapus</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="p-8 text-center text-gray-400 font-medium">Belum ada data klien/mitra kolaborasi.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
