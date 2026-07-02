@@ -87,9 +87,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # =============================================================
 # REDIRECTION ALUR LOGIN & LOGOUT CUSTOM ADMIN PANEL BPH
 # =============================================================
-LOGIN_URL = '/bph-panel/login/'
-LOGIN_REDIRECT_URL = '/bph-panel/'
-LOGOUT_REDIRECT_URL = '/bph-panel/login/'
+LOGIN_URL = '/be/login/'
+LOGIN_REDIRECT_URL = '/be/'
+LOGOUT_REDIRECT_URL = '/be/login/'
 
 # =============================================================
 # KONFIGURASI KEAMANAN SESSION LOGIN (KICK PAS BROWSER CLOSE)
