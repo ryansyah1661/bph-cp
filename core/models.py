@@ -27,6 +27,8 @@ class Service(models.Model):
     title = models.CharField(max_length=200, verbose_name="Nama Layanan")
     slug = models.SlugField(unique=True, blank=True)
     portfolio = models.CharField(max_length=3, choices=PORTFOLIO_CHOICES, default='NRM')
+    icon = models.CharField(max_length=50, blank=True, help_text="Nama icon Material Symbols, misal: 'forest', 'travel_explore'", verbose_name="Nama Icon Kartu")
+    thumbnail = models.ImageField(upload_to='services/thumbs/', blank=True, verbose_name="Foto Kartu Layanan")
     bg_image = models.ImageField(upload_to='services/banners/', blank=True, verbose_name="Foto Banner Atas")
     intro = models.TextField(verbose_name="Paragraf Ringkasan Atas")
     approach = models.TextField(verbose_name="Paragraf Pendekatan Komprehensif")
@@ -95,6 +97,14 @@ class Project(models.Model):
     image = models.ImageField(upload_to='projects/thumbs/', verbose_name="Foto Kartu Proyek")
     description = models.TextField(verbose_name="Deskripsi Project")
 
+    # Field tambahan untuk isi halaman detail proyek
+    intro = models.TextField(blank=True, verbose_name="Paragraf Pembuka Detail")
+    challenge = models.TextField(blank=True, verbose_name="Tantangan & Kondisi Awal")
+    methodology = models.TextField(blank=True, verbose_name="Pendekatan & Metodologi Kerja")
+    result = models.TextField(blank=True, verbose_name="Hasil & Dampak Ekologis Terukur")
+    pdf_cover = models.ImageField(upload_to='projects/pdf_covers/', blank=True, null=True, verbose_name="Sampul Modul PDF")
+    pdf_file = models.FileField(upload_to='projects/pdf_files/', blank=True, null=True, verbose_name="Berkas Modul Laporan Teknis (PDF)")
+
     # RELASI FOREIGN KEY (One-to-Many)
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True, related_name='projects')
     service_portfolio = models.ForeignKey(Service, on_delete=models.SET_NULL, null=True, related_name='projects', verbose_name="Sesuai Portofolio Layanan")
@@ -113,6 +123,21 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+
+
+# === 6b. TABEL MATRIKS CAPAIAN KINERJA PROYEK ===
+class ProjectMetric(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='metrics', verbose_name="Untuk Proyek")
+    parameter = models.CharField(max_length=200, verbose_name="Parameter Monitoring")
+    target = models.CharField(max_length=200, verbose_name="Target Awal")
+    actual = models.CharField(max_length=200, verbose_name="Realisasi Akhir Lapangan")
+
+    class Meta:
+        verbose_name_plural = "Matriks Capaian Kinerja Proyek"
+
+    def __str__(self):
+        return f"{self.project.name} - {self.parameter}"
+
     
 # === 7. TABEL CERITA LAPANGAN (Stories) ===
 class Story(models.Model):

@@ -1,51 +1,95 @@
 {% extends "core/custom_admin/base.html" %}
 
 {% block admin_content %}
-<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-    <div class="flex justify-between items-center border-b border-gray-100 pb-4 mb-6">
+<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
+    
+    <!-- Header Box -->
+    <div class="flex justify-between items-center border-b border-gray-100 pb-5">
         <div>
             <h2 class="text-xl font-bold text-emerald-900">Manajemen Artikel & Wawasan Teknis</h2>
             <p class="text-xs text-gray-500 mt-1">Kelola seluruh publikasi artikel informasi Bhumi Pasa Hijau.</p>
         </div>
-        <a href="{% url 'article_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-lg uppercase tracking-wider transition">
-            + Tambah Artikel
+        <a href="{% url 'article_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100">
+            <span class="material-symbols-outlined text-sm">add</span> Tambah Artikel
         </a>
     </div>
 
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse text-sm">
+    <!-- Tabel Data Dengan Kontrol Jarak yang Rapi -->
+    <div class="overflow-x-auto w-full">
+        <table class="w-full text-left border-collapse text-sm table-fixed">
             <thead>
                 <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
-                    <th class="p-3 font-semibold">Gambar</th>
-                    <th class="p-3 font-semibold">Judul Artikel</th>
-                    <th class="p-3 font-semibold">Slug</th>
-                    <th class="p-3 font-semibold text-center">Aksi</th>
+                    <!-- Atur lebar kolom (w-...) secara presisi di sini -->
+                    <th class="p-4 font-semibold w-24 text-center">Gambar</th>
+                    <th class="p-4 font-semibold w-auto">Judul Artikel</th>
+                    <th class="p-4 font-semibold w-48">Penulis</th>
+                    <th class="p-4 font-semibold w-44 text-center">Tanggal Terbit</th>
+                    <th class="p-4 font-semibold w-40">Slug</th>
+                    <th class="p-4 font-semibold text-center w-52">Aksi</th>
                 </tr>
             </thead>
             <tbody class="text-gray-700 divide-y divide-gray-50">
                 {% for article in articles %}
-                <tr>
-                    <td class="p-3">
+                <tr class="hover:bg-slate-50/50 transition">
+                    <!-- 1. Kolom Gambar -->
+                    <td class="p-4 align-middle text-center">
                         {% if article.gambar %}
-                            <img src="{{ article.gambar.url }}" class="w-12 h-12 object-cover rounded-md">
+                            <img src="{{ article.gambar.url }}" class="w-12 h-12 object-cover rounded-xl border border-gray-100 shadow-sm mx-auto">
                         {% else %}
-                             <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded">No Image</span>
+                             <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded-md">No Image</span>
                         {% endif %}
                     </td>
-                    <td class="p-3 font-medium text-emerald-700">{{ article.judul }}</td>
-                    <td class="p-3 text-gray-400 text-xs">{{ article.slug }}</td>
-                    <td class="p-3 text-center space-x-2">
-                        <a href="{% url 'article_update' article.pk %}" class="text-amber-600 hover:underline font-semibold">Edit</a>
-                        <a href="{% url 'article_delete' article.pk %}" class="text-red-600 hover:underline font-semibold">Hapus</a>
+                    
+                    <!-- 2. Kolom Judul (Gunakan truncate biar kalau kepanjangan ga ngerusak layout) -->
+                    <td class="p-4 font-semibold text-slate-800 align-middle text-base hover:text-emerald-700 transition truncate">
+                        {{ article.judul }}
+                    </td>
+
+                    <!-- 3. Kolom Penulis -->
+                    <td class="p-4 align-middle font-medium text-slate-600 truncate">
+                        <div class="flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-slate-400 text-lg">person</span>
+                            <span>{{ article.author|default:"Admin BPH" }}</span>
+                        </div>
+                    </td>
+
+                    <!-- 4. Kolom Tanggal Terbit -->
+                    <td class="p-4 align-middle text-center text-slate-500 font-medium">
+                        <span class="inline-flex items-center gap-1.5 bg-slate-100 text-slate-700 px-3 py-1 rounded-lg text-xs font-semibold">
+                            <span class="material-symbols-outlined text-sm text-slate-400">calendar_month</span>
+                            {{ article.tanggal|date:"d M Y" }}
+                        </span>
+                    </td>
+                    
+                    <!-- 5. Kolom Slug -->
+                    <td class="p-4 align-middle">
+                        <span class="text-gray-400 text-xs font-mono bg-slate-50 border border-slate-100 px-2.5 py-1 rounded-md inline-block max-w-full truncate">
+                            {{ article.slug }}
+                        </span>
+                    </td>
+                    
+                    <!-- 6. Kolom Aksi Kapsul -->
+                    <td class="p-4 text-center align-middle whitespace-nowrap">
+                        <div class="flex justify-center items-center gap-2">
+                            <a href="{% url 'article_update' article.pk %}" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1.5 rounded-full border border-amber-200 shadow-sm transition">
+                                <span class="material-symbols-outlined text-sm">edit</span>
+                                Edit
+                            </a>
+                            <a href="{% url 'article_delete' article.pk %}" class="inline-flex items-center gap-1 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold px-3 py-1.5 rounded-full border border-rose-200 shadow-sm transition">
+                                <span class="material-symbols-outlined text-sm">delete</span>
+                                Hapus
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="4" class="p-8 text-center text-gray-400 font-medium">Belum ada data artikel.</td>
+                    <td colspan="6" class="p-8 text-center text-gray-400 font-medium">Belum ada data artikel.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+
 </div>
 {% endblock %}

@@ -9,19 +9,50 @@ from .models import Article, Project, Client, Story, Service, Location, Category
 # JALUR FRONTEND WEBSITE (NAVBAR & MENUS)
 # ==========================================
 def homepage(request):
-    return render(request, 'core/homepage.html')
+    # Ambil 3 artikel terbaru berdasarkan tanggal terbit untuk section "Artikel Terbaru"
+    articles = Article.objects.order_by('-tanggal')[:3]
+    return render(request, 'core/homepage.html', {'articles': articles})
 
 def about_view(request):
     return render(request, 'core/about.html')
 
 def services_view(request):
-    return render(request, 'core/services.html')
+    # Pisahkan berdasarkan portfolio karena section tampilan memang dibagi 2: NRM & NRU
+    services_nrm = Service.objects.filter(portfolio='NRM').prefetch_related('categories')
+    services_nru = Service.objects.filter(portfolio='NRU').prefetch_related('categories')
+    return render(request, 'core/services.html', {
+        'services_nrm': services_nrm,
+        'services_nru': services_nru,
+    })
 
 def experience_view(request):
-    return render(request, 'core/experience.html')
+    projects = Project.objects.select_related('client', 'location').prefetch_related('categories').order_by('-tahun')
+    # Kategori yang benar-benar dipakai minimal 1 proyek (untuk tombol filter dinamis)
+    categories = Category.objects.filter(projects__isnull=False).distinct().order_by('name')
+    # Tahun yang benar-benar ada datanya (untuk dropdown filter tahun dinamis)
+    years = Project.objects.order_by('-tahun').values_list('tahun', flat=True).distinct()
+    return render(request, 'core/experience.html', {
+        'projects': projects,
+        'categories': categories,
+        'years': years,
+    })
 
 def gallery_view(request):
-    return render(request, 'core/gallery.html')
+    # Ambil semua artikel, cerita lapangan, galeri dokumentasi, modul, dan kategori dari database
+    articles = Article.objects.order_by('-tanggal')
+    stories = Story.objects.order_by('-tanggal')
+    gallery_items = Gallery.objects.select_related('kategori').order_by('-tanggal_upload')
+    documents = Modul.objects.order_by('-tanggal_rilis')
+    # Hanya ambil kategori yang benar-benar dipakai di minimal 1 item galeri,
+    # supaya tidak ada tombol filter "kosong" yang tidak menampilkan apapun
+    categories = Category.objects.filter(galleries__isnull=False).distinct().order_by('name')
+    return render(request, 'core/gallery.html', {
+        'articles': articles,
+        'stories': stories,
+        'gallery_items': gallery_items,
+        'documents': documents,
+        'categories': categories,
+    })
 
 def contact_view(request):
     return render(request, 'core/contact.html')
@@ -34,12 +65,29 @@ def detail_articles_view(request, slug):
     return render(request, 'core/detail-articles.html', {'article': article_data})
 
 def detail_experience_view(request, slug):
-    project_data = get_object_or_404(Project, slug=slug)
-    return render(request, 'core/detail-experience.html', {'project': project_data})
+    project_data = get_object_or_404(
+        Project.objects.select_related('client', 'location', 'service_portfolio').prefetch_related('categories', 'metrics'),
+        slug=slug
+    )
+    # Proyek lain yang berbagi kategori yang sama, untuk section "Pengalaman Terkait"
+    related_projects = Project.objects.filter(
+        categories__in=project_data.categories.all()
+    ).exclude(pk=project_data.pk).distinct().order_by('-tahun')[:3]
+    return render(request, 'core/detail-experience.html', {
+        'project': project_data,
+        'related_projects': related_projects,
+    })
 
 def detail_services_view(request, slug):
     service_data = get_object_or_404(Service, slug=slug)
-    return render(request, 'core/detail-services.html', {'service': service_data})
+    # Untuk sidebar navigasi dinamis (dulu hardcoded 6 NRM + 6 NRU manual)
+    nrm_services = Service.objects.filter(portfolio='NRM')
+    nru_services = Service.objects.filter(portfolio='NRU')
+    return render(request, 'core/detail-services.html', {
+        'service': service_data,
+        'nrm_services': nrm_services,
+        'nru_services': nru_services,
+    })
 
 def detail_story_view(request, slug):
     story_data = get_object_or_404(Story, slug=slug)

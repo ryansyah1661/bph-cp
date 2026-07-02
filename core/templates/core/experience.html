@@ -41,15 +41,11 @@
           <button data-filter="all" class="filter-btn px-5 py-2 bg-primary text-on-primary font-label-caps text-label-caps rounded-full transition-all duration-300 shadow-sm">
             Semua
           </button>
-          <button data-filter="konservasi" class="filter-btn px-5 py-2 bg-transparent border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary font-label-caps text-label-caps rounded-full transition-all duration-300">
-            Konservasi
+          {% for cat in categories %}
+          <button data-filter="{{ cat.slug }}" class="filter-btn px-5 py-2 bg-transparent border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary font-label-caps text-label-caps rounded-full transition-all duration-300">
+            {{ cat.name }}
           </button>
-          <button data-filter="riset" class="filter-btn px-5 py-2 bg-transparent border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary font-label-caps text-label-caps rounded-full transition-all duration-300">
-            Riset &amp; Data
-          </button>
-          <button data-filter="sosial" class="filter-btn px-5 py-2 bg-transparent border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary font-label-caps text-label-caps rounded-full transition-all duration-300">
-            Sosial &amp; Komunitas
-          </button>
+          {% endfor %}
         </div>
 
         <div class="relative inline-block text-left w-44" id="custom-dropdown-container">
@@ -60,9 +56,9 @@
           
           <div id="dropdown-menu" class="hidden absolute right-0 mt-1.5 w-full rounded-lg bg-surface-white border border-border-subtle shadow-[0_10px_25px_rgba(0,0,0,0.08)] z-50 overflow-hidden py-1">
             <div data-value="all" class="dropdown-item px-4 py-2.5 text-sm text-on-surface hover:bg-primary hover:text-surface-white cursor-pointer transition-colors duration-150">Semua Tahun</div>
-            <div data-value="2024" class="dropdown-item px-4 py-2.5 text-sm text-on-surface hover:bg-primary hover:text-surface-white cursor-pointer transition-colors duration-150">2024</div>
-            <div data-value="2023" class="dropdown-item px-4 py-2.5 text-sm text-on-surface hover:bg-primary hover:text-surface-white cursor-pointer transition-colors duration-150">2023</div>
-            <div data-value="2022" class="dropdown-item px-4 py-2.5 text-sm text-on-surface hover:bg-primary hover:text-surface-white cursor-pointer duration-150">2022</div>
+            {% for y in years %}
+            <div data-value="{{ y }}" class="dropdown-item px-4 py-2.5 text-sm text-on-surface hover:bg-primary hover:text-surface-white cursor-pointer transition-colors duration-150">{{ y }}</div>
+            {% endfor %}
           </div>
           <input type="hidden" id="year-filter" value="all">
         </div>
@@ -74,199 +70,37 @@
   <section class="w-full bg-surface pt-6 pb-24 border-b border-border-subtle/50">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter" id="project-grid">
-        
-        <a href="{% url 'detail-experience' slug='proyek-rehabilitasi-hutan-kalimantan' %}" data-category="konservasi" data-year="2024" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
+        {% for project in projects %}
+        <a href="{% url 'detail-experience' slug=project.slug %}"
+           data-category="{% for cat in project.categories.all %}{{ cat.slug }} {% endfor %}"
+           data-year="{{ project.tahun }}"
+           class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
           <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
-            <img alt="Rehabilitasi Hutan" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/experience-1.jpg' %}">
+            {% if project.image %}
+            <img alt="{{ project.name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{{ project.image.url }}">
+            {% else %}
+            <img alt="{{ project.name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/experience-1.jpg' %}">
+            {% endif %}
             <div class="absolute top-4 left-4 flex gap-2 z-10">
-              <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-xs font-bold uppercase tracking-wider">Konservasi</span>
-              <span class="bg-surface-white/90 text-on-surface px-2.5 py-1 rounded font-label-caps text-xs font-bold">2024</span>
+              {% for cat in project.categories.all %}
+              <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-xs font-bold uppercase tracking-wider">{{ cat.name }}</span>
+              {% endfor %}
+              <span class="bg-surface-white/90 text-on-surface px-2.5 py-1 rounded font-label-caps text-xs font-bold">{{ project.tahun }}</span>
             </div>
           </div>
           <div class="p-6 flex flex-col flex-grow">
-            <div class="flex items-center gap-2 text-text-muted font-body-sm text-sm mb-3"><span class="material-symbols-outlined text-base">location_on</span><span>Kalimantan Barat</span></div>
-            <h3 class="font-headline-md text-lg font-bold text-on-background mb-3 line-clamp-2 group-hover:text-primary transition-colors">Proyek Rehabilitasi Hutan Kalimantan</h3>
-            <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">Implementasi strategi pemulihan ekosistem komprehensif pada lahan kritis seluas 50.000 hektar.</p>
+            <div class="flex items-center gap-2 text-text-muted font-body-sm text-sm mb-3">
+              <span class="material-symbols-outlined text-base">location_on</span>
+              <span>{{ project.location.nama_provinsi|default:"Wilayah Kerja BPH" }}</span>
+            </div>
+            <h3 class="font-headline-md text-lg font-bold text-on-background mb-3 line-clamp-2 group-hover:text-primary transition-colors">{{ project.name }}</h3>
+            <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">{{ project.description }}</p>
             <span class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider">Lihat Detail <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
           </div>
         </a>
-
-        <a href="{% url 'detail-experience' slug='restorasi-ekosistem-mangrove-terpadu' %}" data-category="riset" data-year="2023" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
-          <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
-            <img alt="Mangrove" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/experience-2.jpg' %}">
-            <div class="absolute top-4 left-4 flex gap-2 z-10">
-              <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-xs font-bold uppercase tracking-wider">Riset &amp; Data</span>
-              <span class="bg-surface-white/90 text-on-surface px-2.5 py-1 rounded font-label-caps text-xs font-bold">2023</span>
-            </div>
-          </div>
-          <div class="p-6 flex flex-col flex-grow">
-            <div class="flex items-center gap-2 text-text-muted font-body-sm text-sm mb-3"><span class="material-symbols-outlined text-base">location_on</span><span>Pesisir Utara Jawa</span></div>
-            <h3 class="font-headline-md text-lg font-bold text-on-background mb-3 line-clamp-2 group-hover:text-primary transition-colors">Restorasi Ekosistem Mangrove Terpadu</h3>
-            <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">Pengembangan sabuk hijau pesisir untuk mitigasi abrasi dan pemetaan karbon biru.</p>
-            <span class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider">Lihat Detail <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
-          </div>
-        </a>
-
-        <a href="{% url 'detail-experience' slug='program-sertifikasi-rimbawan-muda' %}" data-category="sosial" data-year="2023" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
-          <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
-            <img alt="Rimbawan" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/experience-3.jpg' %}">
-            <div class="absolute top-4 left-4 flex gap-2 z-10">
-              <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-xs font-bold uppercase tracking-wider">Sosial</span>
-              <span class="bg-surface-white/90 text-on-surface px-2.5 py-1 rounded font-label-caps text-xs font-bold">2023</span>
-            </div>
-          </div>
-          <div class="p-6 flex flex-col flex-grow">
-            <div class="flex items-center gap-2 text-text-muted font-body-sm text-sm mb-3"><span class="material-symbols-outlined text-base">location_on</span><span>Bogor, Jawa Barat</span></div>
-            <h3 class="font-headline-md text-lg font-bold text-on-background mb-3 line-clamp-2 group-hover:text-primary transition-colors">Program Sertifikasi Rimbawan Muda</h3>
-            <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">Pelatihan intensif berbasis kompetensi teknis kehutanan untuk 500 kader lingkungan.</p>
-            <span class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider">Lihat Detail <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
-          </div>
-        </a>
-
-        <article data-category="konservasi" data-year="2024" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
-          <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
-            <img alt="Proyek DAS" class="w-full h-full object-cover" src="{% static 'images/services9.jpg' %}">
-            <div class="absolute top-4 left-4 flex gap-2 z-10">
-              <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-xs font-bold uppercase tracking-wider">Konservasi</span>
-              <span class="bg-surface-white/90 text-on-surface px-2.5 py-1 rounded font-label-caps text-xs font-bold">2024</span>
-            </div>
-          </div>
-          <div class="p-6 flex flex-col flex-grow">
-            <div class="flex items-center gap-2 text-text-muted font-body-sm text-sm mb-3"><span class="material-symbols-outlined text-base">location_on</span><span>Sumatera Otoritas</span></div>
-            <h3 class="font-headline-md text-lg font-bold text-on-background mb-3 line-clamp-2 group-hover:text-primary transition-colors">Konservasi Sempadan Aliran Sungai Strategis</h3>
-            <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">Penataan sabuk hijau riparian guna menahan erosi tanah baku mutu air.</p>
-            <span class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider">Lihat Detail <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
-          </div>
-        </article>
-
-        <article data-category="riset" data-year="2024" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
-          <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
-            <img alt="Olah Data" class="w-full h-full object-cover" src="{% static 'images/services2.jpg' %}">
-            <div class="absolute top-4 left-4 flex gap-2 z-10">
-              <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-xs font-bold uppercase tracking-wider">Riset &amp; Data</span>
-              <span class="bg-surface-white/90 text-on-surface px-2.5 py-1 rounded font-label-caps text-xs font-bold">2024</span>
-            </div>
-          </div>
-          <div class="p-6 flex flex-col flex-grow">
-            <div class="flex items-center gap-2 text-text-muted font-body-sm text-sm mb-3"><span class="material-symbols-outlined text-base">location_on</span><span>Sofifi, Maluku Utara</span></div>
-            <h3 class="font-headline-md text-lg font-bold text-on-background mb-3 line-clamp-2 group-hover:text-primary transition-colors">Audit Biomassa &amp; Sekuestrasi Karbon Tropis</h3>
-            <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">Pengukuran empiris kapasitas penyimpanan karbon pada tegakan vegetasi alami.</p>
-            <span class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider">Lihat Detail <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
-          </div>
-        </article>
-
-        <article data-category="sosial" data-year="2022" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
-          <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
-            <img alt="Masyarakat" class="w-full h-full object-cover" src="{% static 'images/services1.jpg' %}">
-            <div class="absolute top-4 left-4 flex gap-2 z-10">
-              <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-xs font-bold uppercase tracking-wider">Sosial</span>
-              <span class="bg-surface-white/90 text-on-surface px-2.5 py-1 rounded font-label-caps text-xs font-bold">2022</span>
-            </div>
-          </div>
-          <div class="p-6 flex flex-col flex-grow">
-            <div class="flex items-center gap-2 text-text-muted font-body-sm text-sm mb-3"><span class="material-symbols-outlined text-base">location_on</span><span>Sukabumi, Jawa Barat</span></div>
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Pemberdayaan Desa Lingkar Hutan Lindung</h3>
-            <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">Edukasi skema agroforestri madu hutan untuk alternatif ekonomi masyarakat lokal.</p>
-            <span class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider">Lihat Detail <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
-          </div>
-        </article>
-
-        <article data-category="konservasi" data-year="2023" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
-          <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
-            <img alt="Reboisasi" class="w-full h-full object-cover" src="{% static 'images/services7.jpg' %}">
-            <div class="absolute top-4 left-4 flex gap-2 z-10">
-              <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-xs font-bold uppercase tracking-wider">Konservasi</span>
-              <span class="bg-surface-white/90 text-on-surface px-2.5 py-1 rounded font-label-caps text-xs font-bold">2023</span>
-            </div>
-          </div>
-          <div class="p-6 flex flex-col flex-grow">
-            <div class="flex items-center gap-2 text-text-muted font-body-sm text-sm mb-3"><span class="material-symbols-outlined text-base">location_on</span><span>Sulawesi Tengah</span></div>
-            <h3 class="font-headline-md text-lg font-bold text-on-background mb-3 line-clamp-2 group-hover:text-primary transition-colors">Reboisasi Kawasan Suaka Margasatwa</h3>
-            <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">Penanaman kembali vegetasi penunjang pakan fauna dilindungi endemik.</p>
-            <span class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider">Lihat Detail <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
-          </div>
-        </article>
-
-        <article data-category="riset" data-year="2022" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
-          <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
-            <img alt="Satelit" class="w-full h-full object-cover" src="{% static 'images/experience-1.jpg' %}">
-            <div class="absolute top-4 left-4 flex gap-2 z-10">
-              <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-xs font-bold uppercase tracking-wider">Riset &amp; Data</span>
-              <span class="bg-surface-white/90 text-on-surface px-2.5 py-1 rounded font-label-caps text-xs font-bold">2022</span>
-            </div>
-          </div>
-          <div class="p-6 flex flex-col flex-grow">
-            <div class="flex items-center gap-2 text-text-muted font-body-sm text-sm mb-3"><span class="material-symbols-outlined text-base">location_on</span><span>Pekanbaru, Riau</span></div>
-            <h3 class="font-headline-md text-lg font-bold text-on-background mb-3 line-clamp-2 group-hover:text-primary transition-colors">Pemetaan Garis Kontur Gambut Berbasis GIS</h3>
-            <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">Analisis kedalaman kubah gambut untuk pencegahan kebakaran hutan.</p>
-            <span class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider">Lihat Detail <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
-          </div>
-        </article>
-
-        <article data-category="sosial" data-year="2024" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
-          <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
-            <img alt="Masyarakat" class="w-full h-full object-cover" src="{% static 'images/experience-3.jpg' %}">
-            <div class="absolute top-4 left-4 flex gap-2 z-10">
-              <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-xs font-bold uppercase tracking-wider">Sosial</span>
-              <span class="bg-surface-white/90 text-on-surface px-2.5 py-1 rounded font-label-caps text-xs font-bold">2024</span>
-            </div>
-          </div>
-          <div class="p-6 flex flex-col flex-grow">
-            <div class="flex items-center gap-2 text-text-muted font-body-sm text-sm mb-3"><span class="material-symbols-outlined text-base">location_on</span><span>Kutai, Kaltim</span></div>
-            <h3 class="font-headline-md text-lg font-bold text-on-background mb-3 line-clamp-2 group-hover:text-primary transition-colors">Sertifikasi Legalitas Kayu Rakyat Masyarakat</h3>
-            <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">Pendampingan kelompok tani hutan rakyat demi mengamankan rantai pasok SVLK.</p>
-            <span class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider">Lihat Detail <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
-          </div>
-        </article>
-
-        <article data-category="konservasi" data-year="2022" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
-          <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
-            <img alt="Terumbu Karang" class="w-full h-full object-cover" src="{% static 'images/experience-2.jpg' %}">
-            <div class="absolute top-4 left-4 flex gap-2 z-10">
-              <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-xs font-bold uppercase tracking-wider">Konservasi</span>
-              <span class="bg-surface-white/90 text-on-surface px-2.5 py-1 rounded font-label-caps text-xs font-bold">2022</span>
-            </div>
-          </div>
-          <div class="p-6 flex flex-col flex-grow">
-            <div class="flex items-center gap-2 text-text-muted font-body-sm text-sm mb-3"><span class="material-symbols-outlined text-base">location_on</span><span>Lombok, NTB</span></div>
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Transplantasi Terumbu Karang Pantai Selatan</h3>
-            <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">Aksi pelestarian ekosistem bahari laut menggunakan media biorock ramah lingkungan.</p>
-            <span class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider">Lihat Detail <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
-          </div>
-        </article>
-
-        <article data-category="riset" data-year="2023" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
-          <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
-            <img alt="Riset Air" class="w-full h-full object-cover" src="{% static 'images/services9.jpg' %}">
-            <div class="absolute top-4 left-4 flex gap-2 z-10">
-              <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-xs font-bold uppercase tracking-wider">Riset &amp; Data</span>
-              <span class="bg-surface-white/90 text-on-surface px-2.5 py-1 rounded font-label-caps text-xs font-bold">2023</span>
-            </div>
-          </div>
-          <div class="p-6 flex flex-col flex-grow">
-            <div class="flex items-center gap-2 text-text-muted font-body-sm text-sm mb-3"><span class="material-symbols-outlined text-base">location_on</span><span>Banyuwangi, Jatim</span></div>
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Uji Baku Mutu Air Sungai Daerah Industri</h3>
-            <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">Riset laboratorium berkala parameter fisik kandungan kimia aliran air.</p>
-            <span class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider">Lihat Detail <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
-          </div>
-        </article>
-
-        <article data-category="sosial" data-year="2023" class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
-          <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
-            <img alt="Pelatihan Kelompok" class="w-full h-full object-cover" src="{% static 'images/services2.jpg' %}">
-            <div class="absolute top-4 left-4 flex gap-2 z-10">
-              <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-[10px] font-bold uppercase tracking-wider">Sosial</span>
-              <span class="bg-surface-white/90 text-on-surface px-2.5 py-1 rounded font-label-caps text-xs font-bold">2023</span>
-            </div>
-          </div>
-          <div class="p-6 flex flex-col flex-grow">
-            <div class="flex items-center gap-1.5 text-text-muted font-body-sm text-xs mb-2"><span class="material-symbols-outlined text-sm">location_on</span><span>Malang, Jawa Timur</span></div>
-            <h4 class="font-headline-md text-base font-bold text-on-background line-clamp-2 group-hover:text-primary transition-colors">Workshop Penyusunan Amdal Desa Wisata</h4>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mt-2 leading-relaxed">Bimbingan teknis pengelolaan limbah sampah domestik bagi pengelola wisata.</p>
-            <span class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider mt-4">Lihat Detail <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
-          </div>
-        </article>
-
+        {% empty %}
+        <p class="text-sm text-on-surface-variant col-span-full">Belum ada proyek yang dipublikasikan.</p>
+        {% endfor %}
       </div>
 
       <div class="mt-16 flex flex-wrap justify-center gap-4">
@@ -500,10 +334,12 @@
       let validMatchCount = 0;
 
       cards.forEach(card => {
-        const cardCategory = card.getAttribute('data-category');
+        // data-category sekarang bisa berisi lebih dari 1 slug (dipisah spasi),
+        // karena 1 proyek bisa punya lebih dari 1 kategori (relasi Many-to-Many)
+        const cardCategories = (card.getAttribute('data-category') || '').trim().split(/\s+/).filter(Boolean);
         const cardYear = card.getAttribute('data-year');
 
-        const matchCategory = (selectedCategory === 'all' || cardCategory === selectedCategory);
+        const matchCategory = (selectedCategory === 'all' || cardCategories.includes(selectedCategory));
         const matchYear = (selectedYear === 'all' || cardYear === selectedYear);
 
         if (matchCategory && matchYear) {
@@ -557,7 +393,6 @@
           b.classList.add('bg-transparent', 'border', 'border-outline-variant', 'text-on-surface-variant');
         });
         
-        // FIXED: Ditambahkan class 'hover:text-surface-white' agar tulisan button kategori aktif tetap putih saat disorot kursor
         btn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm', 'hover:text-surface-white');
         btn.classList.remove('bg-transparent', 'border', 'border-outline-variant', 'text-on-surface-variant');
         

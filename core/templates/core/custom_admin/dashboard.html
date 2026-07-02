@@ -53,7 +53,7 @@
                     <tbody>
                         {% for article in recent_articles %}
                         <tr>
-                            <td><a href="{% url 'article_edit' article.id %}" style="font-weight: 600; color: #2d6a4f; text-decoration: none;">{{ article.judul }}</a></td>
+                            <td><a href="{% url 'article_update' article.id %}" style="font-weight: 600; color: #2d6a4f; text-decoration: none;">{{ article.judul }}</a></td>
                         </tr>
                         {% empty %}
                         <tr><td style="text-align: center; color: #adb5bd; padding: 30px;">Belum ada artikel.</td></tr>
@@ -73,7 +73,7 @@
                     <tbody>
                         {% for project in recent_projects %}
                         <tr>
-                            <td><a href="{% url 'project_edit' project.id %}" style="font-weight: 600; color: #2d6a4f; text-decoration: none;">{{ project.name }}</a></td>
+                            <td><a href="{% url 'project_update' project.id %}" style="font-weight: 600; color: #2d6a4f; text-decoration: none;">{{ project.name }}</a></td>
                         </tr>
                         {% empty %}
                         <tr><td style="text-align: center; color: #adb5bd; padding: 30px;">Belum ada proyek.</td></tr>

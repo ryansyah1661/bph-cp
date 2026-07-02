@@ -7,9 +7,9 @@
 <main class="flex-grow pt-[80px]">
   
   {% if service.portfolio == 'NRM' %}
-    {% include 'core/partials/hero-banner.html' with title=service.title subtitle="Natural Resources Management" bg_image=service.bg_image %}
+    {% include 'core/partials/hero-banner.html' with title=service.title subtitle="Natural Resources Management" bg_image=service.bg_image|default:"images/forest-services.jpg" %}
   {% else %}
-    {% include 'core/partials/hero-banner.html' with title=service.title subtitle="Natural Resources Understanding" bg_image=service.bg_image %}
+    {% include 'core/partials/hero-banner.html' with title=service.title subtitle="Natural Resources Understanding" bg_image=service.bg_image|default:"images/forest-services.jpg" %}
   {% endif %}
 
   <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-section-gap grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
@@ -30,7 +30,7 @@
             Tahapan Pelaksanaan
           </h3>
           <ul class="list-none space-y-5 font-body-md text-body-md">
-            {% for step in service.steps %}
+            {% for step in service.steps.all %}
             <li class="flex items-start gap-4">
               <span class="material-symbols-outlined text-primary bg-primary/5 p-2 rounded-xl text-xl block">
                 {{ step.icon }}
@@ -40,6 +40,8 @@
                 <span class="text-on-surface-variant block mt-0.5">{{ step.desc }}</span>
               </div>
             </li>
+            {% empty %}
+            <li class="text-sm text-on-surface-variant">Belum ada tahapan pelaksanaan yang ditambahkan untuk layanan ini.</li>
             {% endfor %}
           </ul>
         </div>
@@ -55,37 +57,14 @@
             Natural Resources Management (NRM)
           </h3>
           <nav class="space-y-1 pl-2 border-l border-border-subtle/80">
-            
-            <a href="{% url 'detail-services' slug='rehabilitasi-hutan' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Rehabilitasi Hutan & Lahan' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
-              <span>Rehabilitasi Hutan &amp; Lahan</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Rehabilitasi Hutan & Lahan' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
+            {% for item in nrm_services %}
+            <a href="{% url 'detail-services' slug=item.slug %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if item.slug == service.slug %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
+              <span>{{ item.title }}</span>
+              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if item.slug == service.slug %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
             </a>
-            
-            <a href="{% url 'detail-services' slug='inventarisasi-lahan' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Inventarisasi Sumberdaya Lahan' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
-              <span>Inventarisasi Sumberdaya Lahan</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Inventarisasi Sumberdaya Lahan' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
-            </a>
-            
-            <a href="{% url 'detail-services' slug='penguatan-kelembagaan' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Penguatan Kelembagaan' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
-              <span>Penguatan Kelembagaan</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Penguatan Kelembagaan' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
-            </a>
-
-            <a href="{% url 'detail-services' slug='perencanaan-sda' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Perencanaan SDA & Lingkungan' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
-              <span>Perencanaan SDA &amp; Lingkungan</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Perencanaan SDA & Lingkungan' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
-            </a>
-
-            <a href="{% url 'detail-services' slug='pengelolaan-tanaman' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Pengelolaan Kesehatan Tanaman' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
-              <span>Pengelolaan Kesehatan Tanaman</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Pengelolaan Kesehatan Tanaman' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
-            </a>
-
-            <a href="{% url 'detail-services' slug='perizinan-lingkungan' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Perizinan Lingkungan' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
-              <span>Perizinan Lingkungan</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Perizinan Lingkungan' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
-            </a>
-            
+            {% empty %}
+            <p class="text-xs text-on-surface-variant px-3 py-2">Belum ada layanan NRM.</p>
+            {% endfor %}
           </nav>
         </div>
 
@@ -95,37 +74,14 @@
             Natural Resources Understanding (NRU)
           </h3>
           <nav class="space-y-1 pl-2 border-l border-border-subtle/80">
-            
-            <a href="{% url 'detail-services' slug='penilaian-keanekaragaman' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Penilaian Keanekaragaman Hayati' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
-              <span>Penilaian Keanekaragaman Hayati</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Penilaian Keanekaragaman Hayati' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
+            {% for item in nru_services %}
+            <a href="{% url 'detail-services' slug=item.slug %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if item.slug == service.slug %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
+              <span>{{ item.title }}</span>
+              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if item.slug == service.slug %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
             </a>
-            
-            <a href="{% url 'detail-services' slug='penilaian-sosial' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Penilaian Sosial' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
-              <span>Penilaian Sosial</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Penilaian Sosial' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
-            </a>
-            
-            <a href="{% url 'detail-services' slug='tanah-hidrologi' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Kajian Tanah &amp; Hidrologi' or service.title == 'Kajian Tanah & Hidrologi' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
-              <span>Kajian Tanah &amp; Hidrologi</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Kajian Tanah &amp; Hidrologi' or service.title == 'Kajian Tanah & Hidrologi' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
-            </a>
-
-            <a href="{% url 'detail-services' slug='kajian-iklim' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Kajian Iklim' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
-              <span>Kajian Iklim</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Kajian Iklim' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
-            </a>
-
-            <a href="{% url 'detail-services' slug='kesehatan-tanaman-nru' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Penilaian Kesehatan Tanaman (NRU)' or service.title == 'Penilaian Kesehatan Tanaman' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
-              <span>Penilaian Kesehatan Tanaman</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Penilaian Kesehatan Tanaman (NRU)' or service.title == 'Penilaian Kesehatan Tanaman' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
-            </a>
-
-            <a href="{% url 'detail-services' slug='energi-terbarukan' %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if service.title == 'Energi Terbarukan' %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
-              <span>Energi Terbarukan</span>
-              <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if service.title == 'Energi Terbarukan' %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
-            </a>
-            
+            {% empty %}
+            <p class="text-xs text-on-surface-variant px-3 py-2">Belum ada layanan NRU.</p>
+            {% endfor %}
           </nav>
         </div>
 
@@ -151,10 +107,14 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
-        <a href="{% url 'experience' %}" class="flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 transition-all duration-300 block group">
+        {% for project in service.projects.all|slice:":3" %}
+        <a href="{% url 'detail-experience' slug=project.slug %}" class="flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 transition-all duration-300 block group">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container-low">
-            <img alt="Proyek Lapangan BPH" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services1.jpg' %}">
+            {% if project.image %}
+            <img alt="{{ project.name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{{ project.image.url }}">
+            {% else %}
+            <img alt="{{ project.name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services1.jpg' %}">
+            {% endif %}
             <div class="absolute top-4 left-4 flex gap-2 z-10">
               <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-[10px] font-bold uppercase tracking-wider">{{ service.portfolio }}</span>
             </div>
@@ -162,44 +122,14 @@
           <div class="p-5 flex flex-col flex-grow">
             <div class="flex items-center gap-1.5 text-text-muted font-body-sm text-xs mb-2">
               <span class="material-symbols-outlined text-sm">location_on</span>
-              <span>Wilayah Kerja BPH</span>
+              <span>{{ project.location.nama_provinsi|default:"Wilayah Kerja BPH" }}</span>
             </div>
-            <h4 class="font-headline-md text-base font-bold text-on-background line-clamp-2 group-hover:text-primary transition-colors">Implementasi Lapangan Proyek Strategis {{ service.portfolio }}</h4>
+            <h4 class="font-headline-md text-base font-bold text-on-background line-clamp-2 group-hover:text-primary transition-colors">{{ project.name }}</h4>
           </div>
         </a>
-
-        <a href="{% url 'experience' %}" class="flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 transition-all duration-300 block group">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container-low">
-            <img alt="Proyek Lapangan BPH" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services2.jpg' %}">
-            <div class="absolute top-4 left-4 flex gap-2 z-10">
-              <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-[10px] font-bold uppercase tracking-wider">{{ service.portfolio }}</span>
-            </div>
-          </div>
-          <div class="p-5 flex flex-col flex-grow">
-            <div class="flex items-center gap-1.5 text-text-muted font-body-sm text-xs mb-2">
-              <span class="material-symbols-outlined text-sm">location_on</span>
-              <span>Kawasan Konservasi</span>
-            </div>
-            <h4 class="font-headline-md text-base font-bold text-on-background line-clamp-2 group-hover:text-primary transition-colors">Pengumpulan Aset Data Teknis Lapangan</h4>
-          </div>
-        </a>
-
-        <a href="{% url 'experience' %}" class="flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 transition-all duration-300 block group">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container-low">
-            <img alt="Proyek Lapangan BPH" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static '' %}{{ service.bg_image }}">
-            <div class="absolute top-4 left-4 flex gap-2 z-10">
-              <span class="bg-primary text-surface-white px-2.5 py-1 rounded font-label-caps text-[10px] font-bold uppercase tracking-wider">{{ service.portfolio }}</span>
-            </div>
-          </div>
-          <div class="p-5 flex flex-col flex-grow">
-            <div class="flex items-center gap-1.5 text-text-muted font-body-sm text-xs mb-2">
-              <span class="material-symbols-outlined text-sm">location_on</span>
-              <span>Site Monitoring</span>
-            </div>
-            <h4 class="font-headline-md text-base font-bold text-on-background line-clamp-2 group-hover:text-primary transition-colors">Analisis Dampak &amp; Evaluasi Kepatuhan Ekosistem</h4>
-          </div>
-        </a>
-
+        {% empty %}
+        <p class="text-sm text-on-surface-variant col-span-full">Belum ada proyek terkait layanan ini.</p>
+        {% endfor %}
       </div>
     </div>
   </section>

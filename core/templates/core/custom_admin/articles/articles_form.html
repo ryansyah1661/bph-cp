@@ -81,18 +81,28 @@
     // --- 1. INITIALIZE QUILL RICH TEXT EDITOR ---
     var quill = new Quill('#quill-editor', { theme: 'snow' });
     var descTextarea = document.querySelector('textarea[name="deskripsi"]');
-    
+
     if (descTextarea && descTextarea.value) {
         quill.root.innerHTML = descTextarea.value;
     }
 
-    // --- 2. FIX TOMBOL SIMPAN MACET (Pindah data Quill ke Textarea asli sebelum submit) ---
+    // --- 2. FIX TOMBOL SIMPAN MACET ---
+    // PENTING: Sinkronisasi HARUS realtime (text-change), bukan hanya di
+    // event 'submit'. Browser mengecek field "required" SEBELUM event
+    // 'submit' ditembak, jadi kalau sync cuma di listener submit, textarea
+    // masih keburu kosong saat validasi jalan -> selalu ketolak walau
+    // Quill sudah diisi.
     var formElement = document.getElementById('article-form');
-    formElement.addEventListener('submit', function(e) {
+
+    function syncQuillToTextarea() {
         if (descTextarea) {
-            descTextarea.value = quill.root.innerHTML;
+            descTextarea.value = quill.getText().trim().length > 0 ? quill.root.innerHTML : '';
         }
-    });
+    }
+
+    quill.on('text-change', syncQuillToTextarea);
+    // Jaga-jaga tetap sync juga sesaat sebelum submit
+    formElement.addEventListener('submit', syncQuillToTextarea);
 
     // --- 3. FIX KALENDER DATE PICKER ---
     var tanggalInput = document.querySelector('input[name="tanggal"]');
@@ -103,7 +113,7 @@
     // --- 4. FIX AUTO GENERATE SLUG DARI JUDUL ---
     var judulInput = document.querySelector('input[name="judul"]');
     var slugInput = document.querySelector('input[name="slug"]');
-    
+
     if (judulInput && slugInput) {
         judulInput.addEventListener('input', function() {
             var slugify = judulInput.value
@@ -164,7 +174,26 @@
 </script>
 
 <style>
-    textarea[name="deskripsi"] { display: none; }
+    /*
+        PENTING: textarea "deskripsi" TIDAK boleh pakai display:none.
+        Kalau field ini required, display:none membuat browser tidak bisa
+        menampilkan pesan validasi HTML5 saat kosong -> submit diblokir
+        diam-diam tanpa respon apapun (ini penyebab bug tombol macet).
+        Gunakan teknik "visually hidden" di bawah ini sebagai gantinya.
+    */
+    textarea[name="deskripsi"] {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+        opacity: 0;
+        pointer-events: none;
+    }
 
     form input[type="text"],
     form input[type="date"],

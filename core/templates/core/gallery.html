@@ -17,43 +17,31 @@
 
       <div class="flex flex-wrap justify-start gap-4 mb-8" id="gallery-filter-container">
         <button data-filter="all" class="gallery-filter-btn font-label-caps text-label-caps px-6 py-2 rounded-full bg-primary text-surface-white transition-all duration-300 shadow-sm hover:text-surface-white">All</button>
-        <button data-filter="nrm" class="gallery-filter-btn font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">NRM</button>
-        <button data-filter="nru" class="gallery-filter-btn font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">NRU</button>
-        <button data-filter="training" class="gallery-filter-btn font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">Training</button>
-        <button data-filter="others" class="gallery-filter-btn font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">Others</button>
+        {% for cat in categories %}
+        <button data-filter="{{ cat.slug }}" class="gallery-filter-btn font-label-caps text-label-caps px-6 py-2 rounded-full border border-border-subtle text-on-surface-variant hover:border-primary hover:text-primary transition-all duration-300">{{ cat.name }}</button>
+        {% endfor %}
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="gallery-card-grid">
-        <div data-tags="nrm" class="gallery-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
+        {% for item in gallery_items %}
+        <div data-tags="{{ item.kategori.slug|default:'tanpa-kategori' }}" class="gallery-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img alt="Environmental restoration" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services1.jpg' %}">
-            <div class="absolute top-4 left-4 z-10"><span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">NRM</span></div>
+            {% if item.gambar %}
+            <img alt="{{ item.caption }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{{ item.gambar.url }}">
+            {% else %}
+            <img alt="{{ item.caption }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services1.jpg' %}">
+            {% endif %}
+            {% if item.kategori %}
+            <div class="absolute top-4 left-4 z-10"><span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">{{ item.kategori.name }}</span></div>
+            {% endif %}
           </div>
           <div class="p-6 flex-1 flex flex-col">
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-2 group-hover:text-primary transition-colors">Restorasi Hutan Tropis</h3>
-            <p class="text-sm text-on-surface-variant leading-relaxed line-clamp-3">Pemulihan ekosistem hutan hujan tropis secara berkala melalui penanaman kembali bibit pohon endemik.</p>
+            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-2 group-hover:text-primary transition-colors">{{ item.caption }}</h3>
           </div>
         </div>
-        <div data-tags="training" class="gallery-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img alt="Field training" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/experience-1.jpg' %}">
-            <div class="absolute top-4 left-4 z-10"><span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">Training</span></div>
-          </div>
-          <div class="p-6 flex-1 flex flex-col">
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-2 group-hover:text-primary transition-colors">Pelatihan Pemetaan Area</h3>
-            <p class="text-sm text-on-surface-variant leading-relaxed line-clamp-3">Membekali tim lapangan dan kader lingkungan dengan keterampilan navigasi GPS tingkat lanjut.</p>
-          </div>
-        </div>
-        <div data-tags="nru" class="gallery-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img alt="Mountain landscape" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services7.jpg' %}" />
-            <div class="absolute top-4 left-4 z-10"><span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">NRU</span></div>
-          </div>
-          <div class="p-6 flex-1 flex flex-col">
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-2 group-hover:text-primary transition-colors">Survei Dataran Tinggi</h3>
-            <p class="text-sm text-on-surface-variant leading-relaxed line-clamp-3">Pengumpulan data lapangan terpadu mengenai indeks keanekaragaman hayati vegetasi flora.</p>
-          </div>
-        </div>
+        {% empty %}
+        <p class="text-sm text-on-surface-variant col-span-full">Belum ada dokumentasi yang diunggah.</p>
+        {% endfor %}
       </div>
     </div>
   </section>
@@ -66,50 +54,25 @@
       </div>
 
       <div id="article-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <a href="{% url 'detail-articles' slug='aksi-kecil-dampak-besar-restorasi-lahan-kritis' %}" class="article-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+        {% for article in articles %}
+        <a href="{% url 'detail-articles' slug=article.slug %}" class="article-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img src="{% static 'images/services1.jpg' %}" alt="Riset" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            {% if article.gambar %}
+            <img src="{{ article.gambar.url }}" alt="{{ article.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            {% else %}
+            <img src="{% static 'images/services1.jpg' %}" alt="{{ article.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            {% endif %}
           </div>
           <div class="p-6 flex-1 flex flex-col">
-            <p class="text-xs text-text-muted font-medium mb-2">26 Juni 2026 • Oleh Admin BPH</p>
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Aksi Kecil, Dampak Besar: Restorasi Lahan Kritis</h3>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Intervensi skala mikro dan keterlibatan komunitas lokal bawa perubahan ekosistem.</p>
+            <p class="text-xs text-text-muted font-medium mb-2">{{ article.tanggal|date:"d F Y" }} • Oleh {{ article.author }}</p>
+            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">{{ article.judul }}</h3>
+            <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">{{ article.short }}</p>
             <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
           </div>
         </a>
-        <a href="{% url 'detail-articles' slug='analisis-sekuestrasi-karbon-hutan-hujan-tropis-2026' %}" class="article-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img src="{% static 'images/services7.jpg' %}" alt="Riset" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-          </div>
-          <div class="p-6 flex-1 flex flex-col">
-            <p class="text-xs text-text-muted font-medium mb-2">24 Juni 2026 • Oleh Tim Ahli BPH</p>
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Analisis Sekuestrasi Karbon Hutan Hujan Tropis 2026</h3>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Eksplorasi data penyerapan karbon dalam menekan pemanasan global ekosistem pulau.</p>
-            <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
-          </div>
-        </a>
-        <a href="{% url 'detail-articles' slug='regulasi-air-bersih-batasan-kegiatan-industri-hilir' %}" class="article-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img src="{% static 'images/services9.jpg' %}" alt="Riset" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-          </div>
-          <div class="p-6 flex-1 flex flex-col">
-            <p class="text-xs text-text-muted font-medium mb-2">22 Juni 2026 • Oleh Legal Kawasan</p>
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Regulasi Air Bersih &amp; Batasan Kegiatan Industri Hilir</h3>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Implementasi kebijakan daerah aliran sungai guna meminimalkan polusi limbah cair.</p>
-            <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
-          </div>
-        </a>
-        <div class="article-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img src="{% static 'images/services2.jpg' %}" alt="Riset" class="w-full h-full object-cover">
-          </div>
-          <div class="p-6 flex-1 flex flex-col">
-            <p class="text-xs text-text-muted font-medium mb-2">15 Mei 2026 • Oleh Tim Data</p>
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Penerapan GIS Spasial Pada Pemetaan Vegetasi</h3>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Pemanfaatan foto citra satelit resolusi tinggi untuk memantau laju deforestasi.</p>
-            <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
-          </div>
-        </div>
+        {% empty %}
+        <p class="text-sm text-on-surface-variant col-span-full">Belum ada artikel yang dipublikasikan.</p>
+        {% endfor %}
       </div>
 
       <div class="mt-12 flex justify-start gap-4">
@@ -127,50 +90,25 @@
       </div>
 
       <div id="story-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <a href="{% url 'detail-story' slug='menembus-kabut-gunung-barat-jejak-macan-dahan' %}" class="story-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+        {% for story in stories %}
+        <a href="{% url 'detail-story' slug=story.slug %}" class="story-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img src="{% static 'images/experience-1.jpg' %}" alt="Cerita" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            {% if story.gambar %}
+            <img src="{{ story.gambar.url }}" alt="{{ story.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            {% else %}
+            <img src="{% static 'images/experience-1.jpg' %}" alt="{{ story.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            {% endif %}
           </div>
           <div class="p-6 flex-1 flex flex-col">
-            <p class="text-xs text-text-muted font-medium mb-2">12 Juni 2026 • Oleh Rimbawan BPH</p>
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Menembus Kabut Gunung Barat: Jejak Macan Dahan</h3>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Catatan perjalanan tim lapangan memasang camera trap di pedalaman rimba primer.</p>
+            <p class="text-xs text-text-muted font-medium mb-2">{{ story.tanggal|date:"d F Y" }} • Oleh {{ story.author }}</p>
+            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">{{ story.judul }}</h3>
+            <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">{{ story.short }}</p>
             <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
           </div>
         </a>
-        <a href="{% url 'detail-story' slug='senyum-pesisir-menanam-masa-depan-bersama-nelayan' %}" class="story-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img src="{% static 'images/experience-2.jpg' %}" alt="Cerita" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-          </div>
-          <div class="p-6 flex-1 flex flex-col">
-            <p class="text-xs text-text-muted font-medium mb-2">05 Juni 2026 • Oleh Kader Mangrove</p>
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Senyum Pesisir: Menanam Masa Depan Bersama Nelayan</h3>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Bagaimana bibit mangrove kecil menyatukan visi ekonomi warga dan kelestarian pantai.</p>
-            <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
-          </div>
-        </a>
-        <a href="{% url 'detail-story' slug='bertahan-di-tengah-badai-tropis-saat-sampling-data' %}" class="story-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img src="{% static 'images/experience-3.jpg' %}" alt="Cerita" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-          </div>
-          <div class="p-6 flex-1 flex flex-col">
-            <p class="text-xs text-text-muted font-medium mb-2">29 Mei 2026 • Oleh Koordinator Site</p>
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Bertahan Di Tengah Badai Tropis Saat Sampling Data</h3>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Suka duka perjuangan tim teknis mengamankan sampel fisik tanah di bawah guyuran hujan deras.</p>
-            <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
-          </div>
-        </a>
-        <div class="story-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img src="{% static 'images/services1.jpg' %}" alt="Cerita" class="w-full h-full object-cover">
-          </div>
-          <div class="p-6 flex-1 flex flex-col">
-            <p class="text-xs text-text-muted font-medium mb-2">10 April 2026 • Oleh Fasilitator Desa</p>
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">Agroforestri Madu: Harmoni Lebah dan Penjaga Hutan</h3>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mb-4 leading-relaxed">Kisah sukses warga beralih profesi dari perambah kayu menjadi peternak madu hutan lestari.</p>
-            <span class="mt-auto text-xs font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
-          </div>
-        </div>
+        {% empty %}
+        <p class="text-sm text-on-surface-variant col-span-full">Belum ada cerita lapangan yang dipublikasikan.</p>
+        {% endfor %}
       </div>
 
       <div class="mt-12 flex justify-start gap-4">
@@ -188,32 +126,22 @@
       </div>
 
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        <a href="{% url 'experience' %}" class="group">
-          <div class="relative aspect-[3/4] bg-surface-white border border-border-subtle rounded-xl overflow-hidden shadow-sm transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
-            <img src="{% static 'images/services1.jpg' %}" alt="Cover Modul Audit" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+        {% for doc in documents %}
+        <a href="{{ doc.file_dokumen.url }}" target="_blank" rel="noopener" class="group">
+          <div class="relative aspect-[3/4] bg-surface-white border border-border-subtle rounded-xl overflow-hidden shadow-sm transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1 flex items-center justify-center">
+            <span class="material-symbols-outlined text-6xl text-primary/30">description</span>
             <div class="absolute top-3 right-3 bg-white/90 p-1.5 rounded-lg shadow-sm text-primary">
-              <span class="material-symbols-outlined text-sm block font-bold">description</span>
+              <span class="material-symbols-outlined text-sm block font-bold">download</span>
             </div>
           </div>
           <div class="mt-4 text-left">
-            <h3 class="font-headline-md text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Audit Ekologis Kawasan Sofifi 2026</h3>
-            <p class="text-[12px] text-on-surface-variant mt-1">NRM &amp; Ecosystem Restoration</p>
+            <h3 class="font-headline-md text-sm font-bold text-on-surface group-hover:text-primary transition-colors">{{ doc.judul }}</h3>
+            <p class="text-[12px] text-on-surface-variant mt-1">Diunggah {{ doc.tanggal_rilis|date:"d F Y" }}</p>
           </div>
         </a>
-        <a href="{% url 'experience' %}" class="group">
-          <div class="relative aspect-[3/4] bg-surface-white border border-border-subtle rounded-xl overflow-hidden shadow-sm transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
-            <img src="{% static 'images/services7.jpg' %}" alt="Cover Modul Karbon" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
-            <div class="absolute top-3 right-3 bg-white/90 p-1.5 rounded-lg shadow-sm text-primary">
-              <span class="material-symbols-outlined text-sm block font-bold">description</span>
-            </div>
-          </div>
-          <div class="max-w-[587px] mt-4 text-left">
-            <h3 class="font-headline-md text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Metodologi Pemetaan Karbon Spasial</h3>
-            <p class="text-[12px] text-on-surface-variant mt-1">NRU &amp; Data Spasial Analysis</p>
-          </div>
-        </a>
+        {% empty %}
+        <p class="text-sm text-on-surface-variant col-span-full">Belum ada modul dokumentasi yang diunggah.</p>
+        {% endfor %}
       </div>
     </div>
   </section>

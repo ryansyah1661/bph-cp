@@ -1,0 +1,71 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-emerald-900 tracking-tight">
+            Cerita Lapangan
+        </h1>
+        <p class="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed">
+            Kumpulan catatan, dokumentasi esensial, dan kisah nyata dari tim kami saat bergerak langsung di area konservasi dan pemberdayaan masyarakat.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for story in stories %}
+        <article class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col hover:shadow-md transition duration-300">
+            <div class="relative aspect-[16/10] overflow-hidden bg-slate-100">
+                {% if story.gambar %}
+                    <img src="{{ story.gambar.url }}" alt="{{ story.judul }}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                {% else %}
+                    <div class="w-full h-full flex items-center justify-center text-slate-400">
+                        <span class="material-symbols-outlined text-4xl">image</span>
+                    </div>
+                {% endif %}
+                
+                {% if story.kategori %}
+                <span class="absolute top-4 left-4 bg-emerald-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+                    {{ story.kategori.name }}
+                </span>
+                {% endif %}
+            </div>
+
+            <div class="p-6 flex-1 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-4 text-xs text-slate-400 mb-3">
+                        <span class="flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">calendar_month</span>
+                            {{ story.tanggal|date:"d M Y" }}
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">person</span>
+                            {{ story.author|default:"Tim Admin" }}
+                        </span>
+                    </div>
+
+                    <h2 class="text-lg font-bold text-slate-800 line-clamp-2 hover:text-emerald-700 transition mb-2">
+                        <a href="{% url 'detail-story' story.slug %}">{{ story.judul }}</a>
+                    </h2>
+
+                    <p class="text-sm text-slate-500 line-clamp-3 leading-relaxed mb-4">
+                        {{ story.short|default:"" }}
+                    </p>
+                </div>
+
+                <div class="pt-4 border-t border-slate-50">
+                    <a href="{% url 'detail-story' story.slug %}" class="inline-flex items-center text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition gap-1 group">
+                        Baca Selengkapnya 
+                        <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition duration-200">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+        </article>
+        {% empty %}
+        <div class="col-span-full py-16 text-center">
+            <span class="material-symbols-outlined text-5xl text-slate-300 mb-2">auto_stories</span>
+            <p class="text-slate-500 font-medium">Belum ada cerita lapangan yang diterbitkan.</p>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

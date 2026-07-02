@@ -16,23 +16,27 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        
-        <a href="{% url 'detail-services' slug='rehabilitasi-hutan' %}" 
+        {% for service in services_nrm %}
+        <a href="{% url 'detail-services' slug=service.slug %}"
              class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img alt="Rehabilitasi Hutan" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services1.jpg' %}" />
+            {% if service.thumbnail %}
+            <img alt="{{ service.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{{ service.thumbnail.url }}" />
+            {% else %}
+            <img alt="{{ service.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services1.jpg' %}" />
+            {% endif %}
             <div class="absolute top-4 left-4 z-10">
               <span class="bg-primary/90 text-surface-white p-2.5 rounded-xl flex items-center justify-center shadow-sm backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-                <span class="material-symbols-outlined text-xl block" style="font-variation-settings: 'FILL' 0;">forest</span>
+                <span class="material-symbols-outlined text-xl block" style="font-variation-settings: 'FILL' 0;">{{ service.icon|default:"eco" }}</span>
               </span>
             </div>
           </div>
           <div class="p-6 flex-1 flex flex-col">
             <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">
-              Rehabilitasi Hutan &amp; Lahan
+              {{ service.title }}
             </h3>
             <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">
-              Strategic restoration of degraded landscapes to recover ecological functionality and enhance biodiversity.
+              {{ service.intro }}
             </p>
             <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
               <span class="relative inline-block pb-1 after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
@@ -42,137 +46,9 @@
             </span>
           </div>
         </a>
-
-        <a href="{% url 'detail-services' slug='inventarisasi-lahan' %}" 
-             class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img alt="Inventarisasi Lahan" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services2.jpg' %}" />
-            <div class="absolute top-4 left-4 z-10">
-              <span class="bg-primary/90 text-surface-white p-2.5 rounded-xl flex items-center justify-center shadow-sm backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-                <span class="material-symbols-outlined text-xl block" style="font-variation-settings: 'FILL' 0;">travel_explore</span>
-              </span>
-            </div>
-          </div>
-          <div class="p-6 flex-1 flex flex-col">
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">
-              Inventarisasi Sumberdaya Lahan
-            </h3>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">
-              Comprehensive data collection and mapping of land assets to inform sustainable land-use planning.
-            </p>
-            <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
-              <span class="relative inline-block pb-1 after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-                Baca Selengkapnya
-              </span>
-              <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
-            </span>
-          </div>
-        </a>
-
-        <a href="{% url 'detail-services' slug='penguatan-kelembagaan' %}" 
-             class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img alt="Penguatan Kelembagaan" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services3.jpg' %}" />
-            <div class="absolute top-4 left-4 z-10">
-              <span class="bg-primary/90 text-surface-white p-2.5 rounded-xl flex items-center justify-center shadow-sm backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-                <span class="material-symbols-outlined text-xl block" style="font-variation-settings: 'FILL' 0;">corporate_fare</span>
-              </span>
-            </div>
-          </div>
-          <div class="p-6 flex-1 flex flex-col">
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">
-              Penguatan Kelembagaan
-            </h3>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">
-              Building robust institutional frameworks to support effective environmental governance and compliance.
-            </p>
-            <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
-              <span class="relative inline-block pb-1 after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-                Baca Selengkapnya
-              </span>
-              <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
-            </span>
-          </div>
-        </a>
-
-        <a href="{% url 'detail-services' slug='perencanaan-sda' %}" 
-             class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img alt="Perencanaan SDA" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services4.jpg' %}" />
-            <div class="absolute top-4 left-4 z-10">
-              <span class="bg-primary/90 text-surface-white p-2.5 rounded-xl flex items-center justify-center shadow-sm backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-                <span class="material-symbols-outlined text-xl block" style="font-variation-settings: 'FILL' 0;">map</span>
-              </span>
-            </div>
-          </div>
-          <div class="p-6 flex-1 flex flex-col">
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">
-              Perencanaan SDA &amp; Lingkungan
-            </h3>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">
-              Strategic blueprinting for natural resource utilization that balances economic goals with ecological limits.
-            </p>
-            <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
-              <span class="relative inline-block pb-1 after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-                Baca Selengkapnya
-              </span>
-              <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
-            </span>
-          </div>
-        </a>
-
-        <a href="{% url 'detail-services' slug='pengelolaan-tanaman' %}" 
-             class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img alt="Kesehatan Tanaman" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services5.jpg' %}" />
-            <div class="absolute top-4 left-4 z-10">
-              <span class="bg-primary/90 text-surface-white p-2.5 rounded-xl flex items-center justify-center shadow-sm backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-                <span class="material-symbols-outlined text-xl block" style="font-variation-settings: 'FILL' 0;">ecg</span>
-              </span>
-            </div>
-          </div>
-          <div class="p-6 flex-1 flex flex-col">
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">
-              Pengelolaan Kesehatan Tanaman
-            </h3>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">
-              Integrated pest and disease management to ensure the vitality of commercial and conservation flora.
-            </p>
-            <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
-              <span class="relative inline-block pb-1 after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-                Baca Selengkapnya
-              </span>
-              <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
-            </span>
-          </div>
-        </a>
-
-        <a href="{% url 'detail-services' slug='perizinan-lingkungan' %}" 
-             class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img alt="Perizinan Lingkungan" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services6.jpg' %}" />
-            <div class="absolute top-4 left-4 z-10">
-              <span class="bg-primary/90 text-surface-white p-2.5 rounded-xl flex items-center justify-center shadow-sm backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-                <span class="material-symbols-outlined text-xl block" style="font-variation-settings: 'FILL' 0;">verified_user</span>
-              </span>
-            </div>
-          </div>
-          <div class="p-6 flex-1 flex flex-col">
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">
-              Perizinan Lingkungan
-            </h3>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">
-              Navigating complex regulatory landscapes to secure necessary environmental clearances and permits.
-            </p>
-            <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
-              <span class="relative inline-block pb-1 after:pointer-events-none after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-                Baca Selengkapnya
-              </span>
-              <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
-            </span>
-          </div>
-        </a>
-
+        {% empty %}
+        <p class="text-sm text-on-surface-variant col-span-full">Belum ada layanan NRM yang dipublikasikan.</p>
+        {% endfor %}
       </div>
     </div>
   </section>
@@ -185,23 +61,27 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        
-        <a href="{% url 'detail-services' slug='penilaian-keanekaragaman' %}" 
+        {% for service in services_nru %}
+        <a href="{% url 'detail-services' slug=service.slug %}"
              class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img alt="Keanekaragaman Hayati" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services7.jpg' %}" />
+            {% if service.thumbnail %}
+            <img alt="{{ service.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{{ service.thumbnail.url }}" />
+            {% else %}
+            <img alt="{{ service.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services7.jpg' %}" />
+            {% endif %}
             <div class="absolute top-4 left-4 z-10">
               <span class="bg-primary/90 text-surface-white p-2.5 rounded-xl flex items-center justify-center shadow-sm backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-                <span class="material-symbols-outlined text-xl block" style="font-variation-settings: 'FILL' 0;">nature_people</span>
+                <span class="material-symbols-outlined text-xl block" style="font-variation-settings: 'FILL' 0;">{{ service.icon|default:"nature_people" }}</span>
               </span>
             </div>
           </div>
           <div class="p-6 flex-1 flex flex-col">
             <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">
-              Penilaian Keanekaragaman Hayati
+              {{ service.title }}
             </h3>
             <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">
-              Rigorous baseline surveys and impact assessments for local flora and fauna populations.
+              {{ service.intro }}
             </p>
             <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
               <span class="relative inline-block pb-1 after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
@@ -211,137 +91,9 @@
             </span>
           </div>
         </a>
-
-        <a href="{% url 'detail-services' slug='penilaian-sosial' %}" 
-             class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img alt="Penilaian Sosial" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services8.jpg' %}" />
-            <div class="absolute top-4 left-4 z-10">
-              <span class="bg-primary/90 text-surface-white p-2.5 rounded-xl flex items-center justify-center shadow-sm backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-                <span class="material-symbols-outlined text-xl block" style="font-variation-settings: 'FILL' 0;">groups</span>
-              </span>
-            </div>
-          </div>
-          <div class="p-6 flex-1 flex flex-col">
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">
-              Penilaian Sosial
-            </h3>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">
-              Evaluating the socio-economic impacts of environmental projects on surrounding communities.
-            </p>
-            <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
-              <span class="relative inline-block pb-1 after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-                Baca Selengkapnya
-              </span>
-              <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
-            </span>
-          </div>
-        </a>
-
-        <a href="{% url 'detail-services' slug='tanah-hidrologi' %}" 
-             class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img alt="Tanah &amp; Hidrologi" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services9.jpg' %}" />
-            <div class="absolute top-4 left-4 z-10">
-              <span class="bg-primary/90 text-surface-white p-2.5 rounded-xl flex items-center justify-center shadow-sm backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-                <span class="material-symbols-outlined text-xl block" style="font-variation-settings: 'FILL' 0;">water_drop</span>
-              </span>
-            </div>
-          </div>
-          <div class="p-6 flex-1 flex flex-col">
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">
-              Kajian Tanah &amp; Hidrologi
-            </h3>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">
-              Detailed analysis of soil mechanics and water cycles to prevent erosion and manage watersheds.
-            </p>
-            <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
-              <span class="relative inline-block pb-1 after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-                Baca Selengkapnya
-              </span>
-              <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
-            </span>
-          </div>
-        </a>
-
-        <a href="{% url 'detail-services' slug='kajian-iklim' %}" 
-             class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img alt="Kajian Iklim" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services10.jpg' %}" />
-            <div class="absolute top-4 left-4 z-10">
-              <span class="bg-primary/90 text-surface-white p-2.5 rounded-xl flex items-center justify-center shadow-sm backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-                <span class="material-symbols-outlined text-xl block" style="font-variation-settings: 'FILL' 0;">partly_cloudy_day</span>
-              </span>
-            </div>
-          </div>
-          <div class="p-6 flex-1 flex flex-col">
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">
-              Kajian Iklim
-            </h3>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">
-              Micro and macro climate modeling to anticipate environmental shifts and inform adaptation strategies.
-            </p>
-            <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
-              <span class="relative inline-block pb-1 after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-                Baca Selengkapnya
-              </span>
-              <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
-            </span>
-          </div>
-        </a>
-
-        <a href="{% url 'detail-services' slug='kesehatan-tanaman-nru' %}" 
-             class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img alt="Kesehatan Tanaman" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services11.jpg' %}" />
-            <div class="absolute top-4 left-4 z-10">
-              <span class="bg-primary/90 text-surface-white p-2.5 rounded-xl flex items-center justify-center shadow-sm backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-                <span class="material-symbols-outlined text-xl block" style="font-variation-settings: 'FILL' 0;">monitor_heart</span>
-              </span>
-            </div>
-          </div>
-          <div class="p-6 flex-1 flex flex-col">
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">
-              Penilaian Kesehatan Tanaman
-            </h3>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">
-              Diagnostic evaluations of ecosystem health indicators to monitor long-term conservation success.
-            </p>
-            <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
-              <span class="relative inline-block pb-1 after:pointer-events-none after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-                Baca Selengkapnya
-              </span>
-              <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
-            </span>
-          </div>
-        </a>
-
-        <a href="{% url 'detail-services' slug='energi-terbarukan' %}" 
-             class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-            <img alt="Energi Terbarukan" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services12.jpg' %}" />
-            <div class="absolute top-4 left-4 z-10">
-              <span class="bg-primary/90 text-surface-white p-2.5 rounded-xl flex items-center justify-center shadow-sm backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-                <span class="material-symbols-outlined text-xl block" style="font-variation-settings: 'FILL' 0;">solar_power</span>
-              </span>
-            </div>
-          </div>
-          <div class="p-6 flex-1 flex flex-col">
-            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">
-              Energi Terbarukan
-            </h3>
-            <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">
-              Feasibility studies and environmental impact assessments for clean energy infrastructure projects.
-            </p>
-            <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
-              <span class="relative inline-block pb-1 after:pointer-events-none after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-                Baca Selengkapnya
-              </span>
-              <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
-            </span>
-          </div>
-        </a>
-
+        {% empty %}
+        <p class="text-sm text-on-surface-variant col-span-full">Belum ada layanan NRU yang dipublikasikan.</p>
+        {% endfor %}
       </div>
     </div>
   </section>
