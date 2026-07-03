@@ -1,16 +1,24 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib import messages
+from django import forms
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from .models import Article, Project, Client, Story, Service, Location, Category, Modul, ContactMessage, Gallery
+from django.contrib.auth.models import User
+from .models import Article, Project, Client, Story, Service, Location, Category, Modul, ContactMessage, Gallery, Profile
 
 # ==========================================
 # JALUR FRONTEND WEBSITE (NAVBAR & MENUS)
 # ==========================================
 def homepage(request):
     articles = Article.objects.order_by('-tanggal')[:3]
-    return render(request, 'core/homepage.html', {'articles': articles})
+    # FIX: Ambil data cerita lapangan terbaru agar seksi "Cerita dari Lapangan" di beranda dinamis dari DB
+    stories = Story.objects.order_by('-tanggal')[:1]
+    return render(request, 'core/homepage.html', {
+        'articles': articles,
+        'stories': stories,
+    })
 
 def about_view(request):
     return render(request, 'core/about.html')
@@ -27,10 +35,15 @@ def experience_view(request):
     projects = Project.objects.select_related('client', 'location').prefetch_related('categories').order_by('-tahun')
     categories = Category.objects.filter(projects__isnull=False).distinct().order_by('name')
     years = Project.objects.order_by('-tahun').values_list('tahun', flat=True).distinct()
+    
+    # 💡 FIX UTAMA: Mengambil seluruh data master Client dari DB agar ticker marquee di halaman list dinamis
+    clients = Client.objects.all()
+    
     return render(request, 'core/experience.html', {
         'projects': projects,
         'categories': categories,
         'years': years,
+        'clients': clients, # <-- Kita lempar variabel ini ke HTML frontend
     })
 
 def gallery_view(request):
@@ -143,13 +156,13 @@ class ProjectListView(AdminRequiredMixin, ListView):
 class ProjectCreateView(AdminRequiredMixin, CreateView):
     model = Project
     template_name = 'core/custom_admin/experience/experience_form.html'
-    fields = '__all__'
+    fields = ['name', 'slug', 'description', 'tahun', 'image', 'client', 'service_portfolio', 'location', 'categories']
     success_url = reverse_lazy('project_list')
 
 class ProjectUpdateView(AdminRequiredMixin, UpdateView):
     model = Project
     template_name = 'core/custom_admin/experience/experience_form.html'
-    fields = '__all__'
+    fields = ['name', 'slug', 'description', 'tahun', 'image', 'client', 'service_portfolio', 'location', 'categories']
     success_url = reverse_lazy('project_list')
 
 class ProjectDeleteView(AdminRequiredMixin, DeleteView):
@@ -218,13 +231,13 @@ class ServiceListView(AdminRequiredMixin, ListView):
 class ServiceCreateView(AdminRequiredMixin, CreateView):
     model = Service
     template_name = 'core/custom_admin/services/services_form.html'
-    fields = '__all__'
+    fields = ['title', 'slug', 'approach', 'portfolio', 'icon', 'thumbnail', 'bg_image', 'intro', 'categories']
     success_url = reverse_lazy('service_list')
 
 class ServiceUpdateView(AdminRequiredMixin, UpdateView):
     model = Service
     template_name = 'core/custom_admin/services/services_form.html'
-    fields = '__all__'
+    fields = ['title', 'slug', 'approach', 'portfolio', 'icon', 'thumbnail', 'bg_image', 'intro', 'categories']
     success_url = reverse_lazy('service_list')
 
 class ServiceDeleteView(AdminRequiredMixin, DeleteView):
@@ -338,3 +351,63 @@ class GalleryDeleteView(AdminRequiredMixin, DeleteView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_confirm_delete.html'
     success_url = reverse_lazy('gallery_admin_list')
+
+# ==========================================
+# PROTEKSI KHUSUS SUPERUSER (HANYA UNTUK MANAJEMEN USER)
+# ==========================================
+class SuperuserRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.is_superuser
+
+# ==========================================
+# 11. MANAGEMENT USER / PENGGUNA
+# ==========================================
+class UserListView(SuperuserRequiredMixin, ListView):
+    model = User
+    template_name = 'core/custom_admin/user/user_list.html'
+    context_object_name = 'users'
+
+class UserCreateView(SuperuserRequiredMixin, CreateView):
+    model = User
+    template_name = 'core/custom_admin/user/user_form.html'
+    fields = ['username', 'email', 'password', 'is_staff', 'is_active', 'is_superuser']
+    success_url = reverse_lazy('user_list')
+    
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        user.set_password(form.cleaned_data['password'])
+        user.save()
+        return super().form_valid(form)
+
+class UserUpdateView(SuperuserRequiredMixin, UpdateView):
+    model = User
+    template_name = 'core/custom_admin/user/user_form.html'
+    fields = ['username', 'email', 'is_staff', 'is_active', 'is_superuser']
+    success_url = reverse_lazy('user_list')
+
+class UserDeleteView(SuperuserRequiredMixin, DeleteView):
+    model = User
+    template_name = 'core/custom_admin/user/user_confirm_delete.html'
+    success_url = reverse_lazy('user_list')
+
+# ==========================================
+# 12. FITUR EDIT PROFIL MANDIRI USER (BARU)
+# ==========================================
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['nama_lengkap', 'foto_profil']
+
+@login_required(login_url='/be/login/')
+def user_edit_profile(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    if request.method == 'POST':
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profil Anda berhasil diperbarui!')
+            return redirect('custom_dashboard')
+    else:
+        form = ProfileUpdateForm(instance=profile)
+        
+    return render(request, 'core/custom_admin/user/user_edit_profile.html', {'form': form})

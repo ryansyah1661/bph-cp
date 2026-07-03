@@ -15,6 +15,15 @@ urlpatterns = [
     path('gallery/', views.gallery_view, name='gallery'),
     path('contact/', views.contact_view, name='contact'),
 
+    # URL ROUTING CRUD USER
+    path('be/users/', views.UserListView.as_view(), name='user_list'),
+    path('be/users/add/', views.UserCreateView.as_view(), name='user_create'),
+    path('be/users/<int:pk>/edit/', views.UserUpdateView.as_view(), name='user_update'),
+    path('be/users/<int:pk>/delete/', views.UserDeleteView.as_view(), name='user_delete'),
+
+    # URL ROUTING EDIT PROFILE
+    path('be/profile/edit/', views.user_edit_profile, name='user_edit_profile'),
+
     # ROUTING FRONTEND HALAMAN DETAIL
     path('articles/detail/<slug:slug>/', views.detail_articles_view, name='detail-articles'),
     path('experience/detail/<slug:slug>/', views.detail_experience_view, name='detail-experience'),

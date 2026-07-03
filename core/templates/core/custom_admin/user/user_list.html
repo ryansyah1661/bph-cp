@@ -1,0 +1,76 @@
+{% extends "core/custom_admin/base.html" %}
+
+{% block admin_content %}
+<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
+    
+    <div class="flex justify-between items-center border-b border-gray-100 pb-5">
+        <div>
+            <h2 class="text-xl font-bold text-emerald-900">Manajemen Pengguna / User</h2>
+            <p class="text-xs text-gray-500 mt-1">Kelola hak akses dan akun administrator panel.</p>
+        </div>
+        <a href="{% url 'user_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100">
+            <span class="material-symbols-outlined text-sm">add</span> Tambah User
+        </a>
+    </div>
+
+    <div class="overflow-x-auto w-full">
+        <table class="w-full text-left border-collapse text-sm table-fixed">
+            <thead>
+                <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
+                    <th class="p-4 font-semibold w-auto">Username</th>
+                    <th class="p-4 font-semibold w-64">Email</th>
+                    <th class="p-4 font-semibold w-40 text-center whitespace-nowrap">Status Staff</th>
+                    <th class="p-4 font-semibold w-40 text-center whitespace-nowrap">Status Aktif</th>
+                    <th class="p-4 font-semibold text-center w-52 whitespace-nowrap">Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700 divide-y divide-gray-50">
+                {% for u in users %}
+                <tr class="hover:bg-slate-50/50 transition">
+                    <td class="p-4 font-semibold text-slate-800 align-middle text-base break-words">
+                        {{ u.username }}
+                    </td>
+                    <td class="p-4 align-middle text-slate-600 break-all">
+                        {{ u.email|default:"-" }}
+                    </td>
+                    <td class="p-4 align-middle text-center whitespace-nowrap">
+                        {% if u.is_staff %}
+                            <span class="inline-block bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs px-3 py-1 rounded-full font-semibold">Staff Admin</span>
+                        {% else %}
+                            <span class="inline-block bg-gray-50 text-gray-500 border border-gray-200 text-xs px-3 py-1 rounded-full">User Biasa</span>
+                        {% endif %}
+                    </td>
+                    <td class="p-4 align-middle text-center whitespace-nowrap">
+                        {% if u.is_active %}
+                            <span class="text-emerald-600 font-bold inline-flex items-center justify-center gap-1.5 text-xs bg-emerald-50/50 px-2.5 py-1 rounded-lg border border-emerald-100">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Aktif
+                            </span>
+                        {% else %}
+                            <span class="text-rose-500 font-bold inline-flex items-center justify-center gap-1.5 text-xs bg-rose-50/50 px-2.5 py-1 rounded-lg border border-rose-100">
+                                <span class="w-2 h-2 rounded-full bg-rose-500"></span> Nonaktif
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td class="p-4 text-center align-middle whitespace-nowrap">
+                        <div class="flex justify-center items-center gap-2">
+                            <a href="{% url 'user_update' u.pk %}" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1.5 rounded-full border border-amber-200 shadow-sm transition">
+                                <span class="material-symbols-outlined text-sm">edit</span> Edit
+                            </a>
+                            {% if u != request.user %}
+                            <a href="{% url 'user_delete' u.pk %}" class="inline-flex items-center gap-1 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold px-3 py-1.5 rounded-full border border-rose-200 shadow-sm transition">
+                                <span class="material-symbols-outlined text-sm">delete</span> Hapus
+                            </a>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="p-8 text-center text-gray-400 font-medium">Belum ada data user.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

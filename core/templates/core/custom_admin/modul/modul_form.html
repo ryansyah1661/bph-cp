@@ -6,7 +6,7 @@
     <p class="text-xs text-gray-500 mt-1">Isi data berkas panduan teknis, hasil audit, atau modul strategi di bawah ini.</p>
 </div>
 
-<form method="post" enctype="multipart/form-data" class="w-full">
+<form method="post" enctype="multipart/form-data" class="w-full" id="modul-form">
     {% csrf_token %}
     <div class="flex gap-6 items-start">
         
@@ -17,10 +17,11 @@
                     {{ form.judul }}
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Pilih Berkas File (PDF/Docs) <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Pilih Berkas File (PDF/Docs) {% if not object.file_dokumen %}<span class="text-red-500">*</span>{% endif %}</label>
                     {{ form.file_dokumen }}
                     {% if object.file_dokumen %}
                         <p class="text-xs text-emerald-600 mt-1 font-medium">File saat ini: <a href="{{ object.file_dokumen.url }}" target="_blank" class="underline hover:text-emerald-700">{{ object.file_dokumen.name }}</a></p>
+                        <p class="text-[11px] text-gray-400 mt-1">Kosongkan field ini jika tidak ingin mengganti berkas.</p>
                     {% endif %}
                 </div>
             </div>
@@ -43,6 +44,7 @@
         border-radius: 8px; 
         font-size: 14px; 
         color: #1e293b; 
+        box-sizing: border-box;
     }
     form input:focus { 
         outline: none; 

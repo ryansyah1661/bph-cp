@@ -8,8 +8,15 @@
     <p class="text-xs text-gray-500 mt-1">Isi formulir di bawah ini dengan lengkap.</p>
 </div>
 
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" id="story-form">
     {% csrf_token %}
+    
+    {% if form.errors %}
+    <div style="background:#fee2e2; border:1px solid #ef4444; padding:12px; border-radius:8px; margin-bottom:16px; color:#991b1b; font-size:13px;">
+        <strong>Terjadi kesalahan saat menyimpan data:</strong>
+        {{ form.errors }}
+    </div>
+    {% endif %}
 
     <div class="flex gap-6 items-start">
 
@@ -28,6 +35,15 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1">Lokasi <span class="text-red-500">*</span></label>
                     {{ form.lokasi }}
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Penulis / Author <span class="text-red-500">*</span></label>
+                    {{ form.author }}
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Ringkasan <span class="text-red-500">*</span></label>
+                    {{ form.short }}
+                    <p class="text-xs text-gray-400 mt-1">Ringkasan singkat yang muncul di kartu depan</p>
                 </div>
             </div>
 
@@ -50,21 +66,21 @@
                 <h3 class="text-sm font-bold text-slate-700 border-b border-gray-100 pb-3 mb-4">Gambar</h3>
                 <label class="block text-sm font-semibold text-slate-600 mb-2">Foto Dokumentasi</label>
 
-                {% if object.gambar %}
-                    <img src="{{ object.gambar.url }}" class="w-full h-36 object-cover rounded-lg mb-3">
-                {% endif %}
+                <div id="preview-container" class="{% if not object.gambar %}hidden{% endif %} mb-3">
+                    <img id="image-preview" src="{% if object.gambar %}{{ object.gambar.url }}{% endif %}" class="w-full h-36 object-cover rounded-lg border">
+                </div>
 
                 <label for="id_gambar" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition" id="drop-zone">
                     <span class="material-symbols-outlined text-gray-400 text-3xl mb-1">upload_file</span>
                     <span class="text-sm text-gray-400">Seret & Jatuhkan atau <span class="text-emerald-600 font-semibold">Jelajahi</span></span>
                 </label>
-                <div id="file-name-display" class="text-xs text-gray-400 mt-2 text-center"></div>
-                <div style="display:none;">{{ form.gambar }}</div>
+                <div id="file-name-display" class="text-xs text-gray-400 mt-2 text-center font-medium"></div>
+                <div class="bph-hidden-file-input">{{ form.gambar }}</div>
             </div>
 
             <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex gap-3">
-                <a href="{% url 'story_list' %}" class="flex-1 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm text-center font-semibold hover:bg-gray-50 transition">Batal</a>
-                <button type="submit" class="flex-1 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700 transition">Simpan Data</button>
+                <a href="{% url 'story_list' %}" class="flex-1 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm text-center font-semibold hover:bg-gray-50 transition" style="text-decoration: none; padding-top: 8px;">Batal</a>
+                <button type="submit" class="flex-1 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700 transition cursor-pointer border-none">Simpan Data</button>
             </div>
 
         </div>
@@ -73,46 +89,121 @@
 
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <script>
+    // --- 1. INITIALIZE QUILL RICH TEXT EDITOR ---
     var quill = new Quill('#quill-editor', { theme: 'snow' });
+    var descTextarea = document.querySelector('textarea[name="deskripsi"]');
 
-    var existing = document.querySelector('textarea[name="deskripsi"]').value;
-    if (existing) quill.root.innerHTML = existing;
+    if (descTextarea && descTextarea.value) {
+        quill.root.innerHTML = descTextarea.value;
+    }
 
-    document.querySelector('form').addEventListener('submit', function() {
-        document.querySelector('textarea[name="deskripsi"]').value = quill.root.innerHTML;
-    });
+    // --- 2. FIX TOMBOL SIMPAN MACET ---
+    var formElement = document.getElementById('story-form');
 
-    // File name display & drag drop
+    function syncQuillToTextarea() {
+        if (descTextarea) {
+            descTextarea.value = quill.getText().trim().length > 0 ? quill.root.innerHTML : '';
+        }
+    }
+
+    quill.on('text-change', syncQuillToTextarea);
+    if(formElement) formElement.addEventListener('submit', syncQuillToTextarea);
+
+    // --- 3. FIX KALENDER DATE PICKER ---
+    var tanggalInput = document.querySelector('input[name="tanggal"]');
+    if (tanggalInput) {
+        tanggalInput.setAttribute('type', 'date');
+    }
+
+    // --- 4. AUTO GENERATE SLUG DARI JUDUL ---
+    var judulInput = document.querySelector('input[name="judul"]');
+    var slugInput = document.querySelector('input[name="slug"]');
+
+    if (judulInput && slugInput) {
+        judulInput.addEventListener('input', function() {
+            var slugify = judulInput.value
+                .toLowerCase()
+                .trim()
+                .replace(/[^\w\s-]/g, '')
+                .replace(/[\s_]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+            slugInput.value = slugify;
+        });
+    }
+
+    // --- 5. FIX REAL-TIME IMAGE PREVIEW & DRAG DROP ---
     const fileInput = document.getElementById('id_gambar');
     const fileNameDisplay = document.getElementById('file-name-display');
     const dropZone = document.getElementById('drop-zone');
+    const imagePreview = document.getElementById('image-preview');
+    const previewContainer = document.getElementById('preview-container');
 
-    fileInput.addEventListener('change', function() {
-        if (this.files[0]) fileNameDisplay.textContent = this.files[0].name;
-    });
-
-    dropZone.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        this.classList.add('border-emerald-400', 'bg-emerald-50');
-    });
-
-    dropZone.addEventListener('dragleave', function() {
-        this.classList.remove('border-emerald-400', 'bg-emerald-50');
-    });
-
-    dropZone.addEventListener('drop', function(e) {
-        e.preventDefault();
-        this.classList.remove('border-emerald-400', 'bg-emerald-50');
-        const files = e.dataTransfer.files;
-        if (files[0]) {
-            fileInput.files = files;
-            fileNameDisplay.textContent = files[0].name;
+    function handleImageFile(file) {
+        if (file) {
+            fileNameDisplay.textContent = file.name;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                if (imagePreview) imagePreview.src = e.target.result;
+                if (previewContainer) previewContainer.classList.remove('hidden');
+            }
+            reader.readAsDataURL(file);
         }
-    });
+    }
+
+    if (fileInput) {
+        fileInput.addEventListener('change', function() {
+            if (this.files[0]) handleImageFile(this.files[0]);
+        });
+    }
+
+    if (dropZone) {
+        dropZone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('border-emerald-400', 'bg-emerald-50');
+        });
+
+        dropZone.addEventListener('dragleave', function() {
+            this.classList.remove('border-emerald-400', 'bg-emerald-50');
+        });
+
+        dropZone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('border-emerald-400', 'bg-emerald-50');
+            const files = e.dataTransfer.files;
+            if (files[0] && fileInput) {
+                fileInput.files = files;
+                handleImageFile(files[0]);
+            }
+        });
+    }
 </script>
 
 <style>
-    textarea[name="deskripsi"] { display: none; }
+    textarea[name="deskripsi"] {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .bph-hidden-file-input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
 
     form input[type="text"],
     form input[type="date"],
@@ -124,9 +215,12 @@
         border-radius: 8px;
         font-size: 14px;
         color: #1e293b;
+        background-color: #ffffff;
+        box-sizing: border-box;
     }
     form input:focus,
-    form textarea:focus {
+    form textarea:focus,
+    form select:focus {
         outline: none;
         border-color: #059669;
         box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1);

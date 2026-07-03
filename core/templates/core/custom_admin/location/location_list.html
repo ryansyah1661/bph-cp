@@ -7,7 +7,7 @@
             <h2 class="text-xl font-bold text-emerald-900">Manajemen Lokasi Wilayah</h2>
             <p class="text-xs text-gray-500 mt-1">Kelola data cakupan wilayah operasional instansi.</p>
         </div>
-        <a href="{% url 'location_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-lg uppercase tracking-wider transition">
+        <a href="{% url 'location_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-lg uppercase tracking-wider transition" style="text-decoration: none;">
             + Tambah Lokasi
         </a>
     </div>
@@ -23,12 +23,12 @@
             </thead>
             <tbody class="text-gray-700 divide-y divide-gray-50">
                 {% for location in locations %}
-                <tr>
-                    <td class="p-3 font-medium text-emerald-700">{{ location.nama }}</td>
-                    <td class="p-3 text-gray-400 text-xs">{{ location.slug }}</td>
+                <tr class="hover:bg-slate-50/50 transition-colors">
+                    <td class="p-3 font-semibold text-emerald-800">{{ location.nama_provinsi }}</td>
+                    <td class="p-3 text-gray-400 text-xs font-mono">{{ location.slug }}</td>
                     <td class="p-3 text-center space-x-2">
-                        <a href="{% url 'location_update' location.pk %}" class="text-amber-600 hover:underline font-semibold">Edit</a>
-                        <a href="{% url 'location_delete' location.pk %}" class="text-red-600 hover:underline font-semibold">Hapus</a>
+                        <a href="{% url 'location_update' location.pk %}" class="text-amber-600 hover:underline font-semibold" style="text-decoration: none;">Edit</a>
+                        <a href="{% url 'location_delete' location.pk %}" class="text-red-600 hover:underline font-semibold" style="text-decoration: none;">Hapus</a>
                     </td>
                 </tr>
                 {% empty %}

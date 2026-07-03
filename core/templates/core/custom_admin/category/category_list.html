@@ -1,0 +1,70 @@
+{% extends 'core/custom_admin/base.html' %}
+{% load static %}
+
+{% block title %}Data Kategori Proyek | Dashboard Admin{% endblock %}
+
+{% block admin_content %}
+<div class="w-full">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-5 border-b border-gray-100">
+        <div>
+            <h1 class="text-xl font-bold text-neutral-900 tracking-tight">Kategori Proyek</h1>
+            <p class="text-sm text-neutral-500 mt-1">Kelola master data kategori untuk pengelompokan pengalaman dan proyek.</p>
+        </div>
+        <div>
+            <a href="{% url 'category_create' %}" class="inline-flex items-center gap-2 py-2.5 px-4 rounded-xl bg-[#308935] hover:bg-[#256a29] text-sm font-bold text-white shadow-sm transition-all cursor-pointer border-none text-decoration-none" style="text-decoration: none;">
+                <span class="material-symbols-outlined text-[18px]">add</span>
+                Tambah Kategori
+            </a>
+        </div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="p-4 mb-4 text-sm text-emerald-800 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center gap-2">
+            <span class="material-symbols-outlined text-base">check_circle</span>
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="bg-white rounded-xl border border-[#eef2f5] shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-[#f8faf9] border-b border-[#eef2f5]">
+                        <th class="py-3.5 px-5 text-xs font-bold uppercase tracking-wider text-neutral-600 w-16 text-center">No</th>
+                        <th class="py-3.5 px-5 text-xs font-bold uppercase tracking-wider text-neutral-600">Nama Kategori</th>
+                        <th class="py-3.5 px-5 text-xs font-bold uppercase tracking-wider text-neutral-600">Slug</th>
+                        <th class="py-3.5 px-5 text-xs font-bold uppercase tracking-wider text-neutral-600 w-24 text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for category in categories %}
+                    <tr class="hover:bg-gray-50/50 transition-colors">
+                        <td class="py-4 px-5 text-sm text-neutral-500 font-medium text-center">{{ forloop.counter }}</td>
+                        <td class="py-4 px-5 text-sm font-semibold text-neutral-800">{{ category.name }}</td>
+                        <td class="py-4 px-5 text-sm text-neutral-500 font-mono">{{ category.slug }}</td>
+                        <td class="py-4 px-5 text-center">
+                            <div class="flex items-center justify-center">
+                                <button type="button" onclick="openDeleteModal('{{ category.id }}', '{{ category.name }}')" class="p-2 text-neutral-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors flex items-center justify-center border-none bg-transparent cursor-pointer" title="Hapus">
+                                    <span class="material-symbols-outlined text-[18px]">delete</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="py-8 text-center text-sm text-neutral-400 font-medium">
+                            <span class="material-symbols-outlined text-4xl block mb-2 text-neutral-300">sell</span>
+                            Belum ada data kategori proyek.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% include 'core/custom_admin/category/category_confirm_delete.html' %}
+{% endblock %}

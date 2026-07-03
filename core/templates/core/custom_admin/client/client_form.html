@@ -6,7 +6,7 @@
     <p class="text-xs text-gray-500 mt-1">Formulir pendaftaran berkas identitas logo institusi mitra kerja.</p>
 </div>
 
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" id="client-form">
     {% csrf_token %}
     <div class="flex gap-6 items-start">
         <div class="flex-1 space-y-5">
@@ -44,8 +44,8 @@
     const fileInput = document.getElementById('id_logo');
     const fileNameDisplay = document.getElementById('file-name-display');
     const dropZone = document.getElementById('drop-zone');
-    if(fileInput) { fileInput.addEventListener('change', function() { if (this.files[0]) fileNameDisplay.textContent = this.files[0].name; }); }
-    if(dropZone) {
+    if (fileInput) { fileInput.addEventListener('change', function() { if (this.files[0]) fileNameDisplay.textContent = this.files[0].name; }); }
+    if (dropZone) {
         dropZone.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('border-emerald-400', 'bg-emerald-50'); });
         dropZone.addEventListener('dragleave', function() { this.classList.remove('border-emerald-400', 'bg-emerald-50'); });
         dropZone.addEventListener('drop', function(e) {
@@ -55,7 +55,7 @@
     }
 </script>
 <style>
-    form input[type="text"] { width: 100%; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; color: #1e293b; }
+    form input[type="text"] { width: 100%; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; color: #1e293b; box-sizing: border-box; }
     form input:focus { outline: none; border-color: #059669; box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1); }
 </style>
 {% endblock %}

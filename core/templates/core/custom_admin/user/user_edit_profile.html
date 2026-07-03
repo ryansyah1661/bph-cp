@@ -1,0 +1,100 @@
+{% extends "core/custom_admin/base.html" %}
+{% load widget_tweaks %}
+
+{% block admin_content %}
+<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm max-w-2xl mx-auto space-y-6">
+    <div class="border-b border-gray-100 pb-4">
+        <h2 class="text-xl font-bold text-emerald-900">Pengaturan Profil Pengguna</h2>
+        <p class="text-xs text-gray-500 mt-1">Kelola foto avatar dan nama lengkap resmi akun Anda.</p>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" class="space-y-5">
+        {% csrf_token %}
+        
+        {% for field in form %}
+        <div class="flex flex-col space-y-1.5">
+            <label class="text-sm font-semibold text-slate-700">
+                {% if field.name == 'nama_lengkap' %}Nama Lengkap
+                {% elif field.name == 'foto_profil' %}Foto Profil / Avatar
+                {% else %}{{ field.label }}{% endif %}
+            </label>
+
+            {% if field.name == 'foto_profil' %}
+                <div class="mt-1 p-5 border border-dashed border-gray-200 rounded-xl bg-slate-50/50 flex flex-col items-center gap-4 w-full">
+                    
+                    <div id="avatar-container" class="text-center flex flex-col items-center">
+                        {% if request.user.profile.foto_profil %}
+                            <p class="text-xs text-gray-400 mb-2 id-foto-text">Foto aktif saat ini:</p>
+                            <img id="profile-preview" src="{{ request.user.profile.foto_profil.url }}" class="w-24 h-24 object-cover rounded-full border-2 border-emerald-500 shadow-sm transition-transform hover:scale-105">
+                        {% else %}
+                            <div id="profile-preview-placeholder" class="w-24 h-24 bg-emerald-50 text-emerald-700 rounded-full flex items-center justify-center font-bold text-xl border-2 border-dashed border-emerald-200 uppercase">
+                                <span id="form-avatar-text">AG</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div id="django-file-input-wrapper" class="w-full text-center">
+                        {{ field|add_class:"text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer transition-colors" }}
+                    </div>
+                </div>
+
+            {% else %}
+                {{ field|add_class:"w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition" }}
+            {% endif %}
+
+            {% if field.errors %}
+                <span class="text-xs text-rose-500 mt-1 block">{{ field.errors.0 }}</span>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <div class="flex justify-end gap-3 pt-5 border-t border-gray-100">
+            <a href="{% url 'custom_dashboard' %}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2.5 rounded-xl transition" style="text-decoration: none; padding-top: 10px;">Batal</a>
+            <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-sm cursor-pointer border-none">Perbarui Profil</button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.querySelector('input[type="file"]');
+    const container = document.getElementById('avatar-container');
+    const inputWrapper = document.getElementById('django-file-input-wrapper');
+
+    // Bersihkan teks "Currently: ..." bawaan Django dari awal load halaman
+    if (inputWrapper) {
+        const pureInput = inputWrapper.querySelector('input[type="file"]');
+        if (pureInput) {
+            inputWrapper.innerHTML = '';
+            inputWrapper.appendChild(pureInput);
+        }
+    }
+
+    // Logika Live Preview pas user memilih file baru
+    if (fileInput) {
+        fileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    let previewImg = document.getElementById('profile-preview');
+                    const placeholder = document.getElementById('profile-preview-placeholder');
+                    const fotoText = document.querySelector('.id-foto-text');
+                    
+                    if (placeholder) {
+                        container.innerHTML = `
+                            <p class="text-xs text-gray-400 mb-2 id-foto-text">Foto baru terpilih:</p>
+                            <img id="profile-preview" src="${e.target.result}" class="w-24 h-24 object-cover rounded-full border-2 border-emerald-500 shadow-sm">
+                        `;
+                    } else if (previewImg) {
+                        if (fotoText) fotoText.innerText = "Foto baru terpilih:";
+                        previewImg.src = e.target.result;
+                    }
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

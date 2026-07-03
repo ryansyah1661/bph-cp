@@ -117,7 +117,7 @@
             font-size: 20px;
         }
 
-        /* Row 2: Tombol Keluar (Diubah Jadi Button Trigger Modal) */
+        /* Row 2: Tombol Keluar / Navigasi */
         .bph-dropdown-item-btn {
             display: flex;
             align-items: center;
@@ -241,17 +241,15 @@
             border: 1px solid transparent;
         }
         
-        /* Modifikasi transparan tanpa background/border kaku penumpuk kotak */
         .bph-menu-toggle.toggle-idle {
             background: transparent;
-            color: #64748b; /* Abu-abu adem */
+            color: #64748b;
         }
         .bph-menu-toggle.toggle-idle:hover {
             background-color: #f8fafc;
             color: #334155;
         }
         
-        /* Modifikasi pas sub-menu aktif: highlight lembut minimalis tanpa double kotak border */
         .bph-menu-toggle.toggle-has-active {
             background: #f4f8f5; 
             border-color: transparent;
@@ -305,12 +303,11 @@
             background-color: #e6f2ea;
             color: #1b4332;
             font-weight: 700;
-            padding-left: 18px; /* Indentasi menjorok ke dalam agar hierarkinya pas */
+            padding-left: 18px;
         }
 
-        /* Berikan jarak napas/gap seimbang di antara menu induk dan sub-menu saat terbuka */
         .bph-dropdown-check:checked ~ .bph-dropdown-content { 
-            max-height: 250px; 
+            max-height: 300px; /* Dinaikkan sedikit kondisinya biar gak kepotong */
             margin-top: 8px; 
         }
         .bph-dropdown-check:checked ~ .bph-menu-toggle .arrow-icon { transform: rotate(90deg); }
@@ -346,7 +343,7 @@
         .bph-modal-box {
             background: #ffffff;
             border-radius: 18px;
-            max-w: 380px;
+            max-width: 380px;
             width: 100%;
             padding: 24px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
@@ -370,20 +367,41 @@
             <span>Bhumi Pasa Hijau</span>
         </a>
         
+        <!-- FIX AREA: RESTRUKTURISASI NAVBAR PROFILE DROPDOWN -->
         <div class="bph-profile-wrapper">
             <input type="checkbox" id="nav-profile-toggle" class="bph-profile-check">
             <label for="nav-profile-toggle" class="bph-username-toggle">
-                <span class="bph-nav-name">Admin Bhumi Pasa Hijau</span>
-                <div class="bph-avatar-circle">
-                    {{ request.user.username|slice:":2" }}
-                </div>
+                <span class="bph-nav-name">
+                    <span id="bph-greeting">Selamat</span>, 
+                    {% if request.user.profile.nama_lengkap %}{{ request.user.profile.nama_lengkap }}{% else %}{{ request.user.username }}{% endif %}
+                </span>
+        
+                {% if request.user.profile.foto_profil %}
+                    <img src="{{ request.user.profile.foto_profil.url }}" class="w-10 h-10 object-cover rounded-full border border-emerald-100 shadow-sm">
+                {% else %}
+                    <div class="bph-avatar-circle">
+                        <span id="bph-avatar-text">--</span>
+                    </div>
+                {% endif %}
             </label>
-            
+    
             <div class="bph-nav-dropdown">
-                <div class="bph-dropdown-info">
-                    <span class="material-symbols-outlined info-icon">account_circle</span>
-                    <span>Admin Bhumi Pasa Hijau</span>
+                <div class="bph-dropdown-info" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px;">
+                    {% if request.user.profile.foto_profil %}
+                        <img src="{{ request.user.profile.foto_profil.url }}" class="w-8 h-8 object-cover rounded-full border border-gray-200 shadow-sm">
+                    {% else %}
+                        <div class="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold text-xs">
+                            <span class="uppercase">AG</span>
+                        </div>
+                    {% endif %}
+                    <span>{% if request.user.profile.nama_lengkap %}{{ request.user.profile.nama_lengkap }}{% else %}{{ request.user.username }}{% endif %}</span>
                 </div>
+
+                <a href="{% url 'user_edit_profile' %}" class="bph-dropdown-item-btn" style="text-decoration: none;">
+                    <span class="material-symbols-outlined logout-icon">manage_accounts</span>
+                    <span>Edit Profil</span>
+                </a>
+                
                 <button type="button" id="trigger-logout-modal" class="bph-dropdown-item-btn">
                     <span class="material-symbols-outlined logout-icon">logout</span>
                     <span>Keluar</span>
@@ -396,19 +414,20 @@
         <div class="bph-sidebar-container">
             <div class="bph-sidebar-left">
                 
-                <a href="{% url 'custom_dashboard' %}" class="bph-menu-flat {% if request.resolver_match.url_name == 'custom_dashboard' %}menu-active{% else %}menu-idle{% endif %}">
+                <a href="{% url 'custom_dashboard' %}" class="bph-menu-flat {% if request.resolver_match.url_name == 'custom_dashboard' %}menu-active{% else %}menu-idle{% endif %}" style="text-decoration: none;">
                     <span class="material-symbols-outlined" style="font-size: 18px;">dashboard</span>
                     <span>Dashboard</span>
                 </a>
 
-                <a href="#" class="bph-menu-flat menu-idle">
+                {% if request.user.is_superuser %}
+                <a href="{% url 'user_list' %}" class="bph-menu-flat {% if request.resolver_match.url_name == 'user_list' or request.resolver_match.url_name == 'user_create' or request.resolver_match.url_name == 'user_update' %}menu-active{% else %}menu-idle{% endif %}" style="text-decoration: none;">
                     <span class="material-symbols-outlined" style="font-size: 18px;">group</span>
                     <span>User</span>
                 </a>
+                {% endif %}
 
                 <div style="height: 1px; background-color: #f1f3f5; margin: 12px 0 12px 0;"></div>
                 
-                <!-- ACCORDION GRUP 1: KONTEN PUBLIKASI -->
                 <div class="bph-menu-group">
                     <input type="checkbox" id="drop-publikasi" class="bph-dropdown-check" checked>
                     
@@ -419,48 +438,54 @@
                     
                     <ul class="bph-dropdown-content">
                         <li class="bph-model-item">
-                            <a href="{% url 'article_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'article_list' or request.resolver_match.url_name == 'article_create' or request.resolver_match.url_name == 'article_update' %}link-active{% else %}link-idle{% endif %}">
+                            <a href="{% url 'article_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'article_list' or request.resolver_match.url_name == 'article_create' or request.resolver_match.url_name == 'article_update' %}link-active{% else %}link-idle{% endif %}" style="text-decoration: none;">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">description</span>Artikel & Wawasan Teknis
                             </a>
-                        </li>
+                        </td>
                         <li class="bph-model-item">
-                            <a href="{% url 'story_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'story_list' or request.resolver_match.url_name == 'story_create' or request.resolver_match.url_name == 'story_update' %}link-active{% else %}link-idle{% endif %}">
+                            <a href="{% url 'story_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'story_list' or request.resolver_match.url_name == 'story_create' or request.resolver_match.url_name == 'story_update' %}link-active{% else %}link-idle{% endif %}" style="text-decoration: none;">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">explore</span>Cerita Lapangan
                             </a>
-                        </li>
+                        </td>
                     </ul>
                 </div>
 
-                <!-- ACCORDION GRUP 2: LAYANAN & PROYEK -->
                 <div class="bph-menu-group">
+                    <!-- Periksa jika ada sub-link di dalamnya yang sedang aktif agar otomatis drop-down-nya terbuka -->
                     <input type="checkbox" id="drop-layanan" class="bph-dropdown-check" checked>
                     
-                    <label for="drop-layanan" class="bph-menu-toggle {% if request.resolver_match.url_name == 'client_list' or request.resolver_match.url_name == 'client_create' or request.resolver_match.url_name == 'client_update' or request.resolver_match.url_name == 'service_list' or request.resolver_match.url_name == 'service_create' or request.resolver_match.url_name == 'service_update' or request.resolver_match.url_name == 'location_list' or request.resolver_match.url_name == 'location_create' or request.resolver_match.url_name == 'location_update' or request.resolver_match.url_name == 'project_list' or request.resolver_match.url_name == 'project_create' or request.resolver_match.url_name == 'project_update' %}toggle-has-active{% else %}toggle-idle{% endif %}">
+                    <label for="drop-layanan" class="bph-menu-toggle {% if request.resolver_match.url_name == 'client_list' or request.resolver_match.url_name == 'client_create' or request.resolver_match.url_name == 'client_update' or request.resolver_match.url_name == 'service_list' or request.resolver_match.url_name == 'service_create' or request.resolver_match.url_name == 'service_update' or request.resolver_match.url_name == 'location_list' or request.resolver_match.url_name == 'location_create' or request.resolver_match.url_name == 'location_update' or request.resolver_match.url_name == 'project_list' or request.resolver_match.url_name == 'project_create' or request.resolver_match.url_name == 'project_update' or request.resolver_match.url_name == 'category_list' or request.resolver_match.url_name == 'category_create' %}toggle-has-active{% else %}toggle-idle{% endif %}">
                         <span style="display: flex; align-items: center; gap: 8px;">🌿 Layanan & Proyek</span>
                         <span class="material-symbols-outlined arrow-icon">chevron_right</span>
                     </label>
                     
                     <ul class="bph-dropdown-content">
                         <li class="bph-model-item">
-                            <a href="{% url 'client_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'client_list' or request.resolver_match.url_name == 'client_create' or request.resolver_match.url_name == 'client_update' %}link-active{% else %}link-idle{% endif %}">
+                            <a href="{% url 'client_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'client_list' or request.resolver_match.url_name == 'client_create' or request.resolver_match.url_name == 'client_update' %}link-active{% else %}link-idle{% endif %}" style="text-decoration: none;">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">corporate_fare</span>Klien / Mitra Kolaborasi
                             </a>
-                        </li>
+                        </td>
                         <li class="bph-model-item">
-                            <a href="{% url 'service_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'service_list' or request.resolver_match.url_name == 'service_create' or request.resolver_match.url_name == 'service_update' %}link-active{% else %}link-idle{% endif %}">
+                            <a href="{% url 'service_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'service_list' or request.resolver_match.url_name == 'service_create' or request.resolver_match.url_name == 'service_update' %}link-active{% else %}link-idle{% endif %}" style="text-decoration: none;">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">handyman</span>Layanan (Services)
                             </a>
-                        </li>
+                        </td>
+                        <!-- 💡 FIX TAMBAHAN: SELEP SUB-MENU MASTER KATEGORI BARU -->
                         <li class="bph-model-item">
-                            <a href="{% url 'location_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'location_list' or request.resolver_match.url_name == 'location_create' or request.resolver_match.url_name == 'location_update' %}link-active{% else %}link-idle{% endif %}">
+                            <a href="{% url 'category_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'category_list' or request.resolver_match.url_name == 'category_create' %}link-active{% else %}link-idle{% endif %}" style="text-decoration: none;">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">sell</span>Kategori Proyek
+                            </a>
+                        </td>
+                        <li class="bph-model-item">
+                            <a href="{% url 'location_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'location_list' or request.resolver_match.url_name == 'location_create' or request.resolver_match.url_name == 'location_update' %}link-active{% else %}link-idle{% endif %}" style="text-decoration: none;">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">location_on</span>Lokasi Wilayah
                             </a>
-                        </li>
+                        </td>
                         <li class="bph-model-item">
-                            <a href="{% url 'project_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'project_list' or request.resolver_match.url_name == 'project_create' or request.resolver_match.url_name == 'project_update' %}link-active{% else %}link-idle{% endif %}">
+                            <a href="{% url 'project_list' %}" class="bph-model-link {% if request.resolver_match.url_name == 'project_list' or request.resolver_match.url_name == 'project_create' or request.resolver_match.url_name == 'project_update' %}link-active{% else %}link-idle{% endif %}" style="text-decoration: none;">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">assignment</span>Proyek (Experience)
                             </a>
-                        </li>
+                        </td>
                     </ul>
                 </div>
 
@@ -472,7 +497,6 @@
         </div>
     </div>
 
-    <!-- MODAL KUSTOM POP-UP LOGOUT THEME BPH -->
     <div id="logout-alert-modal" class="bph-modal-overlay" style="padding: 16px;">
         <div class="bph-modal-box" style="max-width: 440px; width: 100%; padding: 32px 24px; position: relative;">
             
@@ -541,6 +565,48 @@
                 hiddenLogoutForm.submit();
             });
         }
+
+        // --- LOGIKA UCAPAN WAKTU OTOMATIS (WIB / BOGOR & JAKARTA) ---
+        function updateGreeting() {
+            const greetingElement = document.getElementById('bph-greeting');
+            if (!greetingElement) return;
+
+            const currentHour = new Date().getHours();
+            let greeting = "Selamat Malam";
+
+            if (currentHour >= 5 && currentHour < 11) {
+                greeting = "Selamat Pagi";
+            } else if (currentHour >= 11 && currentHour < 15) {
+                greeting = "Selamat Siang";
+            } else if (currentHour >= 15 && currentHour < 18) {
+                greeting = "Selamat Sore";
+            }
+
+            greetingElement.innerText = greeting;
+
+            const username = "{{ request.user.username }}";
+            const avatarElement = document.getElementById('bph-avatar-text');
+    
+            if (avatarElement && username) {
+                let firstLetter = username.charAt(0);
+                let secondLetter = "";
+        
+                const upperMatches = username.slice(1).match(/[A-Z]/);
+        
+                if (upperMatches) {
+                    secondLetter = upperMatches[0];
+                } else if (username.length > 1) {
+                    secondLetter = username.charAt(1);
+                }
+        
+                avatarElement.innerText = (firstLetter + secondLetter).toUpperCase();
+
+                const formAvatar = document.getElementById('form-avatar-text');
+                if (formAvatar) formAvatar.innerText = (firstLetter + secondLetter).toUpperCase();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', updateGreeting);
     </script>
 
 </body>

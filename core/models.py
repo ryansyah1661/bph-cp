@@ -1,5 +1,8 @@
 from django.db import models
 from django.utils.text import slugify
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # === 1. TABEL MASTER KATEGORI ===
 class Category(models.Model):
@@ -33,7 +36,6 @@ class Service(models.Model):
     intro = models.TextField(verbose_name="Paragraf Ringkasan Atas")
     approach = models.TextField(verbose_name="Paragraf Pendekatan Komprehensif")
     
-    # RELASI MANY-TO-MANY: 1 Layanan bisa memilih lebih dari 1 Kategori
     categories = models.ManyToManyField(Category, blank=True, related_name='services')
 
     class Meta:
@@ -97,7 +99,6 @@ class Project(models.Model):
     image = models.ImageField(upload_to='projects/thumbs/', verbose_name="Foto Kartu Proyek")
     description = models.TextField(verbose_name="Deskripsi Project")
 
-    # Field tambahan untuk isi halaman detail proyek
     intro = models.TextField(blank=True, verbose_name="Paragraf Pembuka Detail")
     challenge = models.TextField(blank=True, verbose_name="Tantangan & Kondisi Awal")
     methodology = models.TextField(blank=True, verbose_name="Pendekatan & Metodologi Kerja")
@@ -105,12 +106,10 @@ class Project(models.Model):
     pdf_cover = models.ImageField(upload_to='projects/pdf_covers/', blank=True, null=True, verbose_name="Sampul Modul PDF")
     pdf_file = models.FileField(upload_to='projects/pdf_files/', blank=True, null=True, verbose_name="Berkas Modul Laporan Teknis (PDF)")
 
-    # RELASI FOREIGN KEY (One-to-Many)
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True, related_name='projects')
     service_portfolio = models.ForeignKey(Service, on_delete=models.SET_NULL, null=True, related_name='projects', verbose_name="Sesuai Portofolio Layanan")
     location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, related_name='projects')
 
-    # RELASI MANY-TO-MANY: 1 Proyek bisa dicentang lebih dari 1 Kategori (Konservasi, Riset, dll)
     categories = models.ManyToManyField(Category, related_name='projects', verbose_name="Kategori Proyek")
 
     class Meta:
@@ -124,7 +123,6 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
-
 # === 6b. TABEL MATRIKS CAPAIAN KINERJA PROYEK ===
 class ProjectMetric(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='metrics', verbose_name="Untuk Proyek")
@@ -137,7 +135,6 @@ class ProjectMetric(models.Model):
 
     def __str__(self):
         return f"{self.project.name} - {self.parameter}"
-
     
 # === 7. TABEL CERITA LAPANGAN (Stories) ===
 class Story(models.Model):
@@ -145,11 +142,14 @@ class Story(models.Model):
     slug = models.SlugField(unique=True, blank=True)
     tanggal = models.DateField(verbose_name="Tanggal Rilis")
     author = models.CharField(max_length=100, default="Admin BPH")
+    
+    # FIX TAMBAHAN: Menghubungkan cerita lapangan dengan Lokasi Wilayah
+    lokasi = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, related_name='stories', verbose_name="Lokasi Wilayah")
+    
     short = models.TextField(help_text="Ringkasan pendek yang muncul di kartu depan")
     deskripsi = models.TextField(verbose_name="Isi Cerita Lengkap")
     gambar = models.ImageField(upload_to='stories/', verbose_name="Foto Cerita")
     
-    # Hubungkan ke proyek jika ada (Boleh Kosong / Nullable)
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, blank=True, related_name='stories')
 
     class Meta:
@@ -215,7 +215,6 @@ class Gallery(models.Model):
     caption = models.CharField(max_length=250, verbose_name="Keterangan Foto / Caption")
     gambar = models.ImageField(upload_to='gallery/', verbose_name="File Foto")
     
-    # Hubungkan ke master Kategori biar filternya (NRM, NRU, dll) jalan dinamis di FE
     kategori = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='galleries', verbose_name="Kategori Filter")
     tanggal_upload = models.DateTimeField(auto_now_add=True)
 
@@ -224,3 +223,23 @@ class Gallery(models.Model):
 
     def __str__(self):
         return self.caption
+
+# === 12. TABEL KUSTOM EKSTENSI PROFIL USER PENGGUNA ===
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    nama_lengkap = models.CharField(max_length=150, blank=True, null=True, verbose_name="Nama Lengkap")
+    foto_profil = models.ImageField(upload_to='profile_pics/', blank=True, null=True, verbose_name="Foto Profil")
+
+    def __str__(self):
+        return f"Profile {self.user.username}"
+
+# --- LOGIKA AUTOMATIC SIGNALS DJANGO ---
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    if hasattr(instance, 'profile'):
+        instance.profile.save()

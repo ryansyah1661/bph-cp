@@ -16,12 +16,12 @@
   .animate-ticker-left {
     display: flex;
     width: max-content;
-    animation: marqueeLeft 30s linear infinite;
+    animation: marqueeLeft 14s linear infinite;
   }
   .animate-ticker-right {
     display: flex;
     width: max-content;
-    animation: marqueeRight 30s linear infinite;
+    animation: marqueeRight 14s linear infinite;
   }
   .ticker-container:hover .animate-ticker-left,
   .ticker-container:hover .animate-ticker-right {
@@ -31,7 +31,7 @@
 
 <main class="flex-grow pt-[80px] bg-background">
   
-  {% include 'core/partials/hero-banner.html' with title="Pengalaman Kami" subtitle="Our Track Record" desc="Rekam jejak proyek strategis kami dalam menghadirkan solusi pelestarian lingkungan yang terukur, berfokus pada data, dan berdampak nyata secara global." bg_image="images/about-hero.jpg" %}
+  {% include 'core/partials/hero-banner.html' with title="Pengalaman Kami" subtitle="Our Track Record" desc="Rekam jejak proyek strategis kami dalam menghadirkan solusi pelestarian lingkungan yang terukur, berfokus pada data, and berdampak nyata secara global." bg_image="images/about-hero.jpg" %}
 
   <section class="w-full bg-surface pt-16 pb-3">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
@@ -74,7 +74,7 @@
         <a href="{% url 'detail-experience' slug=project.slug %}"
            data-category="{% for cat in project.categories.all %}{{ cat.slug }} {% endfor %}"
            data-year="{{ project.tahun }}"
-           class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer">
+           class="project-card transition-all duration-300 group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden hover:shadow-[0px_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 cursor-pointer" style="text-decoration: none;">
           <div class="w-full h-64 relative overflow-hidden bg-surface-container-low">
             {% if project.image %}
             <img alt="{{ project.name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{{ project.image.url }}">
@@ -94,7 +94,11 @@
               <span>{{ project.location.nama_provinsi|default:"Wilayah Kerja BPH" }}</span>
             </div>
             <h3 class="font-headline-md text-lg font-bold text-on-background mb-3 line-clamp-2 group-hover:text-primary transition-colors">{{ project.name }}</h3>
-            <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">{{ project.description }}</p>
+            
+            <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">
+              {{ project.description|striptags }}
+            </p>
+            
             <span class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider">Lihat Detail <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
           </div>
         </a>
@@ -114,6 +118,7 @@
     </div>
   </section>
 
+  <!-- 💡 FIX UTAMA: SEKSI MITRA SINKRON DATABASE & SEAMLESS LOOPING -->
   <section id="mitra-section" class="w-full bg-surface-container-lowest border-y border-border-subtle py-20 overflow-hidden">
     <div class="space-y-16">
       
@@ -124,157 +129,42 @@
       </div>
 
       <div class="space-y-4">
-        <h3 class="font-headline-lg text-xs font-bold text-center text-text-muted uppercase tracking-widest px-margin-mobile">── Instansi Pemerintah &amp; Lembagaan Otoritas ──</h3>
+        <h3 class="font-headline-lg text-xs font-bold text-center text-text-muted uppercase tracking-widest px-margin-mobile">── Mitra Kolaborasi Resmi ──</h3>
         <div class="ticker-container w-full overflow-hidden py-2 bg-gradient-to-r from-transparent via-surface to-transparent">
           <div class="animate-ticker-left gap-6 px-3">
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-3 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-primary transition-colors duration-300">forest</span>
-              <div class="flex flex-col text-left">
-                <span class="text-[10px] font-bold tracking-widest text-text-muted/40 group-hover:text-primary/50 transition-colors uppercase leading-none">Kementerian</span>
-                <span class="text-xs font-extrabold text-text-muted/70 group-hover:text-primary transition-colors uppercase tracking-wide mt-0.5">LHK RI</span>
+            
+            <!-- LOOP BARIS SET 1: Mengambil Data Asli Langsung Dari DB Klien -->
+            {% for client in clients %}
+            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-4 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
+              {% if client.logo %}
+                <img src="{{ client.logo.url }}" alt="Logo {{ client.nama }}" class="h-10 w-12 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+              {% else %}
+                <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-primary transition-colors duration-300">corporate_fare</span>
+              {% endif %}
+              <div class="flex flex-col text-left overflow-hidden">
+                <span class="text-[9px] font-bold tracking-widest text-text-muted/40 group-hover:text-primary/50 transition-colors uppercase leading-none">Partner Instansi</span>
+                <span class="text-xs font-extrabold text-text-muted/70 group-hover:text-primary transition-colors uppercase tracking-wide mt-1 truncate">{{ client.nama }}</span>
               </div>
             </div>
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-3 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-primary transition-colors duration-300">gavel</span>
-              <div class="flex flex-col text-left">
-                <span class="text-[10px] font-bold tracking-widest text-text-muted/40 group-hover:text-primary/50 transition-colors uppercase leading-none">Dinas Anggota</span>
-                <span class="text-xs font-extrabold text-text-muted/70 group-hover:text-primary transition-colors uppercase tracking-wide mt-0.5">Lingkungan Hidup</span>
-              </div>
-            </div>
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-3 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-primary transition-colors duration-300">account_balance</span>
-              <div class="flex flex-col text-left">
-                <span class="text-[10px] font-bold tracking-widest text-text-muted/40 group-hover:text-primary/50 transition-colors uppercase leading-none">Badan Usaha</span>
-                <span class="text-xs font-extrabold text-text-muted/70 group-hover:text-primary transition-colors uppercase tracking-wide mt-0.5">Perhutani Pusat</span>
-              </div>
-            </div>
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-3 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-primary transition-colors duration-300">verified</span>
-              <div class="flex flex-col text-left">
-                <span class="text-[10px] font-bold tracking-widest text-text-muted/40 group-hover:text-primary/50 transition-colors uppercase leading-none">Otoritas Konservasi</span>
-                <span class="text-xs font-extrabold text-text-muted/70 group-hover:text-primary transition-colors uppercase tracking-wide mt-0.5">BKSDA Wilayah</span>
-              </div>
-            </div>
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-3 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-primary transition-colors duration-300">science</span>
-              <div class="flex flex-col text-left">
-                <span class="text-[10px] font-bold tracking-widest text-text-muted/40 group-hover:text-primary/50 transition-colors uppercase leading-none">Pusat Penelitian</span>
-                <span class="text-xs font-extrabold text-text-muted/70 group-hover:text-primary transition-colors uppercase tracking-wide mt-0.5">Sains Kehutanan</span>
-              </div>
-            </div>
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-3 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-primary transition-colors duration-300">forest</span>
-              <div class="flex flex-col text-left">
-                <span class="text-[10px] font-bold tracking-widest text-text-muted/40 group-hover:text-primary/50 transition-colors uppercase leading-none">Kementerian</span>
-                <span class="text-xs font-extrabold text-text-muted/70 group-hover:text-primary transition-colors uppercase tracking-wide mt-0.5">LHK RI</span>
-              </div>
-            </div>
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-3 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-primary transition-colors duration-300">gavel</span>
-              <div class="flex flex-col text-left">
-                <span class="text-[10px] font-bold tracking-widest text-text-muted/40 group-hover:text-primary/50 transition-colors uppercase leading-none">Dinas Anggota</span>
-                <span class="text-xs font-extrabold text-text-muted/70 group-hover:text-primary transition-colors uppercase tracking-wide mt-0.5">Lingkungan Hidup</span>
-              </div>
-            </div>
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-3 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-primary transition-colors duration-300">account_balance</span>
-              <div class="flex flex-col text-left">
-                <span class="text-[10px] font-bold tracking-widest text-text-muted/40 group-hover:text-primary/50 transition-colors uppercase leading-none">Badan Usaha</span>
-                <span class="text-xs font-extrabold text-text-muted/70 group-hover:text-primary transition-colors uppercase tracking-wide mt-0.5">Perhutani Pusat</span>
-              </div>
-            </div>
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-3 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-primary transition-colors duration-300">verified</span>
-              <div class="flex flex-col text-left">
-                <span class="text-[10px] font-bold tracking-widest text-text-muted/40 group-hover:text-primary/50 transition-colors uppercase leading-none">Otoritas Konservasi</span>
-                <span class="text-xs font-extrabold text-text-muted/70 group-hover:text-primary transition-colors uppercase tracking-wide mt-0.5">BKSDA Wilayah</span>
-              </div>
-            </div>
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-3 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-primary transition-colors duration-300">science</span>
-              <div class="flex flex-col text-left">
-                <span class="text-[10px] font-bold tracking-widest text-text-muted/40 group-hover:text-primary/50 transition-colors uppercase leading-none">Pusat Penelitian</span>
-                <span class="text-xs font-extrabold text-text-muted/70 group-hover:text-primary transition-colors uppercase tracking-wide mt-0.5">Sains Kehutanan</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            {% empty %}
+            <p class="text-xs text-neutral-400 w-full text-center py-4">Belum ada data logo mitra.</p>
+            {% endfor %}
 
-      <div class="space-y-4 pt-4">
-        <h3 class="font-headline-lg text-xs font-bold text-center text-text-muted uppercase tracking-widest px-margin-mobile">── Sektor Swasta, Korporasi &amp; NGO Lingkungan ──</h3>
-        <div class="ticker-container w-full overflow-hidden py-2 bg-gradient-to-r from-transparent via-surface to-transparent">
-          <div class="animate-ticker-right gap-6 px-3">
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-3 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-forest-deep transition-colors duration-300">eco</span>
-              <div class="flex flex-col text-left">
-                <span class="text-base font-black tracking-tight text-text-muted/70 group-hover:text-forest-deep transition-colors leading-none">GREEN<span class="text-primary font-light">GLOBAL</span></span>
-                <span class="text-[9px] font-bold tracking-widest text-text-muted/40 group-hover:text-primary/70 transition-colors uppercase mt-0.5">Sustainability</span>
+            <!-- LOOP BARIS SET 2: Duplikasi Wajib Agar Efek Gerakan Looping Tidak Patah -->
+            {% for client in clients %}
+            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-4 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
+              {% if client.logo %}
+                <img src="{{ client.logo.url }}" alt="Logo {{ client.nama }}" class="h-10 w-12 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+              {% else %}
+                <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-primary transition-colors duration-300">corporate_fare</span>
+              {% endif %}
+              <div class="flex flex-col text-left overflow-hidden">
+                <span class="text-[9px] font-bold tracking-widest text-text-muted/40 group-hover:text-primary/50 transition-colors uppercase leading-none">Partner Instansi</span>
+                <span class="text-xs font-extrabold text-text-muted/70 group-hover:text-primary transition-colors uppercase tracking-wide mt-1 truncate">{{ client.nama }}</span>
               </div>
             </div>
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-3 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-forest-deep transition-colors duration-300">spa</span>
-              <div class="flex flex-col text-left">
-                <span class="text-sm font-extrabold tracking-wide text-text-muted/70 group-hover:text-forest-deep transition-colors uppercase leading-none">ECOFOUNDATION</span>
-                <span class="text-[9px] font-medium text-text-muted/40 group-hover:text-text-muted/60 transition-colors mt-0.5">Conservation Trust</span>
-              </div>
-            </div>
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-3 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-forest-deep transition-colors duration-300">electric_bolt</span>
-              <div class="flex flex-col text-left">
-                <span class="text-base font-black tracking-tight text-text-muted/70 group-hover:text-forest-deep transition-colors leading-none">MITRA<span class="text-primary">ENERGI</span></span>
-                <span class="text-[9px] font-bold tracking-widest text-text-muted/40 group-hover:text-primary/70 transition-colors uppercase mt-0.5">Renewable Resource</span>
-              </div>
-            </div>
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-2 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-forest-deep transition-colors duration-300">nature</span>
-              <div class="flex flex-col text-left">
-                <span class="text-xs font-black tracking-widest text-text-muted/70 group-hover:text-forest-deep transition-colors uppercase leading-none">RIMBA RAYA</span>
-                <span class="text-[9px] font-semibold text-primary uppercase tracking-wider mt-0.5">NGO Kalimantan</span>
-              </div>
-            </div>
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-3 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-forest-deep transition-colors duration-300">cloud</span>
-              <div class="flex flex-col text-left">
-                <span class="text-sm font-black tracking-wider text-text-muted/70 group-hover:text-forest-deep transition-colors uppercase leading-none">CARBON<span class="text-primary font-medium">TRUST</span></span>
-                <span class="text-[9px] font-bold text-text-muted/40 uppercase tracking-widest mt-0.5">Indonesia Office</span>
-              </div>
-            </div>
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-3 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-forest-deep transition-colors duration-300">eco</span>
-              <div class="flex flex-col text-left">
-                <span class="text-base font-black tracking-tight text-text-muted/70 group-hover:text-forest-deep transition-colors leading-none">GREEN<span class="text-primary font-light">GLOBAL</span></span>
-                <span class="text-[9px] font-bold tracking-widest text-text-muted/40 group-hover:text-primary/70 transition-colors uppercase mt-0.5">Sustainability</span>
-              </div>
-            </div>
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-3 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-forest-deep transition-colors duration-300">spa</span>
-              <div class="flex flex-col text-left">
-                <span class="text-sm font-extrabold tracking-wide text-text-muted/70 group-hover:text-forest-deep transition-colors uppercase leading-none">ECOFOUNDATION</span>
-                <span class="text-[9px] font-medium text-text-muted/40 group-hover:text-text-muted/60 transition-colors mt-0.5">Conservation Trust</span>
-              </div>
-            </div>
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-3 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-forest-deep transition-colors duration-300">electric_bolt</span>
-              <div class="flex flex-col text-left">
-                <span class="text-base font-black tracking-tight text-text-muted/70 group-hover:text-forest-deep transition-colors leading-none">MITRA<span class="text-primary">ENERGI</span></span>
-                <span class="text-[9px] font-bold tracking-widest text-text-muted/40 group-hover:text-primary/70 transition-colors uppercase mt-0.5">Renewable Resource</span>
-              </div>
-            </div>
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-2 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-forest-deep transition-colors duration-300">nature</span>
-              <div class="flex flex-col text-left">
-                <span class="text-xs font-black tracking-widest text-text-muted/70 group-hover:text-forest-deep transition-colors uppercase leading-none">RIMBA RAYA</span>
-                <span class="text-[9px] font-semibold text-primary uppercase tracking-wider mt-0.5">NGO Kalimantan</span>
-              </div>
-            </div>
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-3 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
-              <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-forest-deep transition-colors duration-300">cloud</span>
-              <div class="flex flex-col text-left">
-                <span class="text-sm font-black tracking-wider text-text-muted/70 group-hover:text-forest-deep transition-colors uppercase leading-none">CARBON<span class="text-primary font-medium">TRUST</span></span>
-                <span class="text-[9px] font-bold text-text-muted/40 uppercase tracking-widest mt-0.5">Indonesia Office</span>
-              </div>
-            </div>
+            {% endfor %}
+
           </div>
         </div>
       </div>
@@ -334,8 +224,6 @@
       let validMatchCount = 0;
 
       cards.forEach(card => {
-        // data-category sekarang bisa berisi lebih dari 1 slug (dipisah spasi),
-        // karena 1 proyek bisa punya lebih dari 1 kategori (relasi Many-to-Many)
         const cardCategories = (card.getAttribute('data-category') || '').trim().split(/\s+/).filter(Boolean);
         const cardYear = card.getAttribute('data-year');
 

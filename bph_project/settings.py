@@ -11,6 +11,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'core', 
+    'widget_tweaks',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
