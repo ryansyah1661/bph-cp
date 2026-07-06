@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django import forms
+from django.db.models import Min, Max  # Impor Agregasi yang Benar
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -13,7 +14,6 @@ from .models import Article, Project, Client, Story, Service, Location, Category
 # ==========================================
 def homepage(request):
     articles = Article.objects.order_by('-tanggal')[:3]
-    # FIX: Ambil data cerita lapangan terbaru agar seksi "Cerita dari Lapangan" di beranda dinamis dari DB
     stories = Story.objects.order_by('-tanggal')[:1]
     return render(request, 'core/homepage.html', {
         'articles': articles,
@@ -35,15 +35,43 @@ def experience_view(request):
     projects = Project.objects.select_related('client', 'location').prefetch_related('categories').order_by('-tahun')
     categories = Category.objects.filter(projects__isnull=False).distinct().order_by('name')
     years = Project.objects.order_by('-tahun').values_list('tahun', flat=True).distinct()
-    
-    # 💡 FIX UTAMA: Mengambil seluruh data master Client dari DB agar ticker marquee di halaman list dinamis
     clients = Client.objects.all()
+
+    # --- 1. LOGIKA HITUNG STATISTIK DINAMIS ---
+    total_proyek = Project.objects.count()
+    total_provinsi = Location.objects.filter(projects__isnull=False).distinct().count()
+    total_klien = Client.objects.filter(projects__isnull=False).distinct().count()
     
+    # Menghitung rentang tahun pengalaman secara aman
+    tahun_bounds = Project.objects.all().aggregate(Min('tahun'), Max('tahun'))
+    if tahun_bounds['tahun__min'] and tahun_bounds['tahun__max']:
+        total_tahun_bekerja = (tahun_bounds['tahun__max'] - tahun_bounds['tahun__min']) + 1
+    else:
+        total_tahun_bekerja = 5 # Fallback default
+
+    # --- 2. QUERY DATA UNTUK INTERAKSI MAP DAN CERITA LAPANGAN ---
+    locations_with_projects = Location.objects.filter(projects__isnull=False).prefetch_related('projects').distinct()
+    all_stories = Story.objects.select_related('lokasi', 'project').order_by('-tanggal')
+
+    # AMAN: Ambil parameter filter 'year' menggunakan method .get() bawaan Dict agar anti-crash
+    selected_year = request.GET.get('year', 'all')
+
     return render(request, 'core/experience.html', {
         'projects': projects,
         'categories': categories,
         'years': years,
-        'clients': clients, # <-- Kita lempar variabel ini ke HTML frontend
+        'clients': clients,
+        'selected_year': selected_year,
+        
+        # Data counter statistik
+        'total_tahun_bekerja': total_tahun_bekerja,
+        'total_proyek': total_proyek,
+        'total_provinsi': total_provinsi,
+        'total_klien': total_klien,
+        
+        # Data map & cerita lapangan
+        'locations_with_projects': locations_with_projects,
+        'all_stories': all_stories,
     })
 
 def gallery_view(request):
@@ -64,7 +92,7 @@ def contact_view(request):
     return render(request, 'core/contact.html')
 
 # ==========================================
-# JALUR FRONTEND HALAMAN DETAIL (DINAMIS QUERY DB)
+# JALUR FRONTEND HALAMAN DETAIL (DINAMIS)
 # ==========================================
 def detail_articles_view(request, slug):
     article_data = get_object_or_404(Article, slug=slug)
@@ -98,7 +126,7 @@ def detail_story_view(request, slug):
     return render(request, 'core/detail-story.html', {'story': story_data})
 
 # ==========================================
-# PROTEKSI & SECURITY MIXIN (FIXED PATH CORE)
+# PROTEKSI & SECURITY MIXIN
 # ==========================================
 @user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
 def custom_dashboard(request):
@@ -284,6 +312,13 @@ class CategoryCreateView(AdminRequiredMixin, CreateView):
     fields = '__all__'
     success_url = reverse_lazy('category_list')
 
+# FIX SAKRAL: Menambahkan UpdateView untuk Kategori agar tombol edit di admin tidak memicu error NoReverseMatch
+class CategoryUpdateView(AdminRequiredMixin, UpdateView):
+    model = Category
+    template_name = 'core/custom_admin/category/category_form.html'
+    fields = '__all__'
+    success_url = reverse_lazy('category_list')
+
 class CategoryDeleteView(AdminRequiredMixin, DeleteView):
     model = Category
     template_name = 'core/custom_admin/category/category_confirm_delete.html'
@@ -353,7 +388,7 @@ class GalleryDeleteView(AdminRequiredMixin, DeleteView):
     success_url = reverse_lazy('gallery_admin_list')
 
 # ==========================================
-# PROTEKSI KHUSUS SUPERUSER (HANYA UNTUK MANAJEMEN USER)
+# PROTEKSI KHUSUS SUPERUSER
 # ==========================================
 class SuperuserRequiredMixin(UserPassesTestMixin):
     def test_func(self):
@@ -391,7 +426,7 @@ class UserDeleteView(SuperuserRequiredMixin, DeleteView):
     success_url = reverse_lazy('user_list')
 
 # ==========================================
-# 12. FITUR EDIT PROFIL MANDIRI USER (BARU)
+# 12. FITUR EDIT PROFIL MANDIRI USER
 # ==========================================
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:

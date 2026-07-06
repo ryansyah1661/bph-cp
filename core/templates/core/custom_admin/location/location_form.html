@@ -22,6 +22,11 @@
                     {{ form.slug }}
                     <p class="text-xs text-gray-400 mt-1">Slug otomatis terisi dari nama lokasi</p>
                 </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Provinsi (Kode BPS) <span class="text-red-500">*</span></label>
+                    {{ form.kode_wilayah }}
+                    <p class="text-xs text-gray-400 mt-1">Wajib dipilih supaya pin lokasi otomatis muncul di peta interaktif.</p>
+                </div>
             </div>
         </div>
 
@@ -36,7 +41,6 @@
 </form>
 
 <style>
-    /* Styling agar inputan Django default mengikuti desain Tailwind kita */
     form input[type="text"] {
         width: 100%;
         padding: 8px 12px;
@@ -45,7 +49,16 @@
         font-size: 14px;
         color: #1e293b;
     }
-    form input:focus {
+    form select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 14px;
+        color: #1e293b;
+        background-color: #fff;
+    }
+    form input:focus, form select:focus {
         outline: none;
         border-color: #059669;
         box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1);
@@ -54,17 +67,17 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const lokasiInput = document.getElementById('id_nama_provinsi'); // ID bawaan Django dari field nama_provinsi
-    const slugInput = document.getElementById('id_slug');           // ID bawaan Django dari field slug
+    const lokasiInput = document.getElementById('id_nama_provinsi');
+    const slugInput = document.getElementById('id_slug');
 
     if (lokasiInput && slugInput) {
         lokasiInput.addEventListener('input', function() {
             let slugText = this.value
                 .toLowerCase()
                 .trim()
-                .replace(/[^\w\s-]/g, '')      // Buang karakter aneh selain huruf & spasi
-                .replace(/[\s_]+/g, '-')       // Ubah spasi atau underscore menjadi strip (-)
-                .replace(/^-+|-+$/g, '');      // Bersihkan strip berlebih di ujung awal/akhir
+                .replace(/[^\w\s-]/g, '')
+                .replace(/[\s_]+/g, '-')
+                .replace(/^-+|-+$/g, '');
             
             slugInput.value = slugText;
         });

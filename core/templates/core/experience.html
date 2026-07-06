@@ -9,65 +9,212 @@
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
   }
-  @keyframes marqueeRight {
-    0% { transform: translateX(-50%); }
-    100% { transform: translateX(0); }
-  }
   .animate-ticker-left {
     display: flex;
     width: max-content;
     animation: marqueeLeft 14s linear infinite;
   }
-  .animate-ticker-right {
-    display: flex;
-    width: max-content;
-    animation: marqueeRight 14s linear infinite;
-  }
-  .ticker-container:hover .animate-ticker-left,
-  .ticker-container:hover .animate-ticker-right {
+  .ticker-container:hover .animate-ticker-left {
     animation-play-state: paused;
+  }
+
+  /* ========================================== */
+  /* PETA INDONESIA — D3.js + GeoJSON            */
+  /* ========================================== */
+  .indonesia-map-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+  }
+  #map-svg-container {
+      width: 100%;
+      aspect-ratio: 960 / 430;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f4 100%);
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      position: relative;
+      overflow: hidden;
+  }
+  #map-svg-container svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+  }
+  .province-path {
+      fill: #308935;
+      fill-opacity: 0.12;
+      stroke: #ffffff;
+      stroke-width: 0.75px;
+      transition: fill-opacity 0.25s ease;
+  }
+  .province-path.has-project {
+      fill-opacity: 0.22;
+      cursor: pointer;
+  }
+  .province-path.has-project:hover {
+      fill-opacity: 0.38;
+  }
+  .province-path.active-province {
+      fill-opacity: 0.45;
+  }
+
+  .map-province-pin {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      cursor: pointer;
+      z-index: 20;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .map-province-pin:hover, .map-province-pin.active-pin {
+      transform: translate(-50%, -100%) scale(1.3);
+  }
+  .map-project-popover {
+      position: absolute;
+      background: #ffffff;
+      border: 1px solid #eef2f5;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.09);
+      z-index: 40;
+      min-width: 260px;
+      max-width: 340px;
+      display: none;
+      pointer-events: auto;
   }
 </style>
 
 <main class="flex-grow pt-[80px] bg-background">
-  
-  {% include 'core/partials/hero-banner.html' with title="Pengalaman Kami" subtitle="Our Track Record" desc="Rekam jejak proyek strategis kami dalam menghadirkan solusi pelestarian lingkungan yang terukur, berfokus pada data, and berdampak nyata secara global." bg_image="images/about-hero.jpg" %}
 
-  <section class="w-full bg-surface pt-16 pb-3">
+  {% include 'core/partials/hero-banner.html' with title="Pengalaman BPH" subtitle="Our Track Record" desc="Kami memberikan layanan terbaik untuk memberikan pengalaman yang tak terlupakan." bg_image="images/about-hero.jpg" %}
+
+  <!-- ========================================== -->
+  <!-- SEKSI 1: COUNTER STATISTIK DINAMIS         -->
+  <!-- ========================================== -->
+  <section class="w-full bg-white py-14 border-b border-gray-100">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-      <div class="flex flex-col md:flex-row justify-between items-center gap-stack-md">
-        
-        <div class="flex flex-wrap gap-stack-sm" id="filter-btn-container">
-          <button data-filter="all" class="filter-btn px-5 py-2 bg-primary text-on-primary font-label-caps text-label-caps rounded-full transition-all duration-300 shadow-sm">
-            Semua
-          </button>
-          {% for cat in categories %}
-          <button data-filter="{{ cat.slug }}" class="filter-btn px-5 py-2 bg-transparent border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary font-label-caps text-label-caps rounded-full transition-all duration-300">
-            {{ cat.name }}
-          </button>
-          {% endfor %}
-        </div>
-
-        <div class="relative inline-block text-left w-44" id="custom-dropdown-container">
-          <button type="button" id="dropdown-toggle" class="flex items-center justify-between w-full bg-surface-white border border-border-subtle text-on-surface font-body-sm text-body-sm rounded-lg px-4 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary cursor-pointer select-none">
-            <span id="dropdown-label">Semua Tahun</span>
-            <span id="dropdown-icon" class="material-symbols-outlined text-on-surface-variant transition-transform duration-200 pointer-events-none">expand_more</span>
-          </button>
-          
-          <div id="dropdown-menu" class="hidden absolute right-0 mt-1.5 w-full rounded-lg bg-surface-white border border-border-subtle shadow-[0_10px_25px_rgba(0,0,0,0.08)] z-50 overflow-hidden py-1">
-            <div data-value="all" class="dropdown-item px-4 py-2.5 text-sm text-on-surface hover:bg-primary hover:text-surface-white cursor-pointer transition-colors duration-150">Semua Tahun</div>
-            {% for y in years %}
-            <div data-value="{{ y }}" class="dropdown-item px-4 py-2.5 text-sm text-on-surface hover:bg-primary hover:text-surface-white cursor-pointer transition-colors duration-150">{{ y }}</div>
-            {% endfor %}
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div class="flex flex-col items-center space-y-3">
+          <div class="h-16 w-14 rounded-full bg-[#308935] flex items-center justify-center text-white">
+            <span class="material-symbols-outlined text-2xl font-bold">work_history</span>
           </div>
-          <input type="hidden" id="year-filter" value="all">
+          <h3 class="text-2xl md:text-3xl font-black text-[#308935]">{{ total_tahun_bekerja }} Tahun</h3>
+          <p class="text-xs font-semibold text-gray-500 tracking-wide">Pengalaman</p>
         </div>
-        
+        <div class="flex flex-col items-center space-y-3">
+          <div class="h-16 w-14 rounded-full bg-[#308935] flex items-center justify-center text-white">
+            <span class="material-symbols-outlined text-2xl font-bold">account_tree</span>
+          </div>
+          <h3 class="text-2xl md:text-3xl font-black text-[#308935]">{{ total_proyek }} Proyek</h3>
+          <p class="text-xs font-semibold text-gray-500 tracking-wide">Telah Dikerjakan</p>
+        </div>
+        <div class="flex flex-col items-center space-y-3">
+          <div class="h-16 w-14 rounded-full bg-[#308935] flex items-center justify-center text-white">
+            <span class="material-symbols-outlined text-2xl font-bold">near_me</span>
+          </div>
+          <h3 class="text-2xl md:text-3xl font-black text-[#308935]">{{ total_provinsi }} Provinsi</h3>
+          <p class="text-xs font-semibold text-gray-500 tracking-wide">Lokasi Proyek</p>
+        </div>
+        <div class="flex flex-col items-center space-y-3">
+          <div class="h-16 w-14 rounded-full bg-[#308935] flex items-center justify-center text-white">
+            <span class="material-symbols-outlined text-2xl font-bold">groups</span>
+          </div>
+          <h3 class="text-2xl md:text-3xl font-black text-[#308935]">{{ total_klien }} Klien</h3>
+          <p class="text-xs font-semibold text-gray-500 tracking-wide">Dari Sektor Publik dan Swasta</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="w-full bg-surface pt-6 pb-24 border-b border-border-subtle/50">
+  <!-- ========================================== -->
+  <!-- SEKSI 2: MAP INTERAKTIF INDONESIA (D3.js)  -->
+  <!-- ========================================== -->
+  <section class="w-full bg-[#f8faf9] py-16 border-b border-gray-100">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center">
+      <div class="mb-12">
+        <h2 class="text-2xl md:text-3xl font-black text-emerald-950 uppercase tracking-tight">LOKASI <span class="text-[#308935] font-light">PROYEK</span></h2>
+        <p class="text-sm text-gray-500 mt-1">Click pin di bawah ini untuk informasi lebih lanjut</p>
+      </div>
+
+      <div class="indonesia-map-wrapper">
+        <div id="map-svg-container">
+          <!-- SVG peta akan digambar D3.js di sini -->
+        </div>
+
+        {% for loc in locations_with_projects %}
+          {% if loc.kode_wilayah %}
+          <div class="map-province-pin group"
+               id="pin-prov-{{ loc.kode_wilayah }}"
+               data-kode="{{ loc.kode_wilayah }}"
+               data-name="{{ loc.nama_provinsi }}"
+               style="top: 0%; left: 0%; display: none;">
+               <span class="material-symbols-outlined text-amber-500 text-3xl drop-shadow-md select-none group-hover:text-amber-600">location_on</span>
+          </div>
+
+          <div class="map-project-popover text-left shadow-xl" id="popover-prov-{{ loc.kode_wilayah }}">
+              <h4 class="text-sm font-bold text-neutral-900 mb-2 pb-1 border-b border-gray-100">{{ loc.nama_provinsi }}</h4>
+              <ul class="space-y-1.5 list-none p-0 m-0">
+                {% for proj in loc.projects.all %}
+                  <li class="text-xs font-medium text-neutral-700 leading-snug flex items-start gap-1">
+                     <span class="text-[#308935] font-bold">{{ forloop.counter }}.</span>
+                     <a href="{% url 'detail-experience' slug=proj.slug %}" class="hover:text-[#308935] text-neutral-700 transition-colors" style="text-decoration: none;">{{ proj.name }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- SEKSI 3: KUMPULAN CERITA LAPANGAN          -->
+  <!-- ========================================== -->
+  <section class="w-full bg-white py-16 border-b border-gray-100" id="section-stories-lapangan">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+      <div class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
+        <div>
+          <h2 class="text-xl font-bold text-neutral-900 tracking-tight flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#308935]">explore</span>
+            <span>Cerita Lapangan Terkait</span>
+          </h2>
+          <p class="text-xs text-neutral-500 mt-1" id="story-filter-status">Menampilkan seluruh cerita lapangan dari semua wilayah operasional.</p>
+        </div>
+        <button id="reset-map-filter-btn" class="hidden text-xs font-bold text-red-600 bg-red-50 border border-red-200 px-4 py-2 rounded-xl hover:bg-red-100 transition cursor-pointer">
+          Reset Filter Peta
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="stories-grid-container">
+        {% for story in all_stories %}
+        <div class="story-lapangan-card bg-white border border-gray-100 rounded-2xl p-5 shadow-sm space-y-4 transition-all duration-300 hover:shadow-md"
+             data-provinsi-kode="{{ story.lokasi.kode_wilayah|default:'all' }}">
+          <div class="flex items-center gap-2 text-xs font-bold text-[#308935] bg-emerald-50 px-3 py-1.5 rounded-xl w-max">
+            <span class="material-symbols-outlined text-sm">location_on</span>
+            <span>{{ story.lokasi.nama_provinsi }}</span>
+          </div>
+          <h3 class="text-base font-bold text-neutral-900 line-clamp-2 leading-snug">{{ story.judul }}</h3>
+          <p class="text-xs text-neutral-500 line-clamp-3 leading-relaxed">{{ story.short }}</p>
+          <a href="{% url 'detail-story' slug=story.slug %}" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#308935] hover:underline" style="text-decoration:none;">
+            Baca Cerita Lengkap <span class="material-symbols-outlined text-xs">arrow_forward</span>
+          </a>
+        </div>
+        {% empty %}
+        <p class="text-sm text-neutral-400 col-span-full font-medium py-4">Belum ada unggahan cerita lapangan.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- SEKSI 4: FILTER LIST CARD GRID PROYEK -->
+  <!-- ========================================== -->
+  <section class="w-full bg-surface pt-12 pb-24 border-b border-border-subtle/50">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter" id="project-grid">
         {% for project in projects %}
@@ -94,11 +241,9 @@
               <span>{{ project.location.nama_provinsi|default:"Wilayah Kerja BPH" }}</span>
             </div>
             <h3 class="font-headline-md text-lg font-bold text-on-background mb-3 line-clamp-2 group-hover:text-primary transition-colors">{{ project.name }}</h3>
-            
             <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-grow line-clamp-3 leading-relaxed">
               {{ project.description|striptags }}
             </p>
-            
             <span class="inline-flex items-center gap-2 text-primary font-label-caps text-xs font-bold uppercase tracking-wider">Lihat Detail <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
           </div>
         </a>
@@ -118,22 +263,18 @@
     </div>
   </section>
 
-  <!-- 💡 FIX UTAMA: SEKSI MITRA SINKRON DATABASE & SEAMLESS LOOPING -->
+  <!-- SEKSI CAROUSEL MITRA BERJALAN -->
   <section id="mitra-section" class="w-full bg-surface-container-lowest border-y border-border-subtle py-20 overflow-hidden">
     <div class="space-y-16">
-      
       <div class="text-center max-w-xl mx-auto px-margin-mobile md:px-margin-desktop">
         <span class="font-label-caps text-[11px] font-bold tracking-widest text-primary uppercase bg-primary/10 px-3 py-1 rounded-full mb-3 inline-block">Our Partners</span>
         <h2 class="font-headline-xl text-2xl md:text-3xl font-bold text-on-surface leading-tight">Kemitraan &amp; Kolaborasi Strategis</h2>
         <p class="font-body-md text-sm text-on-surface-variant mt-2">PT Bhumi Pasa Hijau bergerak bersama berbagai instansi dalam melahirkan solusi pelestarian ekosistem yang terukur.</p>
       </div>
-
       <div class="space-y-4">
         <h3 class="font-headline-lg text-xs font-bold text-center text-text-muted uppercase tracking-widest px-margin-mobile">── Mitra Kolaborasi Resmi ──</h3>
         <div class="ticker-container w-full overflow-hidden py-2 bg-gradient-to-r from-transparent via-surface to-transparent">
           <div class="animate-ticker-left gap-6 px-3">
-            
-            <!-- LOOP BARIS SET 1: Mengambil Data Asli Langsung Dari DB Klien -->
             {% for client in clients %}
             <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-4 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
               {% if client.logo %}
@@ -149,8 +290,6 @@
             {% empty %}
             <p class="text-xs text-neutral-400 w-full text-center py-4">Belum ada data logo mitra.</p>
             {% endfor %}
-
-            <!-- LOOP BARIS SET 2: Duplikasi Wajib Agar Efek Gerakan Looping Tidak Patah -->
             {% for client in clients %}
             <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-4 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
               {% if client.logo %}
@@ -164,11 +303,9 @@
               </div>
             </div>
             {% endfor %}
-
           </div>
         </div>
       </div>
-
     </div>
   </section>
 
@@ -176,57 +313,214 @@
 {% endblock %}
 
 {% block extra_js %}
+<!-- D3.js untuk render peta GeoJSON -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+
+    const pins = document.querySelectorAll('.map-province-pin');
+    const popovers = document.querySelectorAll('.map-project-popover');
+    const storyCards = document.querySelectorAll('.story-lapangan-card');
+    const resetBtn = document.getElementById('reset-map-filter-btn');
+    const statusText = document.getElementById('story-filter-status');
+    const mapContainer = document.getElementById('map-svg-container');
+    const mapWrapper = document.querySelector('.indonesia-map-wrapper');
+
+    // Kode wilayah provinsi yang punya proyek (dari Django context)
+    const provincesWithProject = new Set(
+        Array.from(pins).map(pin => pin.getAttribute('data-kode'))
+    );
+
+    let projection, pathGenerator;
+
+    // ==========================================
+    // 1. LOAD GEOJSON & GAMBAR PETA PAKAI D3
+    // ==========================================
+    // Ganti URL ini sesuai lokasi file JSON kamu di static Django,
+    // contoh: {% static 'data/indonesia_provinces.json' %}
+    const GEOJSON_URL = "{% static 'data/indonesia_provinces.json' %}";
+
+    d3.json(GEOJSON_URL).then(function (geojson) {
+
+        const width = mapContainer.clientWidth;
+        const height = mapContainer.clientHeight;
+
+        const svg = d3.select(mapContainer)
+            .append('svg')
+            .attr('viewBox', `0 0 ${width} ${height}`)
+            .attr('preserveAspectRatio', 'xMidYMid meet');
+
+        // Proyeksi Mercator, di-fit otomatis supaya seluruh Indonesia
+        // pas di dalam container (tidak perlu hitung manual)
+        projection = d3.geoMercator().fitSize([width, height], geojson);
+        pathGenerator = d3.geoPath().projection(projection);
+
+        svg.selectAll('path.province-path')
+            .data(geojson.features)
+            .enter()
+            .append('path')
+            .attr('class', d => {
+                const kode = d.properties.kode_wilayah;
+                return 'province-path' + (provincesWithProject.has(kode) ? ' has-project' : '');
+            })
+            .attr('id', d => `province-${d.properties.kode_wilayah}`)
+            .attr('d', pathGenerator)
+            .on('click', function (event, d) {
+                const kode = d.properties.kode_wilayah;
+                if (provincesWithProject.has(kode)) {
+                    event.stopPropagation();
+                    activateProvince(kode);
+                }
+            });
+
+        // Setelah peta selesai digambar, posisikan pin pakai centroid asli
+        // dari geometry (bukan tebak-tebak persen lagi)
+        positionPins(geojson, width, height);
+    }).catch(function (err) {
+        console.error('Gagal memuat data peta:', err);
+        mapContainer.innerHTML = '<p class="text-sm text-red-500 flex items-center justify-center h-full">Peta gagal dimuat. Pastikan file indonesia_provinces.json ada di static/data/.</p>';
+    });
+
+    // ==========================================
+    // 2. POSISIKAN PIN BERDASARKAN CENTROID GEOJSON
+    // ==========================================
+    function positionPins(geojson, width, height) {
+        const featureByKode = {};
+        geojson.features.forEach(f => {
+            featureByKode[f.properties.kode_wilayah] = f;
+        });
+
+        pins.forEach(pin => {
+            const kode = pin.getAttribute('data-kode');
+            const feature = featureByKode[kode];
+            if (!feature) return;
+
+            const centroid = pathGenerator.centroid(feature);
+            if (!centroid || isNaN(centroid[0]) || isNaN(centroid[1])) return;
+
+            const leftPct = (centroid[0] / width) * 100;
+            const topPct = (centroid[1] / height) * 100;
+
+            pin.style.left = `${leftPct}%`;
+            pin.style.top = `${topPct}%`;
+            pin.style.display = 'block';
+
+            pin.dataset.leftPct = leftPct;
+            pin.dataset.topPct = topPct;
+        });
+    }
+
+    // ==========================================
+    // 3. INTERAKSI PIN & POPOVER
+    // ==========================================
+    function activateProvince(kode) {
+        popovers.forEach(pop => pop.style.display = 'none');
+        pins.forEach(p => p.classList.remove('active-pin'));
+        document.querySelectorAll('.province-path').forEach(p => p.classList.remove('active-province'));
+
+        const pin = document.getElementById(`pin-prov-${kode}`);
+        const provincePath = document.getElementById(`province-${kode}`);
+        if (provincePath) provincePath.classList.add('active-province');
+        if (!pin) return;
+
+        pin.classList.add('active-pin');
+        const popover = document.getElementById(`popover-prov-${kode}`);
+        if (popover) {
+            const leftPct = parseFloat(pin.dataset.leftPct || 0);
+            const topPct = parseFloat(pin.dataset.topPct || 0);
+            popover.style.top = `calc(${topPct}% - 12px)`;
+            popover.style.left = `calc(${leftPct}% + 15px)`;
+            popover.style.display = 'block';
+        }
+
+        let matchStoryCount = 0;
+        storyCards.forEach(card => {
+            const cardProvKode = card.getAttribute('data-provinsi-kode');
+            if (cardProvKode === kode) {
+                card.classList.remove('hidden');
+                matchStoryCount++;
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+
+        const provName = pin.getAttribute('data-name');
+        statusText.innerText = `Menampilkan ${matchStoryCount} cerita lapangan di Provinsi ${provName}.`;
+        if (resetBtn) resetBtn.classList.remove('hidden');
+    }
+
+    pins.forEach(pin => {
+        pin.addEventListener('click', (e) => {
+            e.stopPropagation();
+            activateProvince(pin.getAttribute('data-kode'));
+        });
+    });
+
+    document.addEventListener('click', () => {
+        popovers.forEach(pop => pop.style.display = 'none');
+        pins.forEach(p => p.classList.remove('active-pin'));
+        document.querySelectorAll('.province-path').forEach(p => p.classList.remove('active-province'));
+    });
+
+    if (resetBtn) {
+        resetBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            storyCards.forEach(card => card.classList.remove('hidden'));
+            statusText.innerText = "Menampilkan seluruh cerita lapangan dari semua wilayah operasional.";
+            resetBtn.classList.add('hidden');
+            popovers.forEach(pop => pop.style.display = 'none');
+            pins.forEach(p => p.classList.remove('active-pin'));
+            document.querySelectorAll('.province-path').forEach(p => p.classList.remove('active-province'));
+        });
+    }
+
+    // ==========================================
+    // 4. LOGIKA FILTER GRID CARD PROYEK (tetap sama seperti sebelumnya)
+    // ==========================================
     const filterButtons = document.querySelectorAll('.filter-btn');
     const yearInput = document.getElementById('year-filter');
     const cards = document.querySelectorAll('.project-card');
     const loadMoreBtn = document.getElementById('load-more-btn');
     const loadLessBtn = document.getElementById('load-less-btn');
-
     const dropdownToggle = document.getElementById('dropdown-toggle');
     const dropdownMenu = document.getElementById('dropdown-menu');
     const dropdownLabel = document.getElementById('dropdown-label');
     const dropdownIcon = document.getElementById('dropdown-icon');
     const dropdownItems = document.querySelectorAll('.dropdown-item');
+    let visibleLimit = 6;
 
-    let visibleLimit = 6; 
-
-    dropdownToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dropdownMenu.classList.toggle('hidden');
-      dropdownIcon.classList.toggle('rotate-180');
-    });
-
-    document.addEventListener('click', () => {
-      dropdownMenu.classList.add('hidden');
-      dropdownIcon.classList.remove('rotate-180');
-    });
+    if (dropdownToggle && dropdownMenu) {
+      dropdownToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('hidden');
+        if (dropdownIcon) dropdownIcon.classList.toggle('rotate-180');
+      });
+      document.addEventListener('click', () => {
+        dropdownMenu.classList.add('hidden');
+        if (dropdownIcon) dropdownIcon.classList.remove('rotate-180');
+      });
+    }
 
     dropdownItems.forEach(item => {
       item.addEventListener('click', () => {
         const val = item.getAttribute('data-value');
-        const text = item.textContent;
-
-        yearInput.value = val;
-        dropdownLabel.textContent = text;
-        
-        visibleLimit = 6; 
-        applyFilters(); 
+        if (yearInput) yearInput.value = val;
+        if (dropdownLabel) dropdownLabel.textContent = item.textContent;
+        visibleLimit = 6;
+        applyFilters();
       });
     });
 
     function applyFilters() {
       const activeBtn = document.querySelector('.filter-btn.bg-primary');
       const selectedCategory = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
-      const selectedYear = yearInput.value;
-
+      const selectedYear = yearInput ? yearInput.value : 'all';
       let validMatchCount = 0;
 
       cards.forEach(card => {
         const cardCategories = (card.getAttribute('data-category') || '').trim().split(/\s+/).filter(Boolean);
         const cardYear = card.getAttribute('data-year');
-
         const matchCategory = (selectedCategory === 'all' || cardCategories.includes(selectedCategory));
         const matchYear = (selectedYear === 'all' || cardYear === selectedYear);
 
@@ -234,79 +528,47 @@
           validMatchCount++;
           if (validMatchCount <= visibleLimit) {
             card.classList.remove('hidden');
-            card.classList.remove('opacity-0');
-            card.classList.add('opacity-100');
+            card.style.opacity = "1";
           } else {
-            card.classList.add('hidden', 'opacity-0');
-            card.classList.remove('opacity-100');
+            card.classList.add('hidden');
           }
         } else {
-          card.classList.add('hidden', 'opacity-0');
-          card.classList.remove('opacity-100');
+          card.classList.add('hidden');
         }
       });
 
-      if (validMatchCount > visibleLimit) {
-        loadMoreBtn.classList.remove('hidden');
-      } else {
-        loadMoreBtn.classList.add('hidden');
+      if (loadMoreBtn) {
+        if (validMatchCount > visibleLimit) loadMoreBtn.classList.remove('hidden');
+        else loadMoreBtn.classList.add('hidden');
       }
-
-      if (visibleLimit > 6) {
-        loadLessBtn.classList.remove('hidden');
-      } else {
-        loadLessBtn.classList.add('hidden');
+      if (loadLessBtn) {
+        if (visibleLimit > 6) loadLessBtn.classList.remove('hidden');
+        else loadLessBtn.classList.add('hidden');
       }
     }
 
-    loadMoreBtn.addEventListener('click', () => {
-      visibleLimit += 6;
-      applyFilters();
-    });
-
-    loadLessBtn.addEventListener('click', () => {
-      if (visibleLimit > 6) {
-        visibleLimit -= 6;
-        applyFilters();
-        document.getElementById('project-grid').scrollIntoView({ behavior: 'smooth', block: 'end' });
-      }
-    });
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener('click', () => { visibleLimit += 6; applyFilters(); });
+    }
+    if (loadLessBtn) {
+      loadLessBtn.addEventListener('click', () => { if (visibleLimit > 6) { visibleLimit -= 6; applyFilters(); } });
+    }
 
     filterButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        
         filterButtons.forEach(b => {
-          b.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm', 'hover:text-surface-white');
+          b.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
           b.classList.add('bg-transparent', 'border', 'border-outline-variant', 'text-on-surface-variant');
         });
-        
-        btn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm', 'hover:text-surface-white');
+        btn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
         btn.classList.remove('bg-transparent', 'border', 'border-outline-variant', 'text-on-surface-variant');
-        
-        visibleLimit = 6; 
+        visibleLimit = 6;
         applyFilters();
       });
     });
 
-    const customDropdown = document.getElementById('custom-dropdown-container');
-    if (customDropdown) {
-      customDropdown.addEventListener('click', (e) => {
-        e.stopPropagation();
-      });
-    }
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const URLFilterValue = urlParams.get('filter');
-
-    if (URLFilterValue) {
-      const targetButton = document.querySelector(`.filter-btn[data-filter="${URLFilterValue.toLowerCase()}"]`);
-      if (targetButton) {
-        targetButton.click();
-      }
-    } else {
-      applyFilters();
-    }
+    applyFilters();
   });
 </script>
 {% endblock %}

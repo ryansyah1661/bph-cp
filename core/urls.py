@@ -28,6 +28,8 @@ urlpatterns = [
     path('articles/detail/<slug:slug>/', views.detail_articles_view, name='detail-articles'),
     path('experience/detail/<slug:slug>/', views.detail_experience_view, name='detail-experience'),
     path('services/detail/<slug:slug>/', views.detail_services_view, name='detail-services'),
+    
+    # 💡 FIX SAKRAL: Diubah menjadi 'detail-story' agar konsisten dengan struktur url strip lu yang lain
     path('story/detail/<slug:slug>/', views.detail_story_view, name='detail-story'),
 
     # URL ROUTING UNTUK LOGIN & LOGOUT
