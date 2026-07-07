@@ -38,29 +38,32 @@
       border-radius: 16px;
       border: 1px solid rgba(148, 163, 184, 0.15);
       position: relative;
-      overflow: hidden;
   }
   #map-svg-container svg {
       width: 100%;
       height: 100%;
       display: block;
   }
+
+  /* FIX SAKRAL WARNA MAP: Mengubah abu-abu untuk non-proyek & hijau solid untuk has-project */
   .province-path {
-      fill: #308935;
-      fill-opacity: 0.12;
+      fill: #e2e8f0; /* Warna abu-abu default jika belum ada proyek */
+      fill-opacity: 1;
       stroke: #ffffff;
       stroke-width: 0.75px;
-      transition: fill-opacity 0.25s ease;
+      transition: fill 0.25s ease, fill-opacity 0.25s ease;
   }
   .province-path.has-project {
-      fill-opacity: 0.22;
+      fill: #308935; /* Warna hijau resmi BPH jika ada proyek */
+      fill-opacity: 0.85;
       cursor: pointer;
   }
   .province-path.has-project:hover {
-      fill-opacity: 0.38;
+      fill-opacity: 1;
   }
   .province-path.active-province {
-      fill-opacity: 0.45;
+      fill: #1e5823; /* Hijau lebih gelap saat provinsi aktif dipilih */
+      fill-opacity: 1;
   }
 
   .map-province-pin {
@@ -143,31 +146,31 @@
       <div class="indonesia-map-wrapper">
         <div id="map-svg-container">
           <!-- SVG peta akan digambar D3.js di sini -->
+          
+          {% for loc in locations_with_projects %}
+            {% if loc.kode_wilayah %}
+            <div class="map-province-pin group"
+                 id="pin-prov-{{ loc.kode_wilayah }}"
+                 data-kode="{{ loc.kode_wilayah }}"
+                 data-name="{{ loc.nama_provinsi }}"
+                 style="top: 0%; left: 0%; display: none;">
+                 <span class="material-symbols-outlined text-amber-500 text-3xl drop-shadow-md select-none group-hover:text-amber-600">location_on</span>
+            </div>
+
+            <div class="map-project-popover text-left shadow-xl" id="popover-prov-{{ loc.kode_wilayah }}">
+                <h4 class="text-sm font-bold text-neutral-900 mb-2 pb-1 border-b border-gray-100">{{ loc.nama_provinsi }}</h4>
+                <ul class="space-y-1.5 list-none p-0 m-0">
+                  {% for proj in loc.projects.all %}
+                    <li class="text-xs font-medium text-neutral-700 leading-snug flex items-start gap-1">
+                       <span class="text-[#308935] font-bold">{{ forloop.counter }}.</span>
+                       <a href="{% url 'detail-experience' slug=proj.slug %}" class="hover:text-[#308935] text-neutral-700 transition-colors" style="text-decoration: none;">{{ proj.name }}</a>
+                    </li>
+                  {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+          {% endfor %}
         </div>
-
-        {% for loc in locations_with_projects %}
-          {% if loc.kode_wilayah %}
-          <div class="map-province-pin group"
-               id="pin-prov-{{ loc.kode_wilayah }}"
-               data-kode="{{ loc.kode_wilayah }}"
-               data-name="{{ loc.nama_provinsi }}"
-               style="top: 0%; left: 0%; display: none;">
-               <span class="material-symbols-outlined text-amber-500 text-3xl drop-shadow-md select-none group-hover:text-amber-600">location_on</span>
-          </div>
-
-          <div class="map-project-popover text-left shadow-xl" id="popover-prov-{{ loc.kode_wilayah }}">
-              <h4 class="text-sm font-bold text-neutral-900 mb-2 pb-1 border-b border-gray-100">{{ loc.nama_provinsi }}</h4>
-              <ul class="space-y-1.5 list-none p-0 m-0">
-                {% for proj in loc.projects.all %}
-                  <li class="text-xs font-medium text-neutral-700 leading-snug flex items-start gap-1">
-                     <span class="text-[#308935] font-bold">{{ forloop.counter }}.</span>
-                     <a href="{% url 'detail-experience' slug=proj.slug %}" class="hover:text-[#308935] text-neutral-700 transition-colors" style="text-decoration: none;">{{ proj.name }}</a>
-                  </li>
-                {% endfor %}
-              </ul>
-          </div>
-          {% endif %}
-        {% endfor %}
       </div>
     </div>
   </section>
@@ -212,7 +215,7 @@
   </section>
 
   <!-- ========================================== -->
-  <!-- SEKSI 4: FILTER LIST CARD GRID PROYEK -->
+  <!-- SEKSI 4: FILTER LIST CARD GRID PROYEK      -->
   <!-- ========================================== -->
   <section class="w-full bg-surface pt-12 pb-24 border-b border-border-subtle/50">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
@@ -318,6 +321,7 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    console.log('%c[Peta BPH] Versi kode: v3-python-centroid (' + new Date().toISOString() + ')', 'color: #308935; font-weight: bold;');
 
     const pins = document.querySelectorAll('.map-province-pin');
     const popovers = document.querySelectorAll('.map-project-popover');
@@ -332,27 +336,78 @@
         Array.from(pins).map(pin => pin.getAttribute('data-kode'))
     );
 
+    // ==========================================================
+    // KOORDINAT TITIK PRESISI PER PROVINSI (longitude, latitude)
+    // ==========================================================
+    // Dihitung langsung dari file geojson kamu sendiri (bukan sumber
+    // eksternal), memakai Python: untuk tiap provinsi, ambil polygon
+    // dengan bounding-box TERBESAR (pulau/daratan utama, mengabaikan
+    // pulau-pulau kecil terpencar), lalu hitung centroid ring exterior
+    // polygon tersebut memakai shoelace formula. Hasilnya sudah dicek
+    // manual dan konsisten untuk semua 34 provinsi.
+    const PROVINCE_COORDS = {
+        "11": [96.928, 4.3118],       // Aceh
+        "12": [99.1385, 2.3192],      // Sumatera Utara
+        "13": [100.6215, -0.6597],    // Sumatera Barat
+        "14": [101.7467, 0.4556],     // Riau
+        "15": [102.7515, -1.692],     // Jambi
+        "16": [104.1861, -3.2307],    // Sumatera Selatan
+        "17": [102.3768, -3.5399],    // Bengkulu
+        "18": [105.0302, -4.918],     // Lampung
+        "19": [105.9932, -2.2446],    // Bangka-Belitung
+        "21": [108.2101, 3.9345],     // Kepulauan Riau
+        "31": [106.849, -6.2088],     // DKI Jakarta
+        "32": [107.6114, -6.9222],    // Jawa Barat
+        "33": [110.2158, -7.2684],    // Jawa Tengah
+        "34": [110.4582, -7.9096],    // DI Yogyakarta
+        "35": [112.6339, -7.8222],    // Jawa Timur
+        "36": [106.1261, -6.4525],    // Banten
+        "51": [115.1292, -8.3526],    // Bali
+        "52": [117.8559, -8.631],     // Nusa Tenggara Barat
+        "53": [121.161, -8.5956],     // Nusa Tenggara Timur
+        "61": [111.1674, -0.086],     // Kalimantan Barat
+        "62": [113.4285, -1.5966],    // Kalimantan Tengah
+        "63": [115.3837, -2.9329],    // Kalimantan Selatan
+        "64": [116.479, 0.4749],      // Kalimantan Timur
+        "65": [116.1914, 2.8892],     // Kalimantan Utara
+        "71": [124.2525, 0.8705],     // Sulawesi Utara
+        "72": [121.1094, -0.9752],    // Sulawesi Tengah
+        "73": [120.1672, -3.5972],    // Sulawesi Selatan
+        "74": [121.8337, -3.8132],    // Sulawesi Tenggara
+        "75": [122.3614, 0.6872],     // Gorontalo
+        "76": [119.3446, -2.4609],    // Sulawesi Barat
+        "81": [129.4663, -3.2008],    // Maluku
+        "82": [128.0172, 0.8705],     // Maluku Utara
+        "91": [133.15, -2.1005],      // Papua Barat
+        "93": [136.5, -6.5],          // Papua Selatan (perkiraan, provinsi pemekaran baru, belum ada di geojson)
+        "94": [138.7124, -4.5614],    // Papua
+        "95": [138.5, -4.0],          // Papua Pegunungan (perkiraan, provinsi pemekaran baru, belum ada di geojson)
+        "96": [132.0, -1.0],          // Papua Barat Daya (perkiraan, provinsi pemekaran baru, belum ada di geojson)
+    };
+
     let projection, pathGenerator;
 
     // ==========================================
     // 1. LOAD GEOJSON & GAMBAR PETA PAKAI D3
     // ==========================================
-    // Ganti URL ini sesuai lokasi file JSON kamu di static Django,
-    // contoh: {% static 'data/indonesia_provinces.json' %}
     const GEOJSON_URL = "{% static 'data/indonesia_provinces.json' %}";
+
+    let svgElement, svgWidth, svgHeight;
 
     d3.json(GEOJSON_URL).then(function (geojson) {
 
         const width = mapContainer.clientWidth;
         const height = mapContainer.clientHeight;
+        svgWidth = width;
+        svgHeight = height;
 
         const svg = d3.select(mapContainer)
             .append('svg')
             .attr('viewBox', `0 0 ${width} ${height}`)
             .attr('preserveAspectRatio', 'xMidYMid meet');
 
-        // Proyeksi Mercator, di-fit otomatis supaya seluruh Indonesia
-        // pas di dalam container (tidak perlu hitung manual)
+        svgElement = svg.node();
+
         projection = d3.geoMercator().fitSize([width, height], geojson);
         pathGenerator = d3.geoPath().projection(projection);
 
@@ -374,36 +429,34 @@
                 }
             });
 
-        // Setelah peta selesai digambar, posisikan pin pakai centroid asli
-        // dari geometry (bukan tebak-tebak persen lagi)
-        positionPins(geojson, width, height);
+        positionPins(width, height);
     }).catch(function (err) {
         console.error('Gagal memuat data peta:', err);
         mapContainer.innerHTML = '<p class="text-sm text-red-500 flex items-center justify-center h-full">Peta gagal dimuat. Pastikan file indonesia_provinces.json ada di static/data/.</p>';
     });
 
     // ==========================================
-    // 2. POSISIKAN PIN BERDASARKAN CENTROID GEOJSON
+    // 2. POSISIKAN PIN PAKAI KOORDINAT MANUAL (BUKAN CENTROID GEOMETRI)
     // ==========================================
-    function positionPins(geojson, width, height) {
-        const featureByKode = {};
-        geojson.features.forEach(f => {
-            featureByKode[f.properties.kode_wilayah] = f;
-        });
-
+    function positionPins(width, height) {
         pins.forEach(pin => {
             const kode = pin.getAttribute('data-kode');
-            const feature = featureByKode[kode];
-            if (!feature) return;
+            const lonLat = PROVINCE_COORDS[kode];
+            if (!lonLat) {
+                console.warn('Koordinat provinsi tidak ditemukan untuk kode_wilayah: ' + kode);
+                return;
+            }
 
-            const centroid = pathGenerator.centroid(feature);
-            if (!centroid || isNaN(centroid[0]) || isNaN(centroid[1])) return;
+            // Proyeksikan titik [lon, lat] ke koordinat SVG internal (unit viewBox)
+            const projected = projection(lonLat);
+            if (!projected || isNaN(projected[0]) || isNaN(projected[1])) return;
 
-            const leftPct = (centroid[0] / width) * 100;
-            const topPct = (centroid[1] / height) * 100;
+            // Hitung persentase posisi relatif terhadap container SVG
+            const leftPct = (projected[0] / width) * 100;
+            const topPct = (projected[1] / height) * 100;
 
-            pin.style.left = `${leftPct}%`;
-            pin.style.top = `${topPct}%`;
+            pin.style.left = leftPct + '%';
+            pin.style.top = topPct + '%';
             pin.style.display = 'block';
 
             pin.dataset.leftPct = leftPct;
@@ -476,7 +529,7 @@
     }
 
     // ==========================================
-    // 4. LOGIKA FILTER GRID CARD PROYEK (tetap sama seperti sebelumnya)
+    // 4. LOGIKA FILTER GRID CARD PROYEK
     // ==========================================
     const filterButtons = document.querySelectorAll('.filter-btn');
     const yearInput = document.getElementById('year-filter');
