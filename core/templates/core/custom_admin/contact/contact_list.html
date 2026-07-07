@@ -19,7 +19,7 @@
                 </tr>
             </thead>
             <tbody class="text-gray-700 divide-y divide-gray-50">
-                {% for msg in messages %}
+                {% for msg in contacts %}
                 <tr>
                     <td class="p-3">
                         <div class="font-semibold text-emerald-800">{{ msg.nama_lengkap }}</div>
@@ -28,8 +28,12 @@
                     <td class="p-3 font-medium text-gray-700">{{ msg.subjek }}</td>
                     <td class="p-3 text-gray-500 max-w-md leading-relaxed whitespace-pre-line">{{ msg.pesan }}</td>
                     <td class="p-3 text-center text-gray-400 text-xs font-medium">{{ msg.tanggal_kirim|date:"d M Y, H:i" }} WIB</td>
-                    <td class="p-3 text-center">
-                        <a href="{% url 'contact_delete' msg.pk %}" class="text-red-600 hover:underline font-semibold">Hapus</a>
+                    <td class="p-3 text-center align-middle whitespace-nowrap">
+                        <div class="flex justify-center items-center gap-2">
+                            <a href="{% url 'contact_delete' msg.pk %}" title="Hapus" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
+                                <span class="material-symbols-outlined text-sm">delete</span>
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 {% empty %}

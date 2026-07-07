@@ -8,6 +8,14 @@
 
 <form method="post" enctype="multipart/form-data" class="w-full" id="modul-form">
     {% csrf_token %}
+
+    {% if form.errors %}
+    <div style="background:#fee2e2; border:1px solid #ef4444; padding:12px; border-radius:8px; margin-bottom:16px; color:#991b1b; font-size:13px;">
+        <strong>Terjadi kesalahan saat menyimpan data:</strong>
+        {{ form.errors }}
+    </div>
+    {% endif %}
+
     <div class="flex gap-6 items-start">
         
         <div class="flex-1 space-y-5">

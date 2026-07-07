@@ -18,14 +18,7 @@
         </div>
     </div>
 
-    {% if messages %}
-        {% for message in messages %}
-        <div class="p-4 mb-4 text-sm text-emerald-800 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center gap-2">
-            <span class="material-symbols-outlined text-base">check_circle</span>
-            {{ message }}
-        </div>
-        {% endfor %}
-    {% endif %}
+
 
     <div class="bg-white rounded-xl border border-[#eef2f5] shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
@@ -44,10 +37,13 @@
                         <td class="py-4 px-5 text-sm text-neutral-500 font-medium text-center">{{ forloop.counter }}</td>
                         <td class="py-4 px-5 text-sm font-semibold text-neutral-800">{{ category.name }}</td>
                         <td class="py-4 px-5 text-sm text-neutral-500 font-mono">{{ category.slug }}</td>
-                        <td class="py-4 px-5 text-center">
-                            <div class="flex items-center justify-center">
-                                <button type="button" onclick="openDeleteModal('{{ category.id }}', '{{ category.name }}')" class="p-2 text-neutral-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors flex items-center justify-center border-none bg-transparent cursor-pointer" title="Hapus">
-                                    <span class="material-symbols-outlined text-[18px]">delete</span>
+                        <td class="py-4 px-5 text-center align-middle whitespace-nowrap">
+                            <div class="flex justify-center items-center gap-2">
+                                <a href="{% url 'category_update' category.pk %}" title="Edit" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
+                                    <span class="material-symbols-outlined text-sm">edit</span>
+                                </a>
+                                <button type="button" onclick="openDeleteModal('{{ category.id }}', '{{ category.name }}')" title="Hapus" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition cursor-pointer border-none">
+                                    <span class="material-symbols-outlined text-sm">delete</span>
                                 </button>
                             </div>
                         </td>

@@ -36,9 +36,15 @@
                     </td>
                     <td class="p-3 font-semibold text-emerald-800">{{ service.title }}</td>
                     <td class="p-3 text-gray-400 text-xs font-mono">{{ service.slug }}</td>
-                    <td class="p-3 text-center space-x-2">
-                        <a href="{% url 'service_update' service.pk %}" class="text-amber-600 hover:underline font-semibold" style="text-decoration: none;">Edit</a>
-                        <a href="{% url 'service_delete' service.pk %}" class="text-red-600 hover:underline font-semibold" style="text-decoration: none;">Hapus</a>
+                    <td class="p-3 text-center align-middle whitespace-nowrap">
+                        <div class="flex justify-center items-center gap-2">
+                            <a href="{% url 'service_update' service.pk %}" title="Edit" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
+                                <span class="material-symbols-outlined text-sm">edit</span>
+                            </a>
+                            <a href="{% url 'service_delete' service.pk %}" title="Hapus" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
+                                <span class="material-symbols-outlined text-sm">delete</span>
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 {% empty %}

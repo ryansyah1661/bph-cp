@@ -78,6 +78,7 @@ urlpatterns = [
     # URL ROUTING CRUD KATEGORI
     path('be/categories/', views.CategoryListView.as_view(), name='category_list'),
     path('be/categories/add/', views.CategoryCreateView.as_view(), name='category_create'),
+    path('be/categories/<int:pk>/edit/', views.CategoryUpdateView.as_view(), name='category_update'),
     path('be/categories/<int:pk>/delete/', views.CategoryDeleteView.as_view(), name='category_delete'),
 
     # URL ROUTING CRUD DOKUMEN (MODUL)

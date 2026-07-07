@@ -11,6 +11,13 @@
 <form method="post" enctype="multipart/form-data" id="article-form">
     {% csrf_token %}
 
+    {% if form.errors %}
+    <div style="background:#fee2e2; border:1px solid #ef4444; padding:12px; border-radius:8px; margin-bottom:16px; color:#991b1b; font-size:13px;">
+        <strong>Terjadi kesalahan saat menyimpan data:</strong>
+        {{ form.errors }}
+    </div>
+    {% endif %}
+
     <div class="flex gap-6 items-start">
 
         <div class="flex-1 space-y-5">
@@ -87,11 +94,6 @@
     }
 
     // --- 2. FIX TOMBOL SIMPAN MACET ---
-    // PENTING: Sinkronisasi HARUS realtime (text-change), bukan hanya di
-    // event 'submit'. Browser mengecek field "required" SEBELUM event
-    // 'submit' ditembak, jadi kalau sync cuma di listener submit, textarea
-    // masih keburu kosong saat validasi jalan -> selalu ketolak walau
-    // Quill sudah diisi.
     var formElement = document.getElementById('article-form');
 
     function syncQuillToTextarea() {
@@ -101,7 +103,6 @@
     }
 
     quill.on('text-change', syncQuillToTextarea);
-    // Jaga-jaga tetap sync juga sesaat sebelum submit
     formElement.addEventListener('submit', syncQuillToTextarea);
 
     // --- 3. FIX KALENDER DATE PICKER ---
@@ -115,14 +116,18 @@
     var slugInput = document.querySelector('input[name="slug"]');
 
     if (judulInput && slugInput) {
+        judulInput.removeAttribute('maxlength');
+        slugInput.removeAttribute('maxlength');
+
         judulInput.addEventListener('input', function() {
             var slugify = judulInput.value
                 .toLowerCase()
                 .trim()
-                .replace(/[^\w\s-]/g, '')     // Hapus karakter non-alphanumeric
-                .replace(/[\s_]+/g, '-')       // Ganti spasi jadi tanda hubung (-)
-                .replace(/^-+|-+$/g, '');      // Bersihkan tanda hubung di awal/akhir
-            slugInput.value = slugify;
+                .replace(/[^\w\s-]/g, '')
+                .replace(/[\s_]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+            
+            slugInput.value = slugify; 
         });
     }
 
@@ -174,13 +179,6 @@
 </script>
 
 <style>
-    /*
-        PENTING: textarea "deskripsi" TIDAK boleh pakai display:none.
-        Kalau field ini required, display:none membuat browser tidak bisa
-        menampilkan pesan validasi HTML5 saat kosong -> submit diblokir
-        diam-diam tanpa respon apapun (ini penyebab bug tombol macet).
-        Gunakan teknik "visually hidden" di bawah ini sebagai gantinya.
-    */
     textarea[name="deskripsi"] {
         position: absolute;
         width: 1px;

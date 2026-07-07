@@ -159,19 +159,67 @@ class ArticleListView(AdminRequiredMixin, ListView):
 class ArticleCreateView(AdminRequiredMixin, CreateView):
     model = Article
     template_name = 'core/custom_admin/articles/articles_form.html'
-    fields = '__all__'
+    fields = ['judul', 'slug', 'author', 'short', 'deskripsi', 'tanggal', 'gambar']
     success_url = reverse_lazy('article_list')
+
+    def form_valid(self, form):
+        from django.utils.text import slugify
+        
+        # 1. Generate slug dasar dari input form atau dari judul
+        base_slug = form.cleaned_data.get('slug') or slugify(form.cleaned_data.get('judul'))
+        
+        # 2. Potong aman di 200 karakter (umumnya SlugField Django max_length bawaannya 255)
+        # Sisa 55 karakter buat cadangan angka penanda unik (-1, -2, dst)
+        slug = base_slug[:200]
+        
+        # 3. LOGIKA SAKRAL ANTI-BENTROK: Cek ke database apakah slug sudah dipakai
+        # Kalau sudah ada yang kembar, otomatis looping tambah angka di belakangnya
+        queryset = Article.objects.filter(slug=slug)
+        if queryset.exists():
+            original_slug = slug
+            counter = 1
+            while Article.objects.filter(slug=slug).exists():
+                slug = f"{original_slug}-{counter}"
+                counter += 1
+                
+        form.instance.slug = slug
+        messages.success(self.request, 'Artikel baru berhasil ditambahkan!')
+        return super().form_valid(form)
 
 class ArticleUpdateView(AdminRequiredMixin, UpdateView):
     model = Article
     template_name = 'core/custom_admin/articles/articles_form.html'
-    fields = '__all__'
+    fields = ['judul', 'slug', 'author', 'short', 'deskripsi', 'tanggal', 'gambar']
     success_url = reverse_lazy('article_list')
+
+    def form_valid(self, form):
+        from django.utils.text import slugify
+        
+        # Ambil slug dari input form
+        base_slug = form.cleaned_data.get('slug') or slugify(form.cleaned_data.get('judul'))
+        slug = base_slug[:200]
+        
+        # Logika anti-bentrok pas update (abaikan artikel yang sedang diedit ini sendiri)
+        queryset = Article.objects.filter(slug=slug).exclude(pk=self.object.pk)
+        if queryset.exists():
+            original_slug = slug
+            counter = 1
+            while Article.objects.filter(slug=slug).exclude(pk=self.object.pk).exists():
+                slug = f"{original_slug}-{counter}"
+                counter += 1
+                
+        form.instance.slug = slug
+        messages.success(self.request, 'Perubahan artikel berhasil disimpan!')
+        return super().form_valid(form)
 
 class ArticleDeleteView(AdminRequiredMixin, DeleteView):
     model = Article
     template_name = 'core/custom_admin/articles/article_confirm_delete.html'
     success_url = reverse_lazy('article_list')
+    
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'Artikel berhasil dihapus permanen!')
+        return super().delete(request, *args, **kwargs)
 
 # ==========================================
 # 2. MANAGEMENT PROYEK (EXPERIENCE)
@@ -355,7 +403,7 @@ class DocumentDeleteView(AdminRequiredMixin, DeleteView):
 class ContactListView(AdminRequiredMixin, ListView):
     model = ContactMessage
     template_name = 'core/custom_admin/contact/contact_list.html'
-    context_object_name = 'messages'
+    context_object_name = 'contacts'
 
 class ContactDeleteView(AdminRequiredMixin, DeleteView):
     model = ContactMessage

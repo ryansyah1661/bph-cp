@@ -7,7 +7,7 @@ from django.dispatch import receiver
 # === 1. TABEL MASTER KATEGORI ===
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name="Nama Kategori")
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Kategori"
@@ -28,7 +28,7 @@ class Service(models.Model):
     ]
 
     title = models.CharField(max_length=200, verbose_name="Nama Layanan")
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
     portfolio = models.CharField(max_length=3, choices=PORTFOLIO_CHOICES, default='NRM')
     icon = models.CharField(max_length=50, blank=True, help_text="Nama icon Material Symbols, misal: 'forest', 'travel_explore'", verbose_name="Nama Icon Kartu")
     thumbnail = models.ImageField(upload_to='services/thumbs/', blank=True, verbose_name="Foto Kartu Layanan")
@@ -107,7 +107,7 @@ class Location(models.Model):
     ]
 
     nama_provinsi = models.CharField(max_length=150, verbose_name="Nama Provinsi")
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
     # Field baru untuk menentukan titik peta SVG secara otomatis
     kode_wilayah = models.CharField(
         max_length=2, 
@@ -146,7 +146,7 @@ class Client(models.Model):
 # === 6. TABEL PROYEK (Experiences) ===
 class Project(models.Model):
     name = models.CharField(max_length=250, verbose_name="Nama Proyek")
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
     tahun = models.IntegerField(verbose_name="Tahun Pelaksanaan")
     image = models.ImageField(upload_to='projects/thumbs/', verbose_name="Foto Kartu Proyek")
     description = models.TextField(verbose_name="Deskripsi Project")
@@ -191,7 +191,7 @@ class ProjectMetric(models.Model):
 # === 7. TABEL CERITA LAPANGAN (Stories) ===
 class Story(models.Model):
     judul = models.CharField(max_length=250)
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
     tanggal = models.DateField(verbose_name="Tanggal Rilis")
     author = models.CharField(max_length=100, default="Admin BPH")
     
@@ -217,7 +217,7 @@ class Story(models.Model):
 # === 8. TABEL ARTIKEL (Articles) ===
 class Article(models.Model):
     judul = models.CharField(max_length=250)
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
     tanggal = models.DateField(verbose_name="Tanggal Terbit")
     author = models.CharField(max_length=100, default="Admin BPH")
     short = models.TextField(help_text="Ringkasan pendek artikel")
