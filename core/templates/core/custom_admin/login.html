@@ -42,7 +42,7 @@
             </p>
         </div>
 
-        <form class="space-y-5" method="POST" autocomplete="off">
+        <form class="space-y-5" method="POST">
             {% csrf_token %}
             
             <div class="space-y-4">
@@ -51,7 +51,7 @@
                     <div class="relative">
                         <input id="id_username" name="username" type="text" required 
                                class="block w-full px-4 py-3 rounded-xl border border-neutral-300 text-neutral-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 bg-neutral-50/30 transition-all placeholder-neutral-400 font-medium" 
-                               placeholder="Masukkan username" autocomplete="off">
+                               placeholder="Masukkan username" autocomplete="username">
                     </div>
                 </div>
                 
@@ -60,7 +60,7 @@
                     <div class="relative flex items-center bg-neutral-50/30 rounded-xl border border-neutral-300 focus-within:ring-2 focus-within:ring-emerald-600/20 focus-within:border-emerald-600 transition-all">
                         <input id="id_password" name="password" type="password" required 
                                class="block w-full pr-12 h-11 px-4 py-3 bg-transparent text-neutral-900 text-sm focus:outline-none placeholder-neutral-400 font-medium rounded-xl" 
-                               placeholder="••••••••" autocomplete="new-password">
+                               placeholder="••••••••" autocomplete="current-password">
                         <button type="button" id="toggle-password-btn" class="absolute right-3 text-neutral-400 select-none cursor-pointer flex items-center justify-center p-1 rounded-lg transition-colors">
                             <span class="material-symbols-outlined" id="password-eye-icon" style="font-size: 20px;">visibility</span>
                         </button>
@@ -92,22 +92,19 @@
         const togglePasswordBtn = document.getElementById('toggle-password-btn');
         const eyeIcon = document.getElementById('password-eye-icon');
 
-        // Reset paksa state class di awal agar terhindar dari trigger autofill browser
         togglePasswordBtn.className = "absolute right-3 text-neutral-400 select-none cursor-pointer flex items-center justify-center p-1 rounded-lg transition-colors";
 
         togglePasswordBtn.addEventListener('click', function () {
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                eyeIcon.textContent = 'visibility_off'; // Ubah ikon jadi mata dicoret
+                eyeIcon.textContent = 'visibility_off';
                 
-                // HANYA IJO KALO SEDANG DI-CLICK AKTIF (SHOW STATE)
                 togglePasswordBtn.classList.remove('text-neutral-400');
                 togglePasswordBtn.classList.add('text-emerald-600');
             } else {
                 passwordInput.type = 'password';
-                eyeIcon.textContent = 'visibility'; // Kembalikan ke ikon mata biasa
+                eyeIcon.textContent = 'visibility';
                 
-                // BALIK ABU-ABU SEPERTI SEMULA (HIDE STATE)
                 togglePasswordBtn.classList.remove('text-emerald-600');
                 togglePasswordBtn.classList.add('text-neutral-400');
             }

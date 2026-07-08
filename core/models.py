@@ -20,6 +20,20 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
+# === 1b. TABEL FOLDER / ALBUM DOKUMENTASI (TAMBAHAN BARU SAKRAL) ===
+class Folder(models.Model):
+    nama = models.CharField(max_length=255, verbose_name="Nama Folder / Album")
+    tahun = models.IntegerField(verbose_name="Tahun Dokumentasi")
+    kategori = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='folders', verbose_name="Kategori Filter")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Folder / Album Galeri"
+        ordering = ['-tahun', '-id']
+
+    def __str__(self):
+        return f"{self.nama} ({self.tahun})"
+    
 # === 2. TABEL LAYANAN (Services) ===
 class Service(models.Model):
     PORTFOLIO_CHOICES = [
@@ -64,58 +78,26 @@ class ServiceStep(models.Model):
     
 # === 4. TABEL LOKASI (Locations) ===
 class Location(models.Model):
-    # Opsi Kode Provinsi Resmi Berdasarkan Data BPS/Kemendagri
     PROVINCE_CODE_CHOICES = [
-        ('11', '11 - Aceh'),
-        ('12', '12 - Sumatera Utara'),
-        ('13', '13 - Sumatera Barat'),
-        ('14', '14 - Riau'),
-        ('15', '15 - Jambi'),
-        ('16', '16 - Sumatera Selatan'),
-        ('17', '17 - Bengkulu'),
-        ('18', '18 - Lampung'),
-        ('19', '19 - Kepulauan Bangka Belitung'),
-        ('21', '21 - Kepulauan Riau'),
-        ('31', '31 - DKI Jakarta'),
-        ('32', '32 - Jawa Barat'),
-        ('33', '33 - Jawa Tengah'),
-        ('34', '34 - Daerah Istimewa Yogyakarta'),
-        ('35', '35 - Jawa Timur'),
-        ('36', '36 - Banten'),
-        ('51', '51 - Bali'),
-        ('52', '52 - Nusa Tenggara Barat'),
-        ('53', '53 - Nusa Tenggara Timur'),
-        ('61', '61 - Kalimantan Barat'),
-        ('62', '62 - Kalimantan Tengah'),
-        ('63', '63 - Kalimantan Selatan'),
-        ('64', '64 - Kalimantan Timur'),
-        ('65', '65 - Kalimantan Utara'),
-        ('71', '71 - Sulawesi Utara'),
-        ('72', '72 - Sulawesi Tengah'),
-        ('73', '73 - Sulawesi Selatan'),
-        ('74', '74 - Sulawesi Tenggara'),
-        ('75', '75 - Gorontalo'),
-        ('76', '76 - Sulawesi Barat'),
-        ('81', '81 - Maluku'),
-        ('82', '82 - Maluku Utara'),
-        ('91', '91 - Papua'),
-        ('92', '92 - Papua Barat'),
-        ('93', '93 - Papua Selatan'),
-        ('94', '94 - Papua Tengah'),
-        ('95', '95 - Papua Pegunungan'),
-        ('96', '96 - Papua Barat Daya'),
+        ('11', '11 - Aceh'), ('12', '12 - Sumatera Utara'), ('13', '13 - Sumatera Barat'),
+        ('14', '14 - Riau'), ('15', '15 - Jambi'), ('16', '16 - Sumatera Selatan'),
+        ('17', '17 - Bengkulu'), ('18', '18 - Lampung'), ('19', '19 - Kepulauan Bangka Belitung'),
+        ('21', '21 - Kepulauan Riau'), ('31', '31 - DKI Jakarta'), ('32', '32 - Jawa Barat'),
+        ('33', '33 - Jawa Tengah'), ('34', '34 - Daerah Istimewa Yogyakarta'), ('35', '35 - Jawa Timur'),
+        ('36', '36 - Banten'), ('51', '51 - Bali'), ('52', '52 - Nusa Tenggara Barat'),
+        ('53', '53 - Nusa Tenggara Timur'), ('61', '61 - Kalimantan Barat'), ('62', '62 - Kalimantan Tengah'),
+        ('63', '63 - Kalimantan Selatan'), ('64', '64 - Kalimantan Timur'), ('65', '65 - Kalimantan Utara'),
+        ('71', '71 - Sulawesi Utara'), ('72', '72 - Sulawesi Tengah'), ('73', '73 - Sulawesi Selatan'),
+        ('74', '74 - Sulawesi Tenggara'), ('75', '75 - Gorontalo'), ('76', '76 - Sulawesi Barat'),
+        ('81', '81 - Maluku'), ('82', '82 - Maluku Utara'), ('91', '91 - Papua'),
+        ('92', '92 - Papua Barat'), ('93', '93 - Papua Selatan'), ('94', '94 - Papua Tengah'),
+        ('95', '95 - Papua Pegunungan'), ('96', '96 - Papua Barat Daya'),
     ]
 
     nama_provinsi = models.CharField(max_length=150, verbose_name="Nama Provinsi")
     slug = models.SlugField(max_length=200, unique=True, blank=True)
-    # Field baru untuk menentukan titik peta SVG secara otomatis
     kode_wilayah = models.CharField(
-        max_length=2, 
-        choices=PROVINCE_CODE_CHOICES, 
-        unique=True, 
-        null=True, 
-        blank=True,
-        verbose_name="Kode Provinsi BPS"
+        max_length=2, choices=PROVINCE_CODE_CHOICES, unique=True, null=True, blank=True, verbose_name="Kode Provinsi BPS"
     )
 
     class Meta:
@@ -123,7 +105,6 @@ class Location(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            from django.utils.text import slugify
             self.slug = slugify(self.nama_provinsi)
         super().save(*args, **kwargs)
 
@@ -261,13 +242,17 @@ class ContactMessage(models.Model):
     def __str__(self):
         return f"Pesan dari {self.nama_lengkap} - {self.subjek}"
     
-# === 11. TABEL GALERI DOKUMENTASI (Gallery) ===
+# === 11. TABEL GALERI DOKUMENTASI (Gallery - Berelasi dengan Folder) ===
 class Gallery(models.Model):
     caption = models.CharField(max_length=250, verbose_name="Keterangan Foto / Caption")
     gambar = models.ImageField(upload_to='gallery/', verbose_name="File Foto")
     
+    # FIX: Hubungkan Foto ke Folder Pembungkusnya
+    folder = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name='images', null=True, blank=True, verbose_name="Dimasukkan ke Folder")
     kategori = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='galleries', verbose_name="Kategori Filter")
-    tanggal_upload = models.DateTimeField(auto_now_add=True)
+    
+    # Diubah menjadi DateField manual (tanpa auto_now_add) agar admin leluasa setel tanggal inputan di form admin
+    tanggal_upload = models.DateField(verbose_name="Tanggal Dokumentasi")
 
     class Meta:
         verbose_name_plural = "Galeri Dokumentasi"

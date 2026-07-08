@@ -62,33 +62,57 @@
             {% endfor %}
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="gallery-card-grid">
-            {% for item in gallery_items %}
-            <div data-tags="{{ item.kategori.slug|default:'tanpa-kategori' }}" class="gallery-card group flex flex-col bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300">
-              <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-                {% if item.gambar %}
-                <img alt="{{ item.caption }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{{ item.gambar.url }}">
-                {% else %}
-                <img alt="{{ item.caption }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services1.jpg' %}">
-                {% endif %}
-                {% if item.kategori %}
-                <div class="absolute top-4 left-4 z-10"><span class="bg-primary text-surface-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md tracking-wider">{{ item.kategori.name }}</span></div>
-                {% endif %}
+          <!-- 🖼️ FIX FRONTEND: Grouping Tampilan Menggunakan Sub-Folder Dokumentasi -->
+          <div id="gallery-sections-container" class="space-y-12">
+            {% for folder in folders %}
+            <div class="gallery-folder-group space-y-4" data-folder-tags="{{ folder.kategori.slug|default:'tanpa-kategori' }}">
+              
+              <!-- Header Folder Penanda Kegiatan -->
+              <div class="flex flex-wrap items-center justify-between border-b border-slate-200/60 pb-2">
+                <div class="flex items-center gap-2.5">
+                  <span class="material-symbols-outlined text-primary text-base font-bold">folder_open</span>
+                  <h3 class="text-sm md:text-base font-extrabold text-slate-800">{{ folder.nama }}</h3>
+                  <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200/40">{{ folder.images.all|length }} Foto</span>
+                </div>
+                <div class="flex items-center gap-2 text-xs font-medium text-slate-400 mt-1 sm:mt-0">
+                  <span>Tahun {{ folder.tahun }}</span>
+                  {% if folder.kategori %}
+                    <span>|</span>
+                    <span class="text-primary font-bold text-[10px] uppercase tracking-wider">{{ folder.kategori.name }}</span>
+                  {% endif %}
+                </div>
               </div>
-              <div class="p-5 flex-1 flex flex-col justify-center">
-                <h3 class="font-headline-md text-sm font-bold text-on-surface group-hover:text-primary transition-colors leading-snug">{{ item.caption }}</h3>
+
+              <!-- Grid Card Foto di dalam Folder Terkait -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for item in folder.images.all %}
+                <div class="gallery-card group flex flex-col bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300">
+                  <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+                    {% if item.gambar %}
+                    <img alt="{{ item.caption }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{{ item.gambar.url }}">
+                    {% else %}
+                    <img alt="{{ item.caption }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{% static 'images/services1.jpg' %}">
+                    {% endif %}
+                  </div>
+                  <div class="p-5 flex-1 flex flex-col justify-center">
+                    <h3 class="font-headline-md text-sm font-bold text-on-surface group-hover:text-primary transition-colors leading-snug">{{ item.caption }}</h3>
+                  </div>
+                </div>
+                {% endfor %}
               </div>
+
             </div>
             {% empty %}
-            <div class="col-span-full py-16 px-4 flex flex-col items-center justify-center text-center bg-white rounded-2xl border border-dashed border-slate-200 shadow-sm">
-              <span class="material-symbols-outlined text-5xl text-slate-300 mb-3">broken_image</span>
-              <h4 class="text-sm font-bold text-slate-700">Belum Ada Dokumentasi</h4>
-              <p class="text-xs text-slate-400 max-w-xs mt-1">Foto kegiatan lapangan operasional BPH akan segera diperbarui berkala di sini.</p>
+            <div class="py-16 px-4 flex flex-col items-center justify-center text-center bg-white rounded-2xl border border-dashed border-slate-200 shadow-sm">
+              <span class="material-symbols-outlined text-5xl text-slate-300 mb-3">folder_managed</span>
+              <h4 class="text-sm font-bold text-slate-700">Belum Ada Folder Dokumentasi</h4>
+              <p class="text-xs text-slate-400 max-w-xs mt-1">Folder arsip foto lapangan BPH akan segera diperbarui berkala di sini.</p>
             </div>
             {% endfor %}
           </div>
         </div>
 
+        <!-- Seksi Artikel, Cerita, & Modul di bawah tetap utuh tanpa perubahan -->
         <div id="seksi-artikel" class="tab-content-block hidden space-y-6">
           <div class="max-w-2xl text-left">
             <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface mb-1">Artikel &amp; Wawasan Teknis</h2>
@@ -241,28 +265,30 @@
       });
     });
 
-    // --- 2. FIX SAKRAL: FITUR FILTER KATEGORI GALERI FOTO (MEMBERSIHKAN BG-WHITE) ---
+    // --- 2. FIX SAKRAL: FITUR FILTER KATEGORI BERDASARKAN FOLDER/ALBUM NYA ---
     const galleryButtons = document.querySelectorAll('.gallery-filter-btn');
-    const galleryCards = document.querySelectorAll('.gallery-card');
+    const folderGroups = document.querySelectorAll('.gallery-folder-group');
 
     galleryButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         const filterValue = btn.getAttribute('data-filter');
 
         galleryButtons.forEach(b => {
-          // Reset semua tombol ke kondisi pasif (tambahkan kembali bg-white)
           b.classList.remove('bg-primary', 'text-surface-white', 'shadow-sm');
           b.classList.add('bg-white', 'border', 'border-border-subtle', 'text-on-surface-variant', 'hover:border-primary', 'hover:text-primary');
         });
 
-        // Aktifkan tombol yang diklik (buang bg-white agar tidak crash full putih)
         btn.classList.add('bg-primary', 'text-surface-white', 'shadow-sm');
         btn.classList.remove('bg-white', 'border', 'border-border-subtle', 'text-on-surface-variant', 'hover:border-primary', 'hover:text-primary');
 
-        galleryCards.forEach(card => {
-          const cardTags = card.getAttribute('data-tags');
-          if (filterValue === 'all' || cardTags === filterValue) card.classList.remove('hidden');
-          else card.classList.add('hidden');
+        folderGroups.forEach(group => {
+          const folderTag = group.getAttribute('data-folder-tags');
+          
+          if (filterValue === 'all' || folderTag === filterValue) {
+            group.classList.remove('hidden');
+          } else {
+            group.classList.add('hidden');
+          }
         });
       });
     });

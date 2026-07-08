@@ -99,4 +99,10 @@ urlpatterns = [
     path('be/gallery/add/', views.GalleryCreateView.as_view(), name='gallery_admin_create'),
     path('be/gallery/<int:pk>/edit/', views.GalleryUpdateView.as_view(), name='gallery_admin_update'),
     path('be/gallery/<int:pk>/delete/', views.GalleryDeleteView.as_view(), name='gallery_admin_delete'),
+
+    # URL ROUTING CRUD FOLDER GALERI DOKUMENTASI
+    path('be/folders/', views.FolderListView.as_view(), name='folder_list'),
+    path('be/folders/add/', views.FolderCreateView.as_view(), name='folder_create'),
+    path('be/folders/<int:pk>/edit/', views.FolderUpdateView.as_view(), name='folder_update'),
+    path('be/folders/<int:pk>/delete/', views.FolderDeleteView.as_view(), name='folder_delete'),
 ]

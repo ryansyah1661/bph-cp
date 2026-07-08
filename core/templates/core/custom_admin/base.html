@@ -85,17 +85,24 @@
 
                 <div class="h-px bg-slate-800 my-3 opacity-60"></div>
                 
-                <!-- PUBLIKASI MENU GROUP (Ditambahkan Sub-menu Galeri) -->
+                <!-- 📄 PUBLIKASI MENU GROUP (FIX SINKRONISASI DROPDOWN & FOLDER ALBUM) -->
                 <div class="space-y-1 bph-menu-group-container">
-                    <input type="checkbox" id="drop-publikasi" class="bph-dropdown-check" {% if 'article' in request.resolver_match.url_name or 'story' in request.resolver_match.url_name or 'gallery' in request.resolver_match.url_name %}checked{% endif %}>
-                    <label for="drop-publikasi" class="bph-menu-toggle flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-slate-800 transition-all {% if 'article' in request.resolver_match.url_name or 'story' in request.resolver_match.url_name or 'gallery' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/20{% else %}text-slate-500{% endif %}">
+                    <!-- FIX: Ditambahkan kondisi 'folder' agar checkbox otomatis ter-centang dan dropdown terbuka -->
+                    <input type="checkbox" id="drop-publikasi" class="bph-dropdown-check" {% if 'article' in request.resolver_match.url_name or 'story' in request.resolver_match.url_name or 'gallery' in request.resolver_match.url_name or 'folder' in request.resolver_match.url_name %}checked{% endif %}>
+                    
+                    <!-- FIX: Label toggle dapet style emerald-400 pas di halaman folder -->
+                    <label for="drop-publikasi" class="bph-menu-toggle flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-slate-800 transition-all {% if 'article' in request.resolver_match.url_name or 'story' in request.resolver_match.url_name or 'gallery' in request.resolver_match.url_name or 'folder' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/20{% else %}text-slate-500{% endif %}">
                         <span class="flex items-center gap-2.5 truncate">📑 Publikasi</span>
                         <span class="material-symbols-outlined arrow-icon text-base flex-shrink-0">expand_more</span>
                     </label>
+                    
                     <ul class="bph-dropdown-content space-y-1 pl-2">
                         <li><a href="{% url 'article_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'article' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">description</span> Artikel</a></li>
                         <li><a href="{% url 'story_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'story' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">explore</span> Cerita Lapangan</a></li>
                         <li><a href="{% url 'gallery_admin_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'gallery' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">collections</span> Galeri Foto</a></li>
+                        
+                        <!-- FIX: Sub-menu Folder Album dimasukkan ke dalam list ul agar terbungkus accordion dengan rapi -->
+                        <li><a href="{% url 'folder_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'folder' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">create_new_folder</span> Folder Album</a></li>
                     </ul>
                 </div>
 
@@ -115,7 +122,7 @@
                     </ul>
                 </div>
 
-                <!-- UNDUHAN BERKAS MENU GROUP (Kelompok Baru Khusus Modul) -->
+                <!-- UNDUHAN BERKAS MENU GROUP -->
                 <div class="space-y-1 mt-2 bph-menu-group-container">
                     <input type="checkbox" id="drop-unduhan" class="bph-dropdown-check" {% if 'document' in request.resolver_match.url_name %}checked{% endif %}>
                     <label for="drop-unduhan" class="flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-slate-800 transition-all {% if 'document' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/20{% else %}text-slate-500{% endif %}">
@@ -149,7 +156,6 @@
             
             <!-- FIXED TOPBAR -->
             <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-end px-8 sticky top-0 z-10 shadow-sm">
-                <!-- Sapaan & Dropdown Melayang -->
                 <div class="flex items-center gap-4">
                     <div class="text-right hidden sm:block">
                         <p class="text-sm text-slate-400 font-semibold">
@@ -157,7 +163,6 @@
                         </p>
                     </div>
 
-                    <!-- Profile Menu Trigger Checkbox -->
                     <div class="relative inline-block">
                         <input type="checkbox" id="nav-profile-toggle" class="bph-profile-check">
                         <label for="nav-profile-toggle" class="flex items-center gap-1 cursor-pointer p-1 rounded-full hover:bg-slate-100 transition-all select-none">
@@ -171,7 +176,6 @@
                             <span class="material-symbols-outlined text-slate-400 text-lg">arrow_drop_down</span>
                         </label>
                 
-                        <!-- Dropdown Box Melayang -->
                         <div class="bph-nav-dropdown absolute top-full right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-100 p-1.5 hidden z-50">
                             <div class="flex items-center gap-3 px-3 py-2.5 border-b border-slate-100 mb-1">
                                 <div class="flex-1 min-w-0">
@@ -180,13 +184,11 @@
                                 </div>
                             </div>
 
-                            <!-- Link Edit Profil -->
                             <a href="{% url 'user_edit_profile' %}" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition-colors text-sm font-medium" style="text-decoration: none;">
                                 <span class="material-symbols-outlined text-slate-400 text-lg">manage_accounts</span>
                                 <span>Edit Profil</span>
                             </a>
                             
-                            <!-- Tombol Keluar Modul -->
                             <button type="button" id="trigger-logout-modal" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-rose-50 hover:text-rose-600 transition-colors text-sm font-medium border-none bg-transparent text-left cursor-pointer">
                                 <span class="material-symbols-outlined text-slate-400 text-lg">logout</span>
                                 <span>Keluar</span>
@@ -196,7 +198,6 @@
                 </div>
             </header>
 
-            <!-- Dynamic Content Yield Box -->
             <main class="p-8 flex-1 bg-slate-50">
                 {% if messages %}
                     {% for message in messages %}
@@ -228,7 +229,6 @@
         document.getElementById('btn-modal-cancel').onclick = () => logoutAlertModal.classList.remove('active');
         document.getElementById('btn-modal-confirm').onclick = () => document.getElementById('hidden-logout-form').submit();
 
-        // JS Logic Sapaan Otomatis & Avatar Initials
         function updateGreeting() {
             const greetingElement = document.getElementById('bph-greeting');
             if (!greetingElement) return;

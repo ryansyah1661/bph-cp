@@ -2,12 +2,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django import forms
-from django.db.models import Min, Max  # Impor Agregasi yang Benar
+from django.db.models import Min, Max
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
-from .models import Article, Project, Client, Story, Service, Location, Category, Modul, ContactMessage, Gallery, Profile
+from .models import Article, Project, Client, Story, Service, Location, Category, Modul, ContactMessage, Gallery, Profile, Folder
 
 # ==========================================
 # JALUR FRONTEND WEBSITE (NAVBAR & MENUS)
@@ -37,23 +37,18 @@ def experience_view(request):
     years = Project.objects.order_by('-tahun').values_list('tahun', flat=True).distinct()
     clients = Client.objects.all()
 
-    # --- 1. LOGIKA HITUNG STATISTIK DINAMIS ---
     total_proyek = Project.objects.count()
     total_provinsi = Location.objects.filter(projects__isnull=False).distinct().count()
     total_klien = Client.objects.filter(projects__isnull=False).distinct().count()
     
-    # Menghitung rentang tahun pengalaman secara aman
     tahun_bounds = Project.objects.all().aggregate(Min('tahun'), Max('tahun'))
     if tahun_bounds['tahun__min'] and tahun_bounds['tahun__max']:
         total_tahun_bekerja = (tahun_bounds['tahun__max'] - tahun_bounds['tahun__min']) + 1
     else:
-        total_tahun_bekerja = 5 # Fallback default
+        total_tahun_bekerja = 5
 
-    # --- 2. QUERY DATA UNTUK INTERAKSI MAP DAN CERITA LAPANGAN ---
     locations_with_projects = Location.objects.filter(projects__isnull=False).prefetch_related('projects').distinct()
     all_stories = Story.objects.select_related('lokasi', 'project').order_by('-tanggal')
-
-    # AMAN: Ambil parameter filter 'year' menggunakan method .get() bawaan Dict agar anti-crash
     selected_year = request.GET.get('year', 'all')
 
     return render(request, 'core/experience.html', {
@@ -62,14 +57,10 @@ def experience_view(request):
         'years': years,
         'clients': clients,
         'selected_year': selected_year,
-        
-        # Data counter statistik
         'total_tahun_bekerja': total_tahun_bekerja,
         'total_proyek': total_proyek,
         'total_provinsi': total_provinsi,
         'total_klien': total_klien,
-        
-        # Data map & cerita lapangan
         'locations_with_projects': locations_with_projects,
         'all_stories': all_stories,
     })
@@ -77,13 +68,18 @@ def experience_view(request):
 def gallery_view(request):
     articles = Article.objects.order_by('-tanggal')
     stories = Story.objects.order_by('-tanggal')
-    gallery_items = Gallery.objects.select_related('kategori').order_by('-tanggal_upload')
     documents = Modul.objects.order_by('-tanggal_rilis')
-    categories = Category.objects.filter(galleries__isnull=False).distinct().order_by('name')
+    categories = Category.objects.filter(folders__isnull=False).distinct().order_by('name')
+    
+    # --- FIX SAKRAL: AMBIL DATA FOLDER OPERASIONAL DAN PREFETCH RELASI IMAGES NYA ---
+    gallery_items = Gallery.objects.all() # Dipertahankan untuk .count counter sidebar
+    folders = Folder.objects.select_related('kategori').prefetch_related('images').order_by('-tahun', '-id')
+
     return render(request, 'core/gallery.html', {
         'articles': articles,
         'stories': stories,
         'gallery_items': gallery_items,
+        'folders': folders, # Dikirim ke frontend untuk looping sub-folder kegiatan
         'documents': documents,
         'categories': categories,
     })
@@ -91,7 +87,6 @@ def gallery_view(request):
 def contact_view(request):
     return render(request, 'core/contact.html')
 
-# KODE YANG BENAR (MENCARI STORY.HTML)
 def story_view(request):
     stories_data = Story.objects.select_related('lokasi', 'project').order_by('-tanggal')
     return render(request, 'core/story.html', {'stories': stories_data})
@@ -416,7 +411,7 @@ class ContactDeleteView(AdminRequiredMixin, DeleteView):
 
 
 # ==========================================
-# 10. MANAGEMENT GALERI DOKUMENTASI
+# 10. MANAGEMENT GALERI DOKUMENTASI (FORM FIELDS AUTO-DETECT MODEL UPDATE)
 # ==========================================
 class GalleryListView(AdminRequiredMixin, ListView):
     model = Gallery
@@ -426,19 +421,44 @@ class GalleryListView(AdminRequiredMixin, ListView):
 class GalleryCreateView(AdminRequiredMixin, CreateView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_form.html'
-    fields = '__all__'
+    fields = ['caption', 'gambar', 'folder', 'kategori', 'tanggal_upload'] # Ditambahkan field folder & tanggal_upload
     success_url = reverse_lazy('gallery_admin_list')
 
 class GalleryUpdateView(AdminRequiredMixin, UpdateView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_form.html'
-    fields = '__all__'
+    fields = ['caption', 'gambar', 'folder', 'kategori', 'tanggal_upload'] # Ditambahkan field folder & tanggal_upload
     success_url = reverse_lazy('gallery_admin_list')
 
 class GalleryDeleteView(AdminRequiredMixin, DeleteView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_confirm_delete.html'
     success_url = reverse_lazy('gallery_admin_list')
+
+# ==========================================
+# 10b. MANAGEMENT FOLDER / ALBUM GALERI
+# ==========================================
+class FolderListView(AdminRequiredMixin, ListView):
+    model = Folder
+    template_name = 'core/custom_admin/gallery/folder_list.html'
+    context_object_name = 'folders'
+
+class FolderCreateView(AdminRequiredMixin, CreateView):
+    model = Folder
+    template_name = 'core/custom_admin/gallery/folder_form.html'
+    fields = '__all__'
+    success_url = reverse_lazy('folder_list')
+
+class FolderUpdateView(AdminRequiredMixin, UpdateView):
+    model = Folder
+    template_name = 'core/custom_admin/gallery/folder_form.html'
+    fields = '__all__'
+    success_url = reverse_lazy('folder_list')
+
+class FolderDeleteView(AdminRequiredMixin, DeleteView):
+    model = Folder
+    template_name = 'core/custom_admin/gallery/folder_confirm_delete.html'
+    success_url = reverse_lazy('folder_list')
 
 
 # ==========================================
@@ -484,7 +504,7 @@ class UserDeleteView(SuperuserRequiredMixin, DeleteView):
 # ==========================================
 # 12. FITUR EDIT PROFIL MANDIRI USER
 # ==========================================
-class ProfileUpdateForm(forms.ModelForm):
+class ProfileProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['nama_lengkap', 'foto_profil']
@@ -493,12 +513,12 @@ class ProfileUpdateForm(forms.ModelForm):
 def user_edit_profile(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
     if request.method == 'POST':
-        form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
+        form = ProfileProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             messages.success(request, 'Profil Anda berhasil diperbarui!')
             return redirect('custom_dashboard')
     else:
-        form = ProfileUpdateForm(instance=profile)
+        form = ProfileProfileForm(instance=profile)
         
     return render(request, 'core/custom_admin/user/user_edit_profile.html', {'form': form})
