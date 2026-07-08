@@ -1,37 +1,54 @@
 {% extends "core/custom_admin/base.html" %}
 
 {% block admin_content %}
-<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-    <div class="flex justify-between items-center border-b border-gray-100 pb-4 mb-6">
+<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
+    
+    <div class="flex justify-between items-center border-b border-gray-100 pb-5">
         <div>
             <h2 class="text-xl font-bold text-emerald-900">Manajemen Lokasi Wilayah</h2>
             <p class="text-xs text-gray-500 mt-1">Kelola data cakupan wilayah operasional instansi.</p>
         </div>
-        <a href="{% url 'location_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-lg uppercase tracking-wider transition" style="text-decoration: none;">
-            + Tambah Lokasi
+        <a href="{% url 'location_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100" style="text-decoration: none;">
+            <span class="material-symbols-outlined text-sm">add</span> Tambah Lokasi
         </a>
     </div>
 
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse text-sm">
+    <div class="overflow-x-auto w-full">
+        <table class="w-full text-left border-collapse text-sm table-fixed">
             <thead>
                 <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
-                    <th class="p-3 font-semibold">Nama Wilayah / Lokasi</th>
-                    <th class="p-3 font-semibold">Slug</th>
-                    <th class="p-3 font-semibold text-center">Aksi</th>
+                    <th class="p-4 font-semibold w-14 text-center">No.</th>
+                    <th class="p-4 font-semibold w-auto">Nama Wilayah / Provinsi</th>
+                    <th class="p-4 font-semibold w-64">Kode Wilayah (BPS)</th>
+                    <th class="p-4 font-semibold text-center w-28">Aksi</th>
                 </tr>
             </thead>
             <tbody class="text-gray-700 divide-y divide-gray-50">
                 {% for location in locations %}
                 <tr class="hover:bg-slate-50/50 transition-colors">
-                    <td class="p-3 font-semibold text-emerald-800">{{ location.nama_provinsi }}</td>
-                    <td class="p-3 text-gray-400 text-xs font-mono">{{ location.slug }}</td>
-                    <td class="p-3 text-center align-middle whitespace-nowrap">
+                    <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
+                        {{ forloop.counter }}
+                    </td>
+                    
+                    <td class="p-4 font-semibold text-emerald-800 align-middle text-base transition">
+                        {{ location.nama_provinsi }}
+                    </td>
+
+                    <td class="p-4 align-middle font-medium text-slate-600">
+                        <div class="flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-slate-400 text-lg">map</span>
+                            <span class="inline-flex items-center bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg text-xs font-bold font-mono">
+                                {{ location.kode_wilayah|default:"-" }}
+                            </span>
+                        </div>
+                    </td>
+                    
+                    <td class="p-4 text-center align-middle whitespace-nowrap">
                         <div class="flex justify-center items-center gap-2">
-                            <a href="{% url 'location_update' location.pk %}" title="Edit" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
+                            <a href="{% url 'location_update' location.pk %}" title="Edit Lokasi" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
                                 <span class="material-symbols-outlined text-sm">edit</span>
                             </a>
-                            <a href="{% url 'location_delete' location.pk %}" title="Hapus" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
+                            <a href="{% url 'location_delete' location.pk %}" title="Hapus Lokasi" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
                                 <span class="material-symbols-outlined text-sm">delete</span>
                             </a>
                         </div>
@@ -39,11 +56,12 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="3" class="p-8 text-center text-gray-400 font-medium">Belum ada data master lokasi.</td>
+                    <td colspan="4" class="p-8 text-center text-gray-400 font-medium">Belum ada data master lokasi.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+
 </div>
 {% endblock %}

@@ -3,7 +3,6 @@
 {% block admin_content %}
 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
     
-    <!-- Header Box -->
     <div class="flex justify-between items-center border-b border-gray-100 pb-5">
         <div>
             <h2 class="text-xl font-bold text-emerald-900">Manajemen Artikel & Wawasan Teknis</h2>
@@ -14,11 +13,11 @@
         </a>
     </div>
 
-    <!-- Tabel Data Bersih Tanpa Teks ID -->
     <div class="overflow-x-auto w-full">
         <table class="w-full text-left border-collapse text-sm table-fixed">
             <thead>
                 <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
+                    <th class="p-4 font-semibold w-14 text-center">No.</th>
                     <th class="p-4 font-semibold w-24 text-center">Gambar</th>
                     <th class="p-4 font-semibold w-auto">Judul Artikel</th>
                     <th class="p-4 font-semibold w-64">Penulis</th>
@@ -29,7 +28,10 @@
             <tbody class="text-gray-700 divide-y divide-gray-50">
                 {% for article in articles %}
                 <tr class="hover:bg-slate-50/50 transition">
-                    <!-- 1. Kolom Gambar -->
+                    <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
+                        {{ forloop.counter }}
+                    </td>
+
                     <td class="p-4 align-middle text-center">
                         {% if article.gambar %}
                             <img src="{{ article.gambar.url }}" class="w-12 h-12 object-cover rounded-xl border border-gray-100 shadow-sm mx-auto">
@@ -38,12 +40,10 @@
                         {% endif %}
                     </td>
                     
-                    <!-- 2. Kolom Judul (FIXED: Teks ID Sudah Dihapus Bersih) -->
                     <td class="p-4 font-semibold text-slate-800 align-middle text-base hover:text-emerald-700 transition">
                         <div class="line-clamp-2 leading-snug">{{ article.judul }}</div>
                     </td>
 
-                    <!-- 3. Kolom Penulis -->
                     <td class="p-4 align-middle font-medium text-slate-600 truncate">
                         <div class="flex items-center gap-1.5">
                             <span class="material-symbols-outlined text-slate-400 text-lg">person</span>
@@ -51,7 +51,6 @@
                         </div>
                     </td>
 
-                    <!-- 4. Kolom Tanggal Terbit -->
                     <td class="p-4 align-middle text-center text-slate-500 font-medium">
                         <span class="inline-flex items-center gap-1.5 bg-slate-100 text-slate-700 px-3 py-1 rounded-lg text-xs font-semibold">
                             <span class="material-symbols-outlined text-sm text-slate-400">calendar_month</span>
@@ -59,7 +58,6 @@
                         </span>
                     </td>
                     
-                    <!-- 5. Kolom Aksi Icon Murni -->
                     <td class="p-4 text-center align-middle whitespace-nowrap">
                         <div class="flex justify-center items-center gap-2">
                             <a href="{% url 'article_update' article.pk %}" title="Edit Artikel" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
@@ -73,7 +71,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" class="p-8 text-center text-gray-400 font-medium">Belum ada data artikel.</td>
+                    <td colspan="6" class="p-8 text-center text-gray-400 font-medium">Belum ada data artikel.</td>
                 </tr>
                 {% endfor %}
             </tbody>

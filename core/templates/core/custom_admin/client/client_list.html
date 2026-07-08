@@ -1,43 +1,60 @@
 {% extends "core/custom_admin/base.html" %}
 
 {% block admin_content %}
-<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-    <div class="flex justify-between items-center border-b border-gray-100 pb-4 mb-6">
+<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
+    
+    <!-- Header Box -->
+    <div class="flex justify-between items-center border-b border-gray-100 pb-5">
         <div>
             <h2 class="text-xl font-bold text-emerald-900">Klien / Mitra Kolaborasi</h2>
             <p class="text-xs text-gray-500 mt-1">Kelola logo dan arsip data instansi mitra strategis.</p>
         </div>
-        <a href="{% url 'client_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-lg uppercase tracking-wider transition">
-            + Tambah Mitra
+        <a href="{% url 'client_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100">
+            <span class="material-symbols-outlined text-sm">add</span> Tambah Mitra
         </a>
     </div>
 
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse text-sm">
+    <!-- Tabel Data yang Pas, Padat, dan Ber-Nomor -->
+    <div class="overflow-x-auto w-full">
+        <table class="w-full text-left border-collapse text-sm table-fixed">
             <thead>
                 <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
-                    <th class="p-3 font-semibold">Logo</th>
-                    <th class="p-3 font-semibold">Nama Instansi / Mitra</th>
-                    <th class="p-3 font-semibold text-center">Aksi</th>
+                    <!-- Penyetelan lebar kolom secara presisi -->
+                    <th class="p-4 font-semibold w-14 text-center">No.</th>
+                    <th class="p-4 font-semibold w-28 text-center">Logo</th>
+                    <th class="p-4 font-semibold w-auto">Nama Instansi / Mitra</th>
+                    <th class="p-4 font-semibold text-center w-28">Aksi</th>
                 </tr>
             </thead>
             <tbody class="text-gray-700 divide-y divide-gray-50">
                 {% for client in clients %}
-                <tr>
-                    <td class="p-3">
+                <tr class="hover:bg-slate-50/50 transition">
+                    <!-- 1. Kolom Nomor Urut Otomatis -->
+                    <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
+                        {{ forloop.counter }}
+                    </td>
+
+                    <!-- 2. Kolom Logo -->
+                    <td class="p-4 align-middle text-center">
                         {% if client.logo %}
-                            <img src="{{ client.logo.url }}" class="w-16 h-10 object-contain rounded bg-gray-50 p-1">
+                            <img src="{{ client.logo.url }}" class="w-16 h-10 object-contain rounded-xl bg-gray-50 p-1 border border-gray-100 shadow-sm mx-auto">
                         {% else %}
-                             <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded">No Logo</span>
+                             <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded-md">No Logo</span>
                         {% endif %}
                     </td>
-                    <td class="p-3 font-medium text-emerald-700">{{ client.nama }}</td>
-                    <td class="p-3 text-center align-middle whitespace-nowrap">
+                    
+                    <!-- 3. Kolom Nama Instansi / Mitra -->
+                    <td class="p-4 font-semibold text-emerald-700 align-middle text-base transition">
+                        {{ client.nama }}
+                    </td>
+
+                    <!-- 4. Kolom Aksi Icon Murni -->
+                    <td class="p-4 text-center align-middle whitespace-nowrap">
                         <div class="flex justify-center items-center gap-2">
-                            <a href="{% url 'client_update' client.pk %}" title="Edit" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
+                            <a href="{% url 'client_update' client.pk %}" title="Edit Mitra" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
                                 <span class="material-symbols-outlined text-sm">edit</span>
                             </a>
-                            <a href="{% url 'client_delete' client.pk %}" title="Hapus" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
+                            <a href="{% url 'client_delete' client.pk %}" title="Hapus Mitra" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
                                 <span class="material-symbols-outlined text-sm">delete</span>
                             </a>
                         </div>
@@ -45,11 +62,13 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="3" class="p-8 text-center text-gray-400 font-medium">Belum ada data klien/mitra kolaborasi.</td>
+                    <!-- FIX: Ubah colspan jadi 4 karena ada tambahan kolom nomor -->
+                    <td colspan="4" class="p-8 text-center text-gray-400 font-medium">Belum ada data klien/mitra kolaborasi.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+
 </div>
 {% endblock %}

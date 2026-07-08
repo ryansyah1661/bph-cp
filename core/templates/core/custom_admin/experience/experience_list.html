@@ -1,45 +1,79 @@
 {% extends "core/custom_admin/base.html" %}
 
 {% block admin_content %}
-<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-    <div class="flex justify-between items-center border-b border-gray-100 pb-4 mb-6">
+<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
+    
+    <!-- Header Box -->
+    <div class="flex justify-between items-center border-b border-gray-100 pb-5">
         <div>
             <h2 class="text-xl font-bold text-emerald-900">Manajemen Proyek (Experience)</h2>
             <p class="text-xs text-gray-500 mt-1">Kelola portofolio rekaman proyek dan pengalaman Bhumi Pasa Hijau.</p>
         </div>
-        <a href="{% url 'project_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-lg uppercase tracking-wider transition" style="text-decoration: none;">
-            + Tambah Proyek
+        <a href="{% url 'project_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100" style="text-decoration: none;">
+            <span class="material-symbols-outlined text-sm">add</span> Tambah Proyek
         </a>
     </div>
 
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse text-sm">
+    <!-- Tabel Data Ber-Nomor, Bersih, dan Padat Informasi -->
+    <div class="overflow-x-auto w-full">
+        <table class="w-full text-left border-collapse text-sm table-fixed">
             <thead>
                 <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
-                    <th class="p-3 font-semibold">Gambar</th>
-                    <th class="p-3 font-semibold">Nama Proyek</th>
-                    <th class="p-3 font-semibold">Slug</th>
-                    <th class="p-3 font-semibold text-center">Aksi</th>
+                    <!-- Penyetelan lebar kolom agar presisi menghabiskan space -->
+                    <th class="p-4 font-semibold w-14 text-center">No.</th>
+                    <th class="p-4 font-semibold w-24 text-center">Gambar</th>
+                    <th class="p-4 font-semibold w-auto">Nama Proyek</th>
+                    <th class="p-4 font-semibold w-60">Klien / Mitra</th>
+                    <th class="p-4 font-semibold w-32 text-center">Tahun</th>
+                    <th class="p-4 font-semibold text-center w-28">Aksi</th>
                 </tr>
             </thead>
             <tbody class="text-gray-700 divide-y divide-gray-50">
                 {% for project in projects %}
                 <tr class="hover:bg-slate-50/50 transition-colors">
-                    <td class="p-3">
+                    <!-- 1. Kolom Nomor Urut Otomatis -->
+                    <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
+                        {{ forloop.counter }}
+                    </td>
+
+                    <!-- 2. Kolom Gambar -->
+                    <td class="p-4 align-middle text-center">
                         {% if project.image %}
-                            <img src="{{ project.image.url }}" class="w-12 h-12 object-cover rounded-md border">
+                            <img src="{{ project.image.url }}" class="w-12 h-12 object-cover rounded-xl border border-gray-100 shadow-sm mx-auto">
                         {% else %}
-                             <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded">No Image</span>
+                             <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded-md">No Image</span>
                         {% endif %}
                     </td>
-                    <td class="p-3 font-semibold text-emerald-800">{{ project.name }}</td>
-                    <td class="p-3 text-gray-400 text-xs font-mono">{{ project.slug }}</td>
-                    <td class="p-3 text-center align-middle whitespace-nowrap">
+                    
+                    <!-- 3. Kolom Nama Proyek -->
+                    <td class="p-4 font-semibold text-emerald-800 align-middle text-base transition">
+                        <div class="line-clamp-2 leading-snug">{{ project.name }}</div>
+                    </td>
+
+                    <!-- 4. Kolom Klien (Info Tambahan Pengisi Space) -->
+                    <td class="p-4 align-middle font-medium text-slate-600 truncate">
+                        <div class="flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-slate-400 text-lg">corporate_fare</span>
+                            <span>{{ project.client.nama|default:"- " }}</span>
+                        </div>
+                    </td>
+
+                    <!-- 5. Kolom Tahun -->
+                    <td class="p-4 align-middle text-center text-slate-500 font-medium">
+                        <span class="inline-flex items-center gap-1 bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg text-xs font-bold font-mono">
+                            {{ project.tahun }}
+                        </span>
+                    </td>
+
+                    <!-- 6. Kolom Aksi Icon Murni -->
+                    <td class="p-4 text-center align-middle whitespace-nowrap">
                         <div class="flex justify-center items-center gap-2">
-                            <a href="{% url 'project_update' project.pk %}" title="Edit" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
+                            <!-- Tombol Edit Icon Only -->
+                            <a href="{% url 'project_update' project.pk %}" title="Edit Proyek" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
                                 <span class="material-symbols-outlined text-sm">edit</span>
                             </a>
-                            <a href="{% url 'project_delete' project.pk %}" title="Hapus" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
+                            <!-- Tombol Hapus Icon Only -->
+                            <a href="{% url 'project_delete' project.pk %}" title="Hapus Proyek" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
                                 <span class="material-symbols-outlined text-sm">delete</span>
                             </a>
                         </div>
@@ -47,11 +81,13 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="4" class="p-8 text-center text-gray-400 font-medium">Belum ada data proyek.</td>
+                    <!-- FIX: Ubah colspan jadi 6 mengikuti total kolom baru -->
+                    <td colspan="6" class="p-8 text-center text-gray-400 font-medium">Belum ada data proyek.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+
 </div>
 {% endblock %}

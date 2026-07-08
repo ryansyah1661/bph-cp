@@ -1,36 +1,64 @@
 {% extends "core/custom_admin/base.html" %}
 
 {% block admin_content %}
-<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-    <div class="border-b border-gray-100 pb-4 mb-6">
+<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
+    
+    <!-- Header Box -->
+    <div class="border-b border-gray-100 pb-5">
         <h2 class="text-xl font-bold text-emerald-900">Kotak Masuk Pesan Kontak</h2>
         <p class="text-xs text-gray-500 mt-1">Daftar kiriman pesan, pertanyaan, dan proposal kerja sama dari pengunjung halaman kontak website.</p>
     </div>
 
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse text-sm">
+    <!-- Tabel Data Bersih Ber-Nomor dan Seimbang -->
+    <div class="overflow-x-auto w-full">
+        <table class="w-full text-left border-collapse text-sm table-fixed">
             <thead>
                 <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
-                    <th class="p-3 font-semibold">Pengirim</th>
-                    <th class="p-3 font-semibold">Subjek / Nama Instansi</th>
-                    <th class="p-3 font-semibold">Isi Pesan Masuk</th>
-                    <th class="p-3 font-semibold text-center">Waktu Kirim</th>
-                    <th class="p-3 font-semibold text-center">Aksi</th>
+                    <!-- Penyetelan jatah lebar kolom agar proporsional -->
+                    <th class="p-4 font-semibold w-14 text-center">No.</th>
+                    <th class="p-4 font-semibold w-56">Pengirim</th>
+                    <th class="p-4 font-semibold w-52">Subjek / Nama Instansi</th>
+                    <th class="p-4 font-semibold w-auto">Isi Pesan Masuk</th>
+                    <th class="p-4 font-semibold w-44 text-center">Waktu Kirim</th>
+                    <th class="p-4 font-semibold text-center w-20">Aksi</th>
                 </tr>
             </thead>
             <tbody class="text-gray-700 divide-y divide-gray-50">
                 {% for msg in contacts %}
-                <tr>
-                    <td class="p-3">
-                        <div class="font-semibold text-emerald-800">{{ msg.nama_lengkap }}</div>
-                        <div class="text-xs text-gray-400 mt-0.5">{{ msg.email }}</div>
+                <tr class="hover:bg-slate-50/50 transition">
+                    <!-- 1. Kolom Nomor Urut Otomatis -->
+                    <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
+                        {{ forloop.counter }}
                     </td>
-                    <td class="p-3 font-medium text-gray-700">{{ msg.subjek }}</td>
-                    <td class="p-3 text-gray-500 max-w-md leading-relaxed whitespace-pre-line">{{ msg.pesan }}</td>
-                    <td class="p-3 text-center text-gray-400 text-xs font-medium">{{ msg.tanggal_kirim|date:"d M Y, H:i" }} WIB</td>
-                    <td class="p-3 text-center align-middle whitespace-nowrap">
-                        <div class="flex justify-center items-center gap-2">
-                            <a href="{% url 'contact_delete' msg.pk %}" title="Hapus" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
+
+                    <!-- 2. Kolom Pengirim -->
+                    <td class="p-4 align-middle truncate">
+                        <div class="font-semibold text-emerald-800 text-base">{{ msg.nama_lengkap }}</div>
+                        <div class="text-xs text-gray-400 mt-0.5 font-mono">{{ msg.email }}</div>
+                    </td>
+
+                    <!-- 3. Kolom Subjek -->
+                    <td class="p-4 font-medium text-gray-700 align-middle truncate">
+                        {{ msg.subjek }}
+                    </td>
+
+                    <!-- 4. Kolom Isi Pesan (Memanfaatkan sisa space secara optimal) -->
+                    <td class="p-4 text-gray-500 align-middle leading-relaxed whitespace-pre-line text-xs">
+                        {{ msg.pesan }}
+                    </td>
+
+                    <!-- 5. Kolom Waktu Kirim -->
+                    <td class="p-4 text-center align-middle text-gray-400 text-xs font-medium">
+                        <span class="inline-flex items-center gap-1.5 bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg font-semibold">
+                            <span class="material-symbols-outlined text-xs text-slate-400">schedule</span>
+                            {{ msg.tanggal_kirim|date:"d M Y, H:i" }} WIB
+                        </span>
+                    </td>
+                    
+                    <!-- 6. Kolom Aksi Icon Murni Only Delete -->
+                    <td class="p-4 text-center align-middle whitespace-nowrap">
+                        <div class="flex justify-center items-center">
+                            <a href="{% url 'contact_delete' msg.pk %}" title="Hapus Pesan" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
                                 <span class="material-symbols-outlined text-sm">delete</span>
                             </a>
                         </div>
@@ -38,11 +66,13 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" class="p-8 text-center text-gray-400 font-medium">Belum ada pesan atau pertanyaan masuk dari halaman kontak.</td>
+                    <!-- FIX: Ubah colspan jadi 6 karena kolom sekarang bertambah satu -->
+                    <td colspan="6" class="p-8 text-center text-gray-400 font-medium">Belum ada pesan atau pertanyaan masuk dari halaman kontak.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+
 </div>
 {% endblock %}
