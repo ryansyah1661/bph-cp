@@ -199,7 +199,6 @@
 
     </div>
   </section>
-
 </main>
 
 {% block extra_js %}
@@ -242,7 +241,7 @@
       });
     });
 
-    // --- 2. FITUR FILTER KATEGORI GALERI FOTO ---
+    // --- 2. FIX SAKRAL: FITUR FILTER KATEGORI GALERI FOTO (MEMBERSIHKAN BG-WHITE) ---
     const galleryButtons = document.querySelectorAll('.gallery-filter-btn');
     const galleryCards = document.querySelectorAll('.gallery-card');
 
@@ -251,12 +250,14 @@
         const filterValue = btn.getAttribute('data-filter');
 
         galleryButtons.forEach(b => {
+          // Reset semua tombol ke kondisi pasif (tambahkan kembali bg-white)
           b.classList.remove('bg-primary', 'text-surface-white', 'shadow-sm');
-          b.classList.add('border', 'border-border-subtle', 'text-on-surface-variant', 'hover:border-primary', 'hover:text-primary');
+          b.classList.add('bg-white', 'border', 'border-border-subtle', 'text-on-surface-variant', 'hover:border-primary', 'hover:text-primary');
         });
 
+        // Aktifkan tombol yang diklik (buang bg-white agar tidak crash full putih)
         btn.classList.add('bg-primary', 'text-surface-white', 'shadow-sm');
-        btn.classList.remove('border', 'border-border-subtle', 'text-on-surface-variant', 'hover:border-primary', 'hover:text-primary');
+        btn.classList.remove('bg-white', 'border', 'border-border-subtle', 'text-on-surface-variant', 'hover:border-primary', 'hover:text-primary');
 
         galleryCards.forEach(card => {
           const cardTags = card.getAttribute('data-tags');

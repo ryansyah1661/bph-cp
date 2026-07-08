@@ -7,13 +7,31 @@ urlpatterns = [
     # Jembatan Utama bawaan Django Admin
     path('admin/', admin.site.urls),
 
-    # ROUTING FRONTEND WEBSITE
+    # ROUTING FRONTEND WEBSITE (Halaman Utama Pengunjung)
     path('', views.homepage, name='homepage'),
     path('about/', views.about_view, name='about'),
     path('services/', views.services_view, name='services'),
     path('experience/', views.experience_view, name='experience'),
     path('gallery/', views.gallery_view, name='gallery'),
     path('contact/', views.contact_view, name='contact'),
+    
+    # 📑 FIX UTAMA FRONTEND: Sekarang rute halaman daftar cerita versi pengunjung resmi aktif!
+    path('stories/', views.story_view, name='stories'),
+
+    # ROUTING FRONTEND HALAMAN DETAIL (Versi Pengunjung)
+    path('articles/detail/<slug:slug>/', views.detail_articles_view, name='detail-articles'),
+    path('experience/detail/<slug:slug>/', views.detail_experience_view, name='detail-experience'),
+    path('services/detail/<slug:slug>/', views.detail_services_view, name='detail-services'),
+    path('story/detail/<slug:slug>/', views.detail_story_view, name='detail-story'),
+
+    # =========================================================================
+    # URL ROUTING BACKEND CUSTOM ADMIN PANEL (Seluruh Kontrol be/ Berada di Bawah)
+    # =========================================================================
+    path('be/', views.custom_dashboard, name='custom_dashboard'),
+
+    # URL ROUTING UNTUK LOGIN & LOGOUT ADMIN
+    path('be/login/', auth_views.LoginView.as_view(template_name='core/custom_admin/login.html'), name='admin_login'),
+    path('be/logout/', auth_views.LogoutView.as_view(next_page='admin_login'), name='admin_logout'),
 
     # URL ROUTING CRUD USER
     path('be/users/', views.UserListView.as_view(), name='user_list'),
@@ -23,21 +41,6 @@ urlpatterns = [
 
     # URL ROUTING EDIT PROFILE
     path('be/profile/edit/', views.user_edit_profile, name='user_edit_profile'),
-
-    # ROUTING FRONTEND HALAMAN DETAIL
-    path('articles/detail/<slug:slug>/', views.detail_articles_view, name='detail-articles'),
-    path('experience/detail/<slug:slug>/', views.detail_experience_view, name='detail-experience'),
-    path('services/detail/<slug:slug>/', views.detail_services_view, name='detail-services'),
-    
-    # 💡 FIX SAKRAL: Diubah menjadi 'detail-story' agar konsisten dengan struktur url strip lu yang lain
-    path('story/detail/<slug:slug>/', views.detail_story_view, name='detail-story'),
-
-    # URL ROUTING UNTUK LOGIN & LOGOUT
-    path('be/login/', auth_views.LoginView.as_view(template_name='core/custom_admin/login.html'), name='admin_login'),
-    path('be/logout/', auth_views.LogoutView.as_view(next_page='admin_login'), name='admin_logout'),
-
-    # URL ROUTING PANEL DASHBOARD UTAMA
-    path('be/', views.custom_dashboard, name='custom_dashboard'),
 
     # URL ROUTING CRUD ARTIKEL
     path('be/articles/', views.ArticleListView.as_view(), name='article_list'),

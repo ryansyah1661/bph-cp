@@ -91,6 +91,11 @@ def gallery_view(request):
 def contact_view(request):
     return render(request, 'core/contact.html')
 
+# KODE YANG BENAR (MENCARI STORY.HTML)
+def story_view(request):
+    stories_data = Story.objects.select_related('lokasi', 'project').order_by('-tanggal')
+    return render(request, 'core/story.html', {'stories': stories_data})
+
 # ==========================================
 # JALUR FRONTEND HALAMAN DETAIL (DINAMIS)
 # ==========================================
@@ -122,8 +127,9 @@ def detail_services_view(request, slug):
     })
 
 def detail_story_view(request, slug):
-    story_data = get_object_or_404(Story, slug=slug)
+    story_data = get_object_or_404(Story.objects.select_related('lokasi', 'project'), slug=slug)
     return render(request, 'core/detail-story.html', {'story': story_data})
+
 
 # ==========================================
 # PROTEKSI & SECURITY MIXIN
@@ -148,6 +154,7 @@ class AdminRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_staff
 
+
 # ==========================================
 # 1. MANAGEMENT ARTIKEL & WAWASAN TEKNIS
 # ==========================================
@@ -164,16 +171,9 @@ class ArticleCreateView(AdminRequiredMixin, CreateView):
 
     def form_valid(self, form):
         from django.utils.text import slugify
-        
-        # 1. Generate slug dasar dari input form atau dari judul
         base_slug = form.cleaned_data.get('slug') or slugify(form.cleaned_data.get('judul'))
-        
-        # 2. Potong aman di 200 karakter (umumnya SlugField Django max_length bawaannya 255)
-        # Sisa 55 karakter buat cadangan angka penanda unik (-1, -2, dst)
         slug = base_slug[:200]
         
-        # 3. LOGIKA SAKRAL ANTI-BENTROK: Cek ke database apakah slug sudah dipakai
-        # Kalau sudah ada yang kembar, otomatis looping tambah angka di belakangnya
         queryset = Article.objects.filter(slug=slug)
         if queryset.exists():
             original_slug = slug
@@ -194,12 +194,9 @@ class ArticleUpdateView(AdminRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         from django.utils.text import slugify
-        
-        # Ambil slug dari input form
         base_slug = form.cleaned_data.get('slug') or slugify(form.cleaned_data.get('judul'))
         slug = base_slug[:200]
         
-        # Logika anti-bentrok pas update (abaikan artikel yang sedang diedit ini sendiri)
         queryset = Article.objects.filter(slug=slug).exclude(pk=self.object.pk)
         if queryset.exists():
             original_slug = slug
@@ -220,6 +217,7 @@ class ArticleDeleteView(AdminRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, 'Artikel berhasil dihapus permanen!')
         return super().delete(request, *args, **kwargs)
+
 
 # ==========================================
 # 2. MANAGEMENT PROYEK (EXPERIENCE)
@@ -246,6 +244,7 @@ class ProjectDeleteView(AdminRequiredMixin, DeleteView):
     template_name = 'core/custom_admin/experience/experience_confirm_delete.html'
     success_url = reverse_lazy('project_list')
 
+
 # ==========================================
 # 3. MANAGEMENT CERITA LAPANGAN
 # ==========================================
@@ -270,6 +269,7 @@ class StoryDeleteView(AdminRequiredMixin, DeleteView):
     model = Story
     template_name = 'core/custom_admin/story/story_confirm_delete.html'
     success_url = reverse_lazy('story_list')
+
 
 # ==========================================
 # 4. MANAGEMENT MITRA / KLIEN
@@ -296,6 +296,7 @@ class ClientDeleteView(AdminRequiredMixin, DeleteView):
     template_name = 'core/custom_admin/client/client_confirm_delete.html'
     success_url = reverse_lazy('client_list')
 
+
 # ==========================================
 # 5. MANAGEMENT LAYANAN (SERVICES)
 # ==========================================
@@ -320,6 +321,7 @@ class ServiceDeleteView(AdminRequiredMixin, DeleteView):
     model = Service
     template_name = 'core/custom_admin/services/services_confirm_delete.html'
     success_url = reverse_lazy('service_list')
+
 
 # ==========================================
 # 6. MANAGEMENT LOKASI WILAYAH
@@ -346,6 +348,7 @@ class LocationDeleteView(AdminRequiredMixin, DeleteView):
     template_name = 'core/custom_admin/location/location_confirm_delete.html'
     success_url = reverse_lazy('location_list')
 
+
 # ==========================================
 # 7. MANAGEMENT KATEGORI
 # ==========================================
@@ -360,7 +363,6 @@ class CategoryCreateView(AdminRequiredMixin, CreateView):
     fields = '__all__'
     success_url = reverse_lazy('category_list')
 
-# FIX SAKRAL: Menambahkan UpdateView untuk Kategori agar tombol edit di admin tidak memicu error NoReverseMatch
 class CategoryUpdateView(AdminRequiredMixin, UpdateView):
     model = Category
     template_name = 'core/custom_admin/category/category_form.html'
@@ -371,6 +373,7 @@ class CategoryDeleteView(AdminRequiredMixin, DeleteView):
     model = Category
     template_name = 'core/custom_admin/category/category_confirm_delete.html'
     success_url = reverse_lazy('category_list')
+
 
 # ==========================================
 # 8. MANAGEMENT MODUL DOKUMEN
@@ -397,6 +400,7 @@ class DocumentDeleteView(AdminRequiredMixin, DeleteView):
     template_name = 'core/custom_admin/modul/modul_confirm_delete.html'
     success_url = reverse_lazy('document_list')
 
+
 # ==========================================
 # 9. MANAGEMENT KONTAK / PESAN MASUK
 # ==========================================
@@ -409,6 +413,7 @@ class ContactDeleteView(AdminRequiredMixin, DeleteView):
     model = ContactMessage
     template_name = 'core/custom_admin/contact/contact_confirm_delete.html'
     success_url = reverse_lazy('contact_list')
+
 
 # ==========================================
 # 10. MANAGEMENT GALERI DOKUMENTASI
@@ -435,12 +440,14 @@ class GalleryDeleteView(AdminRequiredMixin, DeleteView):
     template_name = 'core/custom_admin/gallery/gallery_confirm_delete.html'
     success_url = reverse_lazy('gallery_admin_list')
 
+
 # ==========================================
 # PROTEKSI KHUSUS SUPERUSER
 # ==========================================
 class SuperuserRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_authenticated and self.request.user.is_superuser
+
 
 # ==========================================
 # 11. MANAGEMENT USER / PENGGUNA
@@ -472,6 +479,7 @@ class UserDeleteView(SuperuserRequiredMixin, DeleteView):
     model = User
     template_name = 'core/custom_admin/user/user_confirm_delete.html'
     success_url = reverse_lazy('user_list')
+
 
 # ==========================================
 # 12. FITUR EDIT PROFIL MANDIRI USER

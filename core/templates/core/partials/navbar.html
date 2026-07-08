@@ -13,6 +13,7 @@
       </a>
     </div>
 
+    <!-- KONTEN MENU UTAMA DESKTOP (BERSIH TOTAL) -->
     <div class="hidden md:flex space-x-1 items-center">
       
       <a href="{% url 'homepage' %}"
@@ -57,7 +58,7 @@
       
       <a href="{% url 'gallery' %}"
          class="font-label-caps text-[15px] font-medium transition-colors duration-300 px-4 py-2 block rounded-full
-         {% if 'gallery' in request.path or 'galeri' in request.path %}
+         {% if 'gallery' in request.path or 'galeri' in request.path or 'story' in request.path or 'article' in request.path %}
            bg-primary/10 text-primary dark:bg-inverse-primary/15 dark:text-inverse-primary font-bold
          {% else %}
            text-on-surface-variant dark:text-surface-variant hover:bg-primary/5 hover:text-primary dark:hover:bg-white/5 dark:hover:text-inverse-primary
