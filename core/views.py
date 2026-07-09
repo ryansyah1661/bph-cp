@@ -32,7 +32,8 @@ def services_view(request):
     })
 
 def experience_view(request):
-    projects = Project.objects.select_related('client', 'location').prefetch_related('categories').order_by('-tahun')
+    # prefetch_related digunakan karena locations sekarang adalah ManyToManyField
+    projects = Project.objects.select_related('client').prefetch_related('locations', 'categories').order_by('-tahun')
     categories = Category.objects.filter(projects__isnull=False).distinct().order_by('name')
     years = Project.objects.order_by('-tahun').values_list('tahun', flat=True).distinct()
     clients = Client.objects.all()
@@ -70,16 +71,14 @@ def gallery_view(request):
     stories = Story.objects.order_by('-tanggal')
     documents = Modul.objects.order_by('-tanggal_rilis')
     categories = Category.objects.filter(folders__isnull=False).distinct().order_by('name')
-    
-    # --- FIX SAKRAL: AMBIL DATA FOLDER OPERASIONAL DAN PREFETCH RELASI IMAGES NYA ---
-    gallery_items = Gallery.objects.all() # Dipertahankan untuk .count counter sidebar
+    gallery_items = Gallery.objects.all()
     folders = Folder.objects.select_related('kategori').prefetch_related('images').order_by('-tahun', '-id')
 
     return render(request, 'core/gallery.html', {
         'articles': articles,
         'stories': stories,
         'gallery_items': gallery_items,
-        'folders': folders, # Dikirim ke frontend untuk looping sub-folder kegiatan
+        'folders': folders,
         'documents': documents,
         'categories': categories,
     })
@@ -99,8 +98,9 @@ def detail_articles_view(request, slug):
     return render(request, 'core/detail-articles.html', {'article': article_data})
 
 def detail_experience_view(request, slug):
+    # prefetch_related digunakan karena locations sekarang ManyToManyField
     project_data = get_object_or_404(
-        Project.objects.select_related('client', 'location', 'service_portfolio').prefetch_related('categories', 'metrics'),
+        Project.objects.select_related('client', 'service_portfolio').prefetch_related('locations', 'categories', 'metrics'),
         slug=slug
     )
     related_projects = Project.objects.filter(
@@ -225,13 +225,15 @@ class ProjectListView(AdminRequiredMixin, ListView):
 class ProjectCreateView(AdminRequiredMixin, CreateView):
     model = Project
     template_name = 'core/custom_admin/experience/experience_form.html'
-    fields = ['name', 'slug', 'description', 'tahun', 'image', 'client', 'service_portfolio', 'location', 'categories']
+    # 📑 Ganti 'location' menjadi 'locations' (jamak)
+    fields = ['name', 'slug', 'description', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'categories']
     success_url = reverse_lazy('project_list')
 
 class ProjectUpdateView(AdminRequiredMixin, UpdateView):
     model = Project
     template_name = 'core/custom_admin/experience/experience_form.html'
-    fields = ['name', 'slug', 'description', 'tahun', 'image', 'client', 'service_portfolio', 'location', 'categories']
+    # 📑 Ganti 'location' menjadi 'locations' (jamak)
+    fields = ['name', 'slug', 'description', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'categories']
     success_url = reverse_lazy('project_list')
 
 class ProjectDeleteView(AdminRequiredMixin, DeleteView):
@@ -239,6 +241,9 @@ class ProjectDeleteView(AdminRequiredMixin, DeleteView):
     template_name = 'core/custom_admin/experience/experience_confirm_delete.html'
     success_url = reverse_lazy('project_list')
 
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'Data proyek berhasil dihapus!')
+        return super().delete(request, *args, **kwargs)
 
 # ==========================================
 # 3. MANAGEMENT CERITA LAPANGAN
@@ -411,7 +416,7 @@ class ContactDeleteView(AdminRequiredMixin, DeleteView):
 
 
 # ==========================================
-# 10. MANAGEMENT GALERI DOKUMENTASI (FORM FIELDS AUTO-DETECT MODEL UPDATE)
+# 10. MANAGEMENT GALERI DOKUMENTASI
 # ==========================================
 class GalleryListView(AdminRequiredMixin, ListView):
     model = Gallery
@@ -421,13 +426,13 @@ class GalleryListView(AdminRequiredMixin, ListView):
 class GalleryCreateView(AdminRequiredMixin, CreateView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_form.html'
-    fields = ['caption', 'gambar', 'folder', 'kategori', 'tanggal_upload'] # Ditambahkan field folder & tanggal_upload
+    fields = ['caption', 'gambar', 'folder', 'kategori', 'tanggal_upload']
     success_url = reverse_lazy('gallery_admin_list')
 
 class GalleryUpdateView(AdminRequiredMixin, UpdateView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_form.html'
-    fields = ['caption', 'gambar', 'folder', 'kategori', 'tanggal_upload'] # Ditambahkan field folder & tanggal_upload
+    fields = ['caption', 'gambar', 'folder', 'kategori', 'tanggal_upload']
     success_url = reverse_lazy('gallery_admin_list')
 
 class GalleryDeleteView(AdminRequiredMixin, DeleteView):

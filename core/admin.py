@@ -43,11 +43,23 @@ class ServiceAdmin(admin.ModelAdmin):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('name', 'tahun', 'location', 'client')
-    list_filter = ('tahun', 'location', 'categories')
+    # 📑 FIX SAKRAL 1: Buang 'locations' dari list_display utama agar tidak crash E109
+    list_display = ('name', 'tahun', 'client')
+    
+    list_filter = ('tahun', 'categories')
     search_fields = ('name', 'description')
     prepopulated_fields = {'slug': ('name',)}
-    filter_horizontal = ('categories',)
+    
+    # 📑 FIX SAKRAL 2: Tambahkan widget filter geser kanan-kiri yang mewah untuk lokasi & kategori ManyToMany
+    filter_horizontal = ('locations', 'categories')
+    
+# @admin.register(Project)
+# class ProjectAdmin(admin.ModelAdmin):
+#     list_display = ('name', 'tahun', 'locations', 'client')
+#     list_filter = ('tahun', 'locations', 'categories')
+#     search_fields = ('name', 'description')
+#     prepopulated_fields = {'slug': ('name',)}
+#     filter_horizontal = ('categories',)
 
 @admin.register(Story)
 class StoryAdmin(admin.ModelAdmin):

@@ -85,12 +85,9 @@
 
                 <div class="h-px bg-slate-800 my-3 opacity-60"></div>
                 
-                <!-- 📄 PUBLIKASI MENU GROUP (FIX SINKRONISASI DROPDOWN & FOLDER ALBUM) -->
+                <!-- 📄 PUBLIKASI MENU GROUP -->
                 <div class="space-y-1 bph-menu-group-container">
-                    <!-- FIX: Ditambahkan kondisi 'folder' agar checkbox otomatis ter-centang dan dropdown terbuka -->
                     <input type="checkbox" id="drop-publikasi" class="bph-dropdown-check" {% if 'article' in request.resolver_match.url_name or 'story' in request.resolver_match.url_name or 'gallery' in request.resolver_match.url_name or 'folder' in request.resolver_match.url_name %}checked{% endif %}>
-                    
-                    <!-- FIX: Label toggle dapet style emerald-400 pas di halaman folder -->
                     <label for="drop-publikasi" class="bph-menu-toggle flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-slate-800 transition-all {% if 'article' in request.resolver_match.url_name or 'story' in request.resolver_match.url_name or 'gallery' in request.resolver_match.url_name or 'folder' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/20{% else %}text-slate-500{% endif %}">
                         <span class="flex items-center gap-2.5 truncate">📑 Publikasi</span>
                         <span class="material-symbols-outlined arrow-icon text-base flex-shrink-0">expand_more</span>
@@ -100,8 +97,6 @@
                         <li><a href="{% url 'article_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'article' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">description</span> Artikel</a></li>
                         <li><a href="{% url 'story_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'story' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">explore</span> Cerita Lapangan</a></li>
                         <li><a href="{% url 'gallery_admin_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'gallery' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">collections</span> Galeri Foto</a></li>
-                        
-                        <!-- FIX: Sub-menu Folder Album dimasukkan ke dalam list ul agar terbungkus accordion dengan rapi -->
                         <li><a href="{% url 'folder_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'folder' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">create_new_folder</span> Folder Album</a></li>
                     </ul>
                 </div>
@@ -198,7 +193,8 @@
                 </div>
             </header>
 
-            <main class="p-8 flex-1 bg-slate-50">
+            <!-- 🚨 FIX SAKRAL: Tambah overflow-y-auto dan max-height kalkulasi agar form panjang bisa di-scroll bebas -->
+            <main class="p-8 flex-1 bg-slate-50 overflow-y-auto max-h-[calc(100vh-64px)]">
                 {% if messages %}
                     {% for message in messages %}
                     <div class="p-4 mb-4 text-sm text-emerald-800 rounded-xl bg-emerald-50 border border-emerald-100 shadow-xs">{{ message }}</div>

@@ -1,6 +1,40 @@
 {% extends "core/custom_admin/base.html" %}
 
 {% block admin_content %}
+<!-- 🎨 STYLE UNTUK MODAL POP-UP MELAYANG -->
+<style>
+    .bph-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(15, 23, 42, 0.4); 
+        backdrop-filter: blur(4px); 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .bph-modal-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .bph-modal-overlay.active > div {
+        transform: scale(1);
+    }
+</style>
+
+<!-- 🚨 FIX SAKRAL: ELEMENT NOTIFIKASI IJO VIA JAVASCRIPT (TERSEMBUNYI SECARA DEFAULT) -->
+<div id="js-flash-message" class="hidden p-4 mb-5 text-sm text-emerald-800 rounded-xl bg-emerald-50 border border-emerald-100 shadow-xs transition-all duration-300">
+    Data proyek berhasil dihapus permanen!
+</div>
+
 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
     
     <!-- Header Box -->
@@ -14,12 +48,11 @@
         </a>
     </div>
 
-    <!-- Tabel Data Ber-Nomor, Bersih, dan Padat Informasi -->
+    <!-- Tabel Data -->
     <div class="overflow-x-auto w-full">
         <table class="w-full text-left border-collapse text-sm table-fixed">
             <thead>
                 <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
-                    <!-- Penyetelan lebar kolom agar presisi menghabiskan space -->
                     <th class="p-4 font-semibold w-14 text-center">No.</th>
                     <th class="p-4 font-semibold w-24 text-center">Gambar</th>
                     <th class="p-4 font-semibold w-auto">Nama Proyek</th>
@@ -31,12 +64,10 @@
             <tbody class="text-gray-700 divide-y divide-gray-50">
                 {% for project in projects %}
                 <tr class="hover:bg-slate-50/50 transition-colors">
-                    <!-- 1. Kolom Nomor Urut Otomatis -->
                     <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
                         {{ forloop.counter }}
                     </td>
 
-                    <!-- 2. Kolom Gambar -->
                     <td class="p-4 align-middle text-center">
                         {% if project.image %}
                             <img src="{{ project.image.url }}" class="w-12 h-12 object-cover rounded-xl border border-gray-100 shadow-sm mx-auto">
@@ -45,12 +76,10 @@
                         {% endif %}
                     </td>
                     
-                    <!-- 3. Kolom Nama Proyek -->
                     <td class="p-4 font-semibold text-emerald-800 align-middle text-base transition">
                         <div class="line-clamp-2 leading-snug">{{ project.name }}</div>
                     </td>
 
-                    <!-- 4. Kolom Klien (Info Tambahan Pengisi Space) -->
                     <td class="p-4 align-middle font-medium text-slate-600 truncate">
                         <div class="flex items-center gap-1.5">
                             <span class="material-symbols-outlined text-slate-400 text-lg">corporate_fare</span>
@@ -58,30 +87,30 @@
                         </div>
                     </td>
 
-                    <!-- 5. Kolom Tahun -->
                     <td class="p-4 align-middle text-center text-slate-500 font-medium">
                         <span class="inline-flex items-center gap-1 bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg text-xs font-bold font-mono">
                             {{ project.tahun }}
                         </span>
                     </td>
 
-                    <!-- 6. Kolom Aksi Icon Murni -->
                     <td class="p-4 text-center align-middle whitespace-nowrap">
                         <div class="flex justify-center items-center gap-2">
-                            <!-- Tombol Edit Icon Only -->
                             <a href="{% url 'project_update' project.pk %}" title="Edit Proyek" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
                                 <span class="material-symbols-outlined text-sm">edit</span>
                             </a>
-                            <!-- Tombol Hapus Icon Only -->
-                            <a href="{% url 'project_delete' project.pk %}" title="Hapus Proyek" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
+                            
+                            <button type="button" 
+                                    class="trigger-delete-btn inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition cursor-pointer"
+                                    data-url="{% url 'project_delete' project.pk %}" 
+                                    data-name="{{ project.name }}" 
+                                    title="Hapus Proyek">
                                 <span class="material-symbols-outlined text-sm">delete</span>
-                            </a>
+                            </button>
                         </div>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <!-- FIX: Ubah colspan jadi 6 mengikuti total kolom baru -->
                     <td colspan="6" class="p-8 text-center text-gray-400 font-medium">Belum ada data proyek.</td>
                 </tr>
                 {% endfor %}
@@ -89,5 +118,73 @@
         </table>
     </div>
 
+    <!-- 🚨 MODAL POP-UP KONFIRMASI HAPUS PROYEK -->
+    <div id="delete-project-modal" class="bph-modal-overlay">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-10 shadow-2xl border border-slate-100 text-center scale-95 transition-transform duration-200">
+            <span class="material-symbols-outlined text-rose-500 text-6xl mb-4">warning</span>
+            <h3 class="text-2xl font-extrabold mb-4 text-slate-900 tracking-wide">Hapus Portofolio Proyek?</h3>
+            <p class="text-base text-slate-500 mb-8 leading-relaxed px-4">Apakah Anda yakin ingin menghapus proyek <span id="modal-project-name" class="font-bold text-slate-800"></span>? Data yang sudah dihapus tidak dapat dikembalikan lagi ke dalam sistem.</p>
+            
+            <form id="delete-project-form" method="post" action="">
+                {% csrf_token %}
+                <div class="flex gap-4 px-2">
+                    <button type="button" id="btn-delete-cancel" class="flex-1 py-3 rounded-xl border border-slate-200 text-sm font-bold cursor-pointer text-slate-600 bg-white hover:bg-slate-50 transition tracking-wide">Batal</button>
+                    <button type="submit" class="flex-1 py-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-sm font-extrabold cursor-pointer border-none shadow-sm transition tracking-wide">Ya, Hapus Proyek</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const deleteModal = document.getElementById('delete-project-modal');
+        const deleteForm = document.getElementById('delete-project-form');
+        const projectNameSpan = document.getElementById('modal-project-name');
+        const cancelBtn = document.getElementById('btn-delete-cancel');
+        const deleteTriggers = document.querySelectorAll('.trigger-delete-btn');
+        const flashMessage = document.getElementById('js-flash-message');
+
+        # 🚨 LOGIKA SAKRAL NYALAIN NOTIFIKASI SETELAH PAGE REFRESH
+        if (localStorage.getItem('project_deleted') === 'true') {
+            flashMessage.classList.remove('hidden');
+            localStorage.removeItem('project_deleted'); # Hapus biar ga muncul lagi pas di-refresh manual
+            
+            # Hilangkan notifikasi secara halus setelah 4 detik
+            setTimeout(() => {
+                flashMessage.classList.add('hidden');
+            }, 4000);
+        }
+
+        // Buka Modal Pop-up secara realtime
+        deleteTriggers.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const deleteUrl = this.getAttribute('data-url');
+                const projectName = this.getAttribute('data-name');
+
+                deleteForm.setAttribute('action', deleteUrl);
+                projectNameSpan.textContent = `"${projectName}"`;
+                deleteModal.classList.add('active');
+            });
+        });
+
+        # Tandai local storage pas form disubmit sukses
+        deleteForm.addEventListener('submit', () => {
+            localStorage.setItem('project_deleted', 'true');
+        });
+
+        // Tutup Modal pas tombol Batal diklik
+        if (cancelBtn) {
+            cancelBtn.onclick = () => deleteModal.classList.remove('active');
+        }
+
+        // Tutup Modal pas area luar box putih diklik
+        deleteModal.addEventListener('click', function(e) {
+            if (e.target === this) deleteModal.classList.remove('active');
+        });
+    });
+</script>
+{% endblock %}
+
 {% endblock %}

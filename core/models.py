@@ -20,7 +20,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
-# === 1b. TABEL FOLDER / ALBUM DOKUMENTASI (TAMBAHAN BARU SAKRAL) ===
+# === 1b. TABEL FOLDER / ALBUM DOKUMENTASI ===
 class Folder(models.Model):
     nama = models.CharField(max_length=255, verbose_name="Nama Folder / Album")
     tahun = models.IntegerField(verbose_name="Tahun Dokumentasi")
@@ -141,7 +141,9 @@ class Project(models.Model):
 
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True, related_name='projects')
     service_portfolio = models.ForeignKey(Service, on_delete=models.SET_NULL, null=True, related_name='projects', verbose_name="Sesuai Portofolio Layanan")
-    location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, related_name='projects')
+    
+    # 📑 LOKASI PROVINSI JAMAK (ManyToManyField)
+    locations = models.ManyToManyField(Location, related_name='projects', verbose_name="Lokasi Wilayah Provinsi")
 
     categories = models.ManyToManyField(Category, related_name='projects', verbose_name="Kategori Proyek")
 
@@ -242,16 +244,13 @@ class ContactMessage(models.Model):
     def __str__(self):
         return f"Pesan dari {self.nama_lengkap} - {self.subjek}"
     
-# === 11. TABEL GALERI DOKUMENTASI (Gallery - Berelasi dengan Folder) ===
+# === 11. TABEL GALERI DOKUMENTASI ===
 class Gallery(models.Model):
     caption = models.CharField(max_length=250, verbose_name="Keterangan Foto / Caption")
     gambar = models.ImageField(upload_to='gallery/', verbose_name="File Foto")
     
-    # FIX: Hubungkan Foto ke Folder Pembungkusnya
     folder = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name='images', null=True, blank=True, verbose_name="Dimasukkan ke Folder")
     kategori = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='galleries', verbose_name="Kategori Filter")
-    
-    # Diubah menjadi DateField manual (tanpa auto_now_add) agar admin leluasa setel tanggal inputan di form admin
     tanggal_upload = models.DateField(verbose_name="Tanggal Dokumentasi")
 
     class Meta:

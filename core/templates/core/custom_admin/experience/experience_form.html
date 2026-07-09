@@ -47,9 +47,11 @@
                         <label class="block text-sm font-semibold text-slate-700 mb-1">Portofolio Layanan <span class="text-red-500">*</span></label>
                         <div class="django-input-wrapper">{{ form.service_portfolio }}</div>
                     </div>
+                    
+                    <!-- 🌿 FIX SAKRAL: Lepas bungkus 'django-input-wrapper' agar Tom Select bisa Auto-Expand bebas tanpa scrollbar potong -->
                     <div class="block-input-group">
                         <label class="block text-sm font-semibold text-slate-700 mb-1">Lokasi Wilayah <span class="text-red-500">*</span></label>
-                        <div class="django-input-wrapper">{{ form.location }}</div>
+                        <div class="text-xs custom-multi-select w-full mt-1">{{ form.locations }}</div>
                     </div>
                 </div>
 
@@ -146,7 +148,7 @@
         tahunInput.parentNode.replaceChild(selectYear, tahunInput);
     }
 
-    // --- 4. AUTO GENERATE SLUG REALTIME DARI NAME --
+    // --- AUTO GENERATE SLUG REALTIME DARI NAME --
     var nameInput = document.getElementById('id_name');
     var slugInput = document.getElementById('id_slug');
 
@@ -159,6 +161,17 @@
                 .replace(/[\s_]+/g, '-')
                 .replace(/^-+|-+$/g, '');
             slugInput.value = slugify;
+        });
+    }
+
+    // --- INITIALIZE TOMSELECT UNTUK MULTI LOKASI & KATEGORI ---
+    const locationsSelect = document.getElementById('id_locations');
+    if (locationsSelect) {
+        new TomSelect(locationsSelect, {
+            plugins: ['remove_button'],
+            create: false,
+            placeholder: "Pilih lokasi wilayah...",
+            allowEmptyOption: true,
         });
     }
 
@@ -180,6 +193,7 @@
         fileInput.addEventListener('change', function() { if (this.files[0]) fileNameDisplay.textContent = this.files[0].name; });
     }
     if (dropZone) {
+        dropZone.preventDefault();
         dropZone.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('border-emerald-400', 'bg-emerald-50'); });
         dropZone.addEventListener('dragleave', function() { this.classList.remove('border-emerald-400', 'bg-emerald-50'); });
         dropZone.addEventListener('drop', function(e) {
@@ -220,12 +234,16 @@
         box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1); 
     }
 
+    /* Override Style TomSelect agar seragam mewah */
     .ts-control {
         border-radius: 8px !important;
         padding: 8px 12px !important;
         border: 1px solid #e2e8f0 !important;
         font-size: 14px !important;
         margin-top: 4px;
+        /* 🚨 ANTI SCROLL: Paksa element tidak mengunci tinggi dan menyembunyikan overflow */
+        height: auto !important;
+        overflow: visible !important;
     }
     .ts-wrapper.focus .ts-control {
         border-color: #059669 !important;
