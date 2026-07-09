@@ -2,79 +2,77 @@
 
 {% block admin_content %}
 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
-    
-    <div class="flex justify-between items-center border-b border-gray-100 pb-5">
-        <div>
-            <h2 class="text-xl font-bold text-emerald-900">Galeri Dokumentasi Lapangan</h2>
-            <p class="text-xs text-gray-500 mt-1">Kelola arsip foto aksi lapangan yang tampil di halaman galeri website utama.</p>
-        </div>
-        <a href="{% url 'gallery_admin_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100">
-            <span class="material-symbols-outlined text-sm">add_a_photo</span> Tambah Foto
-        </a>
+  
+  <div class="flex justify-between items-center border-b border-gray-100 pb-5">
+    <div>
+      <h2 class="text-xl font-bold text-emerald-900">Galeri Dokumentasi Lapangan</h2>
+      <p class="text-xs text-gray-500 mt-1">Kelola arsip foto aksi lapangan yang tampil di halaman galeri website utama.</p>
     </div>
+    <a href="{% url 'gallery_admin_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100">
+      <span class="material-symbols-outlined text-sm">add_a_photo</span> Tambah Foto
+    </a>
+  </div>
 
-    <div class="overflow-x-auto w-full">
-        <table class="w-full text-left border-collapse text-sm table-fixed">
-            <thead>
-                <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
-                    <th class="p-4 font-semibold w-14 text-center">No.</th>
-                    <th class="p-4 font-semibold w-28 text-center">Pratinjau</th>
-                    <th class="p-4 font-semibold w-auto">Keterangan / Caption Foto</th>
-                    <th class="p-4 font-semibold w-48">Dimasukkan Ke Folder</th>
-                    <th class="p-4 font-semibold w-36 text-center">Tahun Dok.</th>
-                    <th class="p-4 font-semibold text-center w-28">Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="text-gray-700 divide-y divide-gray-50">
-                {% for item in items %}
-                <tr class="hover:bg-slate-50/50 transition">
-                    <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
-                        {{ forloop.counter }}
-                    </td>
+  <div class="overflow-x-auto w-full">
+    <table class="w-full text-left border-collapse text-sm table-auto">
+      <thead>
+        <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
+          <th class="p-4 font-semibold w-14 text-center">No.</th>
+          <th class="p-4 font-semibold w-28 text-center">Pratinjau</th>
+          <th class="p-4 font-semibold">Keterangan / Caption Foto</th>
+          <th class="p-4 font-semibold">Folder</th>
+          <th class="p-4 font-semibold text-center">Tahun Dok.</th>
+          <th class="p-4 font-semibold text-center w-28">Aksi</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700 divide-y divide-gray-50">
+        {% for item in items %}
+        <tr class="hover:bg-slate-50/50 transition">
+          <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
+            {{ forloop.counter }}
+          </td>
 
-                    <td class="p-4 align-middle text-center">
-                        {% if item.gambar %}
-                            <img src="{{ item.gambar.url }}" class="w-16 h-12 object-cover rounded-xl border border-gray-100 shadow-sm mx-auto">
-                        {% else %}
-                             <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded-md">No Image</span>
-                        {% endif %}
-                    </td>
-                    
-                    <td class="p-4 font-semibold text-emerald-900 align-middle text-base transition">
-                        <div class="line-clamp-2 leading-snug">{{ item.caption }}</div>
-                    </td>
+          <td class="p-4 align-middle text-center">
+            {% if item.gambar %}
+              <img src="{{ item.gambar.url }}" class="w-16 h-12 object-cover rounded-xl border border-gray-100 shadow-sm mx-auto">
+            {% else %}
+               <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded-md">No Image</span>
+            {% endif %}
+          </td>
+          
+          <!-- 🎨 FIX: Warna diganti text-slate-700 dan ukuran disamakan jadi text-sm -->
+          <td class="p-4 font-semibold text-slate-700 align-middle text-sm transition">
+            <div class="line-clamp-2 leading-snug">{{ item.caption }}</div>
+          </td>
 
-                    <!-- FIX: Kolom Nama Folder Relasi -->
-                    <td class="p-4 align-middle font-semibold text-slate-700 text-xs">
-                        <div class="flex items-center gap-1.5">
-                            <span class="material-symbols-outlined text-slate-400 text-sm">folder_open</span>
-                            <span class="truncate">{{ item.folder.nama|default:"Tanpa Folder" }}</span>
-                        </div>
-                    </td>
+          <!-- 📁 FIX: Icon folder_open dihapus, murni teks bersih text-sm -->
+          <td class="p-4 align-middle font-medium text-slate-700 text-sm">
+            <div class="truncate">{{ item.folder.nama|default:"Tanpa Folder" }}</div>
+          </td>
 
-                    <td class="p-4 text-center align-middle font-medium text-slate-500 text-xs">
-                        {{ item.tanggal_upload|date:"Y" }}
-                    </td>
-                    
-                    <td class="p-4 text-center align-middle whitespace-nowrap">
-                        <div class="flex justify-center items-center gap-2">
-                            <a href="{% url 'gallery_admin_update' item.pk %}" title="Edit Foto" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
-                                <span class="material-symbols-outlined text-sm">edit</span>
-                            </a>
-                            <a href="{% url 'gallery_admin_delete' item.pk %}" title="Hapus Foto" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
-                                <span class="material-symbols-outlined text-sm">delete</span>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="6" class="p-8 text-center text-gray-400 font-medium">Belum ada foto dokumentasi aksi lapangan yang diunggah.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+          <td class="p-4 text-center align-middle font-semibold text-slate-600 text-xs tracking-wide">
+            {{ item.tanggal_upload|date:"Y" }}
+          </td>
+          
+          <td class="p-4 text-center align-middle whitespace-nowrap">
+            <div class="flex justify-center items-center gap-2">
+              <a href="{% url 'gallery_admin_update' item.pk %}" title="Edit Foto" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
+                <span class="material-symbols-outlined text-sm">edit</span>
+              </a>
+              <a href="{% url 'gallery_admin_delete' item.pk %}" title="Hapus Foto" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
+                <span class="material-symbols-outlined text-sm">delete</span>
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="p-8 text-center text-gray-400 font-medium">Belum ada foto dokumentasi aksi lapangan yang diunggah.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
 </div>
 {% endblock %}

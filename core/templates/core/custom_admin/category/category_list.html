@@ -5,61 +5,61 @@
 
 {% block admin_content %}
 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
-    
-    <div class="flex justify-between items-center border-b border-gray-100 pb-5">
-        <div>
-            <h1 class="text-xl font-bold text-[#1e293b] tracking-tight">Kategori Proyek</h1>
-            <p class="text-xs text-gray-500 mt-1">Kelola master data kategori untuk pengelompokan pengalaman dan proyek.</p>
-        </div>
-        <div>
-            <a href="{% url 'category_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100" style="text-decoration: none;">
-                <span class="material-symbols-outlined text-sm">add</span> Tambah Kategori
-            </a>
-        </div>
+  
+  <div class="flex justify-between items-center border-b border-gray-100 pb-5">
+    <div>
+      <h1 class="text-xl font-bold text-[#1e293b] tracking-tight">Kategori Proyek</h1>
+      <p class="text-xs text-gray-500 mt-1">Kelola master data kategori untuk pengelompokan pengalaman dan proyek.</p>
     </div>
+    <div>
+      <a href="{% url 'category_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100" style="text-decoration: none;">
+        <span class="material-symbols-outlined text-sm">add</span> Tambah Kategori
+      </a>
+    </div>
+  </div>
 
-    <div class="overflow-x-auto w-full">
-        <table class="w-full text-left border-collapse text-sm table-fixed">
-            <thead>
-                <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
-                    <th class="p-4 font-semibold w-14 text-center">No.</th>
-                    <th class="p-4 font-semibold w-auto">Nama Kategori</th>
-                    <th class="p-4 font-semibold text-center w-28">Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="text-gray-700 divide-y divide-gray-50">
-                {% for category in categories %}
-                <tr class="hover:bg-slate-50/50 transition-colors">
-                    <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
-                        {{ forloop.counter }}
-                    </td>
-                    
-                    <td class="p-4 font-semibold text-slate-800 align-middle text-base hover:text-emerald-700 transition">
-                        {{ category.name }}
-                    </td>
-                    
-                    <td class="p-4 text-center align-middle whitespace-nowrap">
-                        <div class="flex justify-center items-center gap-2">
-                            <a href="{% url 'category_update' category.pk %}" title="Edit Kategori" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
-                                <span class="material-symbols-outlined text-sm">edit</span>
-                            </a>
-                            <button type="button" onclick="openDeleteModal('{{ category.id }}', '{{ category.name }}')" title="Hapus Kategori" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition cursor-pointer border-none">
-                                <span class="material-symbols-outlined text-sm">delete</span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="3" class="p-8 text-center text-gray-400 font-medium">
-                        <span class="material-symbols-outlined text-4xl block mb-2 text-gray-300">sell</span>
-                        Belum ada data kategori proyek.
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+  <div class="overflow-x-auto w-full">
+    <table class="w-full text-left border-collapse text-sm table-auto">
+      <thead>
+        <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
+          <th class="p-4 font-semibold w-14 text-center">No.</th>
+          <th class="p-4 font-semibold">Nama Kategori</th>
+          <th class="p-4 font-semibold text-center w-28">Aksi</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700 divide-y divide-gray-50">
+        {% for category in categories %}
+        <tr class="hover:bg-slate-50/50 transition-colors">
+          <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
+            {{ forloop.counter }}
+          </td>
+          
+          <td class="p-4 font-semibold text-slate-800 align-middle text-base hover:text-emerald-700 transition">
+            {{ category.name }}
+          </td>
+          
+          <td class="p-4 text-center align-middle whitespace-nowrap">
+            <div class="flex justify-center items-center gap-2">
+              <a href="{% url 'category_update' category.pk %}" title="Edit Kategori" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
+                <span class="material-symbols-outlined text-sm">edit</span>
+              </a>
+              <button type="button" onclick="openDeleteModal('{{ category.id }}', '{{ category.name }}')" title="Hapus Kategori" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition cursor-pointer border-none">
+                <span class="material-symbols-outlined text-sm">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="3" class="p-8 text-center text-gray-400 font-medium">
+            <span class="material-symbols-outlined text-4xl block mb-2 text-gray-300">sell</span>
+            Belum ada data kategori proyek.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 
 {% include 'core/custom_admin/category/category_confirm_delete.html' %}

@@ -70,8 +70,11 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+# =============================================================
+# KONFIGURASI BAHASA DAN ZONA WAKTU SAKRAL (WIB)
+# =============================================================
+LANGUAGE_CODE = 'id'
+TIME_ZONE = 'Asia/Jakarta'
 USE_I18N = True
 USE_TZ = True
 
@@ -95,7 +98,6 @@ LOGOUT_REDIRECT_URL = '/be/login/'
 # =============================================================
 # KONFIGURASI KEAMANAN SESSION LOGIN (KICK PAS BROWSER CLOSE)
 # =============================================================
-# Memaksa cookie session hangus begitu semua tab/window browser ditutup
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Membatasi umur cookie aktif maksimal 1 jam (3600 detik) demi keamanan idle

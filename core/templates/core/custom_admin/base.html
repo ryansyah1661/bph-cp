@@ -2,269 +2,269 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Dashboard Admin | Bhumi Pasa Hijau{% endblock %}</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body, h1, h2, h3, h4, h5, h6, p, td, th, a, input, select, button, textarea { font-family: 'Inter', -apple-system, sans-serif !important; box-sizing: border-box; }
-        html, body { height: 100%; overflow: hidden; margin: 0; padding: 0; background: #ffffff; }
-        
-        /* CSS CONTROL ACCORDION SIDEBAR & DROPDOWN TOPBAR */
-        .bph-profile-check, .bph-dropdown-check { display: none; }
-        
-        /* Trigger Tampil Pas Profile Dropdown Atas Di-klik */
-        .bph-profile-check:checked ~ .bph-nav-dropdown { display: block; }
-        
-        /* Default state konten anak sidebar tertutup */
-        .bph-dropdown-content { max-height: 0; overflow: hidden; transition: max-height 0.25s ease-out; }
-        
-        /* Pas di-check, konten anak memanjang kebuka */
-        .bph-dropdown-check:checked ~ .bph-dropdown-content { max-height: 500px; margin-top: 4px; }
-        
-        /* --- ROTASI PANAH SIDEBAR (MURNI CSS SELECTOR) --- */
-        .bph-menu-group-container .arrow-icon { 
-            transform: rotate(-90deg); 
-            transition: transform 0.2s ease; 
-        }
-        .bph-dropdown-check:checked ~ .bph-menu-toggle .arrow-icon { 
-            transform: rotate(0deg); 
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Dashboard Admin | Bhumi Pasa Hijau{% endblock %}</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body, h1, h2, h3, h4, h5, h6, p, td, th, a, input, select, button, textarea { font-family: 'Inter', -apple-system, sans-serif !important; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; margin: 0; padding: 0; background: #ffffff; }
+    
+    /* CSS CONTROL ACCORDION SIDEBAR & DROPDOWN TOPBAR */
+    .bph-profile-check, .bph-dropdown-check { display: none; }
+    
+    /* Trigger Tampil Pas Profile Dropdown Atas Di-klik */
+    .bph-profile-check:checked ~ .bph-nav-dropdown { display: block; }
+    
+    /* Default state konten anak sidebar tertutup */
+    .bph-dropdown-content { max-height: 0; overflow: hidden; transition: max-height 0.25s ease-out; }
+    
+    /* Pas di-check, konten anak memanjang kebuka */
+    .bph-dropdown-check:checked ~ .bph-dropdown-content { max-height: 500px; margin-top: 4px; }
+    
+    /* --- ROTASI PANAH SIDEBAR (MURNI CSS SELECTOR) --- */
+    .bph-menu-group-container .arrow-icon { 
+      transform: rotate(-90deg); 
+      transition: transform 0.2s ease; 
+    }
+    .bph-dropdown-check:checked ~ .bph-menu-toggle .arrow-icon { 
+      transform: rotate(0deg); 
+    }
 
-        /* Avatar Bulat Inisial Huruf */
-        .bph-avatar-circle {
-            width: 32px;
-            height: 32px;
-            background: #0f172a;
-            color: #ffffff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-        
-        /* Modal Overlay System */
-        .bph-modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.3); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
-        .bph-modal-overlay.active { opacity: 1; pointer-events: auto; }
-    </style>
-    {% block extra_css %}{% endblock %}
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    /* Avatar Bulat Inisial Huruf */
+    .bph-avatar-circle {
+      width: 32px;
+      height: 32px;
+      background: #0f172a;
+      color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    
+    /* Modal Overlay System */
+    .bph-modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.3); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+    .bph-modal-overlay.active { opacity: 1; pointer-events: auto; }
+  </style>
+  {% block extra_css %}{% endblock %}
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen overflow-x-hidden">
 
-    <div class="flex min-h-screen">
-        
-        <!-- ================= SIDEBAR CONTAINER ================= -->
-        <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col fixed h-full z-20 border-r border-slate-800 shadow-xl">
-            <div class="p-5 h-16 border-b border-slate-800 flex items-center gap-3 bg-slate-950/40">
-                <img src="{% static 'images/logo-bph-white.png' %}" alt="Logo" class="h-8 w-auto object-contain">
-                <span class="font-bold text-base text-white tracking-wide truncate">BPH Admin</span>
-            </div>
-            
-            <nav class="flex-1 p-4 space-y-1.5 overflow-y-auto">
-                <!-- Dashboard -->
-                <a href="{% url 'custom_dashboard' %}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all {% if request.resolver_match.url_name == 'custom_dashboard' %} bg-emerald-600 text-white font-semibold {% else %} text-slate-400 hover:bg-slate-800 hover:text-slate-100 {% endif %}">
-                    <span class="material-symbols-outlined text-xl">dashboard</span> Dashboard
-                </a>
-
-                <!-- Manajemen User (Superuser Only) -->
-                {% if request.user.is_superuser %}
-                <a href="{% url 'user_list' %}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all {% if 'user' in request.resolver_match.url_name %} bg-emerald-600 text-white font-semibold {% else %} text-slate-400 hover:bg-slate-800 hover:text-slate-100 {% endif %}">
-                    <span class="material-symbols-outlined text-xl">group</span> Manajemen User
-                </a>
-                {% endif %}
-
-                <!-- Kontak Masuk -->
-                <a href="{% url 'contact_list' %}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all {% if 'contact' in request.resolver_match.url_name %} bg-emerald-600 text-white font-semibold {% else %} text-slate-400 hover:bg-slate-800 hover:text-slate-100 {% endif %}">
-                    <span class="material-symbols-outlined text-xl">inbox</span> Kontak Masuk
-                </a>
-
-                <div class="h-px bg-slate-800 my-3 opacity-60"></div>
-                
-                <!-- 📄 PUBLIKASI MENU GROUP -->
-                <div class="space-y-1 bph-menu-group-container">
-                    <input type="checkbox" id="drop-publikasi" class="bph-dropdown-check" {% if 'article' in request.resolver_match.url_name or 'story' in request.resolver_match.url_name or 'gallery' in request.resolver_match.url_name or 'folder' in request.resolver_match.url_name %}checked{% endif %}>
-                    <label for="drop-publikasi" class="bph-menu-toggle flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-slate-800 transition-all {% if 'article' in request.resolver_match.url_name or 'story' in request.resolver_match.url_name or 'gallery' in request.resolver_match.url_name or 'folder' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/20{% else %}text-slate-500{% endif %}">
-                        <span class="flex items-center gap-2.5 truncate">📑 Publikasi</span>
-                        <span class="material-symbols-outlined arrow-icon text-base flex-shrink-0">expand_more</span>
-                    </label>
-                    
-                    <ul class="bph-dropdown-content space-y-1 pl-2">
-                        <li><a href="{% url 'article_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'article' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">description</span> Artikel</a></li>
-                        <li><a href="{% url 'story_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'story' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">explore</span> Cerita Lapangan</a></li>
-                        <li><a href="{% url 'gallery_admin_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'gallery' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">collections</span> Galeri Foto</a></li>
-                        <li><a href="{% url 'folder_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'folder' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">create_new_folder</span> Folder Album</a></li>
-                    </ul>
-                </div>
-
-                <!-- LAYANAN & PROYEK MENU GROUP -->
-                <div class="space-y-1 mt-2 bph-menu-group-container">
-                    <input type="checkbox" id="drop-layanan" class="bph-dropdown-check" {% if 'client' in request.resolver_match.url_name or 'service' in request.resolver_match.url_name or 'category' in request.resolver_match.url_name or 'location' in request.resolver_match.url_name or 'project' in request.resolver_match.url_name %}checked{% endif %}>
-                    <label for="drop-layanan" class="flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-slate-800 transition-all {% if 'client' in request.resolver_match.url_name or 'service' in request.resolver_match.url_name or 'category' in request.resolver_match.url_name or 'location' in request.resolver_match.url_name or 'project' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/20{% else %}text-slate-500{% endif %}">
-                        <span class="flex items-center gap-2.5 truncate">🌿 Layanan &amp; Proyek</span>
-                        <span class="material-symbols-outlined arrow-icon text-base flex-shrink-0">expand_more</span>
-                    </label>
-                    <ul class="bph-dropdown-content space-y-1 pl-2">
-                        <li><a href="{% url 'client_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'client' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">corporate_fare</span> Klien</a></li>
-                        <li><a href="{% url 'service_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'service' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">handyman</span> Layanan</a></li>
-                        <li><a href="{% url 'category_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'category' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">sell</span> Kategori</a></li>
-                        <li><a href="{% url 'location_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'location' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">location_on</span> Lokasi</a></li>
-                        <li><a href="{% url 'project_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'project' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">assignment</span> Proyek</a></li>
-                    </ul>
-                </div>
-
-                <!-- UNDUHAN BERKAS MENU GROUP -->
-                <div class="space-y-1 mt-2 bph-menu-group-container">
-                    <input type="checkbox" id="drop-unduhan" class="bph-dropdown-check" {% if 'document' in request.resolver_match.url_name %}checked{% endif %}>
-                    <label for="drop-unduhan" class="flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-slate-800 transition-all {% if 'document' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/20{% else %}text-slate-500{% endif %}">
-                        <span class="flex items-center gap-2.5 truncate">📁 Unduhan Berkas</span>
-                        <span class="material-symbols-outlined arrow-icon text-base flex-shrink-0">expand_more</span>
-                    </label>
-                    <ul class="bph-dropdown-content space-y-1 pl-2">
-                        <li><a href="{% url 'document_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'document' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">folder_open</span> Modul Dokumentasi</a></li>
-                    </ul>
-                </div>
-            </nav>
-
-            <!-- FOOTER SIDEBAR PROFILE -->
-            <div class="p-4 border-t border-slate-800 bg-slate-950/20">
-                <div class="flex items-center gap-3 px-2 py-2 rounded-xl bg-slate-800/30 border border-slate-800/50">
-                    {% if request.user.profile.foto_profil %}
-                        <img src="{{ request.user.profile.foto_profil.url }}" class="w-9 h-9 object-cover rounded-xl">
-                    {% else %}
-                        <div class="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-semibold text-xs uppercase" id="bph-avatar-sidebar-text">--</div>
-                    {% endif %}
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-semibold text-white truncate">{% if request.user.profile.nama_lengkap %}{{ request.user.profile.nama_lengkap }}{% else %}{{ request.user.username }}{% endif %}</p>
-                        <p class="text-[10px] text-slate-500 truncate">Administrator</p>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <!-- ================= MAIN CONTENT WRAPPER ================= -->
-        <div class="flex-1 flex flex-col pl-64">
-            
-            <!-- FIXED TOPBAR -->
-            <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-end px-8 sticky top-0 z-10 shadow-sm">
-                <div class="flex items-center gap-4">
-                    <div class="text-right hidden sm:block">
-                        <p class="text-sm text-slate-400 font-semibold">
-                            <span id="bph-greeting">Selamat</span>, {% if request.user.profile.nama_lengkap %}{{ request.user.profile.nama_lengkap }}{% else %}{{ request.user.username }}{% endif %}
-                        </p>
-                    </div>
-
-                    <div class="relative inline-block">
-                        <input type="checkbox" id="nav-profile-toggle" class="bph-profile-check">
-                        <label for="nav-profile-toggle" class="flex items-center gap-1 cursor-pointer p-1 rounded-full hover:bg-slate-100 transition-all select-none">
-                            {% if request.user.profile.foto_profil %}
-                                <img src="{{ request.user.profile.foto_profil.url }}" class="w-8 h-8 object-cover rounded-full border border-slate-200">
-                            {% else %}
-                                <div class="bph-avatar-circle">
-                                    <span id="bph-avatar-text">--</span>
-                                </div>
-                            {% endif %}
-                            <span class="material-symbols-outlined text-slate-400 text-lg">arrow_drop_down</span>
-                        </label>
-                
-                        <div class="bph-nav-dropdown absolute top-full right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-100 p-1.5 hidden z-50">
-                            <div class="flex items-center gap-3 px-3 py-2.5 border-b border-slate-100 mb-1">
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-xs font-semibold text-slate-800 truncate">{% if request.user.profile.nama_lengkap %}{{ request.user.profile.nama_lengkap }}{% else %}{{ request.user.username }}{% endif %}</p>
-                                    <p class="text-[10px] text-slate-400 truncate">{{ request.user.email|default:"No Email Account" }}</p>
-                                </div>
-                            </div>
-
-                            <a href="{% url 'user_edit_profile' %}" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition-colors text-sm font-medium" style="text-decoration: none;">
-                                <span class="material-symbols-outlined text-slate-400 text-lg">manage_accounts</span>
-                                <span>Edit Profil</span>
-                            </a>
-                            
-                            <button type="button" id="trigger-logout-modal" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-rose-50 hover:text-rose-600 transition-colors text-sm font-medium border-none bg-transparent text-left cursor-pointer">
-                                <span class="material-symbols-outlined text-slate-400 text-lg">logout</span>
-                                <span>Keluar</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
-            <!-- 🚨 FIX SAKRAL: Tambah overflow-y-auto dan max-height kalkulasi agar form panjang bisa di-scroll bebas -->
-            <main class="p-8 flex-1 bg-slate-50 overflow-y-auto max-h-[calc(100vh-64px)]">
-                {% if messages %}
-                    {% for message in messages %}
-                    <div class="p-4 mb-4 text-sm text-emerald-800 rounded-xl bg-emerald-50 border border-emerald-100 shadow-xs">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
-                {% block admin_content %}{% endblock %}
-            </main>
-        </div>
-    </div>
-
-    <!-- MODAL CONFIRM LOGOUT -->
-    <div id="logout-alert-modal" class="bph-modal-overlay">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center">
-            <h3 class="font-bold text-lg mb-4">Keluar Aplikasi</h3>
-            <p class="text-sm text-slate-500 mb-6">Yakin ingin keluar dari panel admin Bhumi Pasa Hijau?</p>
-            <div class="flex gap-3">
-                <button type="button" id="btn-modal-cancel" class="flex-1 py-2 rounded-xl border border-slate-200 text-sm font-semibold cursor-pointer">Batal</button>
-                <button type="button" id="btn-modal-confirm" class="flex-1 py-2 rounded-xl bg-rose-600 text-white text-sm font-bold cursor-pointer border-none">Konfirmasi</button>
-            </div>
-        </div>
-    </div>
-
-    <form id="hidden-logout-form" action="{% url 'admin_logout' %}" method="post" class="hidden">{% csrf_token %}</form>
-
-    <script>
-        const logoutAlertModal = document.getElementById('logout-alert-modal');
-        document.getElementById('trigger-logout-modal').onclick = () => logoutAlertModal.classList.add('active');
-        document.getElementById('btn-modal-cancel').onclick = () => logoutAlertModal.classList.remove('active');
-        document.getElementById('btn-modal-confirm').onclick = () => document.getElementById('hidden-logout-form').submit();
-
-        function updateGreeting() {
-            const greetingElement = document.getElementById('bph-greeting');
-            if (!greetingElement) return;
-
-            const currentHour = new Date().getHours();
-            let greeting = "Selamat Malam";
-
-            if (currentHour >= 5 && currentHour < 11) {
-                greeting = "Selamat Pagi";
-            } else if (currentHour >= 11 && currentHour < 15) {
-                greeting = "Selamat Siang";
-            } else if (currentHour >= 15 && currentHour < 18) {
-                greeting = "Selamat Sore";
-            }
-
-            greetingElement.innerText = greeting;
-
-            const username = "{{ request.user.username }}";
-            const avatarElement = document.getElementById('bph-avatar-text');
-            const avatarSidebarElement = document.getElementById('bph-avatar-sidebar-text');
+  <div class="flex min-h-screen">
     
-            if (username) {
-                let firstLetter = username.charAt(0);
-                let secondLetter = "";
-                const upperMatches = username.slice(1).match(/[A-Z]/);
-        
-                if (upperMatches) {
-                    secondLetter = upperMatches[0];
-                } else if (username.length > 1) {
-                    secondLetter = username.charAt(1);
-                }
-                
-                const finalInitials = (firstLetter + secondLetter).toUpperCase();
-                if (avatarElement) avatarElement.innerText = finalInitials;
-                if (avatarSidebarElement) avatarSidebarElement.innerText = finalInitials;
-            }
-        }
+    <!-- ================= SIDEBAR CONTAINER ================= -->
+    <aside class="bg-slate-900 text-slate-300 flex flex-col fixed h-full z-20 border-r border-slate-800 shadow-xl">
+      <div class="p-5 h-16 border-b border-slate-800 flex items-center gap-3 bg-slate-950/40">
+        <img src="{% static 'images/logo-bph-white.png' %}" alt="Logo" class="h-8 object-contain">
+        <span class="font-bold text-base text-white tracking-wide truncate">BPH Admin</span>
+      </div>
+      
+      <nav class="flex-1 p-4 space-y-1.5 overflow-y-auto">
+        <!-- Dashboard -->
+        <a href="{% url 'custom_dashboard' %}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all {% if request.resolver_match.url_name == 'custom_dashboard' %} bg-emerald-600 text-white font-semibold {% else %} text-slate-400 hover:bg-slate-800 hover:text-slate-100 {% endif %}">
+          <span class="material-symbols-outlined text-xl">dashboard</span> Dashboard
+        </a>
 
-        document.addEventListener('DOMContentLoaded', updateGreeting);
-    </script>
-    {% block extra_js %}{% endblock %}
+        <!-- Manajemen User (Superuser Only) -->
+        {% if request.user.is_superuser %}
+        <a href="{% url 'user_list' %}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all {% if 'user' in request.resolver_match.url_name %} bg-emerald-600 text-white font-semibold {% else %} text-slate-400 hover:bg-slate-800 hover:text-slate-100 {% endif %}">
+          <span class="material-symbols-outlined text-xl">group</span> Manajemen User
+        </a>
+        {% endif %}
+
+        <!-- Kontak Masuk -->
+        <a href="{% url 'contact_list' %}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all {% if 'contact' in request.resolver_match.url_name %} bg-emerald-600 text-white font-semibold {% else %} text-slate-400 hover:bg-slate-800 hover:text-slate-100 {% endif %}">
+          <span class="material-symbols-outlined text-xl">inbox</span> Kontak Masuk
+        </a>
+
+        <div class="h-px bg-slate-800 my-3 opacity-60"></div>
+        
+        <!-- 📄 PUBLIKASI MENU GROUP -->
+        <div class="space-y-1 bph-menu-group-container">
+          <input type="checkbox" id="drop-publikasi" class="bph-dropdown-check" {% if 'article' in request.resolver_match.url_name or 'story' in request.resolver_match.url_name or 'gallery' in request.resolver_match.url_name or 'folder' in request.resolver_match.url_name %}checked{% endif %}>
+          <label for="drop-publikasi" class="bph-menu-toggle flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-slate-800 transition-all {% if 'article' in request.resolver_match.url_name or 'story' in request.resolver_match.url_name or 'gallery' in request.resolver_match.url_name or 'folder' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/20{% else %}text-slate-500{% endif %}">
+            <span class="flex items-center gap-2.5 truncate">📑 Publikasi</span>
+            <span class="material-symbols-outlined arrow-icon text-base flex-shrink-0">expand_more</span>
+          </label>
+          
+          <ul class="bph-dropdown-content space-y-1 pl-2">
+            <li><a href="{% url 'article_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'article' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">description</span> Artikel</a></li>
+            <li><a href="{% url 'story_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'story' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">explore</span> Cerita Lapangan</a></li>
+            <li><a href="{% url 'gallery_admin_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'gallery' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">collections</span> Galeri Foto</a></li>
+            <li><a href="{% url 'folder_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'folder' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">create_new_folder</span> Folder Album</a></li>
+          </ul>
+        </div>
+
+        <!-- LAYANAN & PROYEK MENU GROUP -->
+        <div class="space-y-1 mt-2 bph-menu-group-container">
+          <input type="checkbox" id="drop-layanan" class="bph-dropdown-check" {% if 'client' in request.resolver_match.url_name or 'service' in request.resolver_match.url_name or 'category' in request.resolver_match.url_name or 'location' in request.resolver_match.url_name or 'project' in request.resolver_match.url_name %}checked{% endif %}>
+          <label for="drop-layanan" class="flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-slate-800 transition-all {% if 'client' in request.resolver_match.url_name or 'service' in request.resolver_match.url_name or 'category' in request.resolver_match.url_name or 'location' in request.resolver_match.url_name or 'project' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/20{% else %}text-slate-500{% endif %}">
+            <span class="flex items-center gap-2.5 truncate">🌿 Layanan &amp; Proyek</span>
+            <span class="material-symbols-outlined arrow-icon text-base flex-shrink-0">expand_more</span>
+          </label>
+          <ul class="bph-dropdown-content space-y-1 pl-2">
+            <li><a href="{% url 'client_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'client' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">corporate_fare</span> Klien</a></li>
+            <li><a href="{% url 'service_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'service' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">handyman</span> Layanan</a></li>
+            <li><a href="{% url 'category_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'category' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">sell</span> Kategori</a></li>
+            <li><a href="{% url 'location_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'location' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">location_on</span> Lokasi</a></li>
+            <li><a href="{% url 'project_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'project' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">assignment</span> Proyek</a></li>
+          </ul>
+        </div>
+
+        <!-- UNDUHAN BERKAS MENU GROUP -->
+        <div class="space-y-1 mt-2 bph-menu-group-container">
+          <input type="checkbox" id="drop-unduhan" class="bph-dropdown-check" {% if 'document' in request.resolver_match.url_name %}checked{% endif %}>
+          <label for="drop-unduhan" class="flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-slate-800 transition-all {% if 'document' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/20{% else %}text-slate-500{% endif %}">
+            <span class="flex items-center gap-2.5 truncate">📁 Unduhan Berkas</span>
+            <span class="material-symbols-outlined arrow-icon text-base flex-shrink-0">expand_more</span>
+          </label>
+          <ul class="bph-dropdown-content space-y-1 pl-2">
+            <li><a href="{% url 'document_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'document' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">folder_open</span> Modul Dokumentasi</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- FOOTER SIDEBAR PROFILE -->
+      <div class="p-4 border-t border-slate-800 bg-slate-950/20">
+        <div class="flex items-center gap-3 px-2 py-2 rounded-xl bg-slate-800/30 border border-slate-800/50">
+          {% if request.user.profile.foto_profil %}
+            <img src="{{ request.user.profile.foto_profil.url }}" class="w-9 h-9 object-cover rounded-xl">
+          {% else %}
+            <div class="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-semibold text-xs uppercase" id="bph-avatar-sidebar-text">--</div>
+          {% endif %}
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-white truncate">{% if request.user.profile.nama_lengkap %}{{ request.user.profile.nama_lengkap }}{% else %}{{ request.user.username }}{% endif %}</p>
+            <p class="text-[10px] text-slate-500 truncate">Administrator</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ================= MAIN CONTENT WRAPPER ================= -->
+    <div class="flex-1 flex flex-col pl-64">
+      
+      <!-- FIXED TOPBAR -->
+      <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-end px-8 sticky top-0 z-10 shadow-sm">
+        <div class="flex items-center gap-4">
+          <div class="text-right hidden sm:block">
+            <p class="text-sm text-slate-400 font-semibold">
+              <span id="bph-greeting">Selamat</span>, {% if request.user.profile.nama_lengkap %}{{ request.user.profile.nama_lengkap }}{% else %}{{ request.user.username }}{% endif %}
+            </p>
+          </div>
+
+          <div class="relative inline-block">
+            <input type="checkbox" id="nav-profile-toggle" class="bph-profile-check">
+            <label for="nav-profile-toggle" class="flex items-center gap-1 cursor-pointer p-1 rounded-full hover:bg-slate-100 transition-all select-none">
+              {% if request.user.profile.foto_profil %}
+                <img src="{{ request.user.profile.foto_profil.url }}" class="w-8 h-8 object-cover rounded-full border border-slate-200">
+              {% else %}
+                <div class="bph-avatar-circle">
+                  <span id="bph-avatar-text">--</span>
+                </div>
+              {% endif %}
+              <span class="material-symbols-outlined text-slate-400 text-lg">arrow_drop_down</span>
+            </label>
+        
+            <div class="bph-nav-dropdown absolute top-full right-0 mt-2 bg-white rounded-xl shadow-xl border border-slate-100 p-1.5 hidden z-50">
+              <div class="flex items-center gap-3 px-3 py-2.5 border-b border-slate-100 mb-1">
+                <div class="flex-1 min-w-0">
+                  <p class="text-xs font-semibold text-slate-800 truncate">{% if request.user.profile.nama_lengkap %}{{ request.user.profile.nama_lengkap }}{% else %}{{ request.user.username }}{% endif %}</p>
+                  <p class="text-[10px] text-slate-400 truncate">{{ request.user.email|default:"No Email Account" }}</p>
+                </div>
+              </div>
+
+              <a href="{% url 'user_edit_profile' %}" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition-colors text-sm font-medium" style="text-decoration: none;">
+                <span class="material-symbols-outlined text-slate-400 text-lg">manage_accounts</span>
+                <span>Edit Profil</span>
+              </a>
+              
+              <button type="button" id="trigger-logout-modal" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-rose-50 hover:text-rose-600 transition-colors text-sm font-medium border-none bg-transparent text-left cursor-pointer">
+                <span class="material-symbols-outlined text-slate-400 text-lg">logout</span>
+                <span>Keluar</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- 🚨 FIX SAKRAL: Tambah overflow-y-auto dan max-height kalkulasi agar form panjang bisa di-scroll bebas -->
+      <main class="p-8 flex-1 bg-slate-50 overflow-y-auto max-h-[calc(100vh-64px)]">
+        {% if messages %}
+          {% for message in messages %}
+          <div class="p-4 mb-4 text-sm text-emerald-800 rounded-xl bg-emerald-50 border border-emerald-100 shadow-xs">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+        {% block admin_content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+
+  <!-- MODAL CONFIRM LOGOUT -->
+  <div id="logout-alert-modal" class="bph-modal-overlay">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center">
+      <h3 class="font-bold text-lg mb-4">Keluar Aplikasi</h3>
+      <p class="text-sm text-slate-500 mb-6">Yakin ingin keluar dari panel admin Bhumi Pasa Hijau?</p>
+      <div class="flex gap-3">
+        <button type="button" id="btn-modal-cancel" class="flex-1 py-2 rounded-xl border border-slate-200 text-sm font-semibold cursor-pointer">Batal</button>
+        <button type="button" id="btn-modal-confirm" class="flex-1 py-2 rounded-xl bg-rose-600 text-white text-sm font-bold cursor-pointer border-none">Konfirmasi</button>
+      </div>
+    </div>
+  </div>
+
+  <form id="hidden-logout-form" action="{% url 'admin_logout' %}" method="post" class="hidden">{% csrf_token %}</form>
+
+  <script>
+    const logoutAlertModal = document.getElementById('logout-alert-modal');
+    document.getElementById('trigger-logout-modal').onclick = () => logoutAlertModal.classList.add('active');
+    document.getElementById('btn-modal-cancel').onclick = () => logoutAlertModal.classList.remove('active');
+    document.getElementById('btn-modal-confirm').onclick = () => document.getElementById('hidden-logout-form').submit();
+
+    function updateGreeting() {
+      const greetingElement = document.getElementById('bph-greeting');
+      if (!greetingElement) return;
+
+      const currentHour = new Date().getHours();
+      let greeting ="Selamat Malam";
+
+      if (currentHour >= 5 && currentHour < 11) {
+        greeting ="Selamat Pagi";
+      } else if (currentHour >= 11 && currentHour < 15) {
+        greeting ="Selamat Siang";
+      } else if (currentHour >= 15 && currentHour < 18) {
+        greeting ="Selamat Sore";
+      }
+
+      greetingElement.innerText = greeting;
+
+      const username ="{{ request.user.username }}";
+      const avatarElement = document.getElementById('bph-avatar-text');
+      const avatarSidebarElement = document.getElementById('bph-avatar-sidebar-text');
+  
+      if (username) {
+        let firstLetter = username.charAt(0);
+        let secondLetter ="";
+        const upperMatches = username.slice(1).match(/[A-Z]/);
+    
+        if (upperMatches) {
+          secondLetter = upperMatches[0];
+        } else if (username.length > 1) {
+          secondLetter = username.charAt(1);
+        }
+        
+        const finalInitials = (firstLetter + secondLetter).toUpperCase();
+        if (avatarElement) avatarElement.innerText = finalInitials;
+        if (avatarSidebarElement) avatarSidebarElement.innerText = finalInitials;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', updateGreeting);
+  </script>
+  {% block extra_js %}{% endblock %}
 </body>
 </html>

@@ -3,48 +3,48 @@
 
 {% block admin_content %}
 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm max-w-2xl mx-auto space-y-6">
-    <div class="border-b border-gray-100 pb-4">
-        <h2 class="text-xl font-bold text-emerald-900">{% if object %}Edit{% else %}Tambah{% endif %} User Pengguna</h2>
-        <p class="text-xs text-gray-500 mt-1">Isi kredensial akun administrator panel dengan benar.</p>
+  <div class="border-b border-gray-100 pb-4">
+    <h2 class="text-xl font-bold text-emerald-900">{% if object %}Edit{% else %}Tambah{% endif %} User Pengguna</h2>
+    <p class="text-xs text-gray-500 mt-1">Isi kredensial akun administrator panel dengan benar.</p>
+  </div>
+
+  <form method="POST" class="space-y-5">
+    {% csrf_token %}
+    
+    {% for field in form %}
+    <div class="flex flex-col space-y-1.5">
+      <label class="text-sm font-semibold text-slate-700">
+        {% if field.name == 'username' %}Username
+        {% elif field.name == 'email' %}Alamat Email
+        {% elif field.name == 'password' %}Password / Kata Sandi
+        {% elif field.name == 'is_staff' %}Akses Administrator (Staff)
+        {% elif field.name == 'is_active' %}Status Akun Aktif
+        {% else %}{{ field.label }}{% endif %}
+      </label>
+
+      {% if field.field.widget.input_type =="checkbox" %}
+        <div class="flex items-center h-5 pt-1">
+          {{ field|add_class:"w-4 h-4 rounded text-emerald-600 border-gray-300 focus:ring-emerald-500" }}
+          <span class="text-xs text-gray-400 ml-2">Izinkan hak akses/status ini untuk user terkait</span>
+        </div>
+      {% else %}
+        {% if field.name == 'password' %}
+          {{ field|attr:"type:password"|add_class:"w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition" }}
+        {% else %}
+          {{ field|add_class:"w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition" }}
+        {% endif %}
+      {% endif %}
+
+      {% if field.errors %}
+        <span class="text-xs text-rose-500 mt-1">{{ field.errors.0 }}</span>
+      {% endif %}
     </div>
+    {% endfor %}
 
-    <form method="POST" class="space-y-5">
-        {% csrf_token %}
-        
-        {% for field in form %}
-        <div class="flex flex-col space-y-1.5">
-            <label class="text-sm font-semibold text-slate-700">
-                {% if field.name == 'username' %}Username
-                {% elif field.name == 'email' %}Alamat Email
-                {% elif field.name == 'password' %}Password / Kata Sandi
-                {% elif field.name == 'is_staff' %}Akses Administrator (Staff)
-                {% elif field.name == 'is_active' %}Status Akun Aktif
-                {% else %}{{ field.label }}{% endif %}
-            </label>
-
-            {% if field.field.widget.input_type == "checkbox" %}
-                <div class="flex items-center h-5 pt-1">
-                    {{ field|add_class:"w-4 h-4 rounded text-emerald-600 border-gray-300 focus:ring-emerald-500" }}
-                    <span class="text-xs text-gray-400 ml-2">Izinkan hak akses/status ini untuk user terkait</span>
-                </div>
-            {% else %}
-                {% if field.name == 'password' %}
-                    {{ field|attr:"type:password"|add_class:"w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition" }}
-                {% else %}
-                    {{ field|add_class:"w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition" }}
-                {% endif %}
-            {% endif %}
-
-            {% if field.errors %}
-                <span class="text-xs text-rose-500 mt-1">{{ field.errors.0 }}</span>
-            {% endif %}
-        </div>
-        {% endfor %}
-
-        <div class="flex justify-end gap-3 pt-5 border-t border-gray-100">
-            <a href="{% url 'user_list' %}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2.5 rounded-xl transition">Batal</a>
-            <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-sm">Simpan Akun</button>
-        </div>
-    </form>
+    <div class="flex justify-end gap-3 pt-5 border-t border-gray-100">
+      <a href="{% url 'user_list' %}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2.5 rounded-xl transition">Batal</a>
+      <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-sm">Simpan Akun</button>
+    </div>
+  </form>
 </div>
 {% endblock %}

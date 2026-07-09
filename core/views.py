@@ -84,6 +84,24 @@ def gallery_view(request):
     })
 
 def contact_view(request):
+    if request.method == 'POST':
+        nama = request.POST.get('nama_lengkap')
+        email = request.POST.get('email')
+        subjek = request.POST.get('subjek')
+        pesan = request.POST.get('pesan')
+        
+        if nama and email and subjek and pesan:
+            ContactMessage.objects.create(
+                nama_lengkap=nama,
+                email=email,
+                subjek=subjek,
+                pesan=pesan
+            )
+            messages.success(request, 'Pesan Anda berhasil dikirim! Tim kami akan segera menghubungi Anda.')
+            return redirect('contact_view')
+        else:
+            messages.error(request, 'Gagal mengirim pesan. Harap isi semua kolom formulir dengan benar.')
+
     return render(request, 'core/contact.html')
 
 def story_view(request):

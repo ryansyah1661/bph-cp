@@ -13,9 +13,7 @@ urlpatterns = [
     path('services/', views.services_view, name='services'),
     path('experience/', views.experience_view, name='experience'),
     path('gallery/', views.gallery_view, name='gallery'),
-    path('contact/', views.contact_view, name='contact'),
-    
-    # 📑 FIX UTAMA FRONTEND: Sekarang rute halaman daftar cerita versi pengunjung resmi aktif!
+    path('contact/', views.contact_view, name='contact_view'),
     path('stories/', views.story_view, name='stories'),
 
     # ROUTING FRONTEND HALAMAN DETAIL (Versi Pengunjung)

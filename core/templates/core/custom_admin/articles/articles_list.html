@@ -2,81 +2,75 @@
 
 {% block admin_content %}
 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
-    
-    <div class="flex justify-between items-center border-b border-gray-100 pb-5">
-        <div>
-            <h2 class="text-xl font-bold text-emerald-900">Manajemen Artikel & Wawasan Teknis</h2>
-            <p class="text-xs text-gray-500 mt-1">Kelola seluruh publikasi artikel informasi Bhumi Pasa Hijau.</p>
-        </div>
-        <a href="{% url 'article_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100">
-            <span class="material-symbols-outlined text-sm">add</span> Tambah Artikel
-        </a>
+  
+  <div class="flex justify-between items-center border-b border-gray-100 pb-5">
+    <div>
+      <h2 class="text-xl font-bold text-emerald-900">Manajemen Artikel & Wawasan Teknis</h2>
+      <p class="text-xs text-gray-500 mt-1">Kelola seluruh publikasi artikel informasi Bhumi Pasa Hijau.</p>
     </div>
+    <a href="{% url 'article_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100">
+      <span class="material-symbols-outlined text-sm">add</span> Tambah Artikel
+    </a>
+  </div>
 
-    <div class="overflow-x-auto w-full">
-        <table class="w-full text-left border-collapse text-sm table-fixed">
-            <thead>
-                <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
-                    <th class="p-4 font-semibold w-14 text-center">No.</th>
-                    <th class="p-4 font-semibold w-24 text-center">Gambar</th>
-                    <th class="p-4 font-semibold w-auto">Judul Artikel</th>
-                    <th class="p-4 font-semibold w-64">Penulis</th>
-                    <th class="p-4 font-semibold w-56 text-center">Tanggal Terbit</th>
-                    <th class="p-4 font-semibold text-center w-28">Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="text-gray-700 divide-y divide-gray-50">
-                {% for article in articles %}
-                <tr class="hover:bg-slate-50/50 transition">
-                    <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
-                        {{ forloop.counter }}
-                    </td>
+  <div class="overflow-x-auto w-full">
+    <table class="w-full text-left border-collapse text-sm table-auto">
+      <thead>
+        <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
+          <th class="p-4 font-semibold w-14 text-center">No.</th>
+          <th class="p-4 font-semibold w-24 text-center">Gambar</th>
+          <th class="p-4 font-semibold">Judul Artikel</th>
+          <th class="p-4 font-semibold">Penulis</th>
+          <th class="p-4 font-semibold text-center">Tanggal Terbit</th>
+          <th class="p-4 font-semibold text-center w-28">Aksi</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700 divide-y divide-gray-50">
+        {% for article in articles %}
+        <tr class="hover:bg-slate-50/50 transition">
+          <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
+            {{ forloop.counter }}
+          </td>
 
-                    <td class="p-4 align-middle text-center">
-                        {% if article.gambar %}
-                            <img src="{{ article.gambar.url }}" class="w-12 h-12 object-cover rounded-xl border border-gray-100 shadow-sm mx-auto">
-                        {% else %}
-                             <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded-md">No Image</span>
-                        {% endif %}
-                    </td>
-                    
-                    <td class="p-4 font-semibold text-slate-800 align-middle text-base hover:text-emerald-700 transition">
-                        <div class="line-clamp-2 leading-snug">{{ article.judul }}</div>
-                    </td>
+          <td class="p-4 align-middle text-center">
+            {% if article.gambar %}
+              <img src="{{ article.gambar.url }}" class="w-12 h-12 object-cover rounded-xl border border-gray-100 shadow-sm mx-auto">
+            {% else %}
+               <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded-md">No Image</span>
+            {% endif %}
+          </td>
+          
+          <td class="p-4 font-semibold text-slate-800 align-middle text-base hover:text-emerald-700 transition">
+            <div class="line-clamp-2 leading-snug">{{ article.judul }}</div>
+          </td>
 
-                    <td class="p-4 align-middle font-medium text-slate-600 truncate">
-                        <div class="flex items-center gap-1.5">
-                            <span class="material-symbols-outlined text-slate-400 text-lg">person</span>
-                            <span>{{ article.author|default:"Admin BPH" }}</span>
-                        </div>
-                    </td>
+          <td class="p-4 align-middle font-medium text-slate-600 truncate">
+            <span>{{ article.author|default:"Admin BPH" }}</span>
+          </td>
 
-                    <td class="p-4 align-middle text-center text-slate-500 font-medium">
-                        <span class="inline-flex items-center gap-1.5 bg-slate-100 text-slate-700 px-3 py-1 rounded-lg text-xs font-semibold">
-                            <span class="material-symbols-outlined text-sm text-slate-400">calendar_month</span>
-                            {{ article.tanggal|date:"d M Y" }}
-                        </span>
-                    </td>
-                    
-                    <td class="p-4 text-center align-middle whitespace-nowrap">
-                        <div class="flex justify-center items-center gap-2">
-                            <a href="{% url 'article_update' article.pk %}" title="Edit Artikel" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
-                                <span class="material-symbols-outlined text-sm">edit</span>
-                            </a>
-                            <a href="{% url 'article_delete' article.pk %}" title="Hapus Artikel" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
-                                <span class="material-symbols-outlined text-sm">delete</span>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="6" class="p-8 text-center text-gray-400 font-medium">Belum ada data artikel.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+          <td class="p-4 align-middle text-center font-semibold text-slate-600 text-xs tracking-wide">
+            {{ article.tanggal|date:"d M Y" }}
+          </td>
+          
+          <td class="p-4 text-center align-middle whitespace-nowrap">
+            <div class="flex justify-center items-center gap-2">
+              <a href="{% url 'article_update' article.pk %}" title="Edit Artikel" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
+                <span class="material-symbols-outlined text-sm">edit</span>
+              </a>
+              <a href="{% url 'article_delete' article.pk %}" title="Hapus Artikel" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
+                <span class="material-symbols-outlined text-sm">delete</span>
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="p-8 text-center text-gray-400 font-medium">Belum ada data artikel.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
 </div>
 {% endblock %}

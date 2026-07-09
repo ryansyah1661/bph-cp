@@ -2,94 +2,94 @@
 
 {% block admin_content %}
 <div class="mb-6 pt-2">
-    <h2 class="text-xl font-bold text-emerald-900">{% if object %}Edit{% else %}Tambah{% endif %} Foto Dokumentasi Galeri</h2>
-    <p class="text-xs text-gray-500 mt-1">Unggah berkas foto aksi lapangan baru beserta relasi folder dan kategori filternya.</p>
+  <h2 class="text-xl font-bold text-emerald-900">{% if object %}Edit{% else %}Tambah{% endif %} Foto Dokumentasi Galeri</h2>
+  <p class="text-xs text-gray-500 mt-1">Unggah berkas foto aksi lapangan baru beserta relasi folder dan kategori filternya.</p>
 </div>
 
 <form method="post" enctype="multipart/form-data" class="w-full" id="gallery-form">
-    {% csrf_token %}
+  {% csrf_token %}
 
-    {% if form.errors %}
-    <div style="background:#fee2e2; border:1px solid #ef4444; padding:12px; border-radius:8px; margin-bottom:16px; color:#991b1b; font-size:13px;">
-        <strong>Terjadi kesalahan saat menyimpan data:</strong>
-        {{ form.errors }}
-    </div>
-    {% endif %}
+  {% if form.errors %}
+  <div style="background:#fee2e2; border:1px solid #ef4444; padding:12px; border-radius:8px; margin-bottom:16px; color:#991b1b; font-size:13px;">
+    <strong>Terjadi kesalahan saat menyimpan data:</strong>
+    {{ form.errors }}
+  </div>
+  {% endif %}
 
-    <div class="flex gap-6 items-start">
+  <div class="flex gap-6 items-start">
+    
+    <div class="flex-1 space-y-5">
+      <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-5">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Keterangan / Caption Foto <span class="text-red-500">*</span></label>
+          {{ form.caption }}
+        </div>
+
+        <!-- FIX: Field Dropdown Folder baru untuk Klaster Album -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Pilih Folder / Album Kegiatan <span class="text-red-500">*</span></label>
+          {{ form.folder }}
+          <p class="text-[11px] text-gray-400 mt-1">Pilih folder kegiatan penampung foto ini agar dikelompokkan secara rapi di frontend.</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Pilih Kategori Filter (Opsional/Cadangan)</label>
+          {{ form.kategori }}
+          <p class="text-[11px] text-gray-400 mt-1">Kategori utama biasanya diikutkan otomatis sesuai folder yang lu pilih.</p>
+        </div>
         
-        <div class="flex-1 space-y-5">
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-5">
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Keterangan / Caption Foto <span class="text-red-500">*</span></label>
-                    {{ form.caption }}
-                </div>
-
-                <!-- FIX: Field Dropdown Folder baru untuk Klaster Album -->
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Pilih Folder / Album Kegiatan <span class="text-red-500">*</span></label>
-                    {{ form.folder }}
-                    <p class="text-[11px] text-gray-400 mt-1">Pilih folder kegiatan penampung foto ini agar dikelompokkan secara rapi di frontend.</p>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Pilih Kategori Filter (Opsional/Cadangan)</label>
-                    {{ form.kategori }}
-                    <p class="text-[11px] text-gray-400 mt-1">Kategori utama biasanya diikutkan otomatis sesuai folder yang lu pilih.</p>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Tanggal Dokumentasi <span class="text-red-500">*</span></label>
-                    {{ form.tanggal_upload }}
-                    <p class="text-[11px] text-gray-400 mt-1">Tanggal dokumentasi riil pengambilan foto di lapangan.</p>
-                </div>
-            </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Tanggal Dokumentasi <span class="text-red-500">*</span></label>
+          {{ form.tanggal_upload }}
+          <p class="text-[11px] text-gray-400 mt-1">Tanggal dokumentasi riil pengambilan foto di lapangan.</p>
         </div>
-
-        <div class="w-80 flex-shrink-0 space-y-5">
-            <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
-                <label class="block text-sm font-semibold text-slate-700 mb-3">File Gambar Foto Berkas {% if not object.gambar %}<span class="text-red-500">*</span>{% endif %}</label>
-                
-                {% if object.gambar %}
-                    <div class="mb-3 rounded-xl overflow-hidden border border-gray-100 shadow-inner">
-                        <img src="{{ object.gambar.url }}" class="w-full h-40 object-cover">
-                    </div>
-                    <p class="text-[11px] text-gray-400 mb-2">Kosongkan field ini jika tidak ingin mengganti gambar.</p>
-                {% endif %}
-                
-                <div class="w-full">
-                    <div class="file-input-wrapper">
-                        {{ form.gambar }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex gap-3">
-                <a href="{% url 'gallery_admin_list' %}" class="flex-1 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm text-center font-semibold hover:bg-gray-50 transition">Batal</a>
-                <button type="submit" class="flex-1 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700 transition">Simpan</button>
-            </div>
-        </div>
+      </div>
     </div>
+
+    <div class="w-80 flex-shrink-0 space-y-5">
+      <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+        <label class="block text-sm font-semibold text-slate-700 mb-3">File Gambar Foto Berkas {% if not object.gambar %}<span class="text-red-500">*</span>{% endif %}</label>
+        
+        {% if object.gambar %}
+          <div class="mb-3 rounded-xl overflow-hidden border border-gray-100 shadow-inner">
+            <img src="{{ object.gambar.url }}" class="w-full h-40 object-cover">
+          </div>
+          <p class="text-[11px] text-gray-400 mb-2">Kosongkan field ini jika tidak ingin mengganti gambar.</p>
+        {% endif %}
+        
+        <div class="w-full">
+          <div class="file-input-wrapper">
+            {{ form.gambar }}
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex gap-3">
+        <a href="{% url 'gallery_admin_list' %}" class="flex-1 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm text-center font-semibold hover:bg-gray-50 transition">Batal</a>
+        <button type="submit" class="flex-1 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700 transition">Simpan</button>
+      </div>
+    </div>
+  </div>
 </form>
 
 <style>
-    /* FIX STYLE: Sinkronkan input select, text, file, dan date agar rounded-xl & serasi */
-    form input[type="text"], form select, form input[type="file"], form input[type="date"] { 
-        width: 100%; 
-        padding: 10px 14px; 
-        border: 1px solid #e2e8f0; 
-        border-radius: 12px; 
-        font-size: 14px; 
-        color: #1e293b; 
-        background-color: #f9fafb;
-        box-sizing: border-box;
-        transition: all 0.2s;
-    }
-    form input:focus, form select:focus { 
-        outline: none; 
-        border-color: #059669; 
-        background-color: #ffffff;
-        box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1); 
-    }
+  /* FIX STYLE: Sinkronkan input select, text, file, dan date agar rounded-xl & serasi */
+  form input[type="text"], form select, form input[type="file"], form input[type="date"] { 
+    width: 100%; 
+    padding: 10px 14px; 
+    border: 1px solid #e2e8f0; 
+    border-radius: 12px; 
+    font-size: 14px; 
+    color: #1e293b; 
+    background-color: #f9fafb;
+    box-sizing: border-box;
+    transition: all 0.2s;
+  }
+  form input:focus, form select:focus { 
+    outline: none; 
+    border-color: #059669; 
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1); 
+  }
 </style>
 {% endblock %}
