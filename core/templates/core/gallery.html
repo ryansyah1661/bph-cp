@@ -62,12 +62,10 @@
             {% endfor %}
           </div>
 
-          <!-- 🖼️ FIX FRONTEND: Grouping Tampilan Menggunakan Sub-Folder Dokumentasi -->
           <div id="gallery-sections-container" class="space-y-12">
             {% for folder in folders %}
             <div class="gallery-folder-group space-y-4" data-folder-tags="{{ folder.kategori.slug|default:'tanpa-kategori' }}">
               
-              <!-- Header Folder Penanda Kegiatan -->
               <div class="flex flex-wrap items-center justify-between border-b border-slate-200/60 pb-2">
                 <div class="flex items-center gap-2.5">
                   <span class="material-symbols-outlined text-primary text-base font-bold">folder_open</span>
@@ -83,7 +81,6 @@
                 </div>
               </div>
 
-              <!-- Grid Card Foto di dalam Folder Terkait -->
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {% for item in folder.images.all %}
                 <div class="gallery-card group flex flex-col bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300">
@@ -112,7 +109,6 @@
           </div>
         </div>
 
-        <!-- Seksi Artikel, Cerita, & Modul di bawah tetap utuh tanpa perubahan -->
         <div id="seksi-artikel" class="tab-content-block hidden space-y-6">
           <div class="max-w-2xl text-left">
             <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface mb-1">Artikel &amp; Wawasan Teknis</h2>
@@ -229,7 +225,6 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     
-    // --- 1. SCRIPT LOGIKA SEJAJAR TAB NAVIGASI ---
     const tabButtons = document.querySelectorAll('.tab-menu-btn');
     const tabContents = document.querySelectorAll('.tab-content-block');
 
@@ -265,7 +260,6 @@
       });
     });
 
-    // --- 2. FIX SAKRAL: FITUR FILTER KATEGORI BERDASARKAN FOLDER/ALBUM NYA ---
     const galleryButtons = document.querySelectorAll('.gallery-filter-btn');
     const folderGroups = document.querySelectorAll('.gallery-folder-group');
 
@@ -293,7 +287,6 @@
       });
     });
     
-    // --- 3. LOAD MORE / LESS ARTIKEL ---
     const articleCards = document.querySelectorAll('.article-card');
     const articleMoreBtn = document.getElementById('article-more-btn');
     const articleLessBtn = document.getElementById('article-less-btn');
@@ -324,7 +317,6 @@
       });
     }
 
-    // --- 4. LOAD MORE / LESS CERITA LAPANGAN ---
     const storyCards = document.querySelectorAll('.story-card');
     const storyMoreBtn = document.getElementById('story-more-btn');
     const storyLessBtn = document.getElementById('story-less-btn');

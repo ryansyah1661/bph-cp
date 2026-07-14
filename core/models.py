@@ -142,7 +142,6 @@ class Project(models.Model):
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True, related_name='projects')
     service_portfolio = models.ForeignKey(Service, on_delete=models.SET_NULL, null=True, related_name='projects', verbose_name="Sesuai Portofolio Layanan")
     
-    # 📑 LOKASI PROVINSI JAMAK (ManyToManyField)
     locations = models.ManyToManyField(Location, related_name='projects', verbose_name="Lokasi Wilayah Provinsi")
 
     categories = models.ManyToManyField(Category, related_name='projects', verbose_name="Kategori Proyek")

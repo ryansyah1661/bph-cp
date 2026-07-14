@@ -30,12 +30,9 @@
       <tbody class="text-gray-700 divide-y divide-gray-50">
         {% for client in clients %}
         <tr class="hover:bg-slate-50/50 transition">
-          <!-- 1. Kolom Nomor Urut Otomatis -->
           <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
             {{ forloop.counter }}
           </td>
-
-          <!-- 2. Kolom Logo -->
           <td class="p-4 align-middle text-center">
             {% if client.logo %}
               <img src="{{ client.logo.url }}" class="w-16 h-10 object-contain rounded-xl bg-gray-50 p-1 border border-gray-100 shadow-sm mx-auto">
@@ -43,13 +40,9 @@
                <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded-md">No Logo</span>
             {% endif %}
           </td>
-          
-          <!-- 3. Kolom Nama Instansi / Mitra -->
           <td class="p-4 font-semibold text-emerald-700 align-middle text-sm transition truncate">
             {{ client.nama }}
           </td>
-
-          <!-- 4. Kolom Aksi Icon Murni -->
           <td class="p-4 text-center align-middle whitespace-nowrap">
             <div class="flex justify-center items-center gap-2">
               <a href="{% url 'client_update' client.pk %}" title="Edit Mitra" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">

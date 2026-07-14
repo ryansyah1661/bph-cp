@@ -93,7 +93,7 @@
     quill.root.innerHTML = descTextarea.value;
   }
 
-  // --- 2. FIX TOMBOL SIMPAN MACET ---
+  // --- 2. TOMBOL SIMPAN MACET ---
   var formElement = document.getElementById('article-form');
 
   function syncQuillToTextarea() {
@@ -105,13 +105,13 @@
   quill.on('text-change', syncQuillToTextarea);
   formElement.addEventListener('submit', syncQuillToTextarea);
 
-  // --- 3. FIX KALENDER DATE PICKER ---
+  // --- 3. KALENDER DATE PICKER ---
   var tanggalInput = document.querySelector('input[name="tanggal"]');
   if (tanggalInput) {
     tanggalInput.setAttribute('type', 'date');
   }
 
-  // --- 4. FIX AUTO GENERATE SLUG DARI JUDUL ---
+  // --- 4. AUTO GENERATE SLUG DARI JUDUL ---
   var judulInput = document.querySelector('input[name="judul"]');
   var slugInput = document.querySelector('input[name="slug"]');
 
@@ -131,7 +131,7 @@
     });
   }
 
-  // --- 5. FIX REAL-TIME IMAGE PREVIEW & DRAG DROP ---
+  // --- 5. REAL-TIME IMAGE PREVIEW & DRAG DROP ---
   const fileInput = document.getElementById('id_gambar');
   const fileNameDisplay = document.getElementById('file-name-display');
   const dropZone = document.getElementById('drop-zone');

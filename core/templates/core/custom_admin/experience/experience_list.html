@@ -136,7 +136,6 @@
     const deleteTriggers = document.querySelectorAll('.trigger-delete-btn');
     const flashMessage = document.getElementById('js-flash-message');
 
-    // LOGIKA SAKROL NYALAIN NOTIFIKASI SETELAH PAGE REFRESH (Fix typo comment #)
     if (localStorage.getItem('project_deleted') === 'true') {
       flashMessage.classList.remove('hidden');
       localStorage.removeItem('project_deleted'); 
@@ -146,7 +145,6 @@
       }, 4000);
     }
 
-    // Buka Modal Pop-up secara realtime
     deleteTriggers.forEach(btn => {
       btn.addEventListener('click', function() {
         const deleteUrl = this.getAttribute('data-url');
@@ -158,17 +156,14 @@
       });
     });
 
-    // Tandai local storage pas form disubmit sukses
     deleteForm.addEventListener('submit', () => {
       localStorage.setItem('project_deleted', 'true');
     });
 
-    // Tutup Modal pas tombol Batal diklik
     if (cancelBtn) {
       cancelBtn.onclick = () => deleteModal.classList.remove('active');
     }
 
-    // Tutup Modal pas area luar box putih diklik
     deleteModal.addEventListener('click', function(e) {
       if (e.target === this) deleteModal.classList.remove('active');
     });

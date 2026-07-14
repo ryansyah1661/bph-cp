@@ -89,7 +89,6 @@
 
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <script>
-  // --- 1. INITIALIZE QUILL RICH TEXT EDITOR ---
   var quill = new Quill('#quill-editor', { theme: 'snow' });
   var descTextarea = document.querySelector('textarea[name="deskripsi"]');
 
@@ -97,7 +96,6 @@
     quill.root.innerHTML = descTextarea.value;
   }
 
-  // --- 2. FIX TOMBOL SIMPAN MACET ---
   var formElement = document.getElementById('story-form');
 
   function syncQuillToTextarea() {
@@ -108,14 +106,11 @@
 
   quill.on('text-change', syncQuillToTextarea);
   if(formElement) formElement.addEventListener('submit', syncQuillToTextarea);
-
-  // --- 3. FIX KALENDER DATE PICKER ---
   var tanggalInput = document.querySelector('input[name="tanggal"]');
   if (tanggalInput) {
     tanggalInput.setAttribute('type', 'date');
   }
 
-  // --- 4. AUTO GENERATE SLUG DARI JUDUL ---
   var judulInput = document.querySelector('input[name="judul"]');
   var slugInput = document.querySelector('input[name="slug"]');
 
@@ -131,7 +126,6 @@
     });
   }
 
-  // --- 5. FIX REAL-TIME IMAGE PREVIEW & DRAG DROP ---
   const fileInput = document.getElementById('id_gambar');
   const fileNameDisplay = document.getElementById('file-name-display');
   const dropZone = document.getElementById('drop-zone');

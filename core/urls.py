@@ -23,7 +23,7 @@ urlpatterns = [
     path('story/detail/<slug:slug>/', views.detail_story_view, name='detail-story'),
 
     # =========================================================================
-    # URL ROUTING BACKEND CUSTOM ADMIN PANEL (Seluruh Kontrol be/ Berada di Bawah)
+    # URL ROUTING BACKEND CUSTOM ADMIN PANEL
     # =========================================================================
     path('be/', views.custom_dashboard, name='custom_dashboard'),
 

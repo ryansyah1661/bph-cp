@@ -178,7 +178,6 @@
       }, 4000);
     }
 
-    // --- LOGIKA MODAL DETAIL BACA PESAN + FETCH STATE READ ---
     detailTriggers.forEach(btn => {
       btn.addEventListener('click', function() {
         const messageId = this.dataset.id;
@@ -207,7 +206,6 @@
             if (response.ok) {
               this.dataset.read = 'true';
               
-              // 🚨 REALTIME UPDATE: Ubah dot dan badge tanpa reload pas diklik
               if (rowElement) {
                 rowElement.classList.remove('bg-emerald-50/20', 'text-slate-900');
                 this.classList.remove('font-bold', 'text-slate-950');

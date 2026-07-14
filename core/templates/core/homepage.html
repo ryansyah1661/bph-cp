@@ -40,7 +40,6 @@
     </div>
   </section>
 
-  <!-- ARTIKEL TERBARU -->
   <section class="py-section-gap bg-surface-container-lowest border-t border-border-subtle w-full">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-4">
@@ -95,11 +94,9 @@
     </div>
   </section>
 
-  <!-- 💡 SEKSI CERITA DARI LAPANGAN (DINAMIS DARI DB) -->
   <section class="py-16 bg-gradient-to-b bg-surface from-transparent to-[#f9fbf9] dark:to-surface-dim/20 border-t border-border-subtle w-full">
     <div class="w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
       
-      <!-- Kita ambil data cerita pertama/terbaru (stories.0) -->
       {% if stories %}
         {% with latest_story=stories.0 %}
         <a href="{% url 'detail-articles' slug=latest_story.slug %}"
@@ -117,7 +114,7 @@
           
           {% if latest_story.lokasi %}
           <div class="absolute bottom-4 right-4 bg-primary text-surface-white px-4 py-2 rounded-xl text-xs font-bold tracking-wide shadow-md z-10">
-            📍 {{ latest_story.lokasi.nama_provinsi }}
+            {{ latest_story.lokasi.nama_provinsi }}
           </div>
           {% endif %}
         </a>
@@ -143,7 +140,6 @@
         </div>
         {% endwith %}
       {% else %}
-        <!-- Tampilan default/cadangan kalau di database sama sekali belum ada data cerita lapangan -->
         <a href="#" class="relative group overflow-hidden rounded-3xl shadow-md border border-black/5">
           <img src="{% static 'images/cerita.jpg' %}" alt="BPH" class="w-full h-[300px] md:h-[450px] object-cover" />
           <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>

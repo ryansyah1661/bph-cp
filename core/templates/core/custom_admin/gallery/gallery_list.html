@@ -40,12 +40,10 @@
             {% endif %}
           </td>
           
-          <!-- 🎨 FIX: Warna diganti text-slate-700 dan ukuran disamakan jadi text-sm -->
           <td class="p-4 font-semibold text-slate-700 align-middle text-sm transition">
             <div class="line-clamp-2 leading-snug">{{ item.caption }}</div>
           </td>
 
-          <!-- 📁 FIX: Icon folder_open dihapus, murni teks bersih text-sm -->
           <td class="p-4 align-middle font-medium text-slate-700 text-sm">
             <div class="truncate">{{ item.folder.nama|default:"Tanpa Folder" }}</div>
           </td>

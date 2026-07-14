@@ -10,22 +10,16 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     body, h1, h2, h3, h4, h5, h6, p, td, th, a, input, select, button, textarea { font-family: 'Inter', -apple-system, sans-serif !important; box-sizing: border-box; }
     
-    /* 🚨 FIX TINGGI GLOBAL: Ubah min-height dan biarkan overflow dikontrol pembungkus konten utama */
     html, body { min-height: 100%; margin: 0; padding: 0; background: #ffffff; }
     
-    /* CSS CONTROL ACCORDION SIDEBAR & DROPDOWN TOPBAR */
     .bph-profile-check, .bph-dropdown-check { display: none; }
     
-    /* Trigger Tampil Pas Profile Dropdown Atas Di-klik */
     .bph-profile-check:checked ~ .bph-nav-dropdown { display: block; }
     
-    /* Default state konten anak sidebar tertutup */
     .bph-dropdown-content { max-height: 0; overflow: hidden; transition: max-height 0.25s ease-out; }
     
-    /* Pas di-check, konten anak memanjang kebuka */
     .bph-dropdown-check:checked ~ .bph-dropdown-content { max-height: 500px; margin-top: 4px; }
     
-    /* --- ROTASI PANAH SIDEBAR --- */
     .bph-menu-group-container .arrow-icon { 
       transform: rotate(-90deg); 
       transition: transform 0.2s ease; 
@@ -34,7 +28,6 @@
       transform: rotate(0deg); 
     }
 
-    /* Avatar Bulat Inisial Huruf */
     .bph-avatar-circle {
       width: 32px;
       height: 32px;
@@ -49,7 +42,6 @@
       text-transform: uppercase;
     }
     
-    /* 🚨 FIX MODAL OVERLAY FULL LAYAR: Kunci mati posisinya di z-index tertinggi dan overlay fixed mutlak */
     .bph-modal-overlay { 
       position: fixed; 
       top: 0;
@@ -97,7 +89,7 @@
         </a>
         {% endif %}
 
-        <!-- Kontak Masuk (Auto Ijo via Request Match) -->
+        <!-- Kontak Masuk -->
         <a href="{% url 'contact_list' %}" class="flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium transition-all {% if request.resolver_match.url_name == 'contact_list' %} bg-emerald-600 text-white font-semibold shadow-md {% else %} text-slate-300 hover:bg-slate-950/40 hover:text-white {% endif %}">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined text-xl">mail</span> 
@@ -112,7 +104,7 @@
 
         <div class="h-px bg-slate-800 my-3 opacity-60"></div>
         
-        <!-- 📄 PUBLIKASI MENU GROUP -->
+        <!-- PUBLIKASI MENU GROUP -->
         <div class="space-y-1 bph-menu-group-container">
           <input type="checkbox" id="drop-publikasi" class="bph-dropdown-check" {% if 'article' in request.resolver_match.url_name or 'story' in request.resolver_match.url_name or 'gallery' in request.resolver_match.url_name or 'folder' in request.resolver_match.url_name %}checked{% endif %}>
           <label for="drop-publikasi" class="bph-menu-toggle flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-slate-800 transition-all {% if 'article' in request.resolver_match.url_name or 'story' in request.resolver_match.url_name or 'gallery' in request.resolver_match.url_name or 'folder' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/20{% else %}text-slate-500{% endif %}">

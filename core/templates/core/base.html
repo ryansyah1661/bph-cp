@@ -18,14 +18,13 @@
         theme: {
           extend: {
             colors: {
-              // ================= FIXED BRAND COLORS (SESUAI BRAND GUIDELINES BPH) =================
-              "primary": "#308935",                // Grass (Primary Color resmi BPH)
-              "forest-deep": "#077944",             // Naughty Green (Optional Accent resmi BPH)
-              "tertiary": "#FFC000",               // Amber (Tertiary Color resmi BPH)
-              "gray-melange": "#CDCACA",           // Gray Melange (Optional Color resmi BPH)
-              "surface-white": "#FFFFFF",          // White (Secondary Color resmi BPH)
+              // ================= BRAND GUIDELINES BPH =================
+              "primary": "#308935",
+              "forest-deep": "#077944",
+              "tertiary": "#FFC000",
+              "gray-melange": "#CDCACA",
+              "surface-white": "#FFFFFF",
               
-              // Kolom penunjang sistem dashboard UI layout tetap dipertahankan murni
               "on-secondary-fixed-variant": "#474744",
               "on-secondary": "#ffffff",
               "tertiary-fixed": "#ffdea8",
@@ -90,19 +89,19 @@
               "stack-md": "16px",
               "section-gap": "120px",
             },
-            // ================= FIXED FONT FAMILY MAPS (SESUAI ATURAN PANDUAN HALAMAN 8) =================
+            // ================= FONT FAMILY MAPS =================
             fontFamily: {
-              "display-lg": ["Plus Jakarta Sans", "sans-serif"],        // Heading token
-              "display-lg-mobile": ["Plus Jakarta Sans", "sans-serif"], // Heading token
-              "headline-xl": ["Plus Jakarta Sans", "sans-serif"],       // Heading token
-              "headline-lg": ["Plus Jakarta Sans", "sans-serif"],       // Heading token
+              "display-lg": ["Plus Jakarta Sans", "sans-serif"],
+              "display-lg-mobile": ["Plus Jakarta Sans", "sans-serif"],
+              "headline-xl": ["Plus Jakarta Sans", "sans-serif"],
+              "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
               
-              "headline-md": ["Poppins", "sans-serif"],                 // Sub Heading token
+              "headline-md": ["Poppins", "sans-serif"],
               
-              "body-lg": ["Inter", "sans-serif"],                       // Text / Body token
-              "body-md": ["Inter", "sans-serif"],                       // Text / Body token
-              "body-sm": ["Inter", "sans-serif"],                       // Text / Body token
-              "label-caps": ["Inter", "sans-serif"],                    // Text / Body token
+              "body-lg": ["Inter", "sans-serif"],
+              "body-md": ["Inter", "sans-serif"],
+              "body-sm": ["Inter", "sans-serif"],
+              "label-caps": ["Inter", "sans-serif"],
             },
             fontSize: {
               "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
@@ -120,7 +119,7 @@
       };
     </script>
     <style>
-      /* FIXED: Default fallback font utama text / body menggunakan Inter */
+
       body {
         font-family: 'Inter', sans-serif;
       }
@@ -180,25 +179,21 @@
       const backToTopBtn = document.getElementById("back-to-top");
       let lastScrollY = window.scrollY;
 
-      // Listener Scroll Bar Native (Ringan, Stabil, Tanpa Lag)
       window.addEventListener("scroll", () => {
         const currentScrollY = window.scrollY;
 
-        // 1. Logika Efek Shadow Navbar
         if (currentScrollY > 50) {
           if(nav) nav.classList.add("shadow-[0px_4px_20px_rgba(0,0,0,0.05)]");
         } else {
           if(nav) nav.classList.remove("shadow-[0px_4px_20px_rgba(0,0,0,0.05)]");
         }
 
-        // 2. RESTORED: Logika Efek Navbar Naik Turun (Hide on Scroll Down, Show on Scroll Up)
         if (currentScrollY > lastScrollY && currentScrollY > 150) {
           if(nav) nav.classList.add("-translate-y-full");
         } else {
           if(nav) nav.classList.remove("-translate-y-full");
         }
 
-        // 3. Logika Munculin Tombol Back to Top
         if (currentScrollY > 400) {
           backToTopBtn.classList.remove("opacity-0", "translate-y-6", "pointer-events-none");
         } else {

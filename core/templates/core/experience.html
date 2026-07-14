@@ -45,7 +45,6 @@
       display: block;
   }
 
-  /* WARNA DASAR DEFAULT JIKA TIDAK ADA PROYEK */
   .province-path {
       fill: #e2e8f0; 
       fill-opacity: 1;
@@ -255,7 +254,6 @@
         projectCounts[kode] = count;
     });
 
-    // 🚨 FIX SAKRAL: Menggunakan 5 warna pilihan murni dari lu, Ki!
     function getColorByCount(count) {
         if (!count || count === 0) return '#e2e8f0'; // 0 Proyek: Abu-abu bawaan
         if (count === 1) return '#0EFF00';           // 1 Proyek

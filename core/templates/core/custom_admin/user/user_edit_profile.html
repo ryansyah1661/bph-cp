@@ -61,7 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const container = document.getElementById('avatar-container');
   const inputWrapper = document.getElementById('django-file-input-wrapper');
 
-  // Bersihkan teks"Currently: ..." bawaan Django dari awal load halaman
   if (inputWrapper) {
     const pureInput = inputWrapper.querySelector('input[type="file"]');
     if (pureInput) {
@@ -70,7 +69,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Logika Live Preview pas user memilih file baru
   if (fileInput) {
     fileInput.addEventListener('change', function() {
       const file = this.files[0];

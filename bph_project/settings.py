@@ -54,11 +54,11 @@ WSGI_APPLICATION = 'bph_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db_bph',          # ← Nama database yang lu buat di Laragon tadi
-        'USER': 'root',            # ← Default user Laragon itu root
-        'PASSWORD': '',            # ← Default password Laragon itu kosong/blank
-        'HOST': '127.0.0.1',       # ← Alamat lokal server
-        'PORT': '3306',            # ← Port default MySQL
+        'NAME': 'db_bph',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         }
@@ -98,9 +98,7 @@ LOGIN_REDIRECT_URL = '/be/'
 LOGOUT_REDIRECT_URL = '/be/login/'
 
 # =============================================================
-# KONFIGURASI KEAMANAN SESSION LOGIN (KICK PAS BROWSER CLOSE)
+# KONFIGURASI KEAMANAN SESSION LOGIN
 # =============================================================
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
-# Membatasi umur cookie aktif maksimal 1 jam (3600 detik) demi keamanan idle
 SESSION_COOKIE_AGE = 3600
