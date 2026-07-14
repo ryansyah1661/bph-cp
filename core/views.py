@@ -32,7 +32,6 @@ def services_view(request):
     })
 
 def experience_view(request):
-    # prefetch_related digunakan karena locations sekarang adalah ManyToManyField
     projects = Project.objects.select_related('client').prefetch_related('locations', 'categories').order_by('-tahun')
     categories = Category.objects.filter(projects__isnull=False).distinct().order_by('name')
     years = Project.objects.order_by('-tahun').values_list('tahun', flat=True).distinct()
@@ -98,7 +97,7 @@ def contact_view(request):
                 pesan=pesan
             )
             messages.success(request, 'Pesan Anda berhasil dikirim! Tim kami akan segera menghubungi Anda.')
-            return redirect('contact_view')
+            return redirect('contact')
         else:
             messages.error(request, 'Gagal mengirim pesan. Harap isi semua kolom formulir dengan benar.')
 
@@ -116,7 +115,6 @@ def detail_articles_view(request, slug):
     return render(request, 'core/detail-articles.html', {'article': article_data})
 
 def detail_experience_view(request, slug):
-    # prefetch_related digunakan karena locations sekarang ManyToManyField
     project_data = get_object_or_404(
         Project.objects.select_related('client', 'service_portfolio').prefetch_related('locations', 'categories', 'metrics'),
         slug=slug
@@ -243,14 +241,12 @@ class ProjectListView(AdminRequiredMixin, ListView):
 class ProjectCreateView(AdminRequiredMixin, CreateView):
     model = Project
     template_name = 'core/custom_admin/experience/experience_form.html'
-    # 📑 Ganti 'location' menjadi 'locations' (jamak)
     fields = ['name', 'slug', 'description', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'categories']
     success_url = reverse_lazy('project_list')
 
 class ProjectUpdateView(AdminRequiredMixin, UpdateView):
     model = Project
     template_name = 'core/custom_admin/experience/experience_form.html'
-    # 📑 Ganti 'location' menjadi 'locations' (jamak)
     fields = ['name', 'slug', 'description', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'categories']
     success_url = reverse_lazy('project_list')
 
@@ -427,6 +423,10 @@ class ContactListView(AdminRequiredMixin, ListView):
     template_name = 'core/custom_admin/contact/contact_list.html'
     context_object_name = 'contacts'
 
+    def get_queryset(self):
+        ContactMessage.objects.filter(is_read=False).update(is_read=True)
+        return ContactMessage.objects.all().order_by('-tanggal_kirim')
+
 class ContactDeleteView(AdminRequiredMixin, DeleteView):
     model = ContactMessage
     template_name = 'core/custom_admin/contact/contact_confirm_delete.html'
@@ -457,6 +457,7 @@ class GalleryDeleteView(AdminRequiredMixin, DeleteView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_confirm_delete.html'
     success_url = reverse_lazy('gallery_admin_list')
+
 
 # ==========================================
 # 10b. MANAGEMENT FOLDER / ALBUM GALERI

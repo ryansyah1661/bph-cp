@@ -238,6 +238,8 @@ class ContactMessage(models.Model):
     pesan = models.TextField(verbose_name="Detail Pesan / Pertanyaan")
     tanggal_kirim = models.DateTimeField(auto_now_add=True, verbose_name="Waktu Kirim")
 
+    is_read = models.BooleanField(default=False, verbose_name="Sudah Dibaca")
+    
     class Meta:
         verbose_name_plural = "Pesan Masuk Kontak"
 

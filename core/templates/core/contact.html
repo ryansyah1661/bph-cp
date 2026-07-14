@@ -93,7 +93,7 @@
           <h3 class="font-headline-lg text-xl font-bold text-on-surface mb-2">Kirim Pesan Langsung</h3>
           <p class="font-body-md text-sm text-on-surface-variant mb-8">Tim administrasi kami akan merespons surat Anda dalam waktu maksimal 1x24 jam kerja.</p>
 
-          <form method="POST" action="{% url 'contact_view' %}" class="space-y-6">
+          <form method="POST" action="{% url 'contact' %}" class="space-y-6">
             {% csrf_token %}
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
