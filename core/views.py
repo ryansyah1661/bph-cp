@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from .models import Article, Project, Client, Story, Service, Location, Category, Modul, ContactMessage, Gallery, Profile, Folder
 
 # ==========================================
@@ -424,13 +426,22 @@ class ContactListView(AdminRequiredMixin, ListView):
     context_object_name = 'contacts'
 
     def get_queryset(self):
-        ContactMessage.objects.filter(is_read=False).update(is_read=True)
         return ContactMessage.objects.all().order_by('-tanggal_kirim')
 
 class ContactDeleteView(AdminRequiredMixin, DeleteView):
     model = ContactMessage
     template_name = 'core/custom_admin/contact/contact_confirm_delete.html'
     success_url = reverse_lazy('contact_list')
+
+@login_required(login_url='/be/login/')
+def mark_message_as_read(request, pk):
+    if request.method == 'POST':
+        msg = get_object_or_404(ContactMessage, pk=pk)
+        if not msg.is_read:
+            msg.is_read = True
+            msg.save()
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'failed'}, status=400)
 
 
 # ==========================================

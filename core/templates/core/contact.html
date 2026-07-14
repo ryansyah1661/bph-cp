@@ -8,7 +8,7 @@
   
   {% include 'core/partials/hero-banner.html' with title="Hubungi Kami" subtitle="Get In Touch" desc="Punya pertanyaan mengenai layanan konsultasi manajemen lingkungan atau ingin menjalin kemitraan strategis? Hubungi tim ahli kami sekarang." bg_image="images/contact.jpg" %}
 
-  <section class="px-margin-mobile bg-surface md:px-margin-desktop max-w-container-max mx-auto py-section-gap">
+  <section id="form-kontak" class="px-margin-mobile bg-surface md:px-margin-desktop max-w-container-max mx-auto py-section-gap">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
       
       <div class="lg:col-span-5 space-y-8">
@@ -93,7 +93,7 @@
           <h3 class="font-headline-lg text-xl font-bold text-on-surface mb-2">Kirim Pesan Langsung</h3>
           <p class="font-body-md text-sm text-on-surface-variant mb-8">Tim administrasi kami akan merespons surat Anda dalam waktu maksimal 1x24 jam kerja.</p>
 
-          <form method="POST" action="{% url 'contact' %}" class="space-y-6">
+          <form method="POST" action="#form-kontak" class="space-y-6">
             {% csrf_token %}
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

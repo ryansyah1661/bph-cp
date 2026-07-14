@@ -26,14 +26,30 @@
       </thead>
       <tbody class="text-gray-700 divide-y divide-gray-50">
         {% for msg in contacts %}
-        <tr class="hover:bg-slate-50/50 transition-colors">
+        <tr class="hover:bg-slate-50/50 transition-colors {% if not msg.is_read %}bg-emerald-50/10 text-slate-900{% endif %}">
           <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
             {{ forloop.counter }}
           </td>
 
           <td class="p-4 align-middle text-left">
-            <div class="font-semibold text-emerald-800 text-sm">{{ msg.nama_lengkap }}</div>
-            <div class="text-xs text-gray-400 font-medium mt-0.5">{{ msg.email }}</div>
+            <div class="flex items-center gap-2">
+              {% if not msg.is_read %}
+                <span class="status-dot h-2 w-2 rounded-full bg-emerald-500 ring-4 ring-emerald-100 shrink-0"></span>
+              {% else %}
+                <span class="status-dot h-2 w-2 rounded-full bg-slate-300 shrink-0"></span>
+              {% endif %}
+              
+              <div class="font-semibold text-emerald-800 text-sm">{{ msg.nama_lengkap }}</div>
+            </div>
+            <div class="text-xs text-gray-400 font-medium mt-0.5 pl-4">{{ msg.email }}</div>
+            
+            <div class="mt-1.5 pl-4">
+              {% if not msg.is_read %}
+                <span class="status-badge inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-rose-50 text-rose-600 border border-rose-100">Belum Dibaca</span>
+              {% else %}
+                <span class="status-badge inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-100 text-slate-500">Sudah Dibaca</span>
+              {% endif %}
+            </div>
           </td>
   
           <td class="p-4 align-middle font-semibold text-slate-700 text-sm text-left">
@@ -42,7 +58,9 @@
 
           <td class="p-4 pl-16 align-middle text-left max-w-xl">
             <button type="button" 
-                class="btn-buka-pesan text-left text-sm font-medium text-slate-700 line-clamp-2 leading-relaxed whitespace-pre-line hover:text-emerald-600 cursor-pointer transition bg-transparent border-none p-0 w-full"
+                class="btn-buka-pesan text-left text-sm font-medium text-slate-700 line-clamp-2 leading-relaxed whitespace-pre-line hover:text-emerald-600 cursor-pointer transition bg-transparent border-none p-0 w-full {% if not msg.is_read %}font-bold text-slate-950{% endif %}"
+                data-id="{{ msg.pk }}"
+                data-read="{{ msg.is_read|yesno:'true,false' }}"
                 data-nama="{{ msg.nama_lengkap }}"
                 data-email="{{ msg.email }}"
                 data-subjek="{{ msg.subjek }}"
@@ -76,7 +94,6 @@
     </table>
   </div>
 
-  <!-- Modal Pop-up Detail Baca Pesan Lengkap -->
   <div id="modal-detail-pesan" class="bph-modal-overlay">
     <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-50 transform scale-95 transition-all duration-200 id-modal-box">
       <div class="flex justify-between items-start border-b border-gray-100 pb-3 mb-4">
@@ -112,7 +129,6 @@
     </div>
   </div>
 
-  <!-- Modal Hapus Pesan -->
   <div id="delete-message-modal" class="bph-modal-overlay">
     <div class="bg-white rounded-2xl max-w-lg w-full p-10 shadow-2xl border border-slate-100 text-center scale-95 transition-transform duration-200 id-delete-box">
       <span class="material-symbols-outlined text-rose-500 text-6xl mb-4">warning</span>
@@ -130,11 +146,11 @@
   </div>
 
 </div>
+{% endblock %}
 
 {% block extra_js %}
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements Modal Hapus
     const deleteModal = document.getElementById('delete-message-modal');
     const deleteForm = document.getElementById('delete-message-form');
     const senderNameSpan = document.getElementById('modal-sender-name');
@@ -142,7 +158,6 @@
     const deleteTriggers = document.querySelectorAll('.trigger-delete-btn');
     const flashMessage = document.getElementById('js-flash-message');
 
-    // DOM Elements Modal Detail Baca Pesan
     const detailModal = document.getElementById('modal-detail-pesan');
     const detailModalBox = detailModal.querySelector('.id-modal-box');
     const detailTriggers = document.querySelectorAll('.btn-buka-pesan');
@@ -155,7 +170,6 @@
     const mEmail = document.getElementById('modal-email');
     const mIsi = document.getElementById('modal-isi');
 
-    // Handler Notifikasi Flash Berhasil Hapus via localStorage
     if (localStorage.getItem('message_deleted') === 'true') {
       flashMessage.classList.remove('hidden');
       localStorage.removeItem('message_deleted');
@@ -164,22 +178,57 @@
       }, 4000);
     }
 
-    // --- LOGIKA MODAL DETAIL BACA PESAN ---
+    // --- LOGIKA MODAL DETAIL BACA PESAN + FETCH STATE READ ---
     detailTriggers.forEach(btn => {
       btn.addEventListener('click', function() {
+        const messageId = this.dataset.id;
+        const isRead = this.dataset.read === 'true';
+        const rowElement = this.closest('tr');
+        const dotElement = rowElement ? rowElement.querySelector('.status-dot') : null;
+        const badgeElement = rowElement ? rowElement.querySelector('.status-badge') : null;
+
         mSubjek.innerText = this.dataset.subjek;
         mWaktu.innerText = this.dataset.waktu;
         mNama.innerText = this.dataset.nama;
         mEmail.innerText = this.dataset.email;
         mIsi.innerText = this.dataset.isi;
 
-        // Tambah class active bawaan overlay CSS
         detailModal.classList.add('active');
+
+        if (!isRead) {
+          fetch(`/be/messages/${messageId}/read/`, {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': '{{ csrf_token }}',
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => {
+            if (response.ok) {
+              this.dataset.read = 'true';
+              
+              // 🚨 REALTIME UPDATE: Ubah dot dan badge tanpa reload pas diklik
+              if (rowElement) {
+                rowElement.classList.remove('bg-emerald-50/20', 'text-slate-900');
+                this.classList.remove('font-bold', 'text-slate-950');
+              }
+              if (dotElement) {
+                dotElement.className = 'status-dot h-2 w-2 rounded-full bg-slate-300 shrink-0';
+              }
+              if (badgeElement) {
+                badgeElement.className = 'status-badge inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-100 text-slate-500';
+                badgeElement.innerText = 'Sudah Dibaca';
+              }
+            }
+          })
+          .catch(error => console.error('Error:', error));
+        }
       });
     });
 
     function closeDetailModal() {
       detailModal.classList.remove('active');
+      window.location.reload();
     }
 
     closeDetailX.addEventListener('click', closeDetailModal);
@@ -213,6 +262,4 @@
     });
   });
 </script>
-{% endblock %}
-
 {% endblock %}

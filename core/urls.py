@@ -91,6 +91,7 @@ urlpatterns = [
     # URL ROUTING CRUD PESAN KONTAK
     path('be/messages/', views.ContactListView.as_view(), name='contact_list'),
     path('be/messages/<int:pk>/delete/', views.ContactDeleteView.as_view(), name='contact_delete'),
+    path('be/messages/<int:pk>/read/', views.mark_message_as_read, name='mark_message_as_read'),
 
     # URL ROUTING CRUD GALERI DOKUMENTASI
     path('be/gallery/', views.GalleryListView.as_view(), name='gallery_admin_list'),
