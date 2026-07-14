@@ -104,4 +104,24 @@ urlpatterns = [
     path('be/folders/add/', views.FolderCreateView.as_view(), name='folder_create'),
     path('be/folders/<int:pk>/edit/', views.FolderUpdateView.as_view(), name='folder_update'),
     path('be/folders/<int:pk>/delete/', views.FolderDeleteView.as_view(), name='folder_delete'),
+
+    # 1. Halaman minta reset password (input email)
+    path('password-reset/', 
+         auth_views.PasswordResetView.as_view(template_name='core/registration/password_reset_form.html'), 
+         name='password_reset'),
+         
+    # 2. Halaman konfirmasi email terkirim (ada tombol resend di sini nanti)
+    path('password-reset/done/', 
+         auth_views.PasswordResetDoneView.as_view(template_name='core/registration/password_reset_done.html'), 
+         name='password_reset_done'),
+         
+    # 3. Link unik token dari email yang diklik user
+    path('password-reset-confirm/<uidb64>/<token>/', 
+         auth_views.PasswordResetConfirmView.as_view(template_name='core/registration/password_reset_confirm.html'), 
+         name='password_reset_confirm'),
+         
+    # 4. Halaman sukses setelah password berhasil diubah
+    path('password-reset-complete/', 
+         auth_views.PasswordResetCompleteView.as_view(template_name='core/registration/password_reset_complete.html'), 
+         name='password_reset_complete'),
 ]

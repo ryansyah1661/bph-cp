@@ -102,3 +102,20 @@ LOGOUT_REDIRECT_URL = '/be/login/'
 # =============================================================
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 3600
+
+# =============================================================
+# 🚨 KONFIGURASI SURAT ELEKTRONIK (EMAIL SMTP) UNTUK RESET PASSWORD
+# =============================================================
+
+# 💡 PILIHAN 1: Pakai ini pas testing lokal (Isi email bakal dicetak langsung di terminal VS Code lu)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# 💡 PILIHAN 2: Pakai ini kalau lu udah siap kirim email beneran lewat SMTP Gmail asli.
+# (Jika ingin mengaktifkan Pilihan 2, hapus tanda '#' pada 7 baris di bawah dan beri '#' pada Pilihan 1)
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'email_lu@gmail.com'  # ← Isi pakai alamat Gmail website/perusahaan
+# EMAIL_HOST_PASSWORD = 'xxxx xxxx xxxx xxxx'  # ← Isi pakai App Password 16 digit dari akun Google
+# DEFAULT_FROM_EMAIL = 'Bhumi Pasa Hijau <email_lu@gmail.com>'

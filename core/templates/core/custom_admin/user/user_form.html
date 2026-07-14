@@ -3,7 +3,7 @@
 
 {% block admin_content %}
 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm max-w-2xl mx-auto space-y-6">
-  <div class="border-b border-gray-100 pb-4">
+  <div class="border-b border-gray-100 pb-4 text-left">
     <h2 class="text-xl font-bold text-emerald-900">{% if object %}Edit{% else %}Tambah{% endif %} User Pengguna</h2>
     <p class="text-xs text-gray-500 mt-1">Isi kredensial akun administrator panel dengan benar.</p>
   </div>
@@ -12,24 +12,28 @@
     {% csrf_token %}
     
     {% for field in form %}
-    <div class="flex flex-col space-y-1.5">
+    <div class="flex flex-col space-y-1.5 text-left">
       <label class="text-sm font-semibold text-slate-700">
         {% if field.name == 'username' %}Username
         {% elif field.name == 'email' %}Alamat Email
         {% elif field.name == 'password' %}Password / Kata Sandi
         {% elif field.name == 'is_staff' %}Akses Administrator (Staff)
         {% elif field.name == 'is_active' %}Status Akun Aktif
+        {% elif field.name == 'is_superuser' %}Hak Akses Superuser
         {% else %}{{ field.label }}{% endif %}
       </label>
 
-      {% if field.field.widget.input_type =="checkbox" %}
+      {% if field.field.widget.input_type == "checkbox" %}
         <div class="flex items-center h-5 pt-1">
-          {{ field|add_class:"w-4 h-4 rounded text-emerald-600 border-gray-300 focus:ring-emerald-500" }}
+          {{ field|add_class:"w-4 h-4 rounded text-emerald-600 border-gray-300 focus:ring-emerald-500 cursor-pointer" }}
           <span class="text-xs text-gray-400 ml-2">Izinkan hak akses/status ini untuk user terkait</span>
         </div>
       {% else %}
         {% if field.name == 'password' %}
           {{ field|attr:"type:password"|add_class:"w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition" }}
+          {% if object %}
+            <span class="text-[11px] text-amber-600 font-medium mt-1"> Biarkan kosong atau isi dengan karakter acak jika tidak ingin mengubah password bawaan saat mengedit email/username.</span>
+          {% endif %}
         {% else %}
           {{ field|add_class:"w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition" }}
         {% endif %}
