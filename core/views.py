@@ -23,10 +23,17 @@ def homepage(request):
     })
 
 def about_view(request):
-    # Mengambil data tim ahli untuk ditampilkan di halaman About Us
-    team_members = TeamMember.objects.all().order_by('urutan', 'id')
+    # Mengambil data tim berdasarkan masing-masing kategori
+    advisors = TeamMember.objects.filter(kategori='advisors').order_by('urutan', 'id')
+    executives = TeamMember.objects.filter(kategori='executives').order_by('urutan', 'id')
+    staff = TeamMember.objects.filter(kategori='staff').order_by('urutan', 'id')
+    associates = TeamMember.objects.filter(kategori='associates').order_by('urutan', 'id')
+
     return render(request, 'core/about.html', {
-        'team_members': team_members
+        'advisors': advisors,
+        'executives': executives,
+        'staff': staff,
+        'associates': associates,
     })
 
 def services_view(request):
@@ -512,7 +519,7 @@ class TeamListView(AdminRequiredMixin, ListView):
 class TeamCreateView(AdminRequiredMixin, CreateView):
     model = TeamMember
     template_name = 'core/custom_admin/team/team_form.html'
-    fields = ['nama', 'jabatan', 'kategori', 'urutan', 'foto']
+    fields = ['nama', 'jabatan', 'bio', 'kategori', 'urutan', 'foto']
     success_url = reverse_lazy('team_list')
 
     def form_valid(self, form):
@@ -522,7 +529,7 @@ class TeamCreateView(AdminRequiredMixin, CreateView):
 class TeamUpdateView(AdminRequiredMixin, UpdateView):
     model = TeamMember
     template_name = 'core/custom_admin/team/team_form.html'
-    fields = ['nama', 'jabatan', 'kategori', 'urutan', 'foto']
+    fields = ['nama', 'jabatan', 'bio', 'kategori', 'urutan', 'foto']
     success_url = reverse_lazy('team_list')
 
     def form_valid(self, form):

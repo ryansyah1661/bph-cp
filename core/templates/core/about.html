@@ -79,78 +79,127 @@
       </p>
     </div>
 
+    <!-- Tombol Filter Tab -->
     <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-12">
       <button data-target="advisor" class="tab-btn px-6 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-300 bg-primary text-surface-white shadow-md">
-        Advisors
+        Senior Advisors
       </button>
       <button data-target="executive" class="tab-btn px-6 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-300 bg-surface-container text-on-surface-variant hover:bg-primary/10 hover:text-primary">
         Executives
       </button>
       <button data-target="staff" class="tab-btn px-6 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-300 bg-surface-container text-on-surface-variant hover:bg-primary/10 hover:text-primary">
-        Staff
+        Staff Consultants
       </button>
       <button data-target="associate" class="tab-btn px-6 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-300 bg-surface-container text-on-surface-variant hover:bg-primary/10 hover:text-primary">
-        Associates
+        Associate Consultants
       </button>
     </div>
 
+    <!-- Container Konten Tab Dinamis dari Database -->
     <div class="relative min-h-[400px]">
       
+      <!-- TAB 1: ADVISORS -->
       <div id="tab-advisor" class="tab-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter transition-all duration-500 transform opacity-100 translate-y-0">
-        <div class="group">
-          <div class="aspect-[3/4] mb-stack-md overflow-hidden bg-surface-container-highest rounded-lg">
-            <img class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" 
-                 alt="Diana Puspita Headshot" 
-                 src="{% static 'images/team-4.jpg' %}"/>
+        {% for member in advisors %}
+        <div class="group flex flex-col items-center text-center h-full bg-white rounded-xl p-4 border border-border-subtle hover:shadow-lg transition-all duration-300">
+          <div class="aspect-[3/4] w-full mb-stack-md overflow-hidden bg-surface-container-highest rounded-lg">
+            {% if member.foto %}
+              <img class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" 
+                   alt="{{ member.nama }}" 
+                   src="{{ member.foto.url }}"/>
+            {% else %}
+              <div class="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">No Photo</div>
+            {% endif %}
           </div>
-          <h4 class="font-headline-md text-headline-md text-on-surface mb-1">Diana Puspita, S.H.</h4>
-          <p class="font-body-md text-body-md text-primary">Penasihat Kebijakan Lingkungan</p>
+          <h4 class="font-headline-md text-headline-md text-on-surface mb-1 text-center">{{ member.nama }}</h4>
+          <p class="font-body-md text-body-md text-primary font-semibold text-center">{{ member.jabatan }}</p>
+          {% if member.bio %}
+          <div class="mt-3 p-3 bg-amber-50/60 border-l-2 border-amber-400 rounded-r-lg w-full text-center">
+            <p class="text-xs italic text-slate-600 leading-relaxed">"{{ member.bio }}"</p>
+          </div>
+          {% endif %}
         </div>
+        {% empty %}
+        <div class="col-span-full text-center py-12 text-slate-400">Belum ada data Senior Advisors.</div>
+        {% endfor %}
       </div>
 
+      <!-- TAB 2: EXECUTIVES -->
       <div id="tab-executive" class="tab-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter transition-all duration-500 transform opacity-0 translate-y-4 hidden">
-        <div class="group">
-          <div class="aspect-[3/4] mb-stack-md overflow-hidden bg-surface-container-highest rounded-lg">
-            <img class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" 
-                 alt="Dr. Budi Santoso Headshot" 
-                 src="{% static 'images/team-1.jpg' %}"/>
+        {% for member in executives %}
+        <div class="group flex flex-col items-center text-center h-full bg-white rounded-xl p-4 border border-border-subtle hover:shadow-lg transition-all duration-300">
+          <div class="aspect-[3/4] w-full mb-stack-md overflow-hidden bg-surface-container-highest rounded-lg">
+            {% if member.foto %}
+              <img class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" 
+                   alt="{{ member.nama }}" 
+                   src="{{ member.foto.url }}"/>
+            {% else %}
+              <div class="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">No Photo</div>
+            {% endif %}
           </div>
-          <h4 class="font-headline-md text-headline-md text-on-surface mb-1">Dr. Budi Santoso</h4>
-          <p class="font-body-md text-body-md text-primary">Direktur Utama</p>
-        </div>
-        <div class="group">
-          <div class="aspect-[3/4] mb-stack-md overflow-hidden bg-surface-container-highest rounded-lg">
-            <img class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" 
-                 alt="Anisa Rahmawati Headshot" 
-                 src="{% static 'images/team-2.jpg' %}"/>
+          <h4 class="font-headline-md text-headline-md text-on-surface mb-1 text-center">{{ member.nama }}</h4>
+          <p class="font-body-md text-body-md text-primary font-semibold text-center">{{ member.jabatan }}</p>
+          {% if member.bio %}
+          <div class="mt-3 p-3 bg-amber-50/60 border-l-2 border-amber-400 rounded-r-lg w-full text-center">
+            <p class="text-xs italic text-slate-600 leading-relaxed">"{{ member.bio }}"</p>
           </div>
-          <h4 class="font-headline-md text-headline-md text-on-surface mb-1">Anisa Rahmawati, M.Sc</h4>
-          <p class="font-body-md text-body-md text-primary">Kepala Konservasi Strategis</p>
+          {% endif %}
         </div>
+        {% empty %}
+        <div class="col-span-full text-center py-12 text-slate-400">Belum ada data Executives.</div>
+        {% endfor %}
       </div>
 
+      <!-- TAB 3: STAFF -->
       <div id="tab-staff" class="tab-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter transition-all duration-500 transform opacity-0 translate-y-4 hidden">
-        <div class="group">
-          <div class="aspect-[3/4] mb-stack-md overflow-hidden bg-surface-container-highest rounded-lg">
-            <img class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" 
-                 alt="Reza Pratama Headshot" 
-                 src="{% static 'images/team-3.jpg' %}"/>
+        {% for member in staff %}
+        <div class="group flex flex-col items-center text-center h-full bg-white rounded-xl p-4 border border-border-subtle hover:shadow-lg transition-all duration-300">
+          <div class="aspect-[3/4] w-full mb-stack-md overflow-hidden bg-surface-container-highest rounded-lg">
+            {% if member.foto %}
+              <img class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" 
+                   alt="{{ member.nama }}" 
+                   src="{{ member.foto.url }}"/>
+            {% else %}
+              <div class="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">No Photo</div>
+            {% endif %}
           </div>
-          <h4 class="font-headline-md text-headline-md text-on-surface mb-1">Reza Pratama</h4>
-          <p class="font-body-md text-body-md text-primary">Analis Data Lingkungan</p>
+          <h4 class="font-headline-md text-headline-md text-on-surface mb-1 text-center">{{ member.nama }}</h4>
+          <p class="font-body-md text-body-md text-primary font-semibold text-center">{{ member.jabatan }}</p>
+          {% if member.bio %}
+          <div class="mt-3 p-3 bg-amber-50/60 border-l-2 border-amber-400 rounded-r-lg w-full text-center">
+            <p class="text-xs italic text-slate-600 leading-relaxed">"{{ member.bio }}"</p>
+          </div>
+          {% endif %}
         </div>
+        {% empty %}
+        <div class="col-span-full text-center py-12 text-slate-400">Belum ada data Staff Consultants.</div>
+        {% endfor %}
       </div>
 
+      <!-- TAB 4: ASSOCIATES -->
       <div id="tab-associate" class="tab-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter transition-all duration-500 transform opacity-0 translate-y-4 hidden">
-        <div class="group">
-          <div class="aspect-[3/4] mb-stack-md overflow-hidden bg-surface-container-highest rounded-lg">
-            <img class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" 
-                 alt="Associate Placeholder Headshot" 
-                 src="{% static 'images/team-2.jpg' %}"/>
+        {% for member in associates %}
+        <div class="group flex flex-col items-center text-center h-full bg-white rounded-xl p-4 border border-border-subtle hover:shadow-lg transition-all duration-300">
+          <div class="aspect-[3/4] w-full mb-stack-md overflow-hidden bg-surface-container-highest rounded-lg">
+            {% if member.foto %}
+              <img class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" 
+                   alt="{{ member.nama }}" 
+                   src="{{ member.foto.url }}"/>
+            {% else %}
+              <div class="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">No Photo</div>
+            {% endif %}
           </div>
-          <h4 class="font-headline-md text-headline-md text-on-surface mb-1">Ahmad Hidayat, M.Ling</h4>
-          <p class="font-body-md text-body-md text-primary">Associate Ekologi Hutan</p>
+          <h4 class="font-headline-md text-headline-md text-on-surface mb-1 text-center">{{ member.nama }}</h4>
+          <p class="font-body-md text-body-md text-primary font-semibold text-center">{{ member.jabatan }}</p>
+          {% if member.bio %}
+          <div class="mt-3 p-3 bg-amber-50/60 border-l-2 border-amber-400 rounded-r-lg w-full text-center">
+            <p class="text-xs italic text-slate-600 leading-relaxed">"{{ member.bio }}"</p>
+          </div>
+          {% endif %}
         </div>
+        {% empty %}
+        <div class="col-span-full text-center py-12 text-slate-400">Belum ada data Associate Consultants.</div>
+        {% endfor %}
       </div>
 
     </div>

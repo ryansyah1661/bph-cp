@@ -280,6 +280,7 @@ class TeamMember(models.Model):
 
     nama = models.CharField(max_length=255, verbose_name="Nama Lengkap & Gelar")
     jabatan = models.CharField(max_length=255, verbose_name="Jabatan / Posisi")
+    bio = models.TextField(blank=True, null=True, verbose_name="Bio / Cerita Singkat", help_text="Opsional. Boleh dikosongkan.")
     kategori = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='advisors', verbose_name="Kategori Tim")
     foto = models.ImageField(upload_to='team/', verbose_name="Foto Profil Anggota")
     urutan = models.IntegerField(default=0, help_text="Angka lebih kecil tampil lebih dulu (0, 1, 2...)", verbose_name="Urutan Tampil")
