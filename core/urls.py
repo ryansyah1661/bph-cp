@@ -105,17 +105,24 @@ urlpatterns = [
     path('be/folders/<int:pk>/edit/', views.FolderUpdateView.as_view(), name='folder_update'),
     path('be/folders/<int:pk>/delete/', views.FolderDeleteView.as_view(), name='folder_delete'),
 
-    # 1. Halaman minta reset password (input email)
+    # =========================================================================
+    # ALUR SISTEM LUPA PASSWORD (AUTHENTICATION FLOW)
+    # =========================================================================
+    
+    # 1. Halaman minta reset password (input email) + Template HTML E-mail Kustom
     path('password-reset/', 
-         auth_views.PasswordResetView.as_view(template_name='core/registration/password_reset_form.html'), 
+         auth_views.PasswordResetView.as_view(
+             template_name='core/registration/password_reset_form.html',
+             html_email_template_name='core/registration/password_reset_email.html'
+         ), 
          name='password_reset'),
          
-    # 2. Halaman konfirmasi email terkirim (ada tombol resend di sini nanti)
+    # 2. Halaman konfirmasi email terkirim
     path('password-reset/done/', 
          auth_views.PasswordResetDoneView.as_view(template_name='core/registration/password_reset_done.html'), 
          name='password_reset_done'),
          
-    # 3. Link unik token dari email yang diklik user
+    # 3. Link unik token dari email yang diklik user (Sekarang dengan Icon Mata & Name Input Valid)
     path('password-reset-confirm/<uidb64>/<token>/', 
          auth_views.PasswordResetConfirmView.as_view(template_name='core/registration/password_reset_confirm.html'), 
          name='password_reset_confirm'),

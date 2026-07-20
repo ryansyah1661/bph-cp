@@ -1,9 +1,13 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-gex9-d@0-b(8$h_d+o#ygfdlagtda09hv&d6t2-qt9l-m-@^wn'
+# Load file .env
+load_dotenv(BASE_DIR / '.env')
+
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fallback-key')
 
 DEBUG = True
 
@@ -34,7 +38,7 @@ ROOT_URLCONF = 'bph_project.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'BACKEND': 'django.template.backends.DjangoTemplates',
         'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -42,7 +46,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-
                 'core.context_processors.unread_messages_count',
             ],
         },
@@ -104,18 +107,13 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 3600
 
 # =============================================================
-# 🚨 KONFIGURASI SURAT ELEKTRONIK (EMAIL SMTP) UNTUK RESET PASSWORD
+# Konfigurasi SMTP Brevo untuk Reset Password (Aman via .env)
 # =============================================================
-
-# 💡 PILIHAN 1: Pakai ini pas testing lokal (Isi email bakal dicetak langsung di terminal VS Code lu)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-# 💡 PILIHAN 2: Pakai ini kalau lu udah siap kirim email beneran lewat SMTP Gmail asli.
-# (Jika ingin mengaktifkan Pilihan 2, hapus tanda '#' pada 7 baris di bawah dan beri '#' pada Pilihan 1)
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'email_lu@gmail.com'  # ← Isi pakai alamat Gmail website/perusahaan
-# EMAIL_HOST_PASSWORD = 'xxxx xxxx xxxx xxxx'  # ← Isi pakai App Password 16 digit dari akun Google
-# DEFAULT_FROM_EMAIL = 'Bhumi Pasa Hijau <email_lu@gmail.com>'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-relay.brevo.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  
+DEFAULT_FROM_EMAIL = 'Bhumi Pasa Hijau <no-reply@bhumipasahijau.com>'
+PASSWORD_RESET_TIMEOUT = 14400 # link aktif selama 4 jam (dalam detik)
