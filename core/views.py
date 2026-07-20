@@ -9,7 +9,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import Article, Project, Client, Story, Service, Location, Category, Modul, ContactMessage, Gallery, Profile, Folder
+from .models import Article, Project, Client, Story, Service, Location, Category, Modul, ContactMessage, Gallery, Profile, Folder, TeamMember
 
 # ==========================================
 # JALUR FRONTEND WEBSITE (NAVBAR & MENUS)
@@ -23,7 +23,11 @@ def homepage(request):
     })
 
 def about_view(request):
-    return render(request, 'core/about.html')
+    # Mengambil data tim ahli untuk ditampilkan di halaman About Us
+    team_members = TeamMember.objects.all().order_by('urutan', 'id')
+    return render(request, 'core/about.html', {
+        'team_members': team_members
+    })
 
 def services_view(request):
     services_nrm = Service.objects.filter(portfolio='NRM').prefetch_related('categories')
@@ -157,6 +161,7 @@ def custom_dashboard(request):
         'total_documents': Modul.objects.count(),  
         'total_messages': ContactMessage.objects.count(),
         'total_gallery': Gallery.objects.count(),
+        'total_team': TeamMember.objects.count(),
         'recent_articles': Article.objects.order_by('-id')[:5],
         'recent_projects': Project.objects.order_by('-id')[:5],
     }
@@ -494,6 +499,44 @@ class FolderDeleteView(AdminRequiredMixin, DeleteView):
     model = Folder
     template_name = 'core/custom_admin/gallery/folder_confirm_delete.html'
     success_url = reverse_lazy('folder_list')
+
+
+# ==========================================
+# 10c. MANAGEMENT TIM AHLI KAMI (TEAM)
+# ==========================================
+class TeamListView(AdminRequiredMixin, ListView):
+    model = TeamMember
+    template_name = 'core/custom_admin/team/team_list.html'
+    context_object_name = 'members'
+
+class TeamCreateView(AdminRequiredMixin, CreateView):
+    model = TeamMember
+    template_name = 'core/custom_admin/team/team_form.html'
+    fields = ['nama', 'jabatan', 'kategori', 'urutan', 'foto']
+    success_url = reverse_lazy('team_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Anggota tim baru berhasil ditambahkan!')
+        return super().form_valid(form)
+
+class TeamUpdateView(AdminRequiredMixin, UpdateView):
+    model = TeamMember
+    template_name = 'core/custom_admin/team/team_form.html'
+    fields = ['nama', 'jabatan', 'kategori', 'urutan', 'foto']
+    success_url = reverse_lazy('team_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Data anggota tim berhasil diperbarui!')
+        return super().form_valid(form)
+
+class TeamDeleteView(AdminRequiredMixin, DeleteView):
+    model = TeamMember
+    template_name = 'core/custom_admin/team/team_confirm_delete.html'
+    success_url = reverse_lazy('team_list')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'Anggota tim berhasil dihapus!')
+        return super().delete(request, *args, **kwargs)
 
 
 # ==========================================

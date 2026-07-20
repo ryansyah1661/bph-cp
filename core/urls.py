@@ -105,6 +105,12 @@ urlpatterns = [
     path('be/folders/<int:pk>/edit/', views.FolderUpdateView.as_view(), name='folder_update'),
     path('be/folders/<int:pk>/delete/', views.FolderDeleteView.as_view(), name='folder_delete'),
 
+    # URL ROUTING CRUD TIM AHLI KAMI (TEAM)
+    path('be/team/', views.TeamListView.as_view(), name='team_list'),
+    path('be/team/add/', views.TeamCreateView.as_view(), name='team_create'),
+    path('be/team/<int:pk>/edit/', views.TeamUpdateView.as_view(), name='team_update'),
+    path('be/team/<int:pk>/delete/', views.TeamDeleteView.as_view(), name='team_delete'),
+
     # =========================================================================
     # ALUR SISTEM LUPA PASSWORD (AUTHENTICATION FLOW)
     # =========================================================================
@@ -122,7 +128,7 @@ urlpatterns = [
          auth_views.PasswordResetDoneView.as_view(template_name='core/registration/password_reset_done.html'), 
          name='password_reset_done'),
          
-    # 3. Link unik token dari email yang diklik user (Sekarang dengan Icon Mata & Name Input Valid)
+    # 3. Link unik token dari email yang diklik user
     path('password-reset-confirm/<uidb64>/<token>/', 
          auth_views.PasswordResetConfirmView.as_view(template_name='core/registration/password_reset_confirm.html'), 
          name='password_reset_confirm'),

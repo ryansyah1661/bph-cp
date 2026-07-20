@@ -269,6 +269,29 @@ class Profile(models.Model):
     def __str__(self):
         return f"Profile {self.user.username}"
 
+# === 13. TABEL TIM AHLI KAMI (Team Members) ===
+class TeamMember(models.Model):
+    CATEGORY_CHOICES = [
+        ('advisors', 'Advisors'),
+        ('executives', 'Executives'),
+        ('staff', 'Staff'),
+        ('associates', 'Associates'),
+    ]
+
+    nama = models.CharField(max_length=255, verbose_name="Nama Lengkap & Gelar")
+    jabatan = models.CharField(max_length=255, verbose_name="Jabatan / Posisi")
+    kategori = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='advisors', verbose_name="Kategori Tim")
+    foto = models.ImageField(upload_to='team/', verbose_name="Foto Profil Anggota")
+    urutan = models.IntegerField(default=0, help_text="Angka lebih kecil tampil lebih dulu (0, 1, 2...)", verbose_name="Urutan Tampil")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Tim Ahli Kami"
+        ordering = ['urutan', 'id']
+
+    def __str__(self):
+        return f"{self.nama} - {self.jabatan} ({self.get_kategori_display()})"
+
 # --- LOGIKA AUTOMATIC SIGNALS DJANGO ---
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

@@ -1,0 +1,156 @@
+{% extends "core/custom_admin/base.html" %}
+
+{% block admin_content %}
+<div class="mb-6 pt-2">
+  <h2 class="text-xl font-bold text-emerald-900">{% if object %}Edit{% else %}Tambah{% endif %} Anggota Tim Ahli</h2>
+  <p class="text-xs text-gray-500 mt-1">Isi formulir di bawah ini dengan lengkap.</p>
+</div>
+
+<form method="post" enctype="multipart/form-data" id="team-form">
+  {% csrf_token %}
+  
+  {% if form.errors %}
+  <div style="background:#fee2e2; border:1px solid #ef4444; padding:12px; border-radius:8px; margin-bottom:16px; color:#991b1b; font-size:13px;">
+    <strong>Terjadi kesalahan saat menyimpan data:</strong>
+    {{ form.errors }}
+  </div>
+  {% endif %}
+
+  <div class="flex gap-6 items-start">
+
+    <!-- Kolom Kiri: Input Data Utama -->
+    <div class="flex-1 space-y-5">
+
+      <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-5">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Lengkap & Gelar <span class="text-red-500">*</span></label>
+          {{ form.nama }}
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Jabatan / Posisi <span class="text-red-500">*</span></label>
+          {{ form.jabatan }}
+          <p class="text-xs text-gray-400 mt-1">Contoh: Penasihat Kebijakan Lingkungan</p>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Kategori Tim <span class="text-red-500">*</span></label>
+          {{ form.kategori }}
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Urutan Tampil</label>
+          {{ form.urutan }}
+          <p class="text-xs text-gray-400 mt-1">Angka lebih kecil akan tampil lebih depan (0, 1, 2...)</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Kolom Kanan: Foto Profil & Tombol Aksi -->
+    <div class="w-80 space-y-5 flex-shrink-0">
+
+      <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+        <h3 class="text-sm font-bold text-slate-700 border-b border-gray-100 pb-3 mb-4">Foto Profil</h3>
+        <label class="block text-sm font-semibold text-slate-600 mb-2">Foto Anggota Tim</label>
+
+        <div id="preview-container" class="{% if not object.foto %}hidden{% endif %} mb-3">
+          <img id="image-preview" src="{% if object.foto %}{{ object.foto.url }}{% endif %}" class="w-full h-48 object-cover rounded-lg border">
+        </div>
+
+        <label for="id_foto" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition" id="drop-zone">
+          <span class="material-symbols-outlined text-gray-400 text-3xl mb-1">upload_file</span>
+          <span class="text-sm text-gray-400 text-center">Seret & Jatuhkan foto atau <br><span class="text-emerald-600 font-semibold">Jelajahi</span></span>
+        </label>
+        <div id="file-name-display" class="text-xs text-gray-400 mt-2 text-center font-medium"></div>
+        <div class="bph-hidden-file-input">{{ form.foto }}</div>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex gap-3">
+        <a href="{% url 'team_list' %}" class="flex-1 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm text-center font-semibold hover:bg-gray-50 transition" style="text-decoration: none; padding-top: 8px;">Batal</a>
+        <button type="submit" class="flex-1 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700 transition cursor-pointer border-none">Simpan Data</button>
+      </div>
+
+    </div>
+  </div>
+</form>
+
+<script>
+  const fileInput = document.getElementById('id_foto');
+  const fileNameDisplay = document.getElementById('file-name-display');
+  const dropZone = document.getElementById('drop-zone');
+  const imagePreview = document.getElementById('image-preview');
+  const previewContainer = document.getElementById('preview-container');
+
+  function handleImageFile(file) {
+    if (file) {
+      fileNameDisplay.textContent = file.name;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        if (imagePreview) imagePreview.src = e.target.result;
+        if (previewContainer) previewContainer.classList.remove('hidden');
+      }
+      reader.readAsDataURL(file);
+    }
+  }
+
+  if (fileInput) {
+    fileInput.addEventListener('change', function() {
+      if (this.files[0]) handleImageFile(this.files[0]);
+    });
+  }
+
+  if (dropZone) {
+    dropZone.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      this.classList.add('border-emerald-400', 'bg-emerald-50');
+    });
+
+    dropZone.addEventListener('dragleave', function() {
+      this.classList.remove('border-emerald-400', 'bg-emerald-50');
+    });
+
+    dropZone.addEventListener('drop', function(e) {
+      e.preventDefault();
+      this.classList.remove('border-emerald-400', 'bg-emerald-50');
+      const files = e.dataTransfer.files;
+      if (files[0] && fileInput) {
+        fileInput.files = files;
+        handleImageFile(files[0]);
+      }
+    });
+  }
+</script>
+
+<style>
+  .bph-hidden-file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  form input[type="text"],
+  form input[type="number"],
+  form textarea,
+  form select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1e293b;
+    background-color: #ffffff;
+    box-sizing: border-box;
+  }
+  form input:focus,
+  form textarea:focus,
+  form select:focus {
+    outline: none;
+    border-color: #059669;
+    box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1);
+  }
+</style>
+{% endblock %}

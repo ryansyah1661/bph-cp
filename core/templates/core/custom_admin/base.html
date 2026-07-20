@@ -136,6 +136,18 @@
           </ul>
         </div>
 
+        <!-- ORGANISASI MENU GROUP -->
+        <div class="space-y-1 mt-2 bph-menu-group-container">
+          <input type="checkbox" id="drop-organisasi" class="bph-dropdown-check" {% if 'team' in request.resolver_match.url_name %}checked{% endif %}>
+          <label for="drop-organisasi" class="bph-menu-toggle flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-slate-800 transition-all {% if 'team' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/20{% else %}text-slate-500{% endif %}">
+            <span class="flex items-center gap-2.5 truncate">👥 Organisasi</span>
+            <span class="material-symbols-outlined arrow-icon text-base flex-shrink-0">expand_more</span>
+          </label>
+          <ul class="bph-dropdown-content space-y-1 pl-2">
+            <li><a href="{% url 'team_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'team' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">groups</span> Tim Kami</a></li>
+          </ul>
+        </div>
+
         <!-- UNDUHAN BERKAS MENU GROUP -->
         <div class="space-y-1 mt-2 bph-menu-group-container">
           <input type="checkbox" id="drop-unduhan" class="bph-dropdown-check" {% if 'document' in request.resolver_match.url_name %}checked{% endif %}>
@@ -144,7 +156,7 @@
             <span class="material-symbols-outlined arrow-icon text-base flex-shrink-0">expand_more</span>
           </label>
           <ul class="bph-dropdown-content space-y-1 pl-2">
-            <li><a href="{% url 'document_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'document' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">folder_open</span> Modul Dokumentasi</span></a></li>
+            <li><a href="{% url 'document_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'document' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">folder_open</span> Modul Dokumentasi</a></li>
           </ul>
         </div>
       </nav>
