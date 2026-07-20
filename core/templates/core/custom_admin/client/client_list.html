@@ -3,28 +3,25 @@
 {% block admin_content %}
 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
   
-  <!-- Header Box -->
   <div class="flex justify-between items-center border-b border-gray-100 pb-5">
     <div>
-      <h2 class="text-xl font-bold text-emerald-900">Klien / Mitra Kolaborasi</h2>
-      <p class="text-xs text-gray-500 mt-1">Kelola logo dan arsip data instansi mitra strategis.</p>
+      <h2 class="text-xl font-bold text-emerald-900">Manajemen Klien & Mitra Kolaborasi</h2>
+      <p class="text-xs text-gray-500 mt-1">Kelola logo dan arsip data instansi mitra strategis Bhumi Pasa Hijau.</p>
     </div>
     <a href="{% url 'client_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100">
       <span class="material-symbols-outlined text-sm">add</span> Tambah Mitra
     </a>
   </div>
 
-  <!-- Tabel Data yang Pas, Padat, dan Ber-Nomor -->
   <div class="overflow-x-auto w-full">
-    <!-- 🚨 FIX: Kita balikkan table-auto agar tombol aksi terkunci di ujung kanan -->
     <table class="w-full text-left border-collapse text-sm table-auto">
       <thead>
         <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
-          <!-- 🚨 FIX: Jatah lebar kolom diatur ulang secara presisi dan adil -->
-          <th class="p-4 font-semibold w-16 text-center">No.</th>
-          <th class="p-4 font-semibold w-28 text-center">Logo</th>
-          <th class="p-4 font-semibold text-left">Nama Instansi / Mitra</th>
-          <th class="p-4 font-semibold text-center">Aksi</th>
+          <th class="p-4 font-semibold w-14 text-center">No.</th>
+          <th class="p-4 font-semibold w-24 text-center">Logo</th>
+          <th class="p-4 font-semibold">Nama Instansi / Perusahaan</th>
+          <th class="p-4 font-semibold text-center">Sektor</th>
+          <th class="p-4 font-semibold text-center w-28">Aksi</th>
         </tr>
       </thead>
       <tbody class="text-gray-700 divide-y divide-gray-50">
@@ -33,22 +30,32 @@
           <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
             {{ forloop.counter }}
           </td>
+
           <td class="p-4 align-middle text-center">
             {% if client.logo %}
-              <img src="{{ client.logo.url }}" class="w-16 h-10 object-contain rounded-xl bg-gray-50 p-1 border border-gray-100 shadow-sm mx-auto">
+              <img src="{{ client.logo.url }}" class="w-12 h-12 object-contain rounded-xl border border-gray-100 p-1 bg-white shadow-sm mx-auto">
             {% else %}
                <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded-md">No Logo</span>
             {% endif %}
           </td>
-          <td class="p-4 font-semibold text-emerald-700 align-middle text-sm transition truncate">
-            {{ client.nama }}
+          
+          <td class="p-4 font-semibold text-slate-800 align-middle text-base">
+            <div class="line-clamp-1 leading-snug">{{ client.nama }}</div>
           </td>
+
+          <td class="p-4 align-middle text-center font-semibold">
+            <span class="inline-block px-3 py-1 rounded-full text-xs 
+              {% if client.sektor == 'swasta' %}bg-blue-100 text-blue-800{% else %}bg-purple-100 text-purple-800{% endif %}">
+              {{ client.get_sektor_display }}
+            </span>
+          </td>
+          
           <td class="p-4 text-center align-middle whitespace-nowrap">
             <div class="flex justify-center items-center gap-2">
-              <a href="{% url 'client_update' client.pk %}" title="Edit Mitra" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
+              <a href="{% url 'client_update' client.pk %}" title="Edit Klien" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
                 <span class="material-symbols-outlined text-sm">edit</span>
               </a>
-              <a href="{% url 'client_delete' client.pk %}" title="Hapus Mitra" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
+              <a href="{% url 'client_delete' client.pk %}" title="Hapus Klien" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
                 <span class="material-symbols-outlined text-sm">delete</span>
               </a>
             </div>
@@ -56,7 +63,7 @@
         </tr>
         {% empty %}
         <tr>
-          <td colspan="4" class="p-8 text-center text-gray-400 font-medium">Belum ada data klien/mitra kolaborasi.</td>
+          <td colspan="5" class="p-8 text-center text-gray-400 font-medium">Belum ada data klien / mitra.</td>
         </tr>
         {% endfor %}
       </tbody>

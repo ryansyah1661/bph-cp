@@ -5,17 +5,21 @@
 
 {% block content %}
 <style>
-  @keyframes marqueeLeft {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+  /* Sembunyikan scrollbar agar tampilan tetap aesthetic & bersih */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
   }
-  .animate-ticker-left {
-    display: flex;
-    width: max-content;
-    animation: marqueeLeft 14s linear infinite;
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
-  .ticker-container:hover .animate-ticker-left {
-    animation-play-state: paused;
+
+  /* Cursor grab untuk menandakan area bisa digeser manual */
+  .interactive-scroll {
+    cursor: grab;
+  }
+  .interactive-scroll:active {
+    cursor: grabbing;
   }
 
   /* ========================================== */
@@ -125,6 +129,7 @@
     </div>
   </section>
 
+  <!-- LOKASI PROYEK SECTION -->
   <section class="w-full bg-[#f8faf9] py-16 border-b border-gray-100">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center">
       <div class="mb-12">
@@ -199,35 +204,65 @@
     </div>
   </section>
 
+  <!-- ================= MITRA KAMI (INTERAKTIF: PRESISI KECEPATAN SAMA PERSIS & BISA DIGESER) ================= -->
   <section id="mitra-section" class="w-full bg-surface-container-lowest border-y border-border-subtle py-20 overflow-hidden">
     <div class="space-y-16">
+      
+      <!-- HEADER MITRA KAMI -->
       <div class="text-center max-w-xl mx-auto px-margin-mobile md:px-margin-desktop">
-        <span class="font-label-caps text-[11px] font-bold tracking-widest text-primary uppercase bg-primary/10 px-3 py-1 rounded-full mb-3 inline-block">Our Partners</span>
-        <h2 class="font-headline-xl text-2xl md:text-3xl font-bold text-on-surface leading-tight">Kemitraan &amp; Kolaborasi Strategis</h2>
-        <p class="font-body-md text-sm text-on-surface-variant mt-2">PT Bhumi Pasa Hijau bergerak bersama berbagai instansi dalam melahirkan solusi pelestarian ekosistem yang terukur.</p>
+        <span class="font-label-caps text-[11px] font-bold tracking-widest text-[#308935] uppercase bg-emerald-50 px-3 py-1 rounded-full mb-3 inline-block border border-emerald-100">Our Partners</span>
+        <h2 class="text-2xl md:text-3xl font-black text-emerald-950 uppercase tracking-tight">MITRA <span class="text-[#308935] font-light">KAMI</span></h2>
+        <p class="text-sm text-gray-500 mt-1">PT Bhumi Pasa Hijau bergerak bersama berbagai instansi dalam melahirkan solusi pelestarian ekosistem yang terukur.</p>
       </div>
+
+      <!-- 1. SEKTOR SWASTA -->
       <div class="space-y-4">
-        <h3 class="font-headline-lg text-xs font-bold text-center text-text-muted uppercase tracking-widest px-margin-mobile">── Mitra Kolaborasi Resmi ──</h3>
-        <div class="ticker-container w-full overflow-hidden py-2 bg-gradient-to-r from-transparent via-surface to-transparent">
-          <div class="animate-ticker-left gap-6 px-3">
-            {% for client in clients %}
-            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-4 shadow-sm group hover:border-primary/40 transition-all duration-300 select-none shrink-0">
+        <h3 class="text-xs font-bold text-center text-gray-500 uppercase tracking-widest px-margin-mobile">── <span class="text-emerald-950 font-black">SEKTOR</span> <span class="text-[#308935] font-semibold">SWASTA</span> ──</h3>
+        <div class="w-full overflow-x-auto hide-scrollbar interactive-scroll py-2 px-4 select-none" id="scroll-swasta">
+          <div class="flex gap-6 w-max">
+            {% for client in clients_swasta %}
+            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-4 shadow-sm group hover:border-[#308935]/40 transition-all duration-300 select-none shrink-0">
               {% if client.logo %}
-                <img src="{{ client.logo.url }}" alt="Logo {{ client.nama }}" class="h-10 w-12 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                <img src="{{ client.logo.url }}" alt="Logo {{ client.nama }}" class="h-10 w-12 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300 pointer-events-none">
               {% else %}
-                <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-primary transition-colors duration-300">corporate_fare</span>
+                <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-[#308935] transition-colors duration-300 pointer-events-none">corporate_fare</span>
               {% endif %}
-              <div class="flex flex-col text-left overflow-hidden">
-                <span class="text-[9px] font-bold tracking-widest text-text-muted/40 group-hover:text-primary/50 transition-colors uppercase leading-none">Partner Instansi</span>
-                <span class="text-xs font-extrabold text-text-muted/70 group-hover:text-primary transition-colors uppercase tracking-wide mt-1 truncate">{{ client.nama }}</span>
+              <div class="flex flex-col text-left overflow-hidden pointer-events-none">
+                <span class="text-[9px] font-bold tracking-widest text-gray-400 group-hover:text-[#308935]/70 transition-colors uppercase leading-none">Sektor Swasta</span>
+                <span class="text-xs font-black text-emerald-950 group-hover:text-[#308935] transition-colors uppercase tracking-wide mt-1 truncate">{{ client.nama }}</span>
               </div>
             </div>
             {% empty %}
-            <p class="text-xs text-neutral-400 w-full text-center py-4">Belum ada data logo mitra.</p>
+            <p class="text-xs text-neutral-400 w-full text-center py-4">Belum ada data mitra sektor swasta.</p>
             {% endfor %}
           </div>
         </div>
       </div>
+
+      <!-- 2. SEKTOR PUBLIK -->
+      <div class="space-y-4">
+        <h3 class="text-xs font-bold text-center text-gray-500 uppercase tracking-widest px-margin-mobile">── <span class="text-emerald-950 font-black">SEKTOR</span> <span class="text-[#308935] font-semibold">PUBLIK</span> ──</h3>
+        <div class="w-full overflow-x-auto hide-scrollbar interactive-scroll py-2 px-4 select-none" id="scroll-publik">
+          <div class="flex gap-6 w-max">
+            {% for client in clients_publik %}
+            <div class="bg-surface-white border border-border-subtle/70 rounded-xl px-6 h-20 w-64 flex items-center justify-center gap-4 shadow-sm group hover:border-[#308935]/40 transition-all duration-300 select-none shrink-0">
+              {% if client.logo %}
+                <img src="{{ client.logo.url }}" alt="Logo {{ client.nama }}" class="h-10 w-12 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300 pointer-events-none">
+              {% else %}
+                <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-[#308935] transition-colors duration-300 pointer-events-none">account_balance</span>
+              {% endif %}
+              <div class="flex flex-col text-left overflow-hidden pointer-events-none">
+                <span class="text-[9px] font-bold tracking-widest text-gray-400 group-hover:text-[#308935]/70 transition-colors uppercase leading-none">Sektor Publik</span>
+                <span class="text-xs font-black text-emerald-950 group-hover:text-[#308935] transition-colors uppercase tracking-wide mt-1 truncate">{{ client.nama }}</span>
+              </div>
+            </div>
+            {% empty %}
+            <p class="text-xs text-neutral-400 w-full text-center py-4">Belum ada data mitra sektor publik.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -239,6 +274,88 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+
+    // --- JS SCROLL INTERAKTIF DENGAN PRESISI HIGH-ACCURACY FLOAT ---
+    function enableInteractiveTicker(containerId, initialDirection = 1, speed = 1.0) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      let direction = initialDirection; // 1: kanan, -1: kiri
+      let isHovered = false;
+      let isMouseDown = false;
+      let startX, scrollLeftVal;
+
+      // Gunakan float kustom untuk kalkulasi presisi tinggi tanpa pembulatan piksel browser
+      let currentPos = container.scrollLeft;
+
+      // Atur posisi awal Sektor Publik (mulai di ujung kanan)
+      if (initialDirection === -1) {
+        currentPos = container.scrollWidth - container.clientWidth;
+        container.scrollLeft = currentPos;
+      }
+
+      function step() {
+        if (!isHovered && !isMouseDown) {
+          const maxScroll = container.scrollWidth - container.clientWidth;
+
+          if (maxScroll > 0) {
+            currentPos += speed * direction;
+
+            // Cek Ujung Kanan
+            if (currentPos >= maxScroll) {
+              currentPos = maxScroll;
+              direction = -1;
+            } 
+            // Cek Ujung Kiri
+            else if (currentPos <= 0) {
+              currentPos = 0;
+              direction = 1;
+            }
+
+            container.scrollLeft = currentPos;
+          }
+        } else {
+          // Jika sedang di-drag/hover, sinkronkan posisi variabel float dengan scroll manual user
+          currentPos = container.scrollLeft;
+        }
+
+        requestAnimationFrame(step);
+      }
+
+      requestAnimationFrame(step);
+
+      // Event Mouse Hover Pause
+      container.addEventListener('mouseenter', () => isHovered = true);
+      container.addEventListener('mouseleave', () => {
+        isHovered = false;
+        isMouseDown = false;
+      });
+
+      // Event Mouse Drag Manually
+      container.addEventListener('mousedown', (e) => {
+        isMouseDown = true;
+        startX = e.pageX - container.offsetLeft;
+        scrollLeftVal = container.scrollLeft;
+      });
+
+      container.addEventListener('mouseup', () => isMouseDown = false);
+
+      container.addEventListener('mousemove', (e) => {
+        if (!isMouseDown) return;
+        e.preventDefault();
+        const x = e.pageX - container.offsetLeft;
+        const walk = (x - startX) * 2;
+        container.scrollLeft = scrollLeftVal - walk;
+        currentPos = container.scrollLeft;
+      });
+    }
+
+    // Jalankan SCROLL INTERAKTIF (Kecepatan dikunci sama persis 1.0 px/frame)
+    enableInteractiveTicker('scroll-swasta', 1, 1.0);   // Swasta: Mulai dari Kiri ke Kanan
+    enableInteractiveTicker('scroll-publik', -1, 1.0);  // Publik: Mulai dari Kanan ke Kiri
+
+
+    // --- PETA INDONESIA & PROYEK ---
     const pins = document.querySelectorAll('.map-province-pin');
     const popovers = document.querySelectorAll('.map-project-popover');
     const projectSection = document.getElementById('section-proyek-wilayah');
@@ -256,11 +373,11 @@
 
     function getColorByCount(count) {
         if (!count || count === 0) return '#e2e8f0'; // 0 Proyek: Abu-abu bawaan
-        if (count === 1) return '#0EFF00';           // 1 Proyek
-        if (count === 2) return '#1FC500';           // 2 Proyek
-        if (count === 3) return '#089000';           // 3 Proyek
-        if (count === 4) return '#0A5D01';           // 4 Proyek
-        return '#053B00';                            // >= 5 Proyek
+        if (count === 1) return '#bfd5cb';           // 1 Proyek
+        if (count === 2) return '#9bc2a5';           // 2 Proyek
+        if (count === 3) return '#77af80';           // 3 Proyek
+        if (count === 4) return '#539c5a';           // 4 Proyek
+        return '#308935';                            // >= 5 Proyek
     }
 
     const PROVINCE_COORDS = {

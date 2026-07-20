@@ -23,7 +23,6 @@ def homepage(request):
     })
 
 def about_view(request):
-    # Mengambil data tim berdasarkan masing-masing kategori
     advisors = TeamMember.objects.filter(kategori='advisors').order_by('urutan', 'id')
     executives = TeamMember.objects.filter(kategori='executives').order_by('urutan', 'id')
     staff = TeamMember.objects.filter(kategori='staff').order_by('urutan', 'id')
@@ -48,7 +47,10 @@ def experience_view(request):
     projects = Project.objects.select_related('client').prefetch_related('locations', 'categories').order_by('-tahun')
     categories = Category.objects.filter(projects__isnull=False).distinct().order_by('name')
     years = Project.objects.order_by('-tahun').values_list('tahun', flat=True).distinct()
-    clients = Client.objects.all()
+    
+    # Kategori Mitra/Klien Swasta & Publik
+    clients_swasta = Client.objects.filter(sektor='swasta')
+    clients_publik = Client.objects.filter(sektor='publik')
 
     total_proyek = Project.objects.count()
     total_provinsi = Location.objects.filter(projects__isnull=False).distinct().count()
@@ -68,7 +70,8 @@ def experience_view(request):
         'projects': projects,
         'categories': categories,
         'years': years,
-        'clients': clients,
+        'clients_swasta': clients_swasta,
+        'clients_publik': clients_publik,
         'selected_year': selected_year,
         'total_tahun_bekerja': total_tahun_bekerja,
         'total_proyek': total_proyek,
@@ -310,14 +313,22 @@ class ClientListView(AdminRequiredMixin, ListView):
 class ClientCreateView(AdminRequiredMixin, CreateView):
     model = Client
     template_name = 'core/custom_admin/client/client_form.html'
-    fields = '__all__'
+    fields = ['nama', 'sektor', 'logo']
     success_url = reverse_lazy('client_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Klien baru berhasil ditambahkan!')
+        return super().form_valid(form)
 
 class ClientUpdateView(AdminRequiredMixin, UpdateView):
     model = Client
     template_name = 'core/custom_admin/client/client_form.html'
-    fields = '__all__'
+    fields = ['nama', 'sektor', 'logo']
     success_url = reverse_lazy('client_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Data klien berhasil diperbarui!')
+        return super().form_valid(form)
 
 class ClientDeleteView(AdminRequiredMixin, DeleteView):
     model = Client

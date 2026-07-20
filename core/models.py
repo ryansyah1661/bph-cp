@@ -113,16 +113,25 @@ class Location(models.Model):
     
 # === 5. TABEL KLIEN (Clients) ===
 class Client(models.Model):
+    SECTOR_CHOICES = [
+        ('swasta', 'Sektor Swasta'),
+        ('publik', 'Sektor Publik'),
+    ]
+
     nama = models.CharField(max_length=200, verbose_name="Nama Instansi/Perusahaan")
-    alamat = models.TextField(blank=True)
-    email = models.EmailField(blank=True)
+    sektor = models.CharField(
+        max_length=10, 
+        choices=SECTOR_CHOICES, 
+        default='swasta', 
+        verbose_name="Kategori Sektor"
+    )
     logo = models.ImageField(upload_to='clients/logos/', blank=True, help_text="Logo grup untuk bagian partner ticker")
 
     class Meta:
         verbose_name_plural = "Klien / Mitra Kolaborasi"
 
     def __str__(self):
-        return self.nama
+        return f"{self.nama} ({self.get_sektor_display()})"
     
 # === 6. TABEL PROYEK (Experiences) ===
 class Project(models.Model):

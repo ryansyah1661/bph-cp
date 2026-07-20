@@ -3,12 +3,12 @@
 {% block admin_content %}
 <div class="mb-6 pt-2">
   <h2 class="text-xl font-bold text-emerald-900">{% if object %}Edit{% else %}Tambah{% endif %} Klien / Mitra</h2>
-  <p class="text-xs text-gray-500 mt-1">Formulir pendaftaran berkas identitas logo institusi mitra kerja.</p>
+  <p class="text-xs text-gray-500 mt-1">Isi formulir data instansi/perusahaan mitra di bawah ini.</p>
 </div>
 
 <form method="post" enctype="multipart/form-data" id="client-form">
   {% csrf_token %}
-
+  
   {% if form.errors %}
   <div style="background:#fee2e2; border:1px solid #ef4444; padding:12px; border-radius:8px; margin-bottom:16px; color:#991b1b; font-size:13px;">
     <strong>Terjadi kesalahan saat menyimpan data:</strong>
@@ -17,34 +17,45 @@
   {% endif %}
 
   <div class="flex gap-6 items-start">
+
+    <!-- Kolom Kiri: Input Data Utama -->
     <div class="flex-1 space-y-5">
       <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-5">
         <div>
           <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Instansi / Perusahaan <span class="text-red-500">*</span></label>
           {{ form.nama }}
         </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Kategori Sektor <span class="text-red-500">*</span></label>
+          {{ form.sektor }}
+        </div>
       </div>
     </div>
 
-    <div class="space-y-5 flex-shrink-0">
+    <!-- Kolom Kanan: Upload Logo & Tombol -->
+    <div class="w-80 space-y-5 flex-shrink-0">
       <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
-        <h3 class="text-sm font-bold text-slate-700 border-b border-gray-100 pb-3 mb-4">Logo Mitra</h3>
-        {% if object.logo %}
-          <img src="{{ object.logo.url }}" class="w-full h-24 object-contain rounded-lg mb-3 bg-gray-50 p-2 border">
-        {% endif %}
+        <h3 class="text-sm font-bold text-slate-700 border-b border-gray-100 pb-3 mb-4">Logo Klien</h3>
+
+        <div id="preview-container" class="{% if not object.logo %}hidden{% endif %} mb-3">
+          <img id="image-preview" src="{% if object.logo %}{{ object.logo.url }}{% endif %}" class="w-full h-32 object-contain rounded-lg border p-2">
+        </div>
+
         <label for="id_logo" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition" id="drop-zone">
           <span class="material-symbols-outlined text-gray-400 text-3xl mb-1">upload_file</span>
-          <span class="text-sm text-gray-400">Jatuhkan file logo institusi</span>
+          <span class="text-sm text-gray-400 text-center">Seret & Jatuhkan logo atau <br><span class="text-emerald-600 font-semibold">Jelajahi</span></span>
         </label>
-        <div id="file-name-display" class="text-xs text-gray-400 mt-2 text-center"></div>
-        <div style="display:none;">{{ form.logo }}</div>
+        <div id="file-name-display" class="text-xs text-gray-400 mt-2 text-center font-medium"></div>
+        <div class="bph-hidden-file-input">{{ form.logo }}</div>
       </div>
 
       <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex gap-3">
-        <a href="{% url 'client_list' %}" class="flex-1 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm text-center font-semibold hover:bg-gray-50 transition">Batal</a>
-        <button type="submit" class="flex-1 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700 transition">Simpan</button>
+        <a href="{% url 'client_list' %}" class="flex-1 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm text-center font-semibold hover:bg-gray-50 transition" style="text-decoration: none; padding-top: 8px;">Batal</a>
+        <button type="submit" class="flex-1 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700 transition cursor-pointer border-none">Simpan Data</button>
       </div>
     </div>
+
   </div>
 </form>
 
@@ -52,18 +63,78 @@
   const fileInput = document.getElementById('id_logo');
   const fileNameDisplay = document.getElementById('file-name-display');
   const dropZone = document.getElementById('drop-zone');
-  if (fileInput) { fileInput.addEventListener('change', function() { if (this.files[0]) fileNameDisplay.textContent = this.files[0].name; }); }
+  const imagePreview = document.getElementById('image-preview');
+  const previewContainer = document.getElementById('preview-container');
+
+  function handleImageFile(file) {
+    if (file) {
+      fileNameDisplay.textContent = file.name;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        if (imagePreview) imagePreview.src = e.target.result;
+        if (previewContainer) previewContainer.classList.remove('hidden');
+      }
+      reader.readAsDataURL(file);
+    }
+  }
+
+  if (fileInput) {
+    fileInput.addEventListener('change', function() {
+      if (this.files[0]) handleImageFile(this.files[0]);
+    });
+  }
+
   if (dropZone) {
-    dropZone.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('border-emerald-400', 'bg-emerald-50'); });
-    dropZone.addEventListener('dragleave', function() { this.classList.remove('border-emerald-400', 'bg-emerald-50'); });
+    dropZone.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      this.classList.add('border-emerald-400', 'bg-emerald-50');
+    });
+
+    dropZone.addEventListener('dragleave', function() {
+      this.classList.remove('border-emerald-400', 'bg-emerald-50');
+    });
+
     dropZone.addEventListener('drop', function(e) {
-      e.preventDefault(); this.classList.remove('border-emerald-400', 'bg-emerald-50');
-      const files = e.dataTransfer.files; if (files[0] && fileInput) { fileInput.files = files; fileNameDisplay.textContent = files[0].name; }
+      e.preventDefault();
+      this.classList.remove('border-emerald-400', 'bg-emerald-50');
+      const files = e.dataTransfer.files;
+      if (files[0] && fileInput) {
+        fileInput.files = files;
+        handleImageFile(files[0]);
+      }
     });
   }
 </script>
+
 <style>
-  form input[type="text"] { width: 100%; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; color: #1e293b; box-sizing: border-box; }
-  form input:focus { outline: none; border-color: #059669; box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1); }
+  .bph-hidden-file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  form input[type="text"],
+  form select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1e293b;
+    background-color: #ffffff;
+    box-sizing: border-box;
+  }
+  form input:focus,
+  form select:focus {
+    outline: none;
+    border-color: #059669;
+    box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1);
+  }
 </style>
 {% endblock %}
