@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load file .env
 load_dotenv(BASE_DIR / '.env')
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fallback-key')
@@ -76,7 +75,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # =============================================================
-# KONFIGURASI BAHASA DAN ZONA WAKTU SAKRAL (WIB)
+# KONFIGURASI BAHASA DAN ZONA WAKTU (WIB)
 # =============================================================
 LANGUAGE_CODE = 'id'
 TIME_ZONE = 'Asia/Jakarta'
@@ -107,7 +106,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 3600
 
 # =============================================================
-# Konfigurasi SMTP Brevo untuk Reset Password (Aman via .env)
+# Konfigurasi SMTP Brevo untuk Notifikasi & Reset Password
 # =============================================================
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp-relay.brevo.com'
@@ -116,4 +115,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  
 DEFAULT_FROM_EMAIL = 'Bhumi Pasa Hijau <no-reply@bhumipasahijau.com>'
+
+BPH_NOTIFICATION_EMAIL = 'muhammadrian1602@gmail.com'
+
 PASSWORD_RESET_TIMEOUT = 14400 # link aktif selama 4 jam (dalam detik)

@@ -9,10 +9,12 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import send_mail
+from django.conf import settings
 from .models import Article, Project, Client, Story, Service, Location, Category, Modul, ContactMessage, Gallery, Profile, Folder, TeamMember
 
 # ==========================================
-# JALUR FRONTEND WEBSITE (NAVBAR & MENUS)
+# JALUR FRONTEND WEBSITE (NAVBAR & MENU)
 # ==========================================
 def homepage(request):
     articles = Article.objects.order_by('-tanggal')[:3]
@@ -48,7 +50,6 @@ def experience_view(request):
     categories = Category.objects.filter(projects__isnull=False).distinct().order_by('name')
     years = Project.objects.order_by('-tahun').values_list('tahun', flat=True).distinct()
     
-    # Kategori Mitra/Klien Swasta & Publik
     clients_swasta = Client.objects.filter(sektor='swasta')
     clients_publik = Client.objects.filter(sektor='publik')
 
@@ -106,12 +107,45 @@ def contact_view(request):
         pesan = request.POST.get('pesan')
         
         if nama and email and subjek and pesan:
-            ContactMessage.objects.create(
+            contact_msg = ContactMessage.objects.create(
                 nama_lengkap=nama,
                 email=email,
                 subjek=subjek,
                 pesan=pesan
             )
+            
+            try:
+                recipient_email = getattr(settings, 'BPH_NOTIFICATION_EMAIL', 'muhammadrian1602@gmail.com')
+                sender_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'no-reply@bhumipasahijau.com')
+                
+                email_subject = f"[Pesan Baru Web BPH] {subjek}"
+                email_body = f"""
+Halo Tim PT Bhumi Pasa Hijau,
+
+Ada pesan baru masuk melalui Kontak Website:
+
+--------------------------------------------------
+Nama Pengirim : {nama}
+Email Pengirim: {email}
+Subjek/Topik  : {subjek}
+
+Isi Pesan:
+{pesan}
+--------------------------------------------------
+
+Pesan ini telah tersimpan di Dashboard Admin Bhumi Pasa Hijau.
+                """
+                
+                send_mail(
+                    subject=email_subject,
+                    message=email_body,
+                    from_email=sender_email,
+                    recipient_list=[recipient_email],
+                    fail_silently=False
+                )
+            except Exception as e:
+                print(f"Gagal mengirim notifikasi email: {e}")
+
             messages.success(request, 'Pesan Anda berhasil dikirim! Tim kami akan segera menghubungi Anda.')
             return redirect('contact')
         else:
@@ -124,7 +158,7 @@ def story_view(request):
     return render(request, 'core/story.html', {'stories': stories_data})
 
 # ==========================================
-# JALUR FRONTEND HALAMAN DETAIL (DINAMIS)
+# JALUR FRONTEND HALAMAN DETAIL
 # ==========================================
 def detail_articles_view(request, slug):
     article_data = get_object_or_404(Article, slug=slug)
@@ -159,7 +193,7 @@ def detail_story_view(request, slug):
 
 
 # ==========================================
-# PROTEKSI & SECURITY MIXIN
+# PROTEKSI & SECURITY
 # ==========================================
 @user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
 def custom_dashboard(request):
