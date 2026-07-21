@@ -22,7 +22,7 @@
   }
 
   /* ========================================== */
-  /* PETA INDONESIA — D3.js + GeoJSON            */
+  /* PETA INDONESIA — D3.js + GeoJSON           */
   /* ========================================== */
   .indonesia-map-wrapper {
       position: relative;
@@ -392,11 +392,12 @@
 
     function getColorByCount(count) {
         if (!count || count === 0) return '#e2e8f0';
-        if (count === 1) return '#bfd5cb';
-        if (count === 2) return '#9bc2a5';
-        if (count === 3) return '#77af80';
-        if (count === 4) return '#539c5a';
-        return '#308935';
+        if (count < 3) return '#bfd5cb';
+        if (count >= 3 && count < 5) return '#9bc2a5';
+        if (count >= 5 && count < 7) return '#77af80';
+        if (count >= 7 && count < 9) return '#539c5a';
+        if (count >= 9 && count < 11) return '#3e7c44';
+        return '#255d2b';
     }
 
     const PROVINCE_COORDS = {
