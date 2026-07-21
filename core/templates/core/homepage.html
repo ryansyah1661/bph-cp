@@ -4,6 +4,7 @@
 {% block title %}Bhumi Pasa Hijau - Specializing in Natural Resources Management and Understanding{% endblock %}
 
 {% block content %}
+  <!-- HERO SECTION -->
   <section class="relative h-screen min-h-[600px] w-full flex items-center overflow-hidden bg-on-background">
     <div class="absolute inset-0 z-0">
       <div class="absolute inset-0 bg-gradient-to-r from-on-background/80 to-on-background/20 z-10"></div>
@@ -29,6 +30,7 @@
     </div>
   </section>
 
+  <!-- KOMITMEN KAMI SECTION -->
   <section class="py-section-gap bg-surface w-full">
     <div class="max-w-3xl mx-auto text-center px-margin-mobile md:px-margin-desktop">
       <span class="material-symbols-outlined text-primary text-4xl mb-stack-md fill">eco</span>
@@ -40,6 +42,7 @@
     </div>
   </section>
 
+  <!-- ARTIKEL TERBARU SECTION -->
   <section class="py-section-gap bg-surface-container-lowest border-t border-border-subtle w-full">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-4">
@@ -49,7 +52,7 @@
         </div>
         
         <a class="font-label-caps text-xs font-bold uppercase tracking-wider text-primary border border-primary px-7 py-3 rounded-full hover:bg-forest-deep hover:text-surface-white transition-all items-center inline-flex"
-           href="{% url 'gallery' %}#artikel">
+           href="{% url 'gallery' %}#seksi-artikel">
           <span>Lihat Semua</span>
         </a>
       </div>
@@ -94,67 +97,99 @@
     </div>
   </section>
 
-  <section class="py-16 bg-gradient-to-b bg-surface from-transparent to-[#f9fbf9] dark:to-surface-dim/20 border-t border-border-subtle w-full">
-    <div class="w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
+  <!-- CERITA DARI LAPANGAN SECTION -->
+  <section class="py-16 bg-[#f8faf9] border-t border-border-subtle w-full">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
       
+      <!-- HEADER SEKSI CERITA LAPANGAN -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
+        <div>
+          <h2 class="font-headline-lg text-3xl font-bold text-on-surface mb-2">Cerita dari Lapangan</h2>
+          <p class="font-body-md text-sm text-on-surface-variant">Catatan aksi dan narasi konservasi riil tim BPH.</p>
+        </div>
+        <a href="{% url 'gallery' %}#seksi-cerita" class="font-label-caps text-xs font-bold uppercase tracking-wider text-primary border border-primary px-7 py-3 rounded-full hover:bg-forest-deep hover:text-surface-white transition-all items-center inline-flex" style="text-decoration: none;">
+          <span>Lihat Semua Cerita</span>
+        </a>
+      </div>
+
+      <!-- BANNER CARD UTAMA -->
       {% if stories %}
         {% with latest_story=stories.0 %}
-        <a href="{% url 'detail-articles' slug=latest_story.slug %}"
-           class="relative group overflow-hidden rounded-3xl shadow-md border border-black/5 cursor-pointer">
-          {% if latest_story.gambar %}
-            <img src="{{ latest_story.gambar.url }}" 
-                 alt="{{ latest_story.judul }}" 
-                 class="w-full h-[300px] md:h-[450px] object-cover transform duration-700 group-hover:scale-105" />
-          {% else %}
-            <img src="{% static 'images/cerita.jpg' %}" 
-                 alt="Cerita dari Lapangan BPH" 
-                 class="w-full h-[300px] md:h-[450px] object-cover transform duration-700 group-hover:scale-105" />
-          {% endif %}
-          <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-          
-          {% if latest_story.lokasi %}
-          <div class="absolute bottom-4 right-4 bg-primary text-surface-white px-4 py-2 rounded-xl text-xs font-bold tracking-wide shadow-md z-10">
-            {{ latest_story.lokasi.nama_provinsi }}
+        <div class="bg-white border border-border-subtle/80 rounded-3xl p-6 md:p-8 shadow-[0_4px_25px_rgba(0,0,0,0.02)]">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            <!-- GAMBAR DI KIRI (BISA DIKLIK) -->
+            <a href="{% url 'detail-story' slug=latest_story.slug %}" class="lg:col-span-6 relative group overflow-hidden rounded-2xl aspect-[4/3] md:aspect-[16/10] bg-surface-container block" style="text-decoration: none;">
+              {% if latest_story.gambar %}
+                <img src="{{ latest_story.gambar.url }}" 
+                     alt="{{ latest_story.judul }}" 
+                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              {% else %}
+                <img src="{% static 'images/cerita.jpg' %}" 
+                     alt="Cerita dari Lapangan BPH" 
+                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              {% endif %}
+              
+              {% if latest_story.lokasi %}
+              <div class="absolute bottom-4 left-4 bg-emerald-900/80 backdrop-blur-md text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1 shadow-md">
+                <span class="material-symbols-outlined text-xs text-amber-400">location_on</span>
+                {{ latest_story.lokasi.nama_provinsi }}
+              </div>
+              {% endif %}
+            </a>
+
+            <!-- TEKS DI KANAN -->
+            <div class="lg:col-span-6 flex flex-col justify-center space-y-4 group">
+              
+              <!-- BADGE SOROTAN LAPANGAN (STYLE DISAMAKAN PERSIS KOTAK CERITA LAPANGAN) -->
+              <div class="flex items-center gap-3">
+                <span class="bg-emerald-50 text-emerald-800 border border-emerald-100 text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm text-emerald-700">explore</span>
+                  <span>Cerita Lapangan</span>
+                </span>
+                <span class="text-xs text-slate-400 font-medium">{{ latest_story.tanggal|date:"d F Y" }}</span>
+              </div>
+
+              <!-- JUDUL (BISA DIKLIK) -->
+              <a href="{% url 'detail-story' slug=latest_story.slug %}" style="text-decoration: none;">
+                <h3 class="font-headline-lg text-xl md:text-2xl font-bold text-on-surface leading-snug group-hover:text-primary transition-colors duration-300">
+                  {{ latest_story.judul }}
+                </h3>
+              </a>
+
+              <p class="font-body-md text-sm text-on-surface-variant leading-relaxed line-clamp-4">
+                {{ latest_story.short }}
+              </p>
+
+              <!-- BACA SELENGKAPNYA -->
+              <div class="pt-2">
+                <a href="{% url 'detail-story' slug=latest_story.slug %}" 
+                   class="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300"
+                   style="text-decoration: none;">
+                  <span class="relative inline-block pb-1 after:pointer-events-none after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
+                    Baca Selengkapnya
+                  </span>
+                  <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
+                </a>
+              </div>
+            </div>
+
           </div>
-          {% endif %}
-        </a>
-        
-        <div class="flex flex-col items-start space-y-4 md:space-y-5">
-          <span class="font-label-caps text-[11px] font-bold tracking-widest text-primary dark:text-inverse-primary uppercase bg-primary/10 px-3 py-1 rounded-full">
-            Cerita dari Lapangan
-          </span>
-          <h2 class="font-headline-lg text-2xl md:text-3xl font-bold text-on-surface dark:text-surface-white leading-tight">
-            {{ latest_story.judul }}
-          </h2>
-          <p class="font-body-md text-sm md:text-base text-on-surface-variant dark:text-surface-variant leading-relaxed text-justify md:text-left">
-            {{ latest_story.short }}
-          </p>
-          
-          <a class="group inline-flex items-center gap-1 font-label-caps text-xs font-bold uppercase tracking-wider text-primary hover:text-forest-deep transition-colors pt-2"
-             href="{% url 'detail-articles' slug=latest_story.slug %}">
-            <span class="relative inline-block pb-1 after:pointer-events-none after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-              Baca Cerita Selengkapnya
-            </span>
-            <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
-          </a>
         </div>
         {% endwith %}
       {% else %}
-        <a href="#" class="relative group overflow-hidden rounded-3xl shadow-md border border-black/5">
-          <img src="{% static 'images/cerita.jpg' %}" alt="BPH" class="w-full h-[300px] md:h-[450px] object-cover" />
-          <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-        </a>
-        <div class="flex flex-col items-start space-y-4">
-          <span class="font-label-caps text-[11px] font-bold tracking-widest text-primary uppercase bg-primary/10 px-3 py-1 rounded-full">Cerita dari Lapangan</span>
-          <h2 class="font-headline-lg text-2xl font-bold text-on-surface">Belum ada cerita lapangan</h2>
-          <p class="font-body-md text-sm text-on-surface-variant">Silakan tambahkan data melalui panel admin untuk merilis cerita lapangan operasional baru.</p>
+        <div class="bg-white border border-dashed border-slate-200 rounded-3xl p-12 text-center">
+          <span class="material-symbols-outlined text-5xl text-slate-300 mb-2">potted_plant</span>
+          <h3 class="text-base font-bold text-slate-700">Belum ada cerita lapangan</h3>
+          <p class="text-xs text-slate-400 mt-1">Tambahkan data melalui admin panel untuk menampilkan sorotan lapangan terbaru.</p>
         </div>
       {% endif %}
 
     </div>
   </section>
 
-  <section class="pb-20 pt-4 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
+  <!-- CTA SECTION -->
+  <section class="pb-20 pt-10 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
     <div class="relative bg-primary dark:bg-surface-container-high rounded-3xl p-8 md:p-14 flex flex-col md:flex-row justify-between items-center gap-8 shadow-[0_12px_40px_rgba(0,107,41,0.15)] overflow-hidden">
       <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/5 rounded-full blur-xl pointer-events-none"></div>
       <div class="absolute -left-10 -top-10 w-40 h-40 bg-black/5 rounded-full blur-xl pointer-events-none"></div>

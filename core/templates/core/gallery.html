@@ -190,7 +190,7 @@
           </div>
         </div>
 
-        <!-- 4. SEKSI MODUL DOKUMENTASI (LINK PREVIEW PDF) -->
+        <!-- 4. SEKSI MODUL DOKUMENTASI -->
         <div id="seksi-modul" class="tab-content-block hidden space-y-6">
           <div class="mb-6 text-left">
             <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface leading-tight mb-1">Modul Dokumentasi Strategis</h2>
@@ -233,41 +233,59 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     
-    // --- AKSI SWAP TAB SIDEBAR ---
     const tabButtons = document.querySelectorAll('.tab-menu-btn');
     const tabContents = document.querySelectorAll('.tab-content-block');
 
+    function activateTab(targetTabId) {
+      tabButtons.forEach(b => {
+        b.classList.remove('bg-primary', 'text-surface-white', 'shadow-sm');
+        b.classList.add('bg-transparent', 'text-on-surface-variant', 'hover:bg-slate-50');
+        
+        const cnt = b.querySelector('.tab-counter');
+        if(cnt) {
+          cnt.className = "tab-counter text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-extrabold transition-colors";
+        }
+
+        if (b.getAttribute('data-tab') === targetTabId) {
+          b.classList.add('bg-primary', 'text-surface-white', 'shadow-sm');
+          b.classList.remove('bg-transparent', 'text-on-surface-variant', 'hover:bg-slate-50');
+          const activeCnt = b.querySelector('.tab-counter');
+          if(activeCnt) {
+            activeCnt.className = "tab-counter text-[11px] px-2 py-0.5 rounded-full bg-white text-primary font-extrabold transition-colors";
+          }
+        }
+      });
+
+      tabContents.forEach(content => {
+        if (content.id === targetTabId) content.classList.remove('hidden');
+        else content.classList.add('hidden');
+      });
+
+      const mainCol = document.querySelector('.lg\\:col-span-9');
+      if (mainCol) {
+        const offsetTarget = mainCol.offsetTop - 110;
+        window.scrollTo({ top: offsetTarget, behavior: 'smooth' });
+      }
+    }
+
+    // --- AKSI SWAP TAB SIDEBAR VIA KLIK ---
     tabButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         const targetTabId = btn.getAttribute('data-tab');
-
-        tabButtons.forEach(b => {
-          b.classList.remove('bg-primary', 'text-surface-white', 'shadow-sm');
-          b.classList.add('bg-transparent', 'text-on-surface-variant', 'hover:bg-slate-50');
-          
-          const cnt = b.querySelector('.tab-counter');
-          if(cnt) {
-            cnt.className = "tab-counter text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-extrabold transition-colors";
-          }
-        });
-
-        btn.classList.add('bg-primary', 'text-surface-white', 'shadow-sm');
-        btn.classList.remove('bg-transparent', 'text-on-surface-variant', 'hover:bg-slate-50');
-        
-        const activeCnt = btn.querySelector('.tab-counter');
-        if(activeCnt) {
-          activeCnt.className = "tab-counter text-[11px] px-2 py-0.5 rounded-full bg-white text-primary font-extrabold transition-colors";
-        }
-
-        tabContents.forEach(content => {
-          if (content.id === targetTabId) content.classList.remove('hidden');
-          else content.classList.add('hidden');
-        });
-
-        const offsetTarget = document.querySelector('.lg\\:col-span-9').offsetTop - 110;
-        window.scrollTo({ top: offsetTarget, behavior: 'smooth' });
+        activateTab(targetTabId);
       });
     });
+
+    // --- DETEKSI HASH URL (Contoh: /gallery/#seksi-artikel) ---
+    const urlHash = window.location.hash.replace('#', '');
+    if (urlHash) {
+      const targetBlock = document.getElementById(urlHash);
+      if (targetBlock) {
+        setTimeout(() => {
+          activateTab(urlHash);
+        }, 100);
+      }
+    }
 
     // --- FILTER FOLDER GALERI ---
     const galleryButtons = document.querySelectorAll('.gallery-filter-btn');

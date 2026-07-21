@@ -5,7 +5,7 @@
 
 {% block content %}
 <style>
-  /* Sembunyikan scrollbar agar tampilan tetap aesthetic & bersih */
+
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
@@ -14,7 +14,6 @@
     scrollbar-width: none;
   }
 
-  /* Cursor grab untuk menandakan area bisa digeser manual */
   .interactive-scroll {
     cursor: grab;
   }
@@ -156,7 +155,7 @@
                   {% for proj in loc.projects.all %}
                     <li class="text-xs font-medium text-neutral-700 leading-snug flex items-start gap-1">
                        <span class="text-[#308935] font-bold">{{ forloop.counter }}.</span>
-                       <a href="{% url 'detail-experience' slug=proj.slug %}" class="hover:text-[#308935] text-neutral-700 transition-colors" style="text-decoration: none;">{{ proj.name }}</a>
+                       <span class="text-neutral-700">{{ proj.name }}</span>
                     </li>
                   {% endfor %}
                 </ul>
@@ -168,9 +167,10 @@
     </div>
   </section>
 
+  <!-- DAFTAR PROYEK TERKAIT (Tabel Bersih Tanpa Icon) -->
   <section class="w-full bg-white py-16 border-b border-gray-100 hidden" id="section-proyek-wilayah">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-      <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
+      <div class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
         <div>
           <h2 class="text-xl font-bold text-neutral-900 tracking-tight flex items-center gap-2">
             <span class="material-symbols-outlined text-[#308935]">analytics</span>
@@ -178,33 +178,60 @@
           </h2>
           <p class="text-sm font-semibold text-emerald-800 mt-1" id="project-filter-status"></p>
         </div>
-        <button id="reset-map-filter-btn" class="hidden text-xs font-bold text-red-600 bg-red-50 border border-red-200 px-4 py-2 rounded-xl hover:bg-red-100 transition cursor-pointer">
-          Reset Filter Peta
-        </button>
       </div>
 
-      <div class="max-w-4xl mx-auto text-left">
+      <div class="w-full">
         {% for loc in locations_with_projects %}
           {% if loc.kode_wilayah %}
-          <ol class="space-y-4 list-decimal pl-5 text-sm font-medium text-neutral-800 hidden id-list-proyek" id="list-proyek-{{ loc.kode_wilayah }}">
-            {% for proj in loc.projects.all %}
-            <li class="leading-relaxed">
-              <a href="{% url 'detail-experience' slug=proj.slug %}" class="text-neutral-800 hover:text-[#308935] transition-colors font-semibold text-base" style="text-decoration:none;">
-                {{ proj.name }} 
-                <span class="text-xs font-normal text-gray-400 ml-2">({{ proj.tahun }})</span>
-              </a>
-            </li>
-            {% empty %}
-            <li class="text-sm text-neutral-400 font-medium py-2 list-none">Belum ada data proyek di provinsi ini.</li>
-            {% endfor %}
-          </ol>
+          <div class="overflow-x-auto rounded-2xl border border-gray-100 shadow-sm hidden id-list-proyek" id="list-proyek-{{ loc.kode_wilayah }}">
+            <table class="w-full text-left border-collapse min-w-[650px]">
+              <thead>
+                <tr class="bg-slate-50 border-b border-gray-100 text-xs uppercase font-extrabold text-slate-500 tracking-wider">
+                  <th class="py-4 px-6 w-16 text-center">No</th>
+                  <th class="py-4 px-6">Judul Proyek</th>
+                  <th class="py-4 px-6">Mitra / Klien</th>
+                  <th class="py-4 px-6">Lokasi</th>
+                  <th class="py-4 px-6 text-center w-28">Tahun</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100 text-sm font-medium text-slate-700">
+                {% for proj in loc.projects.all %}
+                <tr class="hover:bg-slate-50/80 transition-colors">
+                  <td class="py-4 px-6 text-center font-bold text-slate-400">{{ forloop.counter }}</td>
+                  <td class="py-4 px-6 font-bold text-[#308935]">
+                    {{ proj.name }}
+                  </td>
+                  <td class="py-4 px-6 font-semibold text-slate-700">
+                    {% if proj.client %}
+                      {{ proj.client.nama }}
+                    {% else %}
+                      <span class="text-slate-400 font-normal italic">-</span>
+                    {% endif %}
+                  </td>
+                  <td class="py-4 px-6 text-slate-600">
+                    <span class="inline-block bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-xs font-semibold">
+                      {{ loc.nama_provinsi }}
+                    </span>
+                  </td>
+                  <td class="py-4 px-6 text-center font-semibold text-slate-600">
+                    {{ proj.tahun }}
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="5" class="text-center py-8 text-slate-400 italic">Belum ada data proyek di provinsi ini.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
           {% endif %}
         {% endfor %}
       </div>
     </div>
   </section>
 
-  <!-- ================= MITRA KAMI (INTERAKTIF: PRESISI KECEPATAN SAMA PERSIS & BISA DIGESER) ================= -->
+  <!-- ================= MITRA KAMI ================= -->
   <section id="mitra-section" class="w-full bg-surface-container-lowest border-y border-border-subtle py-20 overflow-hidden">
     <div class="space-y-16">
       
@@ -275,7 +302,7 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
 
-    // --- JS SCROLL INTERAKTIF DENGAN PRESISI HIGH-ACCURACY FLOAT ---
+    // --- JS SCROLL INTERAKTIF ---
     function enableInteractiveTicker(containerId, initialDirection = 1, speed = 1.0) {
       const container = document.getElementById(containerId);
       if (!container) return;
@@ -285,10 +312,8 @@
       let isMouseDown = false;
       let startX, scrollLeftVal;
 
-      // Gunakan float kustom untuk kalkulasi presisi tinggi tanpa pembulatan piksel browser
       let currentPos = container.scrollLeft;
 
-      // Atur posisi awal Sektor Publik (mulai di ujung kanan)
       if (initialDirection === -1) {
         currentPos = container.scrollWidth - container.clientWidth;
         container.scrollLeft = currentPos;
@@ -301,12 +326,10 @@
           if (maxScroll > 0) {
             currentPos += speed * direction;
 
-            // Cek Ujung Kanan
             if (currentPos >= maxScroll) {
               currentPos = maxScroll;
               direction = -1;
             } 
-            // Cek Ujung Kiri
             else if (currentPos <= 0) {
               currentPos = 0;
               direction = 1;
@@ -315,7 +338,6 @@
             container.scrollLeft = currentPos;
           }
         } else {
-          // Jika sedang di-drag/hover, sinkronkan posisi variabel float dengan scroll manual user
           currentPos = container.scrollLeft;
         }
 
@@ -324,14 +346,12 @@
 
       requestAnimationFrame(step);
 
-      // Event Mouse Hover Pause
       container.addEventListener('mouseenter', () => isHovered = true);
       container.addEventListener('mouseleave', () => {
         isHovered = false;
         isMouseDown = false;
       });
 
-      // Event Mouse Drag Manually
       container.addEventListener('mousedown', (e) => {
         isMouseDown = true;
         startX = e.pageX - container.offsetLeft;
@@ -350,9 +370,8 @@
       });
     }
 
-    // Jalankan SCROLL INTERAKTIF (Kecepatan dikunci sama persis 1.0 px/frame)
-    enableInteractiveTicker('scroll-swasta', 1, 1.0);   // Swasta: Mulai dari Kiri ke Kanan
-    enableInteractiveTicker('scroll-publik', -1, 1.0);  // Publik: Mulai dari Kanan ke Kiri
+    enableInteractiveTicker('scroll-swasta', 1, 1.0);
+    enableInteractiveTicker('scroll-publik', -1, 1.0);
 
 
     // --- PETA INDONESIA & PROYEK ---
@@ -372,12 +391,12 @@
     });
 
     function getColorByCount(count) {
-        if (!count || count === 0) return '#e2e8f0'; // 0 Proyek: Abu-abu bawaan
-        if (count === 1) return '#bfd5cb';           // 1 Proyek
-        if (count === 2) return '#9bc2a5';           // 2 Proyek
-        if (count === 3) return '#77af80';           // 3 Proyek
-        if (count === 4) return '#539c5a';           // 4 Proyek
-        return '#308935';                            // >= 5 Proyek
+        if (!count || count === 0) return '#e2e8f0';
+        if (count === 1) return '#bfd5cb';
+        if (count === 2) return '#9bc2a5';
+        if (count === 3) return '#77af80';
+        if (count === 4) return '#539c5a';
+        return '#308935';
     }
 
     const PROVINCE_COORDS = {

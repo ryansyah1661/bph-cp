@@ -47,8 +47,9 @@ class Service(models.Model):
     icon = models.CharField(max_length=50, blank=True, help_text="Nama icon Material Symbols, misal: 'forest', 'travel_explore'", verbose_name="Nama Icon Kartu")
     thumbnail = models.ImageField(upload_to='services/thumbs/', blank=True, verbose_name="Foto Kartu Layanan")
     bg_image = models.ImageField(upload_to='services/banners/', blank=True, verbose_name="Foto Banner Atas")
-    intro = models.TextField(verbose_name="Paragraf Ringkasan Atas")
-    approach = models.TextField(verbose_name="Paragraf Pendekatan Komprehensif")
+    
+    # Field intro sudah dihapus sesuai permintaan
+    approach = models.TextField(verbose_name="Detail Deskripsi Cakupan Kerja")
     
     categories = models.ManyToManyField(Category, blank=True, related_name='services')
 

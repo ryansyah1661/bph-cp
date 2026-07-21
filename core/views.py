@@ -381,13 +381,13 @@ class ServiceListView(AdminRequiredMixin, ListView):
 class ServiceCreateView(AdminRequiredMixin, CreateView):
     model = Service
     template_name = 'core/custom_admin/services/services_form.html'
-    fields = ['title', 'slug', 'approach', 'portfolio', 'icon', 'thumbnail', 'bg_image', 'intro', 'categories']
+    fields = ['title', 'slug', 'approach', 'portfolio', 'icon', 'thumbnail', 'bg_image', 'categories']
     success_url = reverse_lazy('service_list')
 
 class ServiceUpdateView(AdminRequiredMixin, UpdateView):
     model = Service
     template_name = 'core/custom_admin/services/services_form.html'
-    fields = ['title', 'slug', 'approach', 'portfolio', 'icon', 'thumbnail', 'bg_image', 'intro', 'categories']
+    fields = ['title', 'slug', 'approach', 'portfolio', 'icon', 'thumbnail', 'bg_image', 'categories']
     success_url = reverse_lazy('service_list')
 
 class ServiceDeleteView(AdminRequiredMixin, DeleteView):
