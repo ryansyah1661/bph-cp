@@ -91,7 +91,12 @@
           </div>
         </a>
         {% empty %}
-        <p class="text-sm text-on-surface-variant col-span-full">Belum ada artikel yang dipublikasikan.</p>
+        <!-- KOTAK KOSONG YANG DISAMAKAN DENGAN CERITA LAPANGAN -->
+        <div class="bg-white border border-dashed border-slate-200 rounded-3xl p-12 text-center col-span-full">
+          <span class="material-symbols-outlined text-5xl text-slate-300 mb-2">article</span>
+          <h3 class="text-base font-bold text-slate-700">Belum ada artikel yang dipublikasikan</h3>
+          <p class="text-xs text-slate-400 mt-1">Tambahkan data untuk menampilkan wawasan dan artikel terbaru.</p>
+        </div>
         {% endfor %}
       </div>
     </div>
@@ -141,7 +146,7 @@
             <!-- TEKS DI KANAN -->
             <div class="lg:col-span-6 flex flex-col justify-center space-y-4 group">
               
-              <!-- BADGE SOROTAN LAPANGAN (STYLE DISAMAKAN PERSIS KOTAK CERITA LAPANGAN) -->
+              <!-- BADGE SOROTAN LAPANGAN -->
               <div class="flex items-center gap-3">
                 <span class="bg-emerald-50 text-emerald-800 border border-emerald-100 text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
                   <span class="material-symbols-outlined text-sm text-emerald-700">explore</span>
@@ -181,7 +186,7 @@
         <div class="bg-white border border-dashed border-slate-200 rounded-3xl p-12 text-center">
           <span class="material-symbols-outlined text-5xl text-slate-300 mb-2">potted_plant</span>
           <h3 class="text-base font-bold text-slate-700">Belum ada cerita lapangan</h3>
-          <p class="text-xs text-slate-400 mt-1">Tambahkan data melalui admin panel untuk menampilkan sorotan lapangan terbaru.</p>
+          <p class="text-xs text-slate-400 mt-1">Tambahkan data untuk menampilkan cerita lapangan terbaru.</p>
         </div>
       {% endif %}
 
