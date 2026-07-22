@@ -1,7 +1,7 @@
 {% extends "core/custom_admin/base.html" %}
 
 {% block admin_content %}
-<div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm max-w-md mx-auto text-center space-y-6">
+<div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm max-w-md mx-auto text-center space-y-6 mt-10">
   <div class="w-16 h-16 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mx-auto border border-rose-100">
     <span class="material-symbols-outlined text-3xl">warning</span>
   </div>
@@ -11,8 +11,8 @@
   </div>
   <form method="POST" class="flex justify-center gap-3 pt-2">
     {% csrf_token %}
-    <a href="{% url 'user_list' %}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold px-5 py-2.5 rounded-xl transition">Batal</a>
-    <button type="submit" class="bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition shadow-sm">Ya, Hapus Akun</button>
+    <a href="{% url 'user_list' %}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold px-5 py-2.5 rounded-xl transition" style="text-decoration: none;">Batal</a>
+    <button type="submit" class="bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition shadow-sm border-none cursor-pointer">Ya, Hapus Akun</button>
   </form>
 </div>
 {% endblock %}

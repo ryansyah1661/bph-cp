@@ -295,11 +295,19 @@ class ProjectCreateView(AdminRequiredMixin, CreateView):
     fields = ['name', 'slug', 'description', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'categories']
     success_url = reverse_lazy('project_list')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Proyek baru berhasil ditambahkan!')
+        return super().form_valid(form)
+
 class ProjectUpdateView(AdminRequiredMixin, UpdateView):
     model = Project
     template_name = 'core/custom_admin/experience/experience_form.html'
     fields = ['name', 'slug', 'description', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'categories']
     success_url = reverse_lazy('project_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Perubahan data proyek berhasil disimpan!')
+        return super().form_valid(form)
 
 class ProjectDeleteView(AdminRequiredMixin, DeleteView):
     model = Project
@@ -324,16 +332,28 @@ class StoryCreateView(AdminRequiredMixin, CreateView):
     fields = '__all__'
     success_url = reverse_lazy('story_list')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Cerita lapangan baru berhasil ditambahkan!')
+        return super().form_valid(form)
+
 class StoryUpdateView(AdminRequiredMixin, UpdateView):
     model = Story
     template_name = 'core/custom_admin/story/story_form.html'
     fields = '__all__'
     success_url = reverse_lazy('story_list')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Perubahan cerita lapangan berhasil disimpan!')
+        return super().form_valid(form)
+
 class StoryDeleteView(AdminRequiredMixin, DeleteView):
     model = Story
     template_name = 'core/custom_admin/story/story_confirm_delete.html'
     success_url = reverse_lazy('story_list')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'Cerita lapangan berhasil dihapus!')
+        return super().delete(request, *args, **kwargs)
 
 
 # ==========================================
@@ -369,6 +389,10 @@ class ClientDeleteView(AdminRequiredMixin, DeleteView):
     template_name = 'core/custom_admin/client/client_confirm_delete.html'
     success_url = reverse_lazy('client_list')
 
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'Data klien berhasil dihapus!')
+        return super().delete(request, *args, **kwargs)
+
 
 # ==========================================
 # 5. MANAGEMENT LAYANAN (SERVICES)
@@ -384,16 +408,28 @@ class ServiceCreateView(AdminRequiredMixin, CreateView):
     fields = ['title', 'slug', 'approach', 'portfolio', 'icon', 'thumbnail', 'bg_image', 'categories']
     success_url = reverse_lazy('service_list')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Layanan baru berhasil ditambahkan!')
+        return super().form_valid(form)
+
 class ServiceUpdateView(AdminRequiredMixin, UpdateView):
     model = Service
     template_name = 'core/custom_admin/services/services_form.html'
     fields = ['title', 'slug', 'approach', 'portfolio', 'icon', 'thumbnail', 'bg_image', 'categories']
     success_url = reverse_lazy('service_list')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Data layanan berhasil diperbarui!')
+        return super().form_valid(form)
+
 class ServiceDeleteView(AdminRequiredMixin, DeleteView):
     model = Service
     template_name = 'core/custom_admin/services/services_confirm_delete.html'
     success_url = reverse_lazy('service_list')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'Data Layanan berhasil dihapus!')
+        return super().delete(request, *args, **kwargs)
 
 
 # ==========================================
@@ -410,16 +446,28 @@ class LocationCreateView(AdminRequiredMixin, CreateView):
     fields = '__all__'
     success_url = reverse_lazy('location_list')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Lokasi baru berhasil ditambahkan!')
+        return super().form_valid(form)
+
 class LocationUpdateView(AdminRequiredMixin, UpdateView):
     model = Location
     template_name = 'core/custom_admin/location/location_form.html'
     fields = '__all__'
     success_url = reverse_lazy('location_list')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Data lokasi berhasil diperbarui!')
+        return super().form_valid(form)
+
 class LocationDeleteView(AdminRequiredMixin, DeleteView):
     model = Location
     template_name = 'core/custom_admin/location/location_confirm_delete.html'
     success_url = reverse_lazy('location_list')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'Data lokasi berhasil dihapus!')
+        return super().delete(request, *args, **kwargs)
 
 
 # ==========================================
@@ -436,16 +484,28 @@ class CategoryCreateView(AdminRequiredMixin, CreateView):
     fields = '__all__'
     success_url = reverse_lazy('category_list')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Kategori baru berhasil ditambahkan!')
+        return super().form_valid(form)
+
 class CategoryUpdateView(AdminRequiredMixin, UpdateView):
     model = Category
     template_name = 'core/custom_admin/category/category_form.html'
     fields = '__all__'
     success_url = reverse_lazy('category_list')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Data kategori berhasil diperbarui!')
+        return super().form_valid(form)
+
 class CategoryDeleteView(AdminRequiredMixin, DeleteView):
     model = Category
     template_name = 'core/custom_admin/category/category_confirm_delete.html'
     success_url = reverse_lazy('category_list')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'Data kategori berhasil dihapus!')
+        return super().delete(request, *args, **kwargs)
 
 
 # ==========================================
@@ -462,16 +522,28 @@ class DocumentCreateView(AdminRequiredMixin, CreateView):
     fields = '__all__'
     success_url = reverse_lazy('document_list')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Modul baru berhasil ditambahkan!')
+        return super().form_valid(form)
+
 class DocumentUpdateView(AdminRequiredMixin, UpdateView):
     model = Modul
     template_name = 'core/custom_admin/modul/modul_form.html'
     fields = '__all__'
     success_url = reverse_lazy('document_list')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Data modul berhasil diperbarui!')
+        return super().form_valid(form)
+
 class DocumentDeleteView(AdminRequiredMixin, DeleteView):
     model = Modul
     template_name = 'core/custom_admin/modul/modul_confirm_delete.html'
     success_url = reverse_lazy('document_list')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'Data modul berhasil dihapus!')
+        return super().delete(request, *args, **kwargs)
 
 
 # ==========================================
@@ -489,6 +561,10 @@ class ContactDeleteView(AdminRequiredMixin, DeleteView):
     model = ContactMessage
     template_name = 'core/custom_admin/contact/contact_confirm_delete.html'
     success_url = reverse_lazy('contact_list')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'Pesan berhasil dihapus!')
+        return super().delete(request, *args, **kwargs)
 
 @login_required(login_url='/be/login/')
 def mark_message_as_read(request, pk):
@@ -515,16 +591,28 @@ class GalleryCreateView(AdminRequiredMixin, CreateView):
     fields = ['caption', 'gambar', 'folder', 'kategori', 'tanggal_upload']
     success_url = reverse_lazy('gallery_admin_list')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Gambar baru berhasil ditambahkan ke galeri!')
+        return super().form_valid(form)
+
 class GalleryUpdateView(AdminRequiredMixin, UpdateView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_form.html'
     fields = ['caption', 'gambar', 'folder', 'kategori', 'tanggal_upload']
     success_url = reverse_lazy('gallery_admin_list')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Data gambar berhasil diperbarui!')
+        return super().form_valid(form)
+
 class GalleryDeleteView(AdminRequiredMixin, DeleteView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_confirm_delete.html'
     success_url = reverse_lazy('gallery_admin_list')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'Gambar berhasil dihapus dari galeri!')
+        return super().delete(request, *args, **kwargs)
 
 
 # ==========================================
@@ -541,16 +629,28 @@ class FolderCreateView(AdminRequiredMixin, CreateView):
     fields = '__all__'
     success_url = reverse_lazy('folder_list')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Folder baru berhasil ditambahkan!')
+        return super().form_valid(form)
+
 class FolderUpdateView(AdminRequiredMixin, UpdateView):
     model = Folder
     template_name = 'core/custom_admin/gallery/folder_form.html'
     fields = '__all__'
     success_url = reverse_lazy('folder_list')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Data folder berhasil diperbarui!')
+        return super().form_valid(form)
+
 class FolderDeleteView(AdminRequiredMixin, DeleteView):
     model = Folder
     template_name = 'core/custom_admin/gallery/folder_confirm_delete.html'
     success_url = reverse_lazy('folder_list')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'Data folder berhasil dihapus!')
+        return super().delete(request, *args, **kwargs)
 
 
 # ==========================================
@@ -612,11 +712,12 @@ class UserCreateView(SuperuserRequiredMixin, CreateView):
     template_name = 'core/custom_admin/user/user_form.html'
     fields = ['username', 'email', 'password', 'is_staff', 'is_active', 'is_superuser']
     success_url = reverse_lazy('user_list')
-    
+
     def form_valid(self, form):
         user = form.save(commit=False)
         user.set_password(form.cleaned_data['password'])
         user.save()
+        messages.success(self.request, 'Pengguna baru berhasil ditambahkan!')
         return super().form_valid(form)
 
 class UserUpdateView(SuperuserRequiredMixin, UpdateView):
@@ -625,10 +726,18 @@ class UserUpdateView(SuperuserRequiredMixin, UpdateView):
     fields = ['username', 'email', 'is_staff', 'is_active', 'is_superuser']
     success_url = reverse_lazy('user_list')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Data pengguna berhasil diperbarui!')
+        return super().form_valid(form)
+
 class UserDeleteView(SuperuserRequiredMixin, DeleteView):
     model = User
     template_name = 'core/custom_admin/user/user_confirm_delete.html'
     success_url = reverse_lazy('user_list')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'Pengguna berhasil dihapus!')
+        return super().delete(request, *args, **kwargs)
 
 
 # ==========================================

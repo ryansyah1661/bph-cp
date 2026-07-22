@@ -3,14 +3,13 @@
 {% block admin_content %}
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
-<form method="post" enctype="multipart/form-data" id="services-form" class="space-y-6">
-  {% csrf_token %}
+<div class="mb-6 pt-2">
+  <h2 class="text-xl font-bold text-emerald-900">{% if object %}Edit{% else %}Tambah{% endif %} Jenis Layanan</h2>
+  <p class="text-xs text-gray-500 mt-1">Formulir konfigurasi data detail penawaran program pelayanan</p>
+</div>
 
-  <!-- HEADER ATAS (HANYA JUDUL, TANPA TOMBOL) -->
-  <div class="mb-6 pt-2 border-b border-gray-100 pb-4">
-    <h2 class="text-xl font-bold text-emerald-900">{% if object %}Edit{% else %}Tambah{% endif %} Jenis Layanan</h2>
-    <p class="text-xs text-gray-500 mt-1">Formulir konfigurasi data detail penawaran program pelayanan</p>
-  </div>
+<form method="post" enctype="multipart/form-data" id="services-form">
+  {% csrf_token %}
 
   {% if form.errors %}
   <div style="background:#fee2e2; border:1px solid #ef4444; padding:12px; border-radius:8px; margin-bottom:16px; color:#991b1b; font-size:13px;">
@@ -154,7 +153,7 @@
   }
   .django-input-wrapper input:focus, 
   .django-input-wrapper textarea:focus,
-  .django-input-wrapper select:focus { 
+  .django-input-wrapper select { 
     outline: none; 
     border-color: #059669; 
     box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1); 

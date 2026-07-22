@@ -2,15 +2,23 @@
 {% load widget_tweaks %}
 
 {% block admin_content %}
-<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm max-w-2xl mx-auto space-y-6">
-  <div class="border-b border-gray-100 pb-4 text-left">
-    <h2 class="text-xl font-bold text-emerald-900">{% if object %}Edit{% else %}Tambah{% endif %} User Pengguna</h2>
-    <p class="text-xs text-gray-500 mt-1">Isi kredensial akun administrator panel dengan benar.</p>
-  </div>
+<div class="mb-6 pt-2 max-w-2xl mx-auto">
+  <h2 class="text-xl font-bold text-emerald-900">{% if object %}Edit{% else %}Tambah{% endif %} User Pengguna</h2>
+  <p class="text-xs text-gray-500 mt-1">Isi kredensial akun administrator panel dengan benar.</p>
+</div>
 
+<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm max-w-2xl mx-auto space-y-6">
+  
   <form method="POST" class="space-y-5">
     {% csrf_token %}
     
+    {% if form.errors %}
+    <div style="background:#fee2e2; border:1px solid #ef4444; padding:12px; border-radius:8px; margin-bottom:16px; color:#991b1b; font-size:13px;">
+      <strong>Terjadi kesalahan saat menyimpan data akun:</strong>
+      {{ form.errors }}
+    </div>
+    {% endif %}
+
     {% for field in form %}
     <div class="flex flex-col space-y-1.5 text-left">
       <label class="text-sm font-semibold text-slate-700">
@@ -32,7 +40,7 @@
         {% if field.name == 'password' %}
           {{ field|attr:"type:password"|add_class:"w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition" }}
           {% if object %}
-            <span class="text-[11px] text-amber-600 font-medium mt-1"> Biarkan kosong atau isi dengan karakter acak jika tidak ingin mengubah password bawaan saat mengedit email/username.</span>
+            <span class="text-[11px] text-amber-600 font-medium mt-1">Biarkan kosong atau isi dengan karakter acak jika tidak ingin mengubah password bawaan saat mengedit email/username.</span>
           {% endif %}
         {% else %}
           {{ field|add_class:"w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition" }}
@@ -46,8 +54,8 @@
     {% endfor %}
 
     <div class="flex justify-end gap-3 pt-5 border-t border-gray-100">
-      <a href="{% url 'user_list' %}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2.5 rounded-xl transition">Batal</a>
-      <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-sm">Simpan Akun</button>
+      <a href="{% url 'user_list' %}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold px-4 py-2.5 rounded-xl transition" style="text-decoration: none;">Batal</a>
+      <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-sm border-none cursor-pointer">Simpan Akun</button>
     </div>
   </form>
 </div>
