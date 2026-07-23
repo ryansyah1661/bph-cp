@@ -57,18 +57,16 @@
       <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
         <h3 class="text-sm font-bold text-slate-700 border-b border-gray-100 pb-3 mb-4">Aset Grafis</h3>
         
-        {% if object.thumbnail %}
-          <div class="mb-3 rounded-xl overflow-hidden border">
-            <img src="{{ object.thumbnail.url }}" class="w-full h-36 object-cover">
-          </div>
-        {% endif %}
+        <div id="preview-container" class="{% if not object.thumbnail %}hidden{% endif %} mb-3">
+          <img id="image-preview" src="{% if object.thumbnail %}{{ object.thumbnail.url }}{% endif %}" class="w-full h-36 object-cover rounded-xl border">
+        </div>
         
         <label for="id_thumbnail" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition" id="drop-zone">
           <span class="material-symbols-outlined text-gray-400 text-3xl mb-1">upload_file</span>
-          <span class="text-sm text-gray-400">Seret & Jatuhkan atau <span class="text-emerald-600 font-semibold">Jelajahi</span></span>
+          <span class="text-sm text-gray-400 text-center">Seret & Jatuhkan atau <span class="text-emerald-600 font-semibold">Jelajahi</span></span>
         </label>
         <div id="file-name-display" class="text-xs text-gray-400 mt-2 text-center font-medium"></div>
-        <div style="display:none;">{{ form.thumbnail }}</div>
+        <div class="bph-hidden-file-input">{{ form.thumbnail }}</div>
       </div>
 
       <!-- TOMBOL SIMPAN & BATAL DI BAWAH KANAN -->
@@ -84,7 +82,54 @@
 
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <script>
-  var quill = new Quill('#quill-editor', { theme: 'snow' });
+  var toolbarOptions = [
+    [{ 'header': [2, 3, false] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    ['link'],
+    ['blockquote', 'code-block'],
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    ['image'],
+    ['clean']
+  ];
+
+  var quill = new Quill('#quill-editor', {
+    theme: 'snow',
+    modules: {
+      toolbar: {
+        container: toolbarOptions,
+        handlers: {
+          'image': function() {
+            var input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/png, image/jpeg, image/gif, image/webp');
+            input.click();
+            input.onchange = function() {
+              var file = input.files[0];
+              if (!file) return;
+              if (file.size > 5 * 1024 * 1024) { alert('Ukuran file terlalu besar. Maksimal 5MB.'); return; }
+              var formData = new FormData();
+              formData.append('image', file);
+              fetch('{% url "quill_image_upload" %}', {
+                method: 'POST',
+                headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+                body: formData
+              })
+              .then(function(r) { return r.json(); })
+              .then(function(data) {
+                if (data.url) {
+                  var range = quill.getSelection(true);
+                  quill.insertEmbed(range.index, 'image', data.url);
+                  quill.setSelection(range.index + 1);
+                } else { alert(data.error || 'Gagal mengunggah gambar.'); }
+              })
+              .catch(function(err) { console.error('Upload error:', err); alert('Terjadi kesalahan saat mengunggah gambar.'); });
+            };
+          }
+        }
+      }
+    }
+  });
+
   var approachTextarea = document.querySelector('textarea[name="approach"]');
   if (approachTextarea && approachTextarea.value) { quill.root.innerHTML = approachTextarea.value; }
 
@@ -113,10 +158,24 @@
   const fileInput = document.getElementById('id_thumbnail');
   const fileNameDisplay = document.getElementById('file-name-display');
   const dropZone = document.getElementById('drop-zone');
-  
+  const imagePreview = document.getElementById('image-preview');
+  const previewContainer = document.getElementById('preview-container');
+
+  function handleImageFile(file) {
+    if (file) {
+      fileNameDisplay.textContent = file.name;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        if (imagePreview) imagePreview.src = e.target.result;
+        if (previewContainer) previewContainer.classList.remove('hidden');
+      }
+      reader.readAsDataURL(file);
+    }
+  }
+
   if (fileInput) { 
     fileInput.addEventListener('change', function() { 
-      if (this.files[0]) fileNameDisplay.textContent = this.files[0].name; 
+      if (this.files[0]) handleImageFile(this.files[0]); 
     }); 
   }
   
@@ -125,14 +184,25 @@
     dropZone.addEventListener('dragleave', function() { this.classList.remove('border-emerald-400', 'bg-emerald-50'); });
     dropZone.addEventListener('drop', function(e) {
       e.preventDefault(); this.classList.remove('border-emerald-400', 'bg-emerald-50');
-      const files = e.dataTransfer.files; if (files[0] && fileInput) { fileInput.files = files; fileNameDisplay.textContent = files[0].name; }
+      const files = e.dataTransfer.files; 
+      if (files[0] && fileInput) { 
+        fileInput.files = files; 
+        handleImageFile(files[0]); 
+      }
     });
   }
 </script>
 
 <style>
-  textarea[name="approach"] { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; opacity: 0; pointer-events: none; }
+  .bph-hidden-file-input textarea,
+  textarea[name="approach"] { 
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; opacity: 0; pointer-events: none; 
+  }
   
+  .bph-hidden-file-input {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+
   .block-input-group {
     display: block;
     width: 100%;
@@ -153,7 +223,7 @@
   }
   .django-input-wrapper input:focus, 
   .django-input-wrapper textarea:focus,
-  .django-input-wrapper select { 
+  .django-input-wrapper select:focus { 
     outline: none; 
     border-color: #059669; 
     box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1); 

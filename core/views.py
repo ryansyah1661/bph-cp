@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django import forms
-from django.db.models import Min, Max
+from django.db.models import Min, Max, Q
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -46,7 +46,7 @@ def services_view(request):
     })
 
 def experience_view(request):
-    projects = Project.objects.select_related('client').prefetch_related('locations', 'categories').order_by('-tahun')
+    projects = Project.objects.select_related('client').prefetch_related('locations', 'categories').order_by('-tahun', '-id')
     categories = Category.objects.filter(projects__isnull=False).distinct().order_by('name')
     years = Project.objects.order_by('-tahun').values_list('tahun', flat=True).distinct()
     
@@ -87,7 +87,7 @@ def gallery_view(request):
     stories = Story.objects.order_by('-tanggal')
     documents = Modul.objects.order_by('-tanggal_rilis')
     categories = Category.objects.filter(folders__isnull=False).distinct().order_by('name')
-    gallery_items = Gallery.objects.all()
+    gallery_items = Gallery.objects.all().order_by('-tanggal_upload', '-id')
     folders = Folder.objects.select_related('kategori').prefetch_related('images').order_by('-tahun', '-id')
 
     return render(request, 'core/gallery.html', {
@@ -162,7 +162,19 @@ def story_view(request):
 # ==========================================
 def detail_articles_view(request, slug):
     article_data = get_object_or_404(Article, slug=slug)
-    return render(request, 'core/detail-articles.html', {'article': article_data})
+    
+    related_articles = Article.objects.filter(
+        Q(author=article_data.author)
+    ).exclude(pk=article_data.pk).order_by('-tanggal')[:3]
+    
+    if related_articles.count() < 3:
+        extra_articles = Article.objects.exclude(pk=article_data.pk).exclude(pk__in=related_articles.values_list('pk', flat=True)).order_by('-tanggal')[:3 - related_articles.count()]
+        related_articles = list(related_articles) + list(extra_articles)
+
+    return render(request, 'core/detail-articles.html', {
+        'article': article_data,
+        'related_articles': related_articles
+    })
 
 def detail_experience_view(request, slug):
     project_data = get_object_or_404(
@@ -171,7 +183,7 @@ def detail_experience_view(request, slug):
     )
     related_projects = Project.objects.filter(
         categories__in=project_data.categories.all()
-    ).exclude(pk=project_data.pk).distinct().order_by('-tahun')[:3]
+    ).exclude(pk=project_data.pk).distinct().order_by('-tahun', '-id')[:3]
     return render(request, 'core/detail-experience.html', {
         'project': project_data,
         'related_projects': related_projects,
@@ -189,7 +201,19 @@ def detail_services_view(request, slug):
 
 def detail_story_view(request, slug):
     story_data = get_object_or_404(Story.objects.select_related('lokasi', 'project'), slug=slug)
-    return render(request, 'core/detail-story.html', {'story': story_data})
+    
+    related_stories = Story.objects.filter(
+        Q(author=story_data.author) | Q(lokasi=story_data.lokasi)
+    ).exclude(pk=story_data.pk).distinct().order_by('-tanggal')[:3]
+    
+    if related_stories.count() < 3:
+        extra_stories = Story.objects.exclude(pk=story_data.pk).exclude(pk__in=related_stories.values_list('pk', flat=True)).order_by('-tanggal')[:3 - related_stories.count()]
+        related_stories = list(related_stories) + list(extra_stories)
+
+    return render(request, 'core/detail-story.html', {
+        'story': story_data,
+        'related_stories': related_stories
+    })
 
 
 # ==========================================
@@ -206,8 +230,8 @@ def custom_dashboard(request):
         'total_messages': ContactMessage.objects.count(),
         'total_gallery': Gallery.objects.count(),
         'total_team': TeamMember.objects.count(),
-        'recent_articles': Article.objects.order_by('-id')[:5],
-        'recent_projects': Project.objects.order_by('-id')[:5],
+        'recent_articles': Article.objects.order_by('-tanggal', '-id')[:5],
+        'recent_projects': Project.objects.order_by('-tahun', '-id')[:5],
     }
     return render(request, 'core/custom_admin/dashboard.html', context)
 
@@ -224,6 +248,9 @@ class ArticleListView(AdminRequiredMixin, ListView):
     model = Article
     template_name = 'core/custom_admin/articles/articles_list.html'
     context_object_name = 'articles'
+
+    def get_queryset(self):
+        return Article.objects.all().order_by('-tanggal', '-id')
 
 class ArticleCreateView(AdminRequiredMixin, CreateView):
     model = Article
@@ -289,6 +316,9 @@ class ProjectListView(AdminRequiredMixin, ListView):
     template_name = 'core/custom_admin/experience/experience_list.html'
     context_object_name = 'projects'
 
+    def get_queryset(self):
+        return Project.objects.all().order_by('-tahun', '-id')
+
 class ProjectCreateView(AdminRequiredMixin, CreateView):
     model = Project
     template_name = 'core/custom_admin/experience/experience_form.html'
@@ -325,6 +355,9 @@ class StoryListView(AdminRequiredMixin, ListView):
     model = Story
     template_name = 'core/custom_admin/story/story_list.html'
     context_object_name = 'stories'
+
+    def get_queryset(self):
+        return Story.objects.all().order_by('-tanggal', '-id')
 
 class StoryCreateView(AdminRequiredMixin, CreateView):
     model = Story
@@ -364,6 +397,9 @@ class ClientListView(AdminRequiredMixin, ListView):
     template_name = 'core/custom_admin/client/client_list.html'
     context_object_name = 'clients'
 
+    def get_queryset(self):
+        return Client.objects.all().order_by('-id')
+
 class ClientCreateView(AdminRequiredMixin, CreateView):
     model = Client
     template_name = 'core/custom_admin/client/client_form.html'
@@ -401,6 +437,9 @@ class ServiceListView(AdminRequiredMixin, ListView):
     model = Service
     template_name = 'core/custom_admin/services/services_list.html'
     context_object_name = 'services'
+
+    def get_queryset(self):
+        return Service.objects.all().order_by('-id')
 
 class ServiceCreateView(AdminRequiredMixin, CreateView):
     model = Service
@@ -440,6 +479,9 @@ class LocationListView(AdminRequiredMixin, ListView):
     template_name = 'core/custom_admin/location/location_list.html'
     context_object_name = 'locations'
 
+    def get_queryset(self):
+        return Location.objects.all().order_by('-id')
+
 class LocationCreateView(AdminRequiredMixin, CreateView):
     model = Location
     template_name = 'core/custom_admin/location/location_form.html'
@@ -478,6 +520,9 @@ class CategoryListView(AdminRequiredMixin, ListView):
     template_name = 'core/custom_admin/category/category_list.html'
     context_object_name = 'categories'
 
+    def get_queryset(self):
+        return Category.objects.all().order_by('-id')
+
 class CategoryCreateView(AdminRequiredMixin, CreateView):
     model = Category
     template_name = 'core/custom_admin/category/category_form.html'
@@ -515,6 +560,9 @@ class DocumentListView(AdminRequiredMixin, ListView):
     model = Modul  
     template_name = 'core/custom_admin/modul/modul_list.html'
     context_object_name = 'documents'
+
+    def get_queryset(self):
+        return Modul.objects.all().order_by('-tanggal_rilis', '-id')
 
 class DocumentCreateView(AdminRequiredMixin, CreateView):
     model = Modul
@@ -585,6 +633,9 @@ class GalleryListView(AdminRequiredMixin, ListView):
     template_name = 'core/custom_admin/gallery/gallery_list.html'
     context_object_name = 'items'
 
+    def get_queryset(self):
+        return Gallery.objects.all().order_by('-tanggal_upload', '-id')
+
 class GalleryCreateView(AdminRequiredMixin, CreateView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_form.html'
@@ -623,10 +674,13 @@ class FolderListView(AdminRequiredMixin, ListView):
     template_name = 'core/custom_admin/gallery/folder_list.html'
     context_object_name = 'folders'
 
+    def get_queryset(self):
+        return Folder.objects.all().order_by('-tahun', '-id')
+
 class FolderCreateView(AdminRequiredMixin, CreateView):
     model = Folder
     template_name = 'core/custom_admin/gallery/folder_form.html'
-    fields = '__all__'
+    fields = ['nama', 'tahun']
     success_url = reverse_lazy('folder_list')
 
     def form_valid(self, form):
@@ -636,7 +690,7 @@ class FolderCreateView(AdminRequiredMixin, CreateView):
 class FolderUpdateView(AdminRequiredMixin, UpdateView):
     model = Folder
     template_name = 'core/custom_admin/gallery/folder_form.html'
-    fields = '__all__'
+    fields = ['nama', 'tahun']
     success_url = reverse_lazy('folder_list')
 
     def form_valid(self, form):
@@ -660,6 +714,9 @@ class TeamListView(AdminRequiredMixin, ListView):
     model = TeamMember
     template_name = 'core/custom_admin/team/team_list.html'
     context_object_name = 'members'
+
+    def get_queryset(self):
+        return TeamMember.objects.all().order_by('urutan', '-id')
 
 class TeamCreateView(AdminRequiredMixin, CreateView):
     model = TeamMember
@@ -706,6 +763,9 @@ class UserListView(SuperuserRequiredMixin, ListView):
     model = User
     template_name = 'core/custom_admin/user/user_list.html'
     context_object_name = 'users'
+
+    def get_queryset(self):
+        return User.objects.all().order_by('-date_joined')
 
 class UserCreateView(SuperuserRequiredMixin, CreateView):
     model = User
@@ -761,3 +821,40 @@ def user_edit_profile(request):
         form = ProfileProfileForm(instance=profile)
         
     return render(request, 'core/custom_admin/user/user_edit_profile.html', {'form': form})
+
+
+# ==========================================
+# 13. UPLOAD GAMBAR QUILL EDITOR
+# ==========================================
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def quill_image_upload(request):
+    """Endpoint untuk upload gambar dari Quill Editor via AJAX."""
+    if request.method == 'POST' and request.FILES.get('image'):
+        import uuid, os
+        image = request.FILES['image']
+
+        # Validasi tipe file
+        allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+        if image.content_type not in allowed_types:
+            return JsonResponse({'error': 'Tipe file tidak didukung. Gunakan JPG, PNG, GIF, atau WebP.'}, status=400)
+
+        # Validasi ukuran file (max 5MB)
+        if image.size > 5 * 1024 * 1024:
+            return JsonResponse({'error': 'Ukuran file terlalu besar. Maksimal 5MB.'}, status=400)
+
+        # Simpan file dengan nama unik
+        ext = os.path.splitext(image.name)[1]
+        filename = f"{uuid.uuid4().hex}{ext}"
+        upload_dir = os.path.join(settings.MEDIA_ROOT, 'editor_uploads')
+        os.makedirs(upload_dir, exist_ok=True)
+
+        filepath = os.path.join(upload_dir, filename)
+        with open(filepath, 'wb+') as f:
+            for chunk in image.chunks():
+                f.write(chunk)
+
+        image_url = f"{settings.MEDIA_URL}editor_uploads/{filename}"
+        return JsonResponse({'url': image_url})
+
+    return JsonResponse({'error': 'Tidak ada file yang dikirim.'}, status=400)

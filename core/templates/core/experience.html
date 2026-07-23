@@ -5,7 +5,6 @@
 
 {% block content %}
 <style>
-
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
@@ -307,7 +306,7 @@
       const container = document.getElementById(containerId);
       if (!container) return;
 
-      let direction = initialDirection; // 1: kanan, -1: kiri
+      let direction = initialDirection;
       let isHovered = false;
       let isMouseDown = false;
       let startX, scrollLeftVal;
@@ -379,7 +378,6 @@
     const popovers = document.querySelectorAll('.map-project-popover');
     const projectSection = document.getElementById('section-proyek-wilayah');
     const allLists = document.querySelectorAll('.id-list-proyek');
-    const resetBtn = document.getElementById('reset-map-filter-btn');
     const statusText = document.getElementById('project-filter-status');
     const mapContainer = document.getElementById('map-svg-container');
 
@@ -479,34 +477,37 @@
     }
 
     function activateProvince(kode) {
-        popovers.forEach(pop => pop.style.display = 'none');
-        pins.forEach(p => p.classList.remove('active-pin'));
-
         const pin = document.getElementById(`pin-prov-${kode}`);
         if (!pin) return;
 
-        pin.classList.add('active-pin');
+        const isAlreadyActive = pin.classList.contains('active-pin');
 
-        const popover = document.getElementById(`popover-prov-${kode}`);
-        if (popover) {
-            const leftPct = parseFloat(pin.dataset.leftPct || 0);
-            const topPct = parseFloat(pin.dataset.topPct || 0);
-            popover.style.top = `calc(${topPct}% - 12px)`;
-            popover.style.left = `calc(${leftPct}% + 15px)`;
-            popover.style.display = 'block';
-        }
-
+        popovers.forEach(pop => pop.style.display = 'none');
+        pins.forEach(p => p.classList.remove('active-pin'));
+        projectSection.classList.add('hidden');
         allLists.forEach(list => list.classList.add('hidden'));
-        const targetList = document.getElementById(`list-proyek-${kode}`);
-        if (targetList) {
-            projectSection.classList.remove('hidden'); 
-            targetList.classList.remove('hidden'); 
-            
-            const provName = pin.getAttribute('data-name');
-            statusText.innerText = `Menampilkan Proyek di Provinsi ${provName}:`;
-        }
 
-        if (resetBtn) resetBtn.classList.remove('hidden');
+        if (!isAlreadyActive) {
+            pin.classList.add('active-pin');
+
+            const popover = document.getElementById(`popover-prov-${kode}`);
+            if (popover) {
+                const leftPct = parseFloat(pin.dataset.leftPct || 0);
+                const topPct = parseFloat(pin.dataset.topPct || 0);
+                popover.style.top = `calc(${topPct}% - 12px)`;
+                popover.style.left = `calc(${leftPct}% + 15px)`;
+                popover.style.display = 'block';
+            }
+
+            const targetList = document.getElementById(`list-proyek-${kode}`);
+            if (targetList) {
+                projectSection.classList.remove('hidden'); 
+                targetList.classList.remove('hidden'); 
+                
+                const provName = pin.getAttribute('data-name');
+                statusText.innerText = `Menampilkan Proyek di Provinsi ${provName}:`;
+            }
+        }
     }
 
     pins.forEach(pin => {
@@ -516,21 +517,20 @@
         });
     });
 
-    document.addEventListener('click', () => {
-        popovers.forEach(pop => pop.style.display = 'none');
-        pins.forEach(p => p.classList.remove('active-pin'));
+    popovers.forEach(pop => {
+        pop.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
     });
 
-    if (resetBtn) {
-        resetBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            projectSection.classList.add('hidden'); 
-            allLists.forEach(list => list.classList.add('hidden')); 
-            popovers.forEach(pop => pop.style.display = 'none'); 
-            resetBtn.classList.add('hidden');
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.map-province-pin') && !e.target.closest('.map-project-popover')) {
+            popovers.forEach(pop => pop.style.display = 'none');
             pins.forEach(p => p.classList.remove('active-pin'));
-        });
-    }
+            projectSection.classList.add('hidden');
+            allLists.forEach(list => list.classList.add('hidden'));
+        }
+    });
   });
 </script>
 {% endblock %}

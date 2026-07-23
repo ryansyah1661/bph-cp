@@ -46,6 +46,9 @@ urlpatterns = [
     path('be/articles/<int:pk>/edit/', views.ArticleUpdateView.as_view(), name='article_update'),
     path('be/articles/<int:pk>/delete/', views.ArticleDeleteView.as_view(), name='article_delete'),
 
+    # URL ROUTING UPLOAD GAMBAR QUILL EDITOR
+    path('be/quill/upload-image/', views.quill_image_upload, name='quill_image_upload'),
+
     # URL ROUTING CRUD PROYEK / EXPERIENCES
     path('be/experiences/', views.ProjectListView.as_view(), name='project_list'),
     path('be/experiences/add/', views.ProjectCreateView.as_view(), name='project_create'),
