@@ -86,6 +86,11 @@
       display: none;
       pointer-events: auto;
   }
+
+  .map-province-pin:not(.loaded), 
+  .material-symbols-outlined:not(.loaded) {
+      visibility: hidden;
+  }
 </style>
 
 <main class="flex-grow pt-[80px] bg-background">
@@ -300,6 +305,9 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.map-province-pin, .material-symbols-outlined').forEach(el => {
+        el.classList.add('loaded');
+    });
 
     // --- JS SCROLL INTERAKTIF ---
     function enableInteractiveTicker(containerId, initialDirection = 1, speed = 1.0) {
@@ -414,7 +422,7 @@
     };
 
     let projection, pathGenerator;
-    const GEOJSON_URL = "{% static 'data/indonesia_provinces.json' %}";
+    const GEOJSON_URL = "{% url 'provinces_geojson' %}";
 
     d3.json(GEOJSON_URL).then(function (geojson) {
         const width = mapContainer.clientWidth;
@@ -523,8 +531,9 @@
         });
     });
 
+    // Klik di luar area pin peta atau popover akan menutup semuanya kembali ke semula
     document.addEventListener('click', (e) => {
-        if (!e.target.closest('.map-province-pin') && !e.target.closest('.map-project-popover')) {
+        if (!e.target.closest('.map-province-pin') && !e.target.closest('.map-project-popover') && !e.target.closest('.province-path')) {
             popovers.forEach(pop => pop.style.display = 'none');
             pins.forEach(p => p.classList.remove('active-pin'));
             projectSection.classList.add('hidden');

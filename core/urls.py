@@ -114,6 +114,9 @@ urlpatterns = [
     path('be/team/<int:pk>/edit/', views.TeamUpdateView.as_view(), name='team_update'),
     path('be/team/<int:pk>/delete/', views.TeamDeleteView.as_view(), name='team_delete'),
 
+    # URL ROUTING API PROVINCES GEOJSON UNTUK PETA
+    path('api/provinces-geojson/', views.provinces_geojson_api, name='provinces_geojson'),
+
     # =========================================================================
     # ALUR SISTEM LUPA PASSWORD (AUTHENTICATION FLOW)
     # =========================================================================

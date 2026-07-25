@@ -11,6 +11,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from django.conf import settings
+from django.core.serializers import serialize
+from django.http import HttpResponse
 from .models import Article, Project, Client, Story, Service, Location, Category, Modul, ContactMessage, Gallery, Profile, Folder, TeamMember
 
 # ==========================================
@@ -81,6 +83,12 @@ def experience_view(request):
         'locations_with_projects': locations_with_projects,
         'all_stories': all_stories,
     })
+
+def provinces_geojson_api(request):
+    geojson_path = settings.BASE_DIR / 'static' / 'data' / 'indonesia_provinces.json'
+    with open(geojson_path, 'r', encoding='utf-8') as f:
+        geojson_data = f.read()
+    return HttpResponse(geojson_data, content_type='application/json')
 
 def gallery_view(request):
     articles = Article.objects.order_by('-tanggal')

@@ -3,6 +3,7 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib.gis.db import models as gis_models
 
 # === 1. TABEL MASTER KATEGORI ===
 class Category(models.Model):
@@ -100,6 +101,9 @@ class Location(models.Model):
     kode_wilayah = models.CharField(
         max_length=2, choices=PROVINCE_CODE_CHOICES, unique=True, null=True, blank=True, verbose_name="Kode Provinsi BPS"
     )
+    
+    # Kolom PostGIS untuk menyimpan poligon batas wilayah peta
+    geom = gis_models.MultiPolygonField(srid=4326, null=True, blank=True, verbose_name="Geometri Poligon Peta")
 
     class Meta:
         verbose_name_plural = "Lokasi Wilayah"

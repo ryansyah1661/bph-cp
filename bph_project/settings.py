@@ -1,6 +1,15 @@
 import os
+import ctypes
 from pathlib import Path
 from dotenv import load_dotenv
+
+# Konfigurasi GDAL/GEOS untuk Windows (OSGeo4W)
+if os.name == 'nt':
+    os.environ['PATH'] = r'D:\OSGeo4W\bin' + os.pathsep + os.environ['PATH']
+    os.environ['GDAL_LIBRARY_PATH'] = r'D:\OSGeo4W\bin\gdal313.dll'
+    os.environ['GEOS_LIBRARY_PATH'] = r'D:\OSGeo4W\bin\geos_c.dll'
+    GDAL_LIBRARY_PATH = r'D:\OSGeo4W\bin\gdal313.dll'
+    GEOS_LIBRARY_PATH = r'D:\OSGeo4W\bin\geos_c.dll'
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',  # Ditambahkan untuk GeoDjango
 ]
 
 MIDDLEWARE = [
@@ -55,7 +65,7 @@ WSGI_APPLICATION = 'bph_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',  # Diubah ke database spasial PostGIS
         'NAME': 'db_bph',
         'USER': 'postgres',
         'PASSWORD': 'ryan1602',
