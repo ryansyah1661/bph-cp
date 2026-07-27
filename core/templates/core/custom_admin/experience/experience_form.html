@@ -5,9 +5,18 @@
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
-<div class="mb-6 pt-2">
-  <h2 class="text-xl font-bold text-emerald-900">{% if object %}Edit{% else %}Tambah{% endif %} Proyek (Experience)</h2>
-  <p class="text-xs text-gray-500 mt-1">Isi formulir portofolio proyek di bawah ini dengan lengkap.</p>
+<div class="mb-6 pt-2 flex justify-between items-center">
+  <div>
+    <h2 class="text-xl font-bold text-emerald-900">{% if object %}Edit{% else %}Tambah{% endif %} Proyek (Experience)</h2>
+    <p class="text-xs text-gray-500 mt-1">Isi formulir portofolio proyek di bawah ini dengan lengkap.</p>
+  </div>
+  {% if object %}
+  <div>
+    <button type="button" onclick="openDeleteModal('{% url 'project_delete' object.pk %}', '{{ object.name|escapejs }}')" class="bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold px-4 py-2.5 rounded-xl border border-rose-200 transition flex items-center gap-1.5 cursor-pointer">
+      <span class="material-symbols-outlined text-sm">delete</span> Hapus Proyek
+    </button>
+  </div>
+  {% endif %}
 </div>
 
 <form method="post" enctype="multipart/form-data" id="experience-form">
@@ -68,33 +77,86 @@
       </div>
     </div>
 
+    <!-- Kolom Kanan: Gambar & Tombol Menyatu dalam Satu Card -->
     <div class="space-y-5 flex-shrink-0 w-80">
-      <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
-        <h3 class="text-sm font-bold text-slate-700 border-b border-gray-100 pb-3 mb-4">Gambar</h3>
-        <label class="block text-sm font-semibold text-slate-600 mb-2">Foto Kartu Proyek</label>
+      <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-5">
+        <h3 class="text-sm font-bold text-slate-700 border-b border-gray-100 pb-3">Gambar</h3>
         
-        <div id="preview-container" class="{% if not object.image %}hidden{% endif %} mb-3">
-          <img id="image-preview" src="{% if object.image %}{{ object.image.url }}{% endif %}" class="w-full h-36 object-cover rounded-xl border">
+        <div>
+          <label class="block text-sm font-semibold text-slate-600 mb-2">Foto Kartu Proyek</label>
+          
+          <div id="preview-container" class="{% if not object.image %}hidden{% endif %} mb-3">
+            <img id="image-preview" src="{% if object.image %}{{ object.image.url }}{% endif %}" class="w-full h-36 object-cover rounded-xl border">
+          </div>
+          
+          <label for="id_image" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition" id="drop-zone">
+            <span class="material-symbols-outlined text-gray-400 text-3xl mb-1">upload_file</span>
+            <span class="text-sm text-gray-400 text-center">Seret & Jatuhkan atau <span class="text-emerald-600 font-semibold">Jelajahi</span></span>
+          </label>
+          <div id="file-name-display" class="text-xs text-gray-400 mt-2 text-center font-medium"></div>
+          <div class="bph-hidden-file-input">{{ form.image }}</div>
         </div>
-        
-        <label for="id_image" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition" id="drop-zone">
-          <span class="material-symbols-outlined text-gray-400 text-3xl mb-1">upload_file</span>
-          <span class="text-sm text-gray-400 text-center">Seret & Jatuhkan atau <span class="text-emerald-600 font-semibold">Jelajahi</span></span>
-        </label>
-        <div id="file-name-display" class="text-xs text-gray-400 mt-2 text-center font-medium"></div>
-        <div class="bph-hidden-file-input">{{ form.image }}</div>
-      </div>
 
-      <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex gap-3">
-        <a href="{% url 'project_list' %}" class="flex-1 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm text-center font-semibold hover:bg-gray-50 transition" style="text-decoration: none; padding-top: 8px;">Batal</a>
-        <button type="submit" class="flex-1 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700 transition cursor-pointer border-none">Simpan Data</button>
+        <!-- Tombol Batal & Simpan Data Disatukan di Bawah Card Kanan -->
+        <div class="pt-4 border-t border-gray-100 flex items-center justify-end gap-2.5">
+          <a href="{% url 'project_list' %}" class="px-4 py-2 border border-gray-200 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-50 transition" style="text-decoration: none;">Batal</a>
+          <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 transition cursor-pointer border-none shadow-sm shadow-emerald-100">Simpan Data</button>
+        </div>
       </div>
     </div>
   </div>
 </form>
 
+<!-- MODAL POPUP KONFIRMASI HAPUS -->
+<div id="deleteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl border border-gray-100 text-center transform transition-all scale-95 opacity-0 duration-300" id="modalContent">
+        <div class="w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-4">
+            <span class="material-symbols-outlined text-2xl">delete</span>
+        </div>
+        <h3 class="text-lg font-bold text-neutral-900 mb-2">Hapus Proyek?</h3>
+        <p class="text-sm text-gray-500 mb-6">Apakah Anda yakin ingin menghapus proyek <strong id="itemTitle" class="text-neutral-800"></strong> secara permanen? Tindakan ini tidak bisa dibatalkan.</p>
+        
+        <form id="deleteForm" method="POST" class="flex items-center justify-center gap-3">
+            {% csrf_token %}
+            <button type="button" onclick="closeDeleteModal()" class="w-full py-2.5 rounded-xl bg-gray-100 text-gray-700 text-sm font-semibold hover:bg-gray-200 transition-colors cursor-pointer">
+                Batal
+            </button>
+            <button type="submit" class="w-full py-2.5 rounded-xl bg-rose-600 text-white text-sm font-semibold hover:bg-rose-700 transition-colors shadow-md shadow-rose-500/20 cursor-pointer border-none">
+                Ya, Hapus
+            </button>
+        </form>
+    </div>
+</div>
+
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <script>
+  function openDeleteModal(deleteUrl, itemName) {
+      const modal = document.getElementById('deleteModal');
+      const modalContent = document.getElementById('modalContent');
+      const deleteForm = document.getElementById('deleteForm');
+      const titleSpan = document.getElementById('itemTitle');
+
+      deleteForm.action = deleteUrl;
+      titleSpan.innerText = `"${itemName}"`;
+
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+          modalContent.classList.remove('scale-95', 'opacity-0');
+          modalContent.classList.add('scale-100', 'opacity-100');
+      }, 10);
+  }
+
+  function closeDeleteModal() {
+      const modal = document.getElementById('deleteModal');
+      const modalContent = document.getElementById('modalContent');
+
+      modalContent.classList.remove('scale-100', 'opacity-100');
+      modalContent.classList.add('scale-95', 'opacity-0');
+      setTimeout(() => {
+          modal.classList.add('hidden');
+      }, 300);
+  }
+
   var toolbarOptions = [
     [{ 'header': [2, 3, false] }],
     ['bold', 'italic', 'underline', 'strike'],
@@ -304,7 +366,6 @@
     box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1); 
   }
 
-  /* Override Style TomSelect agar seragam mewah */
   .ts-control {
     border-radius: 8px !important;
     padding: 8px 12px !important;

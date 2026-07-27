@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django import forms
 from django.db.models import Min, Max, Q
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -227,8 +228,12 @@ def detail_story_view(request, slug):
 # ==========================================
 # PROTEKSI & SECURITY
 # ==========================================
-@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+@login_required(login_url='/be/login/')
 def custom_dashboard(request):
+    if not request.user.is_staff:
+        logout(request)  # Logout otomatis akun non-staff dari sesi
+        messages.error(request, 'Akses ditolak! Hanya pengguna dengan hak staff yang dapat mengakses dashboard.')
+        return redirect('homepage')
     context = {
         'total_articles': Article.objects.count(),
         'total_projects': Project.objects.count(),
@@ -247,6 +252,13 @@ class AdminRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
     login_url = '/be/login/'
     def test_func(self):
         return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        if self.request.user.is_authenticated and not self.request.user.is_staff:
+            logout(self.request)  # Logout otomatis akun non-staff dari sesi
+            messages.error(self.request, 'Akses ditolak! Hanya pengguna dengan hak staff yang dapat mengakses panel admin.')
+            return redirect('homepage')
+        return super().handle_no_permission()
 
 
 # ==========================================
@@ -306,14 +318,14 @@ class ArticleUpdateView(AdminRequiredMixin, UpdateView):
         messages.success(self.request, 'Perubahan artikel berhasil disimpan!')
         return super().form_valid(form)
 
-class ArticleDeleteView(AdminRequiredMixin, DeleteView):
-    model = Article
-    template_name = 'core/custom_admin/articles/article_confirm_delete.html'
-    success_url = reverse_lazy('article_list')
-    
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, 'Artikel berhasil dihapus permanen!')
-        return super().delete(request, *args, **kwargs)
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def article_delete_view(request, pk):
+    article = get_object_or_404(Article, pk=pk)
+    if request.method == 'POST':
+        article.delete()
+        messages.success(request, 'Artikel berhasil dihapus!')
+    return redirect('article_list')
 
 
 # ==========================================
@@ -347,14 +359,14 @@ class ProjectUpdateView(AdminRequiredMixin, UpdateView):
         messages.success(self.request, 'Perubahan data proyek berhasil disimpan!')
         return super().form_valid(form)
 
-class ProjectDeleteView(AdminRequiredMixin, DeleteView):
-    model = Project
-    template_name = 'core/custom_admin/experience/experience_confirm_delete.html'
-    success_url = reverse_lazy('project_list')
-
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, 'Data proyek berhasil dihapus!')
-        return super().delete(request, *args, **kwargs)
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def project_delete_view(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    if request.method == 'POST':
+        project.delete()
+        messages.success(request, 'Data proyek berhasil dihapus!')
+    return redirect('project_list')
 
 # ==========================================
 # 3. MANAGEMENT CERITA LAPANGAN
@@ -387,14 +399,14 @@ class StoryUpdateView(AdminRequiredMixin, UpdateView):
         messages.success(self.request, 'Perubahan cerita lapangan berhasil disimpan!')
         return super().form_valid(form)
 
-class StoryDeleteView(AdminRequiredMixin, DeleteView):
-    model = Story
-    template_name = 'core/custom_admin/story/story_confirm_delete.html'
-    success_url = reverse_lazy('story_list')
-
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, 'Cerita lapangan berhasil dihapus!')
-        return super().delete(request, *args, **kwargs)
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def story_delete_view(request, pk):
+    story = get_object_or_404(Story, pk=pk)
+    if request.method == 'POST':
+        story.delete()
+        messages.success(request, 'Cerita lapangan berhasil dihapus!')
+    return redirect('story_list')
 
 
 # ==========================================
@@ -428,14 +440,14 @@ class ClientUpdateView(AdminRequiredMixin, UpdateView):
         messages.success(self.request, 'Data klien berhasil diperbarui!')
         return super().form_valid(form)
 
-class ClientDeleteView(AdminRequiredMixin, DeleteView):
-    model = Client
-    template_name = 'core/custom_admin/client/client_confirm_delete.html'
-    success_url = reverse_lazy('client_list')
-
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, 'Data klien berhasil dihapus!')
-        return super().delete(request, *args, **kwargs)
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def client_delete_view(request, pk):
+    client = get_object_or_404(Client, pk=pk)
+    if request.method == 'POST':
+        client.delete()
+        messages.success(request, 'Data klien berhasil dihapus!')
+    return redirect('client_list')
 
 
 # ==========================================
@@ -469,14 +481,14 @@ class ServiceUpdateView(AdminRequiredMixin, UpdateView):
         messages.success(self.request, 'Data layanan berhasil diperbarui!')
         return super().form_valid(form)
 
-class ServiceDeleteView(AdminRequiredMixin, DeleteView):
-    model = Service
-    template_name = 'core/custom_admin/services/services_confirm_delete.html'
-    success_url = reverse_lazy('service_list')
-
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, 'Data Layanan berhasil dihapus!')
-        return super().delete(request, *args, **kwargs)
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def service_delete_view(request, pk):
+    service = get_object_or_404(Service, pk=pk)
+    if request.method == 'POST':
+        service.delete()
+        messages.success(request, 'Data Layanan berhasil dihapus!')
+    return redirect('service_list')
 
 
 # ==========================================
@@ -510,14 +522,14 @@ class LocationUpdateView(AdminRequiredMixin, UpdateView):
         messages.success(self.request, 'Data lokasi berhasil diperbarui!')
         return super().form_valid(form)
 
-class LocationDeleteView(AdminRequiredMixin, DeleteView):
-    model = Location
-    template_name = 'core/custom_admin/location/location_confirm_delete.html'
-    success_url = reverse_lazy('location_list')
-
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, 'Data lokasi berhasil dihapus!')
-        return super().delete(request, *args, **kwargs)
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def location_delete_view(request, pk):
+    location = get_object_or_404(Location, pk=pk)
+    if request.method == 'POST':
+        location.delete()
+        messages.success(request, 'Data lokasi berhasil dihapus!')
+    return redirect('location_list')
 
 
 # ==========================================
@@ -551,14 +563,14 @@ class CategoryUpdateView(AdminRequiredMixin, UpdateView):
         messages.success(self.request, 'Data kategori berhasil diperbarui!')
         return super().form_valid(form)
 
-class CategoryDeleteView(AdminRequiredMixin, DeleteView):
-    model = Category
-    template_name = 'core/custom_admin/category/category_confirm_delete.html'
-    success_url = reverse_lazy('category_list')
-
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, 'Data kategori berhasil dihapus!')
-        return super().delete(request, *args, **kwargs)
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def category_delete_view(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    if request.method == 'POST':
+        category.delete()
+        messages.success(request, 'Data kategori berhasil dihapus!')
+    return redirect('category_list')
 
 
 # ==========================================
@@ -592,14 +604,14 @@ class DocumentUpdateView(AdminRequiredMixin, UpdateView):
         messages.success(self.request, 'Data modul berhasil diperbarui!')
         return super().form_valid(form)
 
-class DocumentDeleteView(AdminRequiredMixin, DeleteView):
-    model = Modul
-    template_name = 'core/custom_admin/modul/modul_confirm_delete.html'
-    success_url = reverse_lazy('document_list')
-
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, 'Data modul berhasil dihapus!')
-        return super().delete(request, *args, **kwargs)
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def document_delete_view(request, pk):
+    doc = get_object_or_404(Modul, pk=pk)
+    if request.method == 'POST':
+        doc.delete()
+        messages.success(request, 'Data modul berhasil dihapus!')
+    return redirect('document_list')
 
 
 # ==========================================
@@ -613,14 +625,14 @@ class ContactListView(AdminRequiredMixin, ListView):
     def get_queryset(self):
         return ContactMessage.objects.all().order_by('-tanggal_kirim')
 
-class ContactDeleteView(AdminRequiredMixin, DeleteView):
-    model = ContactMessage
-    template_name = 'core/custom_admin/contact/contact_confirm_delete.html'
-    success_url = reverse_lazy('contact_list')
-
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, 'Pesan berhasil dihapus!')
-        return super().delete(request, *args, **kwargs)
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def contact_delete_view(request, pk):
+    msg = get_object_or_404(ContactMessage, pk=pk)
+    if request.method == 'POST':
+        msg.delete()
+        messages.success(request, 'Pesan berhasil dihapus!')
+    return redirect('contact_list')
 
 @login_required(login_url='/be/login/')
 def mark_message_as_read(request, pk):
@@ -664,14 +676,14 @@ class GalleryUpdateView(AdminRequiredMixin, UpdateView):
         messages.success(self.request, 'Data gambar berhasil diperbarui!')
         return super().form_valid(form)
 
-class GalleryDeleteView(AdminRequiredMixin, DeleteView):
-    model = Gallery
-    template_name = 'core/custom_admin/gallery/gallery_confirm_delete.html'
-    success_url = reverse_lazy('gallery_admin_list')
-
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, 'Gambar berhasil dihapus dari galeri!')
-        return super().delete(request, *args, **kwargs)
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def gallery_delete_view(request, pk):
+    item = get_object_or_404(Gallery, pk=pk)
+    if request.method == 'POST':
+        item.delete()
+        messages.success(request, 'Gambar berhasil dihapus!')
+    return redirect('gallery_admin_list')
 
 
 # ==========================================
@@ -705,14 +717,14 @@ class FolderUpdateView(AdminRequiredMixin, UpdateView):
         messages.success(self.request, 'Data folder berhasil diperbarui!')
         return super().form_valid(form)
 
-class FolderDeleteView(AdminRequiredMixin, DeleteView):
-    model = Folder
-    template_name = 'core/custom_admin/gallery/folder_confirm_delete.html'
-    success_url = reverse_lazy('folder_list')
-
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, 'Data folder berhasil dihapus!')
-        return super().delete(request, *args, **kwargs)
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def folder_delete_view(request, pk):
+    folder = get_object_or_404(Folder, pk=pk)
+    if request.method == 'POST':
+        folder.delete()
+        messages.success(request, 'Data folder berhasil dihapus!')
+    return redirect('folder_list')
 
 
 # ==========================================
@@ -746,22 +758,30 @@ class TeamUpdateView(AdminRequiredMixin, UpdateView):
         messages.success(self.request, 'Data anggota tim berhasil diperbarui!')
         return super().form_valid(form)
 
-class TeamDeleteView(AdminRequiredMixin, DeleteView):
-    model = TeamMember
-    template_name = 'core/custom_admin/team/team_confirm_delete.html'
-    success_url = reverse_lazy('team_list')
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def team_delete_view(request, pk):
+    member = get_object_or_404(TeamMember, pk=pk)
+    if request.method == 'POST':
+        member.delete()
+        messages.success(request, 'Anggota tim berhasil dihapus!')
+    return redirect('team_list')
 
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, 'Anggota tim berhasil dihapus!')
-        return super().delete(request, *args, **kwargs)
 
-
-# ==========================================
+## ==========================================
 # PROTEKSI KHUSUS SUPERUSER
 # ==========================================
-class SuperuserRequiredMixin(UserPassesTestMixin):
+class SuperuserRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    login_url = '/be/login/'
+
     def test_func(self):
         return self.request.user.is_authenticated and self.request.user.is_superuser
+
+    def handle_no_permission(self):
+        if self.request.user.is_authenticated and not self.request.user.is_superuser:
+            messages.error(self.request, 'Akses ditolak! Menu Manajemen Pengguna hanya dapat diakses oleh Superuser.')
+            return redirect('custom_dashboard')
+        return super().handle_no_permission()
 
 
 # ==========================================
@@ -798,14 +818,18 @@ class UserUpdateView(SuperuserRequiredMixin, UpdateView):
         messages.success(self.request, 'Data pengguna berhasil diperbarui!')
         return super().form_valid(form)
 
-class UserDeleteView(SuperuserRequiredMixin, DeleteView):
-    model = User
-    template_name = 'core/custom_admin/user/user_confirm_delete.html'
-    success_url = reverse_lazy('user_list')
-
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, 'Pengguna berhasil dihapus!')
-        return super().delete(request, *args, **kwargs)
+@login_required(login_url='/be/login/')
+def user_delete_view(request, pk):
+    # Validasi langsung di dalam view untuk fungsi hapus
+    if not request.user.is_superuser:
+        messages.error(request, 'Akses ditolak! Penghapusan pengguna hanya dapat dilakukan oleh Superuser.')
+        return redirect('custom_dashboard')
+        
+    user = get_object_or_404(User, pk=pk)
+    if request.method == 'POST':
+        user.delete()
+        messages.success(request, 'Pengguna berhasil dihapus!')
+    return redirect('user_list')
 
 
 # ==========================================
@@ -842,16 +866,13 @@ def quill_image_upload(request):
         import uuid, os
         image = request.FILES['image']
 
-        # Validasi tipe file
         allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
         if image.content_type not in allowed_types:
             return JsonResponse({'error': 'Tipe file tidak didukung. Gunakan JPG, PNG, GIF, atau WebP.'}, status=400)
 
-        # Validasi ukuran file (max 5MB)
         if image.size > 5 * 1024 * 1024:
             return JsonResponse({'error': 'Ukuran file terlalu besar. Maksimal 5MB.'}, status=400)
 
-        # Simpan file dengan nama unik
         ext = os.path.splitext(image.name)[1]
         filename = f"{uuid.uuid4().hex}{ext}"
         upload_dir = os.path.join(settings.MEDIA_ROOT, 'editor_uploads')

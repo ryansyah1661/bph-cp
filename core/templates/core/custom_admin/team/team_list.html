@@ -1,6 +1,34 @@
 {% extends "core/custom_admin/base.html" %}
 
 {% block admin_content %}
+<style>
+  .bph-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.4); 
+    backdrop-filter: blur(4px); 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  .bph-modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .bph-modal-overlay.active > div {
+    transform: scale(1);
+  }
+</style>
+
 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
   
   <div class="flex justify-between items-center border-b border-gray-100 pb-5">
@@ -8,7 +36,7 @@
       <h2 class="text-xl font-bold text-emerald-900">Manajemen Tim Ahli Kami</h2>
       <p class="text-xs text-gray-500 mt-1">Kelola daftar penasihat, eksekutif, staf, dan associate Bhumi Pasa Hijau.</p>
     </div>
-    <a href="{% url 'team_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100">
+    <a href="{% url 'team_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100" style="text-decoration: none;">
       <span class="material-symbols-outlined text-sm">add</span> Tambah Anggota
     </a>
   </div>
@@ -68,9 +96,14 @@
               <a href="{% url 'team_update' member.pk %}" title="Edit Anggota" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
                 <span class="material-symbols-outlined text-sm">edit</span>
               </a>
-              <a href="{% url 'team_delete' member.pk %}" title="Hapus Anggota" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
+              
+              <button type="button" 
+                  class="trigger-delete-btn inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition cursor-pointer"
+                  data-url="{% url 'team_delete' member.pk %}" 
+                  data-name="{{ member.nama|escapejs }}" 
+                  title="Hapus Anggota">
                 <span class="material-symbols-outlined text-sm">delete</span>
-              </a>
+              </button>
             </div>
           </td>
         </tr>
@@ -83,5 +116,66 @@
     </table>
   </div>
 
+  <div id="delete-team-modal" class="bph-modal-overlay">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-10 shadow-2xl border border-slate-100 text-center scale-95 transition-transform duration-200">
+      <span class="material-symbols-outlined text-rose-500 text-6xl mb-4">warning</span>
+      <h3 class="text-2xl font-extrabold mb-4 text-slate-900 tracking-wide">Hapus Anggota Tim?</h3>
+      <p class="text-base text-slate-500 mb-8 leading-relaxed px-4">Apakah Anda yakin ingin menghapus anggota tim <span id="modal-team-name" class="font-bold text-slate-800"></span>? Data profil ini akan dihapus permanen dari sistem.</p>
+      
+      <form id="delete-team-form" method="post" action="">
+        {% csrf_token %}
+        <div class="flex gap-4 px-2">
+          <button type="button" id="btn-delete-cancel" class="flex-1 py-3 rounded-xl border border-slate-200 text-sm font-bold cursor-pointer text-slate-600 bg-white hover:bg-slate-50 transition tracking-wide">Batal</button>
+          <button type="submit" class="flex-1 py-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-sm font-extrabold cursor-pointer border-none shadow-sm transition tracking-wide">Ya, Hapus Anggota</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const deleteModal = document.getElementById('delete-team-modal');
+    const deleteForm = document.getElementById('delete-team-form');
+    const teamNameSpan = document.getElementById('modal-team-name');
+    const cancelBtn = document.getElementById('btn-delete-cancel');
+    const deleteTriggers = document.querySelectorAll('.trigger-delete-btn');
+    const flashMessage = document.getElementById('js-flash-message');
+
+    if (flashMessage && localStorage.getItem('team_deleted') === 'true') {
+      flashMessage.classList.remove('hidden');
+      localStorage.removeItem('team_deleted'); 
+      
+      setTimeout(() => {
+        flashMessage.classList.add('hidden');
+      }, 4000);
+    }
+
+    deleteTriggers.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const deleteUrl = this.getAttribute('data-url');
+        const teamName = this.getAttribute('data-name');
+
+        deleteForm.setAttribute('action', deleteUrl);
+        teamNameSpan.textContent = `"${teamName}"`;
+        deleteModal.classList.add('active');
+      });
+    });
+
+    deleteForm.addEventListener('submit', () => {
+      localStorage.setItem('team_deleted', 'true');
+    });
+
+    if (cancelBtn) {
+      cancelBtn.onclick = () => deleteModal.classList.remove('active');
+    }
+
+    deleteModal.addEventListener('click', function(e) {
+      if (e.target === this) deleteModal.classList.remove('active');
+    });
+  });
+</script>
 {% endblock %}

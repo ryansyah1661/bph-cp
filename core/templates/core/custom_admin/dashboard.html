@@ -19,6 +19,27 @@
     .bph-custom-table td { padding: 14px 20px; border-top: 1px solid #f1f3f5; }
   </style>
 
+  <!-- BLOK PENANGKAP PESAN (FLASH MESSAGES / ERROR ALERT) -->
+  {% if messages %}
+    <div class="mb-5 space-y-2">
+      {% for message in messages %}
+        <div class="p-4 rounded-xl text-sm font-semibold flex items-center gap-3 shadow-sm border
+          {% if message.tags == 'error' or message.tags == 'danger' %}
+            bg-rose-50 border-rose-200 text-rose-700
+          {% elif message.tags == 'success' %}
+            bg-emerald-50 border-emerald-200 text-emerald-700
+          {% else %}
+            bg-blue-50 border-blue-200 text-blue-700
+          {% endif %}">
+          <span class="material-symbols-outlined text-xl">
+            {% if message.tags == 'error' or message.tags == 'danger' %}error{% else %}info{% endif %}
+          </span>
+          <span>{{ message }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
   <div class="bph-cards-grid">
     <div class="bph-stat-card">
       <div class="bph-label">Total Artikel Aktif</div>

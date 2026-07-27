@@ -29,10 +29,6 @@
   }
 </style>
 
-<div id="js-flash-message" class="hidden p-4 mb-5 text-sm text-emerald-800 rounded-xl bg-emerald-50 border border-emerald-100 shadow-xs transition-all duration-300">
-  Data proyek berhasil dihapus permanen!
-</div>
-
 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
   
   <div class="flex justify-between items-center border-b border-gray-100 pb-5">
@@ -93,7 +89,7 @@
               <button type="button" 
                   class="trigger-delete-btn inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition cursor-pointer"
                   data-url="{% url 'project_delete' project.pk %}" 
-                  data-name="{{ project.name }}" 
+                  data-name="{{ project.name|escapejs }}" 
                   title="Hapus Proyek">
                 <span class="material-symbols-outlined text-sm">delete</span>
               </button>
@@ -125,6 +121,7 @@
     </div>
   </div>
 </div>
+{% endblock %}
 
 {% block extra_js %}
 <script>
@@ -136,7 +133,7 @@
     const deleteTriggers = document.querySelectorAll('.trigger-delete-btn');
     const flashMessage = document.getElementById('js-flash-message');
 
-    if (localStorage.getItem('project_deleted') === 'true') {
+    if (flashMessage && localStorage.getItem('project_deleted') === 'true') {
       flashMessage.classList.remove('hidden');
       localStorage.removeItem('project_deleted'); 
       
@@ -169,6 +166,4 @@
     });
   });
 </script>
-{% endblock %}
-
 {% endblock %}

@@ -1,0 +1,26 @@
+{% extends "core/custom_admin/base.html" %}
+
+{% block admin_content %}
+<div class="max-w-xl mx-auto bg-white p-8 rounded-2xl border border-gray-100 shadow-sm text-center space-y-6 mt-10">
+    <div class="w-16 h-16 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto">
+        <span class="material-symbols-outlined text-3xl">delete</span>
+    </div>
+
+    <div>
+        <h2 class="text-xl font-bold text-slate-900 mb-2">Hapus Folder Album?</h2>
+        <p class="text-sm text-gray-500 leading-relaxed">
+            Apakah Anda yakin ingin menghapus folder <strong class="text-slate-800">"{{ object.nama }}"</strong> (Tahun {{ object.tahun }})? Tindakan ini bersifat permanen dan tidak dapat dibatalkan.
+        </p>
+    </div>
+
+    <form method="POST" class="flex items-center justify-center gap-3 pt-2">
+        {% csrf_token %}
+        <a href="{% url 'folder_list' %}" class="w-full py-3 rounded-xl bg-gray-100 text-gray-700 text-sm font-semibold hover:bg-gray-200 transition-colors text-center" style="text-decoration: none;">
+            Batal
+        </a>
+        <button type="submit" class="w-full py-3 rounded-xl bg-rose-600 text-white text-sm font-semibold hover:bg-rose-700 transition-colors shadow-md shadow-rose-500/20 cursor-pointer border-none">
+            Ya, Hapus Folder
+        </button>
+    </form>
+</div>
+{% endblock %}

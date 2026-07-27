@@ -1,9 +1,6 @@
 {% extends "core/custom_admin/base.html" %}
 
 {% block admin_content %}
-<div id="js-flash-message" class="hidden p-4 mb-5 text-sm text-emerald-800 rounded-xl bg-emerald-50 border border-emerald-100 shadow-xs transition-all duration-300">
-  Pesan kontak berhasil dihapus permanen!
-</div>
 
 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
   
@@ -64,7 +61,7 @@
                 data-nama="{{ msg.nama_lengkap }}"
                 data-email="{{ msg.email }}"
                 data-subjek="{{ msg.subjek }}"
-                data-waktu="{{ msg.tanggal_kirim|date:'d/m/Y' }} pukul {{ msg.tanggal_kirim|date:'H:i' }}"
+                data-waktu="{{ msg.tanggal_kirim|date:'d/m/Y' }} pukul {{ msg.tanggal_kirim|date:'H:i' }} WIB"
                 data-isi="{{ msg.pesan }}">
               {{ msg.pesan }}
             </button>
@@ -72,7 +69,7 @@
 
           <td class="p-4 align-middle text-center font-semibold text-slate-700 text-xs tracking-wide whitespace-nowrap">
             <div>{{ msg.tanggal_kirim|date:"d/m/Y" }}</div>
-            <div class="text-[11px] text-slate-400 font-medium mt-0.5">{{ msg.tanggal_kirim|date:"H:i" }}</div>
+            <div class="text-[11px] text-slate-400 font-medium mt-0.5">{{ msg.tanggal_kirim|date:"H:i" }} WIB</div>
           </td>
 
           <td class="p-4 text-center align-middle">
@@ -99,7 +96,7 @@
       <div class="flex justify-between items-start border-b border-gray-100 pb-3 mb-4">
         <div class="text-left">
           <h3 class="text-base font-bold text-slate-900 leading-snug" id="modal-subjek">Subjek Pesan</h3>
-          <p class="text-[11px] text-gray-400 font-medium mt-0.5" id="modal-waktu">00/00/0000 00:00</p>
+          <p class="text-[11px] text-gray-400 font-medium mt-0.5" id="modal-waktu">00/00/0000 00:00 WIB</p>
         </div>
         <button type="button" id="btn-tutup-pesan" class="text-gray-400 hover:text-gray-600 cursor-pointer bg-transparent border-none text-2xl font-light leading-none">&times;</button>
       </div>
@@ -121,10 +118,6 @@
             -
           </div>
         </div>
-      </div>
-      
-      <div class="mt-6 flex justify-end">
-        <button type="button" id="btn-close-footer" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs rounded-xl cursor-pointer border-none transition">Tutup Pesan</button>
       </div>
     </div>
   </div>
@@ -159,10 +152,8 @@
     const flashMessage = document.getElementById('js-flash-message');
 
     const detailModal = document.getElementById('modal-detail-pesan');
-    const detailModalBox = detailModal.querySelector('.id-modal-box');
     const detailTriggers = document.querySelectorAll('.btn-buka-pesan');
     const closeDetailX = document.getElementById('btn-tutup-pesan');
-    const closeDetailBtn = document.getElementById('btn-close-footer');
 
     const mSubjek = document.getElementById('modal-subjek');
     const mWaktu = document.getElementById('modal-waktu');
@@ -170,7 +161,7 @@
     const mEmail = document.getElementById('modal-email');
     const mIsi = document.getElementById('modal-isi');
 
-    if (localStorage.getItem('message_deleted') === 'true') {
+    if (flashMessage && localStorage.getItem('message_deleted') === 'true') {
       flashMessage.classList.remove('hidden');
       localStorage.removeItem('message_deleted');
       setTimeout(() => {
@@ -229,8 +220,10 @@
       window.location.reload();
     }
 
-    closeDetailX.addEventListener('click', closeDetailModal);
-    closeDetailBtn.addEventListener('click', closeDetailModal);
+    if (closeDetailX) {
+      closeDetailX.addEventListener('click', closeDetailModal);
+    }
+
     detailModal.addEventListener('click', (e) => {
       if (e.target === detailModal) closeDetailModal();
     });

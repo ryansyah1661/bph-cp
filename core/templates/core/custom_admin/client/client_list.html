@@ -56,9 +56,10 @@
               <a href="{% url 'client_update' client.pk %}" title="Edit Klien" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
                 <span class="material-symbols-outlined text-sm">edit</span>
               </a>
-              <a href="{% url 'client_delete' client.pk %}" title="Hapus Klien" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
+              <!-- Tombol Hapus dengan trigger Modal Pop-up -->
+              <button type="button" onclick="openDeleteModal('{% url 'client_delete' client.pk %}', '{{ client.nama|escapejs }}')" title="Hapus Klien" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition cursor-pointer">
                 <span class="material-symbols-outlined text-sm">delete</span>
-              </a>
+              </button>
             </div>
           </td>
         </tr>
@@ -72,4 +73,54 @@
   </div>
 
 </div>
+
+<!-- MODAL POPUP KONFIRMASI HAPUS -->
+<div id="deleteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl border border-gray-100 text-center transform transition-all scale-95 opacity-0 duration-300" id="modalContent">
+        <div class="w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-4">
+            <span class="material-symbols-outlined text-2xl">delete</span>
+        </div>
+        <h3 class="text-lg font-bold text-neutral-900 mb-2">Hapus Klien / Mitra?</h3>
+        <p class="text-sm text-gray-500 mb-6">Apakah Anda yakin ingin menghapus data instansi <strong id="articleTitle" class="text-neutral-800"></strong> secara permanen? Tindakan ini tidak bisa dibatalkan.</p>
+        
+        <form id="deleteForm" method="POST" class="flex items-center justify-center gap-3">
+            {% csrf_token %}
+            <button type="button" onclick="closeDeleteModal()" class="w-full py-2.5 rounded-xl bg-gray-100 text-gray-700 text-sm font-semibold hover:bg-gray-200 transition-colors">
+                Batal
+            </button>
+            <button type="submit" class="w-full py-2.5 rounded-xl bg-rose-600 text-white text-sm font-semibold hover:bg-rose-700 transition-colors shadow-md shadow-rose-500/20">
+                Ya, Hapus
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openDeleteModal(deleteUrl, itemName) {
+        const modal = document.getElementById('deleteModal');
+        const modalContent = document.getElementById('modalContent');
+        const deleteForm = document.getElementById('deleteForm');
+        const titleSpan = document.getElementById('articleTitle');
+
+        deleteForm.action = deleteUrl;
+        titleSpan.innerText = `"${itemName}"`;
+
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modalContent.classList.remove('scale-95', 'opacity-0');
+            modalContent.classList.add('scale-100', 'opacity-100');
+        }, 10);
+    }
+
+    function closeDeleteModal() {
+        const modal = document.getElementById('deleteModal');
+        const modalContent = document.getElementById('modalContent');
+
+        modalContent.classList.remove('scale-100', 'opacity-100');
+        modalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+</script>
 {% endblock %}

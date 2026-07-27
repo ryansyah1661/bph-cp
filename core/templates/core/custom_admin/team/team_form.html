@@ -49,28 +49,32 @@
 
     </div>
 
-    <!-- Kolom Kanan: Foto Profil & Tombol Aksi -->
+    <!-- Kolom Kanan: Foto Profil & Tombol Aksi Menyatu -->
     <div class="w-80 space-y-5 flex-shrink-0">
 
-      <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
-        <h3 class="text-sm font-bold text-slate-700 border-b border-gray-100 pb-3 mb-4">Foto Profil</h3>
-        <label class="block text-sm font-semibold text-slate-600 mb-2">Foto Anggota Tim</label>
+      <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-4">
+        <h3 class="text-sm font-bold text-slate-700 border-b border-gray-100 pb-3">Foto Profil</h3>
+        
+        <div>
+          <label class="block text-sm font-semibold text-slate-600 mb-2">Foto Anggota Tim</label>
 
-        <div id="preview-container" class="{% if not object.foto %}hidden{% endif %} mb-3">
-          <img id="image-preview" src="{% if object.foto %}{{ object.foto.url }}{% endif %}" class="w-full h-48 object-cover rounded-lg border">
+          <div id="preview-container" class="{% if not object.foto %}hidden{% endif %} mb-3">
+            <img id="image-preview" src="{% if object.foto %}{{ object.foto.url }}{% endif %}" class="w-full h-48 object-cover rounded-lg border">
+          </div>
+
+          <label for="id_foto" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition" id="drop-zone">
+            <span class="material-symbols-outlined text-gray-400 text-3xl mb-1">upload_file</span>
+            <span class="text-sm text-gray-400 text-center">Seret & Jatuhkan foto atau <br><span class="text-emerald-600 font-semibold">Jelajahi</span></span>
+          </label>
+          <div id="file-name-display" class="text-xs text-gray-400 mt-2 text-center font-medium"></div>
+          <div class="bph-hidden-file-input">{{ form.foto }}</div>
         </div>
 
-        <label for="id_foto" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition" id="drop-zone">
-          <span class="material-symbols-outlined text-gray-400 text-3xl mb-1">upload_file</span>
-          <span class="text-sm text-gray-400 text-center">Seret & Jatuhkan foto atau <br><span class="text-emerald-600 font-semibold">Jelajahi</span></span>
-        </label>
-        <div id="file-name-display" class="text-xs text-gray-400 mt-2 text-center font-medium"></div>
-        <div class="bph-hidden-file-input">{{ form.foto }}</div>
-      </div>
-
-      <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex gap-3">
-        <a href="{% url 'team_list' %}" class="flex-1 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm text-center font-semibold hover:bg-gray-50 transition" style="text-decoration: none; padding-top: 8px;">Batal</a>
-        <button type="submit" class="flex-1 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700 transition cursor-pointer border-none">Simpan Data</button>
+        <!-- Tombol Batal & Simpan Data Menyatu di Bagian Bawah Card Kanan -->
+        <div class="pt-4 border-t border-gray-100 flex items-center justify-end gap-2.5">
+          <a href="{% url 'team_list' %}" class="px-4 py-2 border border-gray-200 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-50 transition text-center flex-1" style="text-decoration: none;">Batal</a>
+          <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 transition cursor-pointer border-none shadow-sm shadow-emerald-100 flex-1">Simpan Data</button>
+        </div>
       </div>
 
     </div>

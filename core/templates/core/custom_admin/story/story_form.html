@@ -20,6 +20,7 @@
 
   <div class="flex gap-6 items-start">
 
+    <!-- KOLOM KIRI -->
     <div class="flex-1 space-y-5">
 
       <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-5">
@@ -59,6 +60,7 @@
 
     </div>
 
+    <!-- KOLOM KANAN -->
     <div class="space-y-5 flex-shrink-0 w-80">
 
       <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
@@ -66,25 +68,30 @@
         {{ form.tanggal }}
       </div>
 
-      <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
-        <h3 class="text-sm font-bold text-slate-700 border-b border-gray-100 pb-3 mb-4">Gambar</h3>
-        <label class="block text-sm font-semibold text-slate-600 mb-2">Foto Dokumentasi</label>
+      <!-- CARD GAMBAR & TOMBOL AKSI MENYATU -->
+      <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-4">
+        <h3 class="text-sm font-bold text-slate-700 border-b border-gray-100 pb-3">Gambar</h3>
+        
+        <div>
+          <label class="block text-sm font-semibold text-slate-600 mb-2">Foto Dokumentasi</label>
 
-        <div id="preview-container" class="{% if not object.gambar %}hidden{% endif %} mb-3">
-          <img id="image-preview" src="{% if object.gambar %}{{ object.gambar.url }}{% endif %}" class="w-full h-36 object-cover rounded-lg border">
+          <div id="preview-container" class="{% if not object.gambar %}hidden{% endif %} mb-3">
+            <img id="image-preview" src="{% if object.gambar %}{{ object.gambar.url }}{% endif %}" class="w-full h-36 object-cover rounded-lg border">
+          </div>
+
+          <label for="id_gambar" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition" id="drop-zone">
+            <span class="material-symbols-outlined text-gray-400 text-3xl mb-1">upload_file</span>
+            <span class="text-sm text-gray-400">Seret & Jatuhkan atau <span class="text-emerald-600 font-semibold">Jelajahi</span></span>
+          </label>
+          <div id="file-name-display" class="text-xs text-gray-400 mt-2 text-center font-medium"></div>
+          <div class="bph-hidden-file-input">{{ form.gambar }}</div>
         </div>
 
-        <label for="id_gambar" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition" id="drop-zone">
-          <span class="material-symbols-outlined text-gray-400 text-3xl mb-1">upload_file</span>
-          <span class="text-sm text-gray-400">Seret & Jatuhkan atau <span class="text-emerald-600 font-semibold">Jelajahi</span></span>
-        </label>
-        <div id="file-name-display" class="text-xs text-gray-400 mt-2 text-center font-medium"></div>
-        <div class="bph-hidden-file-input">{{ form.gambar }}</div>
-      </div>
-
-      <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex gap-3">
-        <a href="{% url 'story_list' %}" class="flex-1 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm text-center font-semibold hover:bg-gray-50 transition" style="text-decoration: none; padding-top: 8px;">Batal</a>
-        <button type="submit" class="flex-1 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700 transition cursor-pointer border-none">Simpan Data</button>
+        <!-- Tombol Batal & Simpan Data Menyatu di Bagian Bawah Card Kanan -->
+        <div class="pt-4 border-t border-gray-100 flex items-center justify-end gap-2.5">
+          <a href="{% url 'story_list' %}" class="px-4 py-2 border border-gray-200 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-50 transition text-center flex-1" style="text-decoration: none;">Batal</a>
+          <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 transition cursor-pointer border-none shadow-sm shadow-emerald-100 flex-1">Simpan Data</button>
+        </div>
       </div>
 
     </div>
