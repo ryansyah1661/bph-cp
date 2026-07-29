@@ -1,27 +1,66 @@
 {% extends 'core/base.html' %}
 {% load static i18n %}
 
-{% block title %}{% trans "Tentang BPH - Bhumi Pasa Hijau" %}{% endblock %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block title %}
+  {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+    About Us - Bhumi Pasa Hijau
+  {% else %}
+    Tentang BPH - Bhumi Pasa Hijau
+  {% endif %}
+{% endblock %}
 
 {% block content %}
 <main class="flex-grow pt-[80px]">
 
-  {% trans "Tentang Kami" as hero_title %}
-  {% trans "Corporate Profile" as hero_subtitle %}
-  {% trans "Bhumi Pasa Hijau (BPH) didirikan oleh para profesional muda di Bogor sebagai firma konsultan strategis yang berfokus pada pemahaman dan tata kelola sumber daya alam, lingkungan, serta sosial berkelanjutan." as hero_desc %}
-  {% include 'core/partials/hero-banner.html' with title=hero_title subtitle=hero_subtitle desc=hero_desc bg_image="images/about-hero.jpg" %}
+  <!-- HERO SECTION -->
+  <section class="relative h-[70vh] min-h-[500px] w-full flex items-center justify-center text-center overflow-hidden bg-on-background">
+    <div class="absolute inset-0 z-0">
+      <div class="absolute inset-0 bg-gradient-to-t from-surface via-on-background/50 to-on-background/70 z-10"></div>
+      <img alt="About Hero" class="w-full h-full object-cover" src="{% static 'images/about-hero.jpg' %}" />
+    </div>
+    <div class="relative z-20 w-full max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop text-surface-white">
+      <p class="font-label-caps text-label-caps uppercase text-tertiary mb-3 tracking-wider">
+        Corporate Profile
+      </p>
+      <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-4 leading-tight">
+        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+          About Us
+        {% else %}
+          Tentang Kami
+        {% endif %}
+      </h1>
+      <p class="font-body-lg text-body-lg max-w-2xl mx-auto text-surface-white/90 leading-relaxed">
+        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+          Bhumi Pasa Hijau (BPH) was founded by young professionals in Bogor as a strategic consulting firm focusing on the understanding and governance of natural resources, environment, and sustainable social development.
+        {% else %}
+          Bhumi Pasa Hijau (BPH) didirikan oleh para profesional muda di Bogor sebagai firma konsultan strategis yang berfokus pada pemahaman dan tata kelola sumber daya alam, lingkungan, serta sosial berkelanjutan.
+        {% endif %}
+      </p>
+    </div>
+  </section>
 
+  <!-- SEKSI MEMBANGUN MASA DEPAN -->
   <section class="max-w-container-max bg-surface mx-auto px-margin-mobile md:px-margin-desktop py-section-gap">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center">
       <div class="md:col-span-5 md:col-start-1">
         <h2 class="font-headline-xl text-headline-xl text-on-surface mb-stack-lg">
-          {% trans "Membangun Masa Depan Keberlanjutan" %}
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Building a Sustainable Future{% else %}Membangun Masa Depan Keberlanjutan{% endif %}
         </h2>
         <p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-md leading-relaxed">
-          {% trans "Bhumi Pasa Hijau (BPH) didirikan dengan kesadaran mendalam akan pentingnya keseimbangan antara kemajuan industri dan pelestarian lingkungan. Sebagai firma manajemen lingkungan strategis, kami berdedikasi untuk menyediakan solusi berbasis data yang akurat dan dapat dipertanggungjawabkan." %}
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+            Bhumi Pasa Hijau (BPH) was established with a deep awareness of the importance of balance between industrial progress and environmental preservation. As a strategic environmental management firm, we are dedicated to providing accurate and accountable data-driven solutions.
+          {% else %}
+            Bhumi Pasa Hijau (BPH) didirikan dengan kesadaran mendalam akan pentingnya keseimbangan antara kemajuan industri dan pelestarian lingkungan. Sebagai firma manajemen lingkungan strategis, kami berdedikasi untuk menyediakan solusi berbasis data yang akurat dan dapat dipertanggungjawabkan.
+          {% endif %}
         </p>
         <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-          {% trans "Sejak awal mula, komitmen kami adalah menjadi penghubung antara kebijakan lingkungan global dan implementasi praktis di lapangan, memastikan bahwa setiap langkah pembangunan membawa dampak positif yang terukur bagi ekosistem." %}
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+            From the very beginning, our commitment has been to bridge global environmental policies with practical field implementation, ensuring that every step of development brings measurable positive impacts to the ecosystem.
+          {% else %}
+            Sejak awal mula, komitmen kami adalah menjadi penghubung antara kebijakan lingkungan global dan implementasi praktis di lapangan, memastikan bahwa setiap langkah pembangunan membawa dampak positif yang terukur bagi ekosistem.
+          {% endif %}
         </p>
       </div>
       <div class="md:col-span-6 md:col-start-7 mt-12 md:mt-0 relative group">
@@ -34,6 +73,7 @@
     </div>
   </section>
 
+  <!-- SEKSI VISI & MISI -->
   <section class="bg-surface-container-lowest border-y border-border-subtle py-section-gap">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
@@ -42,9 +82,15 @@
           <div class="mb-stack-md text-primary">
             <span class="material-symbols-outlined text-[48px]" style="font-variation-settings: 'FILL' 1;">visibility</span>
           </div>
-          <h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">{% trans "Visi Kami" %}</h3>
+          <h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Our Vision{% else %}Visi Kami{% endif %}
+          </h3>
           <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed flex-grow">
-            {% trans "Menjadi mitra strategis terpercaya yang memimpin dalam inovasi manajemen lingkungan, mengintegrasikan sains, kebijakan, and praktik terbaik untuk mewujudkan pelestarian alam berskala global." %}
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+              To be a trusted strategic partner leading in environmental management innovation, integrating science, policy, and best practices to achieve global-scale nature conservation.
+            {% else %}
+              Menjadi mitra strategis terpercaya yang memimpin dalam inovasi manajemen lingkungan, mengintegrasikan sains, kebijakan, and praktik terbaik untuk mewujudkan pelestarian alam berskala global.
+            {% endif %}
           </p>
         </div>
         
@@ -52,19 +98,27 @@
           <div class="mb-stack-md text-primary">
             <span class="material-symbols-outlined text-[48px]" style="font-variation-settings: 'FILL' 1;">track_changes</span>
           </div>
-          <h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">{% trans "Misi Kami" %}</h3>
+          <h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Our Mission{% else %}Misi Kami{% endif %}
+          </h3>
           <ul class="font-body-md text-body-md text-on-surface-variant space-y-stack-sm flex-grow">
             <li class="flex items-start">
               <span class="material-symbols-outlined text-primary mr-3 mt-1 text-[20px]">check_circle</span>
-              <span>{% trans "Mengurangi dampak lingkungan industri melalui audit dan strategi mitigasi yang presisi." %}</span>
+              <span>
+                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Reducing industrial environmental impacts through precise audits and mitigation strategies.{% else %}Mengurangi dampak lingkungan industri melalui audit dan strategi mitigasi yang presisi.{% endif %}
+              </span>
             </li>
             <li class="flex items-start">
               <span class="material-symbols-outlined text-primary mr-3 mt-1 text-[20px]">check_circle</span>
-              <span>{% trans "Menyediakan solusi berbasis pengetahuan and data empiris untuk pengambilan keputusan." %}</span>
+              <span>
+                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Providing knowledge-based solutions and empirical data for decision-making.{% else %}Menyediakan solusi berbasis pengetahuan and data empiris untuk pengambilan keputusan.{% endif %}
+              </span>
             </li>
             <li class="flex items-start">
               <span class="material-symbols-outlined text-primary mr-3 mt-1 text-[20px]">check_circle</span>
-              <span>{% trans "Mendorong tata kelola perusahaan yang baik (Good Corporate Governance) berwawasan lingkungan." %}</span>
+              <span>
+                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Promoting environmentally-conscious Good Corporate Governance.{% else %}Mendorong tata kelola perusahaan yang baik (Good Corporate Governance) berwawasan lingkungan.{% endif %}
+              </span>
             </li>
           </ul>
         </div>
@@ -73,12 +127,19 @@
     </div>
   </section>
 
+  <!-- SEKSI TIM AHLI -->
   <section class="max-w-container-max bg-surface mx-auto px-margin-mobile md:px-margin-desktop py-section-gap">
     
     <div class="text-center max-w-2xl mx-auto mb-10">
-      <h2 class="font-headline-xl text-headline-xl text-on-surface mb-stack-md">{% trans "Tim Ahli Kami" %}</h2>
+      <h2 class="font-headline-xl text-headline-xl text-on-surface mb-stack-md">
+        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Our Expert Team{% else %}Tim Ahli Kami{% endif %}
+      </h2>
       <p class="font-body-lg text-body-lg text-on-surface-variant">
-        {% trans "Dedikasi profesional kami digerakkan oleh para ahli di bidang ekologi, manajemen strategis, dan kebijakan lingkungan." %}
+        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+          Our professional dedication is driven by experts in ecology, strategic management, and environmental policy.
+        {% else %}
+          Dedikasi profesional kami digerakkan oleh para ahli di bidang ekologi, manajemen strategis, dan kebijakan lingkungan.
+        {% endif %}
       </p>
     </div>
 
@@ -123,7 +184,9 @@
           {% endif %}
         </div>
         {% empty %}
-        <div class="col-span-full text-center py-12 text-slate-400">{% trans "Belum ada data Senior Advisors." %}</div>
+        <div class="col-span-full text-center py-12 text-slate-400">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No Senior Advisors data available yet.{% else %}Belum ada data Senior Advisors.{% endif %}
+        </div>
         {% endfor %}
       </div>
 
@@ -149,7 +212,9 @@
           {% endif %}
         </div>
         {% empty %}
-        <div class="col-span-full text-center py-12 text-slate-400">{% trans "Belum ada data Executives." %}</div>
+        <div class="col-span-full text-center py-12 text-slate-400">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No Executives data available yet.{% else %}Belum ada data Executives.{% endif %}
+        </div>
         {% endfor %}
       </div>
 
@@ -175,7 +240,9 @@
           {% endif %}
         </div>
         {% empty %}
-        <div class="col-span-full text-center py-12 text-slate-400">{% trans "Belum ada data Staff Consultants." %}</div>
+        <div class="col-span-full text-center py-12 text-slate-400">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No Staff Consultants data available yet.{% else %}Belum ada data Staff Consultants.{% endif %}
+        </div>
         {% endfor %}
       </div>
 
@@ -201,7 +268,9 @@
           {% endif %}
         </div>
         {% empty %}
-        <div class="col-span-full text-center py-12 text-slate-400">{% trans "Belum ada data Associate Consultants." %}</div>
+        <div class="col-span-full text-center py-12 text-slate-400">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No Associate Consultants data available yet.{% else %}Belum ada data Associate Consultants.{% endif %}
+        </div>
         {% endfor %}
       </div>
 

@@ -21,17 +21,17 @@ msgstr ""
 #, fuzzy
 #| msgid "We are Bhumi Pasa Hijau (BPH)"
 msgid "Tentang BPH - Bhumi Pasa Hijau"
-msgstr "We are Bhumi Pasa Hijau (BPH)"
+msgstr "About BPH - Bhumi Pasa Hijau"
 
 #: .\core\templates\core\about.html:9
 #, fuzzy
 #| msgid "Tentang BPH"
 msgid "Tentang Kami"
-msgstr "About BPH"
+msgstr "About Us"
 
 #: .\core\templates\core\about.html:10
 msgid "Corporate Profile"
-msgstr ""
+msgstr "Corporate Profile"
 
 #: .\core\templates\core\about.html:11
 msgid ""
@@ -39,10 +39,13 @@ msgid ""
 "firma konsultan strategis yang berfokus pada pemahaman dan tata kelola "
 "sumber daya alam, lingkungan, serta sosial berkelanjutan."
 msgstr ""
+"Bhumi Pasa Hijau (BPH) was founded by young professionals in Bogor as a strategic "
+"consulting firm focusing on the understanding and governance of natural "
+"resources, environment, and sustainable social development."
 
 #: .\core\templates\core\about.html:18
 msgid "Membangun Masa Depan Keberlanjutan"
-msgstr ""
+msgstr "Building a Sustainable Future"
 
 #: .\core\templates\core\about.html:21
 msgid ""
@@ -51,6 +54,10 @@ msgid ""
 "firma manajemen lingkungan strategis, kami berdedikasi untuk menyediakan "
 "solusi berbasis data yang akurat dan dapat dipertanggungjawabkan."
 msgstr ""
+"Bhumi Pasa Hijau (BPH) was established with a deep awareness of the importance "
+"of balance between industrial progress and environmental preservation. As a "
+"strategic environmental management firm, we are dedicated to providing accurate "
+"and accountable data-driven solutions."
 
 #: .\core\templates\core\about.html:24
 msgid ""
@@ -59,10 +66,13 @@ msgid ""
 "setiap langkah pembangunan membawa dampak positif yang terukur bagi "
 "ekosistem."
 msgstr ""
+"From the very beginning, our commitment has been to bridge global environmental "
+"policies with practical field implementation, ensuring that every step of "
+"development brings measurable positive impacts to the ecosystem."
 
 #: .\core\templates\core\about.html:45
 msgid "Visi Kami"
-msgstr ""
+msgstr "Our Vision"
 
 #: .\core\templates\core\about.html:47
 msgid ""
@@ -70,74 +80,85 @@ msgid ""
 "lingkungan, mengintegrasikan sains, kebijakan, and praktik terbaik untuk "
 "mewujudkan pelestarian alam berskala global."
 msgstr ""
+"To be a trusted strategic partner leading in environmental management innovation, "
+"integrating science, policy, and best practices to achieve global-scale nature "
+"conservation."
 
 #: .\core\templates\core\about.html:55
 msgid "Misi Kami"
-msgstr ""
+msgstr "Our Mission"
 
 #: .\core\templates\core\about.html:59
 msgid ""
 "Mengurangi dampak lingkungan industri melalui audit dan strategi mitigasi "
 "yang presisi."
 msgstr ""
+"Reducing industrial environmental impacts through precise audits and mitigation "
+"strategies."
 
 #: .\core\templates\core\about.html:63
 msgid ""
 "Menyediakan solusi berbasis pengetahuan and data empiris untuk pengambilan "
 "keputusan."
 msgstr ""
+"Providing knowledge-based solutions and empirical data for decision-making."
 
 #: .\core\templates\core\about.html:67
 msgid ""
 "Mendorong tata kelola perusahaan yang baik (Good Corporate Governance) "
 "berwawasan lingkungan."
 msgstr ""
+"Promoting environmentally-conscious Good Corporate Governance."
 
 #: .\core\templates\core\about.html:79
 msgid "Tim Ahli Kami"
-msgstr ""
+msgstr "Our Expert Team"
 
 #: .\core\templates\core\about.html:81
 msgid ""
 "Dedikasi profesional kami digerakkan oleh para ahli di bidang ekologi, "
 "manajemen strategis, dan kebijakan lingkungan."
 msgstr ""
+"Our professional dedication is driven by experts in ecology, strategic management, "
+"and environmental policy."
 
 #: .\core\templates\core\about.html:126
 msgid "Belum ada data Senior Advisors."
-msgstr ""
+msgstr "No Senior Advisors data available yet."
 
 #: .\core\templates\core\about.html:152
 msgid "Belum ada data Executives."
-msgstr ""
+msgstr "No Executives data available yet."
 
 #: .\core\templates\core\about.html:178
 msgid "Belum ada data Staff Consultants."
-msgstr ""
+msgstr "No Staff Consultants data available yet."
 
 #: .\core\templates\core\about.html:204
 msgid "Belum ada data Associate Consultants."
-msgstr ""
+msgstr "No Associate Consultants data available yet."
 
 #: .\core\templates\core\articles.html:4
 #, fuzzy
 #| msgid "We are Bhumi Pasa Hijau (BPH)"
 msgid "Artikel & Wawasan - Bhumi Pasa Hijau"
-msgstr "We are Bhumi Pasa Hijau (BPH)"
+msgstr "Articles & Insights - Bhumi Pasa Hijau"
 
 #: .\core\templates\core\articles.html:9
 msgid "Artikel & Wawasan"
-msgstr ""
+msgstr "Articles & Insights"
 
 #: .\core\templates\core\articles.html:10
 msgid "News & Insights"
-msgstr ""
+msgstr "News & Insights"
 
 #: .\core\templates\core\articles.html:11
 msgid ""
 "Kumpulan pemikiran teknis, analisis data sekuestrasi karbon, laporan audit, "
 "dan panduan praktis manajemen lingkungan berkelanjutan."
 msgstr ""
+"A collection of technical thoughts, carbon sequestration data analysis, audit reports, "
+"and practical guides for sustainable environmental management."
 
 #: .\core\templates\core\articles.html:25
 #: .\core\templates\core\detail-articles.html:27
@@ -160,13 +181,13 @@ msgstr "Read More"
 #: .\core\templates\core\articles.html:94
 #: .\core\templates\core\gallery.html:153
 msgid "Muat Artikel Lebih Banyak"
-msgstr ""
+msgstr "Load More Articles"
 
 #: .\core\templates\core\contact.html:4
 #, fuzzy
 #| msgid "We are Bhumi Pasa Hijau (BPH)"
-msgid "Kontak - Bhumi Pasa Hijau"
-msgstr "We are Bhumi Pasa Hijau (BPH)"
+msgid "Contact - Bhumi Pasa Hijau"
+msgstr "Contact - Bhumi Pasa Hijau"
 
 #: .\core\templates\core\contact.html:9
 #: .\core\templates\core\homepage.html:210
@@ -176,7 +197,7 @@ msgstr "Contact Us"
 
 #: .\core\templates\core\contact.html:10
 msgid "Get In Touch"
-msgstr ""
+msgstr "Get In Touch"
 
 #: .\core\templates\core\contact.html:11
 #, fuzzy
@@ -188,174 +209,177 @@ msgid ""
 "Punya pertanyaan mengenai layanan konsultasi manajemen lingkungan atau ingin "
 "menjalin kemitraan strategis? Hubungi tim ahli kami sekarang."
 msgstr ""
-"Have questions about our natural resource management consulting services or "
-"want to partner on your next conservation project? Contact our team of "
-"experts today."
+"Have questions regarding environmental management consulting services or "
+"want to establish a strategic partnership? Contact our team of experts today."
 
 #: .\core\templates\core\contact.html:20
 #, fuzzy
 #| msgid "Kontak"
 msgid "Kontak Resmi"
-msgstr "Contact"
+msgstr "Official Contact"
 
 #: .\core\templates\core\contact.html:23
 msgid "Mari Berdiskusi Demi Solusi Keberlanjutan"
-msgstr ""
+msgstr "Let's Discuss for Sustainability Solutions"
 
 #: .\core\templates\core\contact.html:26
 msgid ""
 "Kantor pusat kami beroperasi penuh untuk melayani konsultasi teknis, audit "
 "lingkungan, hingga perencanaan program CSR konservasi seluruh Indonesia."
 msgstr ""
+"Our headquarters operates fully to serve technical consultations, environmental "
+"audits, and conservation CSR program planning across Indonesia."
 
 #: .\core\templates\core\contact.html:37
 msgid "Alamat Kantor Pusat"
-msgstr ""
+msgstr "Headquarters Address"
 
 #: .\core\templates\core\contact.html:61
 msgid "Hubungi Telepon / WhatsApp"
-msgstr ""
+msgstr "Phone / WhatsApp Contact"
 
 #: .\core\templates\core\contact.html:73
 msgid "Jam Operasional Kantor"
-msgstr ""
+msgstr "Office Operational Hours"
 
 #: .\core\templates\core\contact.html:75
 msgid "Senin – Jumat"
-msgstr ""
+msgstr "Monday – Friday"
 
 #: .\core\templates\core\contact.html:96
 msgid "Kirim Pesan Langsung"
-msgstr ""
+msgstr "Send Direct Message"
 
 #: .\core\templates\core\contact.html:97
 msgid ""
 "Tim administrasi kami akan merespons surat Anda dalam waktu maksimal 1x24 "
 "jam kerja."
 msgstr ""
+"Our administrative team will respond to your message within a maximum of 1x24 "
+"working hours."
 
 #: .\core\templates\core\contact.html:104
 #, fuzzy
 #| msgid "Baca Selengkapnya"
 msgid "Nama Lengkap"
-msgstr "Read More"
+msgstr "Full Name"
 
 #: .\core\templates\core\contact.html:105
 msgid "Masukkan nama Anda"
-msgstr ""
+msgstr "Enter your name"
 
 #: .\core\templates\core\contact.html:109
 msgid "Alamat Email"
-msgstr ""
+msgstr "Email Address"
 
 #: .\core\templates\core\contact.html:110
 msgid "Masukkan email Anda"
-msgstr ""
+msgstr "Enter your email"
 
 #: .\core\templates\core\contact.html:116
 msgid "Subjek / Nama Instansi"
-msgstr ""
+msgstr "Subject / Institution Name"
 
 #: .\core\templates\core\contact.html:117
 msgid "Contoh: Konsultasi Audit NRM - PT Sukses Bersama"
-msgstr ""
+msgstr "Example: NRM Audit Consultation - PT Sukses Bersama"
 
 #: .\core\templates\core\contact.html:122
 msgid "Detail Pesan / Pertanyaan"
-msgstr ""
+msgstr "Message Details / Inquiry"
 
 #: .\core\templates\core\contact.html:123
 msgid "Tuliskan detail kebutuhan proyek atau pertanyaan Anda di sini..."
-msgstr ""
+msgstr "Write your project needs or inquiry details here..."
 
 #: .\core\templates\core\contact.html:130
 msgid "Kirim Pesan Sekarang"
-msgstr ""
+msgstr "Send Message Now"
 
 #: .\core\templates\core\detail-articles.html:37
 #: .\core\templates\core\gallery.html:32
 msgid "Artikel &amp; Wawasan"
-msgstr ""
+msgstr "Articles &amp; Insights"
 
 #: .\core\templates\core\detail-articles.html:59
 #, fuzzy
 #| msgid "Artikel Terbaru"
 msgid "Artikel Terkait"
-msgstr "Latest Articles"
+msgstr "Related Articles"
 
 #: .\core\templates\core\detail-articles.html:79
 #: .\core\templates\core\detail-story.html:88
 msgid "Baca"
-msgstr ""
+msgstr "Read"
 
 #: .\core\templates\core\detail-experience.html:9
 msgid "Analisis &amp; Restorasi Ekosistem Strategis"
-msgstr ""
+msgstr "Strategic Ecosystem Analysis &amp; Restoration"
 
 #: .\core\templates\core\detail-experience.html:10
 msgid "Studi Kasus Proyek"
-msgstr ""
+msgstr "Project Case Study"
 
 #: .\core\templates\core\detail-experience.html:28
 msgid "Tantangan &amp; Kondisi Awal"
-msgstr ""
+msgstr "Challenges &amp; Initial Conditions"
 
 #: .\core\templates\core\detail-experience.html:41
 msgid "Pendekatan &amp; Metodologi Kerja"
-msgstr ""
+msgstr "Approach &amp; Working Methodology"
 
 #: .\core\templates\core\detail-experience.html:54
 msgid "Hasil &amp; Dampak Ekologis Terukur"
-msgstr ""
+msgstr "Results &amp; Measurable Ecological Impacts"
 
 #: .\core\templates\core\detail-experience.html:66
 msgid "Matriks Capaian Kinerja Proyek"
-msgstr ""
+msgstr "Project Performance Achievement Matrix"
 
 #: .\core\templates\core\detail-experience.html:72
 msgid "Parameter Monitoring"
-msgstr ""
+msgstr "Monitoring Parameter"
 
 #: .\core\templates\core\detail-experience.html:73
 msgid "Target Awal"
-msgstr ""
+msgstr "Initial Target"
 
 #: .\core\templates\core\detail-experience.html:74
 #, fuzzy
 #| msgid "Cerita dari Lapangan"
 msgid "Realisasi Akhir Lapangan"
-msgstr "Stories from the Field"
+msgstr "Final Field Realization"
 
 #: .\core\templates\core\detail-experience.html:94
 msgid "Ringkasan Proyek"
-msgstr ""
+msgstr "Project Summary"
 
 #: .\core\templates\core\detail-experience.html:97
 #: .\core\templates\core\experience.html:199
 msgid "Mitra / Klien"
-msgstr ""
+msgstr "Partner / Client"
 
 #: .\core\templates\core\detail-experience.html:101
 msgid "Lokasi Wilayah"
-msgstr ""
+msgstr "Region Location"
 
 #: .\core\templates\core\detail-experience.html:108
 msgid "Tahun Pelaksanaan"
-msgstr ""
+msgstr "Implementation Year"
 
 #: .\core\templates\core\detail-experience.html:115
 #, fuzzy
 #| msgid "Pengalaman"
 msgid "Kembali ke Pengalaman"
-msgstr "Experience"
+msgstr "Back to Experience"
 
 #: .\core\templates\core\detail-experience.html:144
 msgid "Dokumen Publikasi"
-msgstr ""
+msgstr "Publication Document"
 
 #: .\core\templates\core\detail-experience.html:145
 msgid "Unduh Modul Laporan Teknis Resmi"
-msgstr ""
+msgstr "Download Official Technical Report Module"
 
 #: .\core\templates\core\detail-experience.html:146
 msgid ""
@@ -363,32 +387,35 @@ msgid ""
 "analisis spasial peta citra satelit, serta rekomendasi kebijakan lingkungan "
 "jangka panjang yang diserahkan secara resmi kepada mitra terkait."
 msgstr ""
+"This comprehensive report includes raw field test data, satellite imagery "
+"spatial analysis, and long-term environmental policy recommendations officially "
+"submitted to related partners."
 
 #: .\core\templates\core\detail-experience.html:149
 msgid "Buka &amp; Baca Modul (PDF)"
-msgstr ""
+msgstr "Open &amp; Read Module (PDF)"
 
 #: .\core\templates\core\detail-experience.html:161
 #, fuzzy
 #| msgid "Pengalaman"
 msgid "Pengalaman Terkait"
-msgstr "Experience"
+msgstr "Related Experience"
 
 #: .\core\templates\core\detail-experience.html:162
 msgid "Proyek lain dengan fokus kategori yang serupa."
-msgstr ""
+msgstr "Other projects with similar category focus."
 
 #: .\core\templates\core\detail-services.html:41
 #, fuzzy
 #| msgid "Belum ada cerita lapangan"
 msgid "Belum ada layanan NRM."
-msgstr "No field stories yet"
+msgstr "No NRM services available."
 
 #: .\core\templates\core\detail-services.html:59
 #, fuzzy
 #| msgid "Belum ada cerita lapangan"
 msgid "Belum ada layanan NRU."
-msgstr "No field stories yet"
+msgstr "No NRU services available."
 
 #: .\core\templates\core\detail-story.html:44
 #: .\core\templates\core\homepage.html:151 .\core\templates\core\story.html:8
@@ -399,35 +426,36 @@ msgstr "Field Story"
 #, fuzzy
 #| msgid "Cerita Lapangan"
 msgid "Cerita Lapangan Lainnya"
-msgstr "Field Story"
+msgstr "Other Field Stories"
 
 #: .\core\templates\core\experience.html:4
 #, fuzzy
 #| msgid "We are Bhumi Pasa Hijau (BPH)"
 msgid "Pengalaman Kami - Bhumi Pasa Hijau"
-msgstr "We are Bhumi Pasa Hijau (BPH)"
+msgstr "Our Experience - Bhumi Pasa Hijau"
 
 #: .\core\templates\core\experience.html:98
 #, fuzzy
 #| msgid "Pengalaman"
 msgid "Pengalaman BPH"
-msgstr "Experience"
+msgstr "BPH Experience"
 
 #: .\core\templates\core\experience.html:99
 msgid "Our Track Record"
-msgstr ""
+msgstr "Our Track Record"
 
 #: .\core\templates\core\experience.html:100
 msgid ""
 "Kami memberikan layanan terbaik untuk memberikan pengalaman yang tak "
 "terlupakan."
 msgstr ""
+"We provide the best services to deliver an unforgettable experience."
 
 #: .\core\templates\core\experience.html:110
 #: .\core\templates\core\experience.html:201
 #: .\core\templates\core\gallery.html:82
 msgid "Tahun"
-msgstr ""
+msgstr "Year"
 
 #: .\core\templates\core\experience.html:111
 #: .\core\templates\core\partials\footer.html:47
@@ -437,126 +465,130 @@ msgstr "Experience"
 
 #: .\core\templates\core\experience.html:117
 msgid "Proyek"
-msgstr ""
+msgstr "Projects"
 
 #: .\core\templates\core\experience.html:118
 msgid "Telah Dikerjakan"
-msgstr ""
+msgstr "Completed"
 
 #: .\core\templates\core\experience.html:124
 msgid "Provinsi"
-msgstr ""
+msgstr "Provinces"
 
 #: .\core\templates\core\experience.html:125
 msgid "Lokasi Proyek"
-msgstr ""
+msgstr "Project Locations"
 
 #: .\core\templates\core\experience.html:131
 msgid "Klien"
-msgstr ""
+msgstr "Clients"
 
 #: .\core\templates\core\experience.html:132
 msgid "Dari Sektor Publik dan Swasta"
-msgstr ""
+msgstr "From Public and Private Sectors"
 
 #: .\core\templates\core\experience.html:142
 msgid "LOKASI"
-msgstr ""
+msgstr "LOCATION"
 
 #: .\core\templates\core\experience.html:142
 msgid "PROYEK"
-msgstr ""
+msgstr "PROJECTS"
 
 #: .\core\templates\core\experience.html:143
 msgid "Click pin di bawah ini untuk melihat daftar proyek terkait"
-msgstr ""
+msgstr "Click the pin below to view related project lists"
 
 #: .\core\templates\core\experience.html:184
 msgid "Daftar Proyek Terkait"
-msgstr ""
+msgstr "Related Project List"
 
 #: .\core\templates\core\experience.html:198
 msgid "Judul Proyek"
-msgstr ""
+msgstr "Project Title"
 
 #: .\core\templates\core\experience.html:200
 msgid "Lokasi"
-msgstr ""
+msgstr "Location"
 
 #: .\core\templates\core\experience.html:229
 msgid "Belum ada data proyek di provinsi ini."
-msgstr ""
+msgstr "No project data available in this province."
 
 #: .\core\templates\core\experience.html:248
 msgid "MITRA"
-msgstr ""
+msgstr "PARTNERS"
 
 #: .\core\templates\core\experience.html:248
 msgid "KAMI"
-msgstr ""
+msgstr "OF US"
 
 #: .\core\templates\core\experience.html:249
 msgid ""
 "PT Bhumi Pasa Hijau bergerak bersama berbagai instansi dalam melahirkan "
 "solusi pelestarian ekosistem yang terukur."
 msgstr ""
+"PT Bhumi Pasa Hijau collaborates with various institutions in creating "
+"measurable ecosystem preservation solutions."
 
 #: .\core\templates\core\experience.html:254
 #: .\core\templates\core\experience.html:278
 msgid "SEKTOR"
-msgstr ""
+msgstr "SECTOR"
 
 #: .\core\templates\core\experience.html:254
 msgid "SWASTA"
-msgstr ""
+msgstr "PRIVATE"
 
 #: .\core\templates\core\experience.html:265
 msgid "Sektor Swasta"
-msgstr ""
+msgstr "Private Sector"
 
 #: .\core\templates\core\experience.html:270
 msgid "Belum ada data mitra sektor swasta."
-msgstr ""
+msgstr "No private sector partner data available."
 
 #: .\core\templates\core\experience.html:278
 msgid "PUBLIK"
-msgstr ""
+msgstr "PUBLIC"
 
 #: .\core\templates\core\experience.html:289
 msgid "Sektor Publik"
-msgstr ""
+msgstr "Public Sector"
 
 #: .\core\templates\core\experience.html:294
 msgid "Belum ada data mitra sektor publik."
-msgstr ""
+msgstr "No public sector partner data available."
 
 #: .\core\templates\core\gallery.html:4
 #, fuzzy
 #| msgid "We are Bhumi Pasa Hijau (BPH)"
 msgid "Galeri Kegiatan - Bhumi Pasa Hijau"
-msgstr "We are Bhumi Pasa Hijau (BPH)"
+msgstr "Activity Gallery - Bhumi Pasa Hijau"
 
 #: .\core\templates\core\gallery.html:9
 msgid "Galeri &amp; Publikasi"
-msgstr ""
+msgstr "Gallery &amp; Publications"
 
 #: .\core\templates\core\gallery.html:10
 msgid "Visual &amp; Knowledge Hub"
-msgstr ""
+msgstr "Visual &amp; Knowledge Hub"
 
 #: .\core\templates\core\gallery.html:11
 msgid ""
 "Mendokumentasikan upaya pelestarian lingkungan, rilis riset ilmiah, rilis "
 "berita, serta cerita aksi nyata tim BPH langsung dari lapangan."
 msgstr ""
+"Documenting environmental conservation efforts, scientific research releases, "
+"news releases, and real action stories of the BPH team directly from the field."
 
 #: .\core\templates\core\gallery.html:19
 msgid "Kategori Hub"
-msgstr ""
+msgstr "Hub Category"
 
 #: .\core\templates\core\gallery.html:24
 msgid "Galeri Dokumentasi"
-msgstr ""
+msgstr "Documentation Gallery"
 
 #: .\core\templates\core\gallery.html:40
 #: .\core\templates\core\gallery.html:160
@@ -567,97 +599,103 @@ msgstr "Stories from the Field"
 
 #: .\core\templates\core\gallery.html:48
 msgid "Modul Dokumentasi"
-msgstr ""
+msgstr "Documentation Modules"
 
 #: .\core\templates\core\gallery.html:60
 #, fuzzy
 #| msgid "Cerita dari Lapangan"
 msgid "Dokumentasi Aksi Lapangan"
-msgstr "Stories from the Field"
+msgstr "Field Action Documentation"
 
 #: .\core\templates\core\gallery.html:61
 msgid "Filter dokumentasi berdasarkan fokus bidang kerja lapangan kami."
-msgstr ""
+msgstr "Filter documentation based on our field work focus areas."
 
 #: .\core\templates\core\gallery.html:79
 msgid "Foto"
-msgstr ""
+msgstr "Photos"
 
 #: .\core\templates\core\gallery.html:111
 msgid "Belum Ada Folder Dokumentasi"
-msgstr ""
+msgstr "No Documentation Folders Yet"
 
 #: .\core\templates\core\gallery.html:112
 msgid "Folder arsip foto lapangan BPH akan segera diperbarui berkala di sini."
-msgstr ""
+msgstr "BPH field photo archive folders will be updated periodically here."
 
 #: .\core\templates\core\gallery.html:121
 msgid "Artikel &amp; Wawasan Teknis"
-msgstr ""
+msgstr "Articles &amp; Technical Insights"
 
 #: .\core\templates\core\gallery.html:122
 msgid ""
 "Kumpulan pemikiran rilis riset, data karbon, dan panduan praktis lingkungan "
 "berkelanjutan."
 msgstr ""
+"A collection of research releases, carbon data thoughts, and practical sustainable "
+"environment guides."
 
 #: .\core\templates\core\gallery.html:145
 msgid "Belum Ada Artikel Berita"
-msgstr ""
+msgstr "No News Articles Yet"
 
 #: .\core\templates\core\gallery.html:146
 msgid ""
 "Rilis artikel ilmiah dan wawasan pelestarian lingkungan akan segera terbit."
-msgstr ""
+msgstr "Scientific articles and environmental conservation insights will be published soon."
 
 #: .\core\templates\core\gallery.html:152
 #: .\core\templates\core\gallery.html:191
 msgid "Muat Lebih Sedikit"
-msgstr ""
+msgstr "Load Less"
 
 #: .\core\templates\core\gallery.html:161
 msgid ""
 "Narasi humanis, catatan perjalanan rimbawan, dan tantangan konservasi riil "
 "dari jantung hutan."
 msgstr ""
+"Humanist narratives, forester journey logs, and real conservation challenges "
+"from the heart of the forest."
 
 #: .\core\templates\core\gallery.html:184
 #, fuzzy
 #| msgid "Belum ada cerita lapangan"
 msgid "Belum Ada Cerita Lapangan"
-msgstr "No field stories yet"
+msgstr "No Field Stories Yet"
 
 #: .\core\templates\core\gallery.html:185
 msgid ""
 "Catatan dan dokumentasi rimbawan dari tengah ekosistem hutan akan segera "
 "hadir."
-msgstr ""
+msgstr "Forester notes and documentation from the middle of the forest ecosystem will arrive soon."
 
 #: .\core\templates\core\gallery.html:192
 msgid "Muat Cerita Lebih Banyak"
-msgstr ""
+msgstr "Load More Stories"
 
 #: .\core\templates\core\gallery.html:199
 msgid "Modul Dokumentasi Strategis"
-msgstr ""
+msgstr "Strategic Documentation Modules"
 
 #: .\core\templates\core\gallery.html:200
 msgid ""
 "Akses rangkuman teknis, panduan formal, dan data publikasi berkala dari tim "
 "ahli BPH."
 msgstr ""
+"Access technical summaries, formal guidelines, and periodic publication data "
+"from the BPH expert team."
 
 #: .\core\templates\core\gallery.html:214
 msgid "Diunggah"
-msgstr ""
+msgstr "Uploaded"
 
 #: .\core\templates\core\gallery.html:220
 msgid "Belum Ada Berkas Modul"
-msgstr ""
+msgstr "No Module Files Yet"
 
 #: .\core\templates\core\gallery.html:221
 msgid "Modul panduan dan publikasi teknis PDF belum tersedia untuk diunduh."
-msgstr ""
+msgstr "Guide modules and technical PDF publications are not yet available for download."
 
 #: .\core\templates\core\homepage.html:17
 msgid "We are Bhumi Pasa Hijau (BPH)"
@@ -752,6 +790,11 @@ msgstr "About BPH"
 msgid "Layanan"
 msgstr "Services"
 
+#: .\core\templates\core\partials\footer.html:47
+#: .\core\templates\core\partials\navbar.html:56
+msgid "Pengalaman"
+msgstr "Experience"
+
 #: .\core\templates\core\partials\footer.html:48
 #: .\core\templates\core\partials\navbar.html:66
 msgid "Galeri"
@@ -761,29 +804,30 @@ msgstr "Gallery"
 msgid "Unduh Profil Perusahaan"
 msgstr "Download Company Profile"
 
+#: .\core\templates\core\partials\footer.html:66
+#: .\core\templates\core\partials\navbar.html:91
+msgid "Hubungi Kami"
+msgstr "Contact Us"
+
 #: .\core\templates\core\partials\navbar.html:26
 msgid "Beranda"
 msgstr "Home"
-
-#: .\core\templates\core\partials\navbar.html:91
-msgid "Kontak"
-msgstr "Contact"
 
 #: .\core\templates\core\services.html:4
 #, fuzzy
 #| msgid "We are Bhumi Pasa Hijau (BPH)"
 msgid "Layanan Kami - Bhumi Pasa Hijau"
-msgstr "We are Bhumi Pasa Hijau (BPH)"
+msgstr "Our Services - Bhumi Pasa Hijau"
 
 #: .\core\templates\core\services.html:9
 #, fuzzy
 #| msgid "Layanan"
 msgid "Layanan Kami"
-msgstr "Services"
+msgstr "Our Services"
 
 #: .\core\templates\core\services.html:10
 msgid "Expertise &amp; Solutions"
-msgstr ""
+msgstr "Expertise &amp; Solutions"
 
 #: .\core\templates\core\services.html:11
 msgid ""
@@ -791,29 +835,31 @@ msgid ""
 "manajemen berbasis data, pemahaman ekologis yang mendalam, dan alokasi "
 "sumber daya yang mumpuni."
 msgstr ""
+"Strategic solutions for Indonesia's natural resources. We provide data-driven "
+"management, deep ecological understanding, and robust resource allocation."
 
 #: .\core\templates\core\services.html:46
 #: .\core\templates\core\services.html:91
 #, fuzzy
 #| msgid "Baca Selengkapnya"
 msgid "Lihat Selengkapnya"
-msgstr "Read More"
+msgstr "View More"
 
 #: .\core\templates\core\services.html:53
 #, fuzzy
 #| msgid "Belum ada artikel yang dipublikasikan"
 msgid "Belum ada layanan NRM yang dipublikasikan."
-msgstr "No articles published yet"
+msgstr "No NRM services published yet."
 
 #: .\core\templates\core\services.html:98
 #, fuzzy
 #| msgid "Belum ada artikel yang dipublikasikan"
 msgid "Belum ada layanan NRU yang dipublikasikan."
-msgstr "No articles published yet"
+msgstr "No NRU services published yet."
 
 #: .\core\templates\core\services.html:115
 msgid "Pelatihan &amp; Kapasitas"
-msgstr ""
+msgstr "Training &amp; Capacity"
 
 #: .\core\templates\core\services.html:117
 msgid ""
@@ -822,21 +868,27 @@ msgid ""
 "stewardship. Our \"Social Training\" programs bridge the gap between "
 "technical data and actionable field practice."
 msgstr ""
+"Empowering local communities, institutional staff, and corporate partners "
+"with the knowledge and tools necessary for effective environmental "
+"stewardship. Our \"Social Training\" programs bridge the gap between "
+"technical data and actionable field practice."
 
 #: .\core\templates\core\services.html:121
 #, fuzzy
 #| msgid "Baca Selengkapnya"
 msgid "Selengkapnya"
-msgstr "Read More"
+msgstr "More Details"
 
 #: .\core\templates\core\story.html:11
 msgid ""
 "Kumpulan catatan, dokumentasi esensial, dan kisah nyata dari tim kami saat "
 "bergerak langsung di area konservasi dan pemberdayaan masyarakat."
 msgstr ""
+"A collection of notes, essential documentation, and real stories from our team "
+"moving directly in conservation and community empowerment areas."
 
 #: .\core\templates\core\story.html:67
 #, fuzzy
 #| msgid "Belum ada cerita lapangan"
 msgid "Belum ada cerita lapangan yang diterbitkan."
-msgstr "No field stories yet"
+msgstr "No field stories published yet."

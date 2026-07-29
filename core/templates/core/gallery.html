@@ -1,27 +1,59 @@
 {% extends 'core/base.html' %}
 {% load static i18n %}
 
-{% block title %}{% trans "Galeri Kegiatan - Bhumi Pasa Hijau" %}{% endblock %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block title %}
+  {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+    Gallery & Publications - Bhumi Pasa Hijau
+  {% else %}
+    Galeri & Publikasi - Bhumi Pasa Hijau
+  {% endif %}
+{% endblock %}
 
 {% block content %}
 <main class="flex-grow pt-[80px] bg-background">
   
-  {% trans "Galeri &amp; Publikasi" as hero_title %}
-  {% trans "Visual &amp; Knowledge Hub" as hero_subtitle %}
-  {% trans "Mendokumentasikan upaya pelestarian lingkungan, rilis riset ilmiah, rilis berita, serta cerita aksi nyata tim BPH langsung dari lapangan." as hero_desc %}
-  {% include 'core/partials/hero-banner.html' with title=hero_title subtitle=hero_subtitle desc=hero_desc bg_image="images/forest-services.jpg" %}
+  <!-- HERO SECTION (POSISI TENGAH & EFEK AWAN) -->
+  <section class="relative h-[70vh] min-h-[500px] w-full flex items-center justify-center text-center overflow-hidden bg-on-background">
+    <div class="absolute inset-0 z-0">
+      <div class="absolute inset-0 bg-gradient-to-t from-surface via-on-background/50 to-on-background/70 z-10"></div>
+      <img alt="Gallery Hero" class="w-full h-full object-cover" src="{% static 'images/forest-services.jpg' %}" />
+    </div>
+    <div class="relative z-20 w-full max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop text-surface-white">
+      <p class="font-label-caps text-label-caps uppercase text-tertiary mb-3 tracking-wider">
+        VISUAL & KNOWLEDGE HUB
+      </p>
+      <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-4 leading-tight">
+        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+          Gallery & Publications
+        {% else %}
+          Galeri & Publikasi
+        {% endif %}
+      </h1>
+      <p class="font-body-lg text-body-lg max-w-2xl mx-auto text-surface-white/90 leading-relaxed">
+        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+          Documenting environmental conservation efforts, scientific research releases, news releases, and real action stories of the BPH team directly from the field.
+        {% else %}
+          Mendokumentasikan upaya pelestarian lingkungan, rilis riset ilmiah, rilis berita, serta cerita aksi nyata tim BPH langsung dari lapangan.
+        {% endif %}
+      </p>
+    </div>
+  </section>
 
   <section class="w-full bg-surface py-16">
     <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
       <!-- SIDEBAR KATEGORI HUB -->
       <aside class="lg:col-span-3 bg-white border border-border-subtle rounded-2xl p-5 shadow-[0_4px_20px_rgba(0,0,0,0.01)] lg:sticky lg:top-[110px] z-30 space-y-2">
-        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-4">{% trans "Kategori Hub" %}</h3>
+        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-4">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Hub Category{% else %}Kategori Hub{% endif %}
+        </h3>
         
         <button data-tab="seksi-galeri" class="tab-menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 text-left bg-primary text-surface-white shadow-sm border-none cursor-pointer group">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined text-lg">gallery_thumbnail</span>
-            <span>{% trans "Galeri Dokumentasi" %}</span>
+            <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Documentation Gallery{% else %}Galeri Dokumentasi{% endif %}</span>
           </div>
           <span class="tab-counter text-[11px] px-2 py-0.5 rounded-full bg-white/20 text-white font-extrabold">{{ gallery_items.count|default:"0" }}</span>
         </button>
@@ -29,7 +61,7 @@
         <button data-tab="seksi-artikel" class="tab-menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 text-left text-on-surface-variant hover:bg-slate-50 border-none bg-transparent cursor-pointer group">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined text-lg">newspaper</span>
-            <span>{% trans "Artikel &amp; Wawasan" %}</span>
+            <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Articles & Insights{% else %}Artikel & Wawasan{% endif %}</span>
           </div>
           <span class="tab-counter text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-extrabold group-hover:bg-slate-200 transition-colors">{{ articles.count|default:"0" }}</span>
         </button>
@@ -37,7 +69,7 @@
         <button data-tab="seksi-cerita" class="tab-menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 text-left text-on-surface-variant hover:bg-slate-50 border-none bg-transparent cursor-pointer group">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined text-lg">explore</span>
-            <span>{% trans "Cerita Dari Lapang" %}</span>
+            <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Stories from the Field{% else %}Cerita Dari Lapang{% endif %}</span>
           </div>
           <span class="tab-counter text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-extrabold group-hover:bg-slate-200 transition-colors">{{ stories.count|default:"0" }}</span>
         </button>
@@ -45,7 +77,7 @@
         <button data-tab="seksi-modul" class="tab-menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 text-left text-on-surface-variant hover:bg-slate-50 border-none bg-transparent cursor-pointer group">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined text-lg">folder_open</span>
-            <span>{% trans "Modul Dokumentasi" %}</span>
+            <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Documentation Modules{% else %}Modul Dokumentasi{% endif %}</span>
           </div>
           <span class="tab-counter text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-extrabold group-hover:bg-slate-200 transition-colors">{{ documents.count|default:"0" }}</span>
         </button>
@@ -57,8 +89,12 @@
         <!-- 1. SEKSI GALERI -->
         <div id="seksi-galeri" class="tab-content-block space-y-6">
           <div class="max-w-2xl text-left">
-            <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface mb-1">{% trans "Dokumentasi Aksi Lapangan" %}</h2>
-            <p class="text-xs md:text-sm text-on-surface-variant">{% trans "Filter dokumentasi berdasarkan fokus bidang kerja lapangan kami." %}</p>
+            <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface mb-1">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Field Action Documentation{% else %}Dokumentasi Aksi Lapangan{% endif %}
+            </h2>
+            <p class="text-xs md:text-sm text-on-surface-variant">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Filter documentation based on our field work focus areas.{% else %}Filter dokumentasi berdasarkan fokus bidang kerja lapangan kami.{% endif %}
+            </p>
           </div>
 
           <div class="flex flex-wrap justify-start gap-2.5" id="gallery-filter-container">
@@ -76,10 +112,10 @@
                 <div class="flex items-center gap-2.5">
                   <span class="material-symbols-outlined text-primary text-base font-bold">folder_open</span>
                   <h3 class="text-sm md:text-base font-extrabold text-slate-800">{{ folder.nama }}</h3>
-                  <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200/40">{{ folder.images.all|length }} {% trans "Foto" %}</span>
+                  <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200/40">{{ folder.images.all|length }} {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Photos{% else %}Foto{% endif %}</span>
                 </div>
                 <div class="flex items-center gap-2 text-xs font-medium text-slate-400 mt-1 sm:mt-0">
-                  <span>{% trans "Tahun" %} {{ folder.tahun }}</span>
+                  <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Year{% else %}Tahun{% endif %} {{ folder.tahun }}</span>
                   {% if folder.kategori %}
                     <span>|</span>
                     <span class="text-primary font-bold text-[10px] uppercase tracking-wider">{{ folder.kategori.name }}</span>
@@ -108,8 +144,12 @@
             {% empty %}
             <div class="py-16 px-4 flex flex-col items-center justify-center text-center bg-white rounded-2xl border border-dashed border-slate-200 shadow-sm">
               <span class="material-symbols-outlined text-5xl text-slate-300 mb-3">folder_managed</span>
-              <h4 class="text-sm font-bold text-slate-700">{% trans "Belum Ada Folder Dokumentasi" %}</h4>
-              <p class="text-xs text-slate-400 max-w-xs mt-1">{% trans "Folder arsip foto lapangan BPH akan segera diperbarui berkala di sini." %}</p>
+              <h4 class="text-sm font-bold text-slate-700">
+                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No Documentation Folders Yet{% else %}Belum Ada Folder Dokumentasi{% endif %}
+              </h4>
+              <p class="text-xs text-slate-400 max-w-xs mt-1">
+                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}BPH field photo archive folders will be updated periodically here.{% else %}Folder arsip foto lapangan BPH akan segera diperbarui berkala di sini.{% endif %}
+              </p>
             </div>
             {% endfor %}
           </div>
@@ -118,13 +158,17 @@
         <!-- 2. SEKSI ARTIKEL -->
         <div id="seksi-artikel" class="tab-content-block hidden space-y-6">
           <div class="max-w-2xl text-left">
-            <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface mb-1">{% trans "Artikel &amp; Wawasan Teknis" %}</h2>
-            <p class="text-xs md:text-sm text-on-surface-variant">{% trans "Kumpulan pemikiran rilis riset, data karbon, dan panduan praktis lingkungan berkelanjutan." %}</p>
+            <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface mb-1">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Articles & Technical Insights{% else %}Artikel & Wawasan Teknis{% endif %}
+            </h2>
+            <p class="text-xs md:text-sm text-on-surface-variant">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}A collection of research releases, carbon data thoughts, and practical sustainable environment guides.{% else %}Kumpulan pemikiran rilis riset, data karbon, dan panduan praktis lingkungan berkelanjutan.{% endif %}
+            </p>
           </div>
 
           <div id="article-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for article in articles %}
-            <a href="{% url 'detail-articles' slug=article.slug %}" class="article-card group flex flex-col bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer" style="text-decoration: none;">
+            <a href="{% url 'detail-articles' slug=article.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}" class="article-card group flex flex-col bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer" style="text-decoration: none;">
               <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
                 {% if article.gambar %}
                 <img src="{{ article.gambar.url }}" alt="{{ article.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
@@ -136,34 +180,48 @@
                 <p class="text-[10px] text-text-muted font-medium mb-1">{{ article.tanggal|date:"d F Y" }} • {{ article.author }}</p>
                 <h3 class="font-headline-md text-sm font-bold text-on-surface mb-1.5 line-clamp-2 group-hover:text-primary transition-colors leading-snug">{{ article.judul }}</h3>
                 <p class="text-[11px] text-on-surface-variant line-clamp-3 mb-3 leading-relaxed">{{ article.short }}</p>
-                <span class="mt-auto text-[11px] font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">{% trans "Baca Selengkapnya" %} <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
+                <span class="mt-auto text-[11px] font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">
+                  {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Read More{% else %}Baca Selengkapnya{% endif %} <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
+                </span>
               </div>
             </a>
             {% empty %}
             <div class="col-span-full py-16 px-4 flex flex-col items-center justify-center text-center bg-white rounded-2xl border border-dashed border-slate-200 shadow-sm">
               <span class="material-symbols-outlined text-5xl text-slate-300 mb-3">article</span>
-              <h4 class="text-sm font-bold text-slate-700">{% trans "Belum Ada Artikel Berita" %}</h4>
-              <p class="text-xs text-slate-400 max-w-xs mt-1">{% trans "Rilis artikel ilmiah dan wawasan pelestarian lingkungan akan segera terbit." %}</p>
+              <h4 class="text-sm font-bold text-slate-700">
+                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No News Articles Yet{% else %}Belum Ada Artikel Berita{% endif %}
+              </h4>
+              <p class="text-xs text-slate-400 max-w-xs mt-1">
+                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Scientific articles and environmental conservation insights will be published soon.{% else %}Rilis artikel ilmiah dan wawasan pelestarian lingkungan akan segera terbit.{% endif %}
+              </p>
             </div>
             {% endfor %}
           </div>
 
           <div class="flex justify-start gap-4 pt-2">
-            <button id="article-less-btn" class="hidden font-label-caps text-xs font-bold px-6 py-2.5 bg-white border-2 border-primary text-primary rounded-lg hover:bg-[#1e5823] hover:text-white transition-all duration-300 cursor-pointer">{% trans "Muat Lebih Sedikit" %}</button>
-            <button id="article-more-btn" class="hidden font-label-caps text-xs font-bold px-6 py-2.5 bg-transparent border-2 border-primary text-primary rounded-lg hover:bg-[#1e5823] hover:text-white transition-all duration-300 cursor-pointer">{% trans "Muat Artikel Lebih Banyak" %}</button>
+            <button id="article-less-btn" class="hidden font-label-caps text-xs font-bold px-6 py-2.5 bg-white border-2 border-primary text-primary rounded-lg hover:bg-[#1e5823] hover:text-white transition-all duration-300 cursor-pointer">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Load Less{% else %}Muat Lebih Sedikit{% endif %}
+            </button>
+            <button id="article-more-btn" class="hidden font-label-caps text-xs font-bold px-6 py-2.5 bg-transparent border-2 border-primary text-primary rounded-lg hover:bg-[#1e5823] hover:text-white transition-all duration-300 cursor-pointer">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Load More Articles{% else %}Muat Artikel Lebih Banyak{% endif %}
+            </button>
           </div>
         </div>
 
         <!-- 3. SEKSI CERITA LAPANGAN -->
         <div id="seksi-cerita" class="tab-content-block hidden space-y-6">
           <div class="max-w-2xl text-left">
-            <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface mb-1">{% trans "Cerita Dari Lapang" %}</h2>
-            <p class="text-xs md:text-sm text-on-surface-variant">{% trans "Narasi humanis, catatan perjalanan rimbawan, dan tantangan konservasi riil dari jantung hutan." %}</p>
+            <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface mb-1">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Stories from the Field{% else %}Cerita Dari Lapang{% endif %}
+            </h2>
+            <p class="text-xs md:text-sm text-on-surface-variant">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Humanist narratives, forester journey logs, and real conservation challenges from the heart of the forest.{% else %}Narasi humanis, catatan perjalanan rimbawan, dan tantangan konservasi riil dari jantung hutan.{% endif %}
+            </p>
           </div>
 
           <div id="story-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for story in stories %}
-            <a href="{% url 'detail-story' slug=story.slug %}" class="story-card group flex flex-col bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer" style="text-decoration: none;">
+            <a href="{% url 'detail-story' slug=story.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}" class="story-card group flex flex-col bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer" style="text-decoration: none;">
               <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
                 {% if story.gambar %}
                 <img src="{{ story.gambar.url }}" alt="{{ story.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
@@ -175,29 +233,43 @@
                 <p class="text-[10px] text-text-muted font-medium mb-1">{{ story.tanggal|date:"d F Y" }} • {{ story.author }}</p>
                 <h3 class="font-headline-md text-sm font-bold text-on-surface mb-1.5 line-clamp-2 group-hover:text-primary transition-colors leading-snug">{{ story.judul }}</h3>
                 <p class="text-[11px] text-on-surface-variant line-clamp-3 mb-3 leading-relaxed">{{ story.short }}</p>
-                <span class="mt-auto text-[11px] font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">{% trans "Baca Selengkapnya" %} <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
+                <span class="mt-auto text-[11px] font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">
+                  {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Read More{% else %}Baca Selengkapnya{% endif %} <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
+                </span>
               </div>
             </a>
             {% empty %}
             <div class="col-span-full py-16 px-4 flex flex-col items-center justify-center text-center bg-white rounded-2xl border border-dashed border-slate-200 shadow-sm">
               <span class="material-symbols-outlined text-5xl text-slate-300 mb-3">potted_plant</span>
-              <h4 class="text-sm font-bold text-slate-700">{% trans "Belum Ada Cerita Lapangan" %}</h4>
-              <p class="text-xs text-slate-400 max-w-xs mt-1">{% trans "Catatan dan dokumentasi rimbawan dari tengah ekosistem hutan akan segera hadir." %}</p>
+              <h4 class="text-sm font-bold text-slate-700">
+                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No Field Stories Yet{% else %}Belum Ada Cerita Lapangan{% endif %}
+              </h4>
+              <p class="text-xs text-slate-400 max-w-xs mt-1">
+                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Forester notes and documentation from the middle of the forest ecosystem will arrive soon.{% else %}Catatan dan dokumentasi rimbawan dari tengah ekosistem hutan akan segera hadir.{% endif %}
+              </p>
             </div>
             {% endfor %}
           </div>
 
           <div class="flex justify-start gap-4 pt-2">
-            <button id="story-less-btn" class="hidden font-label-caps text-xs font-bold px-6 py-2.5 bg-white border-2 border-primary text-primary rounded-lg hover:bg-[#1e5823] hover:text-white transition-all duration-300 cursor-pointer">{% trans "Muat Lebih Sedikit" %}</button>
-            <button id="story-more-btn" class="hidden font-label-caps text-xs font-bold px-6 py-2.5 bg-transparent border-2 border-primary text-primary rounded-lg hover:bg-[#1e5823] hover:text-white transition-all duration-300 cursor-pointer">{% trans "Muat Cerita Lebih Banyak" %}</button>
+            <button id="story-less-btn" class="hidden font-label-caps text-xs font-bold px-6 py-2.5 bg-white border-2 border-primary text-primary rounded-lg hover:bg-[#1e5823] hover:text-white transition-all duration-300 cursor-pointer">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Load Less{% else %}Muat Lebih Sedikit{% endif %}
+            </button>
+            <button id="story-more-btn" class="hidden font-label-caps text-xs font-bold px-6 py-2.5 bg-transparent border-2 border-primary text-primary rounded-lg hover:bg-[#1e5823] hover:text-white transition-all duration-300 cursor-pointer">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Load More Stories{% else %}Muat Cerita Lebih Banyak{% endif %}
+            </button>
           </div>
         </div>
 
         <!-- 4. SEKSI MODUL DOKUMENTASI -->
         <div id="seksi-modul" class="tab-content-block hidden space-y-6">
           <div class="mb-6 text-left">
-            <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface leading-tight mb-1">{% trans "Modul Dokumentasi Strategis" %}</h2>
-            <p class="text-xs md:text-sm text-on-surface-variant">{% trans "Akses rangkuman teknis, panduan formal, dan data publikasi berkala dari tim ahli BPH." %}</p>
+            <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface leading-tight mb-1">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Strategic Documentation Modules{% else %}Modul Dokumentasi Strategis{% endif %}
+            </h2>
+            <p class="text-xs md:text-sm text-on-surface-variant">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Access technical summaries, formal guidelines, and periodic publication data from the BPH expert team.{% else %}Akses rangkuman teknis, panduan formal, dan data publikasi berkala dari tim ahli BPH.{% endif %}
+            </p>
           </div>
 
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
@@ -211,14 +283,20 @@
               </div>
               <div class="mt-3 text-left">
                 <h3 class="font-headline-md text-xs font-bold text-on-surface group-hover:text-primary transition-colors line-clamp-2 leading-snug">{{ doc.judul }}</h3>
-                <p class="text-[10px] text-on-surface-variant mt-0.5">{% trans "Diunggah" %} {{ doc.tanggal_rilis|date:"d F Y" }}</p>
+                <p class="text-[10px] text-on-surface-variant mt-0.5">
+                  {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Uploaded{% else %}Diunggah{% endif %} {{ doc.tanggal_rilis|date:"d F Y" }}
+                </p>
               </div>
             </a>
             {% empty %}
             <div class="col-span-full py-16 px-4 flex flex-col items-center justify-center text-center bg-white rounded-2xl border border-dashed border-slate-200 shadow-sm">
               <span class="material-symbols-outlined text-5xl text-slate-300 mb-3">folder_open</span>
-              <h4 class="text-sm font-bold text-slate-700">{% trans "Belum Ada Berkas Modul" %}</h4>
-              <p class="text-xs text-slate-400 max-w-xs mt-1">{% trans "Modul panduan dan publikasi teknis PDF belum tersedia untuk diunduh." %}</p>
+              <h4 class="text-sm font-bold text-slate-700">
+                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No Module Files Yet{% else %}Belum Ada Berkas Modul{% endif %}
+              </h4>
+              <p class="text-xs text-slate-400 max-w-xs mt-1">
+                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Guide modules and technical PDF publications are not yet available for download.{% else %}Modul panduan dan publikasi teknis PDF belum tersedia untuk diunduh.{% endif %}
+              </p>
             </div>
             {% endfor %}
           </div>
@@ -271,7 +349,6 @@
       }
     }
 
-    // --- AKSI SWAP TAB SIDEBAR VIA KLIK ---
     tabButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         const targetTabId = btn.getAttribute('data-tab');
@@ -279,7 +356,6 @@
       });
     });
 
-    // --- DETEKSI HASH URL (Contoh: /gallery/#seksi-artikel) ---
     const urlHash = window.location.hash.replace('#', '');
     if (urlHash) {
       const targetBlock = document.getElementById(urlHash);
@@ -290,7 +366,6 @@
       }
     }
 
-    // --- FILTER FOLDER GALERI ---
     const galleryButtons = document.querySelectorAll('.gallery-filter-btn');
     const folderGroups = document.querySelectorAll('.gallery-folder-group');
 
@@ -318,7 +393,6 @@
       });
     });
     
-    // --- PAGINASI ARTIKEL ---
     const articleCards = document.querySelectorAll('.article-card');
     const articleMoreBtn = document.getElementById('article-more-btn');
     const articleLessBtn = document.getElementById('article-less-btn');
@@ -349,7 +423,6 @@
       });
     }
 
-    // --- PAGINASI CERITA ---
     const storyCards = document.querySelectorAll('.story-card');
     const storyMoreBtn = document.getElementById('story-more-btn');
     const storyLessBtn = document.getElementById('story-less-btn');

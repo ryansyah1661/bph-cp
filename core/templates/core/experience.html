@@ -1,7 +1,15 @@
 {% extends 'core/base.html' %}
 {% load static i18n %}
 
-{% block title %}{% trans "Pengalaman Kami - Bhumi Pasa Hijau" %}{% endblock %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block title %}
+  {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+    Our Experience - Bhumi Pasa Hijau
+  {% else %}
+    Pengalaman Kami - Bhumi Pasa Hijau
+  {% endif %}
+{% endblock %}
 
 {% block content %}
 <style>
@@ -95,11 +103,34 @@
 
 <main class="flex-grow pt-[80px] bg-background">
 
-  {% trans "Pengalaman BPH" as hero_title %}
-  {% trans "Our Track Record" as hero_subtitle %}
-  {% trans "Kami memberikan layanan terbaik untuk memberikan pengalaman yang tak terlupakan." as hero_desc %}
-  {% include 'core/partials/hero-banner.html' with title=hero_title subtitle=hero_subtitle desc=hero_desc bg_image="images/about-hero.jpg" %}
+  <!-- HERO SECTION (DISAMAKAN DENGAN ABOUT & SERVICES: POSISI TENGAH & EFEK AWAN) -->
+  <section class="relative h-[70vh] min-h-[500px] w-full flex items-center justify-center text-center overflow-hidden bg-on-background">
+    <div class="absolute inset-0 z-0">
+      <div class="absolute inset-0 bg-gradient-to-t from-surface via-on-background/50 to-on-background/70 z-10"></div>
+      <img alt="Experience Hero" class="w-full h-full object-cover" src="{% static 'images/about-hero.jpg' %}" />
+    </div>
+    <div class="relative z-20 w-full max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop text-surface-white">
+      <p class="font-label-caps text-label-caps uppercase text-tertiary mb-3 tracking-wider">
+        OUR TRACK RECORD
+      </p>
+      <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-4 leading-tight">
+        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+          BPH Experience
+        {% else %}
+          Pengalaman BPH
+        {% endif %}
+      </h1>
+      <p class="font-body-lg text-body-lg max-w-2xl mx-auto text-surface-white/90 leading-relaxed">
+        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+          We provide the best services to deliver an unforgettable experience.
+        {% else %}
+          Kami memberikan layanan terbaik untuk memberikan pengalaman yang tak terlupakan.
+        {% endif %}
+      </p>
+    </div>
+  </section>
 
+  <!-- STATISTIK SECTION -->
   <section class="w-full bg-white py-14 border-b border-gray-100">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
@@ -107,29 +138,29 @@
           <div class="h-16 w-14 rounded-full bg-[#308935] flex items-center justify-center text-white">
             <span class="material-symbols-outlined text-2xl font-bold">work_history</span>
           </div>
-          <h3 class="text-2xl md:text-3xl font-black text-[#308935]">{{ total_tahun_bekerja }} {% trans "Tahun" %}</h3>
-          <p class="text-xs font-semibold text-gray-500 tracking-wide">{% trans "Pengalaman" %}</p>
+          <h3 class="text-2xl md:text-3xl font-black text-[#308935]">{{ total_tahun_bekerja }} {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Years{% else %}Tahun{% endif %}</h3>
+          <p class="text-xs font-semibold text-gray-500 tracking-wide">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Experience{% else %}Pengalaman{% endif %}</p>
         </div>
         <div class="flex flex-col items-center space-y-3">
           <div class="h-16 w-14 rounded-full bg-[#308935] flex items-center justify-center text-white">
             <span class="material-symbols-outlined text-2xl font-bold">account_tree</span>
           </div>
-          <h3 class="text-2xl md:text-3xl font-black text-[#308935]">{{ total_proyek }} {% trans "Proyek" %}</h3>
-          <p class="text-xs font-semibold text-gray-500 tracking-wide">{% trans "Telah Dikerjakan" %}</p>
+          <h3 class="text-2xl md:text-3xl font-black text-[#308935]">{{ total_proyek }} {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Projects{% else %}Proyek{% endif %}</h3>
+          <p class="text-xs font-semibold text-gray-500 tracking-wide">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Completed{% else %}Telah Dikerjakan{% endif %}</p>
         </div>
         <div class="flex flex-col items-center space-y-3">
           <div class="h-16 w-14 rounded-full bg-[#308935] flex items-center justify-center text-white">
             <span class="material-symbols-outlined text-2xl font-bold">near_me</span>
           </div>
-          <h3 class="text-2xl md:text-3xl font-black text-[#308935]">{{ total_provinsi }} {% trans "Provinsi" %}</h3>
-          <p class="text-xs font-semibold text-gray-500 tracking-wide">{% trans "Lokasi Proyek" %}</p>
+          <h3 class="text-2xl md:text-3xl font-black text-[#308935]">{{ total_provinsi }} {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Provinces{% else %}Provinsi{% endif %}</h3>
+          <p class="text-xs font-semibold text-gray-500 tracking-wide">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Project Locations{% else %}Lokasi Proyek{% endif %}</p>
         </div>
         <div class="flex flex-col items-center space-y-3">
           <div class="h-16 w-14 rounded-full bg-[#308935] flex items-center justify-center text-white">
             <span class="material-symbols-outlined text-2xl font-bold">groups</span>
           </div>
-          <h3 class="text-2xl md:text-3xl font-black text-[#308935]">{{ total_klien }} {% trans "Klien" %}</h3>
-          <p class="text-xs font-semibold text-gray-500 tracking-wide">{% trans "Dari Sektor Publik dan Swasta" %}</p>
+          <h3 class="text-2xl md:text-3xl font-black text-[#308935]">{{ total_klien }} {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Clients{% else %}Klien{% endif %}</h3>
+          <p class="text-xs font-semibold text-gray-500 tracking-wide">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Public & Private Sectors{% else %}Dari Sektor Publik dan Swasta{% endif %}</p>
         </div>
       </div>
     </div>
@@ -139,8 +170,12 @@
   <section class="w-full bg-[#f8faf9] py-16 border-b border-gray-100">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center">
       <div class="mb-12">
-        <h2 class="text-2xl md:text-3xl font-black text-emerald-950 uppercase tracking-tight">{% trans "LOKASI" %} <span class="text-[#308935] font-light">{% trans "PROYEK" %}</span></h2>
-        <p class="text-sm text-gray-500 mt-1">{% trans "Click pin di bawah ini untuk melihat daftar proyek terkait" %}</p>
+        <h2 class="text-2xl md:text-3xl font-black text-emerald-950 uppercase tracking-tight">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}LOCATION <span class="text-[#308935] font-light">PROJECTS</span>{% else %}LOKASI <span class="text-[#308935] font-light">PROYEK</span>{% endif %}
+        </h2>
+        <p class="text-sm text-gray-500 mt-1">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Click the pin below to view related project lists{% else %}Click pin di bawah ini untuk melihat daftar proyek terkait{% endif %}
+        </p>
       </div>
 
       <div class="indonesia-map-wrapper">
@@ -181,7 +216,7 @@
         <div>
           <h2 class="text-xl font-bold text-neutral-900 tracking-tight flex items-center gap-2">
             <span class="material-symbols-outlined text-[#308935]">analytics</span>
-            <span>{% trans "Daftar Proyek Terkait" %}</span>
+            <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Related Project List{% else %}Daftar Proyek Terkait{% endif %}</span>
           </h2>
           <p class="text-sm font-semibold text-emerald-800 mt-1" id="project-filter-status"></p>
         </div>
@@ -195,10 +230,10 @@
               <thead>
                 <tr class="bg-slate-50 border-b border-gray-100 text-xs uppercase font-extrabold text-slate-500 tracking-wider">
                   <th class="py-4 px-6 w-16 text-center">No</th>
-                  <th class="py-4 px-6">{% trans "Judul Proyek" %}</th>
-                  <th class="py-4 px-6">{% trans "Mitra / Klien" %}</th>
-                  <th class="py-4 px-6">{% trans "Lokasi" %}</th>
-                  <th class="py-4 px-6 text-center w-28">{% trans "Tahun" %}</th>
+                  <th class="py-4 px-6">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Project Title{% else %}Judul Proyek{% endif %}</th>
+                  <th class="py-4 px-6">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Partner / Client{% else %}Mitra / Klien{% endif %}</th>
+                  <th class="py-4 px-6">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Location{% else %}Lokasi{% endif %}</th>
+                  <th class="py-4 px-6 text-center w-28">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Year{% else %}Tahun{% endif %}</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-100 text-sm font-medium text-slate-700">
@@ -226,7 +261,9 @@
                 </tr>
                 {% empty %}
                 <tr>
-                  <td colspan="5" class="text-center py-8 text-slate-400 italic">{% trans "Belum ada data proyek di provinsi ini." %}</td>
+                  <td colspan="5" class="text-center py-8 text-slate-400 italic">
+                    {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No project data available in this province.{% else %}Belum ada data proyek di provinsi ini.{% endif %}
+                  </td>
                 </tr>
                 {% endfor %}
               </tbody>
@@ -245,13 +282,23 @@
       <!-- HEADER MITRA KAMI -->
       <div class="text-center max-w-xl mx-auto px-margin-mobile md:px-margin-desktop">
         <span class="font-label-caps text-[11px] font-bold tracking-widest text-[#308935] uppercase bg-emerald-50 px-3 py-1 rounded-full mb-3 inline-block border border-emerald-100">Our Partners</span>
-        <h2 class="text-2xl md:text-3xl font-black text-emerald-950 uppercase tracking-tight">{% trans "MITRA" %} <span class="text-[#308935] font-light">{% trans "KAMI" %}</span></h2>
-        <p class="text-sm text-gray-500 mt-1">{% trans "PT Bhumi Pasa Hijau bergerak bersama berbagai instansi dalam melahirkan solusi pelestarian ekosistem yang terukur." %}</p>
+        <h2 class="text-2xl md:text-3xl font-black text-emerald-950 uppercase tracking-tight">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}OUR <span class="text-[#308935] font-light">PARTNERS</span>{% else %}MITRA <span class="text-[#308935] font-light">KAMI</span>{% endif %}
+        </h2>
+        <p class="text-sm text-gray-500 mt-1">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+            PT Bhumi Pasa Hijau collaborates with various institutions in creating measurable ecosystem preservation solutions.
+          {% else %}
+            PT Bhumi Pasa Hijau bergerak bersama berbagai instansi dalam melahirkan solusi pelestarian ekosistem yang terukur.
+          {% endif %}
+        </p>
       </div>
 
       <!-- 1. SEKTOR SWASTA -->
       <div class="space-y-4">
-        <h3 class="text-xs font-bold text-center text-gray-500 uppercase tracking-widest px-margin-mobile">── <span class="text-emerald-950 font-black">{% trans "SEKTOR" %}</span> <span class="text-[#308935] font-semibold">{% trans "SWASTA" %}</span> ──</h3>
+        <h3 class="text-xs font-bold text-center text-gray-500 uppercase tracking-widest px-margin-mobile">
+          ── <span class="text-emerald-950 font-black">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}PRIVATE{% else %}SEKTOR{% endif %}</span> <span class="text-[#308935] font-semibold">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}SECTOR{% else %}SWASTA{% endif %}</span> ──
+        </h3>
         <div class="w-full overflow-x-auto hide-scrollbar interactive-scroll py-2 px-4 select-none" id="scroll-swasta">
           <div class="flex gap-6 w-max">
             {% for client in clients_swasta %}
@@ -262,12 +309,16 @@
                 <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-[#308935] transition-colors duration-300 pointer-events-none">corporate_fare</span>
               {% endif %}
               <div class="flex flex-col text-left overflow-hidden pointer-events-none">
-                <span class="text-[9px] font-bold tracking-widest text-gray-400 group-hover:text-[#308935]/70 transition-colors uppercase leading-none">{% trans "Sektor Swasta" %}</span>
+                <span class="text-[9px] font-bold tracking-widest text-gray-400 group-hover:text-[#308935]/70 transition-colors uppercase leading-none">
+                  {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Private Sector{% else %}Sektor Swasta{% endif %}
+                </span>
                 <span class="text-xs font-black text-emerald-950 group-hover:text-[#308935] transition-colors uppercase tracking-wide mt-1 truncate">{{ client.nama }}</span>
               </div>
             </div>
             {% empty %}
-            <p class="text-xs text-neutral-400 w-full text-center py-4">{% trans "Belum ada data mitra sektor swasta." %}</p>
+            <p class="text-xs text-neutral-400 w-full text-center py-4">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No private sector partner data available.{% else %}Belum ada data mitra sektor swasta.{% endif %}
+            </p>
             {% endfor %}
           </div>
         </div>
@@ -275,7 +326,9 @@
 
       <!-- 2. SEKTOR PUBLIK -->
       <div class="space-y-4">
-        <h3 class="text-xs font-bold text-center text-gray-500 uppercase tracking-widest px-margin-mobile">── <span class="text-emerald-950 font-black">{% trans "SEKTOR" %}</span> <span class="text-[#308935] font-semibold">{% trans "PUBLIK" %}</span> ──</h3>
+        <h3 class="text-xs font-bold text-center text-gray-500 uppercase tracking-widest px-margin-mobile">
+          ── <span class="text-emerald-950 font-black">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}PUBLIC{% else %}SEKTOR{% endif %}</span> <span class="text-[#308935] font-semibold">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}SECTOR{% else %}PUBLIK{% endif %}</span> ──
+        </h3>
         <div class="w-full overflow-x-auto hide-scrollbar interactive-scroll py-2 px-4 select-none" id="scroll-publik">
           <div class="flex gap-6 w-max">
             {% for client in clients_publik %}
@@ -286,12 +339,16 @@
                 <span class="material-symbols-outlined text-2xl text-text-muted/60 group-hover:text-[#308935] transition-colors duration-300 pointer-events-none">account_balance</span>
               {% endif %}
               <div class="flex flex-col text-left overflow-hidden pointer-events-none">
-                <span class="text-[9px] font-bold tracking-widest text-gray-400 group-hover:text-[#308935]/70 transition-colors uppercase leading-none">{% trans "Sektor Publik" %}</span>
+                <span class="text-[9px] font-bold tracking-widest text-gray-400 group-hover:text-[#308935]/70 transition-colors uppercase leading-none">
+                  {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Public Sector{% else %}Sektor Publik{% endif %}
+                </span>
                 <span class="text-xs font-black text-emerald-950 group-hover:text-[#308935] transition-colors uppercase tracking-wide mt-1 truncate">{{ client.nama }}</span>
               </div>
             </div>
             {% empty %}
-            <p class="text-xs text-neutral-400 w-full text-center py-4">{% trans "Belum ada data mitra sektor publik." %}</p>
+            <p class="text-xs text-neutral-400 w-full text-center py-4">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No public sector partner data available.{% else %}Belum ada data mitra sektor publik.{% endif %}
+            </p>
             {% endfor %}
           </div>
         </div>
@@ -516,7 +573,8 @@
                 targetList.classList.remove('hidden'); 
                 
                 const provName = pin.getAttribute('data-name');
-                statusText.innerText = `Menampilkan Proyek di Provinsi ${provName}:`;
+                const isEn = window.location.search.includes('lang=en');
+                statusText.innerText = isEn ? `Showing Projects in ${provName} Province:` : `Menampilkan Proyek di Provinsi ${provName}:`;
             }
         }
     }
@@ -534,7 +592,6 @@
         });
     });
 
-    // Klik di luar area pin peta atau popover akan menutup semuanya kembali ke semula
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.map-province-pin') && !e.target.closest('.map-project-popover') && !e.target.closest('.province-path')) {
             popovers.forEach(pop => pop.style.display = 'none');

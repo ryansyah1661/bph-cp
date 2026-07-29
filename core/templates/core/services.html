@@ -1,16 +1,47 @@
 {% extends 'core/base.html' %}
 {% load static i18n %}
 
-{% block title %}{% trans "Layanan Kami - Bhumi Pasa Hijau" %}{% endblock %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block title %}
+  {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+    Our Services - Bhumi Pasa Hijau
+  {% else %}
+    Layanan Kami - Bhumi Pasa Hijau
+  {% endif %}
+{% endblock %}
 
 {% block content %}
 <main class="flex-grow pt-[80px]">
 
-  {% trans "Layanan Kami" as hero_title %}
-  {% trans "Expertise &amp; Solutions" as hero_subtitle %}
-  {% trans "Solusi strategis untuk sumber daya alam Indonesia. Kami menyediakan manajemen berbasis data, pemahaman ekologis yang mendalam, dan alokasi sumber daya yang mumpuni." as hero_desc %}
-  {% include 'core/partials/hero-banner.html' with title=hero_title subtitle=hero_subtitle desc=hero_desc bg_image="images/forest-services.jpg" %}
+  <!-- HERO SECTION (DISAMAKAN DENGAN ABOUT: POSISI TENGAH & EFEK AWAN) -->
+  <section class="relative h-[70vh] min-h-[500px] w-full flex items-center justify-center text-center overflow-hidden bg-on-background">
+    <div class="absolute inset-0 z-0">
+      <div class="absolute inset-0 bg-gradient-to-t from-surface via-on-background/50 to-on-background/70 z-10"></div>
+      <img alt="Services Hero" class="w-full h-full object-cover" src="{% static 'images/forest-services.jpg' %}" />
+    </div>
+    <div class="relative z-20 w-full max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop text-surface-white">
+      <p class="font-label-caps text-label-caps uppercase text-tertiary mb-3 tracking-wider">
+        Expertise & Solutions
+      </p>
+      <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-4 leading-tight">
+        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+          Our Services
+        {% else %}
+          Layanan Kami
+        {% endif %}
+      </h1>
+      <p class="font-body-lg text-body-lg max-w-2xl mx-auto text-surface-white/90 leading-relaxed">
+        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+          Strategic solutions for Indonesia's natural resources. We provide data-driven management, deep ecological understanding, and robust resource allocation.
+        {% else %}
+          Solusi strategis untuk sumber daya alam Indonesia. Kami menyediakan manajemen berbasis data, pemahaman ekologis yang mendalam, dan alokasi sumber daya yang mumpuni.
+        {% endif %}
+      </p>
+    </div>
+  </section>
   
+  <!-- SECTION NRM -->
   <section class="py-section-gap bg-surface w-full">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
       
@@ -43,19 +74,22 @@
             </p>
             <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
               <span class="relative inline-block pb-1 after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-                {% trans "Lihat Selengkapnya" %}
+                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}View More{% else %}Lihat Selengkapnya{% endif %}
               </span>
               <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
             </span>
           </div>
         </a>
         {% empty %}
-        <p class="text-sm text-on-surface-variant col-span-full">{% trans "Belum ada layanan NRM yang dipublikasikan." %}</p>
+        <p class="text-sm text-on-surface-variant col-span-full">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No NRM services published yet.{% else %}Belum ada layanan NRM yang dipublikasikan.{% endif %}
+        </p>
         {% endfor %}
       </div>
     </div>
   </section>
 
+  <!-- SECTION NRU -->
   <section class="py-section-gap bg-surface-container-lowest border-y border-border-subtle w-full">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
       
@@ -88,19 +122,22 @@
             </p>
             <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
               <span class="relative inline-block pb-1 after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-                {% trans "Lihat Selengkapnya" %}
+                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}View More{% else %}Lihat Selengkapnya{% endif %}
               </span>
               <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
             </span>
           </div>
         </a>
         {% empty %}
-        <p class="text-sm text-on-surface-variant col-span-full">{% trans "Belum ada layanan NRU yang dipublikasikan." %}</p>
+        <p class="text-sm text-on-surface-variant col-span-full">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No NRU services published yet.{% else %}Belum ada layanan NRU yang dipublikasikan.{% endif %}
+        </p>
         {% endfor %}
       </div>
     </div>
   </section>
 
+  <!-- SECTION TRAINING -->
   <section class="py-section-gap bg-background w-full">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
       
@@ -112,13 +149,19 @@
           <div class="absolute inset-0 bg-gradient-to-r from-inverse-surface/90 via-inverse-surface/60 to-transparent"></div>
         </div>
         <div class="relative z-10 p-margin-mobile md:p-margin-desktop max-w-2xl text-surface-white">
-          <h2 class="font-headline-xl text-headline-xl mb-stack-md text-surface-white">{% trans "Pelatihan &amp; Kapasitas" %}</h2>
+          <h2 class="font-headline-xl text-headline-xl mb-stack-md text-surface-white">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Training & Capacity{% else %}Pelatihan & Kapasitas{% endif %}
+          </h2>
           <p class="font-body-lg text-body-lg text-surface-variant mb-stack-lg opacity-90">
-            {% trans 'Empowering local communities, institutional staff, and corporate partners with the knowledge and tools necessary for effective environmental stewardship. Our "Social Training" programs bridge the gap between technical data and actionable field practice.' %}
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+              Empowering local communities, institutional staff, and corporate partners with the knowledge and tools necessary for effective environmental stewardship. Our "Social Training" programs bridge the gap between technical data and actionable field practice.
+            {% else %}
+              Memberdayakan masyarakat lokal, staf institusi, dan mitra korporat dengan pengetahuan serta alat yang diperlukan untuk pengelolaan lingkungan yang efektif. Program "Social Training" kami menjembatani kesenjangan antara data teknis dan praktik lapangan yang dapat dieksekusi.
+            {% endif %}
           </p>
           <a class="inline-flex items-center justify-center px-6 py-3 bg-primary text-on-primary font-label-caps text-label-caps rounded hover:bg-forest-deep transition-all duration-300 hover:-translate-y-0.5" 
-             href="{% url 'experience' %}?filter=pelatihan">
-            {% trans "Selengkapnya" %}
+               href="{% url 'experience' %}?filter=pelatihan">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}More Details{% else %}Selengkapnya{% endif %}
           </a>
         </div>
       </div>
