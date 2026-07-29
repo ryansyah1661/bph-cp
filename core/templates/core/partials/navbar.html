@@ -1,4 +1,4 @@
-{% load static %}
+{% load static i18n %}
 <nav
   class="fixed top-0 left-0 w-full z-50 py-2.5 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl border-b border-border-subtle dark:border-outline-variant transition-all duration-300"
   id="main-nav">
@@ -23,7 +23,7 @@
          {% else %}
            text-on-surface-variant dark:text-surface-variant hover:bg-primary/5 hover:text-primary dark:hover:bg-white/5 dark:hover:text-inverse-primary
          {% endif %}">
-         Beranda
+         {% trans "Beranda" %}
       </a>
       
       <a href="{% url 'about' %}"
@@ -33,7 +33,7 @@
          {% else %}
            text-on-surface-variant dark:text-surface-variant hover:bg-primary/5 hover:text-primary dark:hover:bg-white/5 dark:hover:text-inverse-primary
          {% endif %}">
-         Tentang BPH
+         {% trans "Tentang BPH" %}
       </a>
       
       <a href="{% url 'services' %}"
@@ -43,7 +43,7 @@
          {% else %}
            text-on-surface-variant dark:text-surface-variant hover:bg-primary/5 hover:text-primary dark:hover:bg-white/5 dark:hover:text-inverse-primary
          {% endif %}">
-         Layanan
+         {% trans "Layanan" %}
       </a>
       
       <a href="{% url 'experience' %}"
@@ -53,7 +53,7 @@
          {% else %}
            text-on-surface-variant dark:text-surface-variant hover:bg-primary/5 hover:text-primary dark:hover:bg-white/5 dark:hover:text-inverse-primary
          {% endif %}">
-         Pengalaman
+         {% trans "Pengalaman" %}
       </a>
       
       <a href="{% url 'gallery' %}"
@@ -63,7 +63,7 @@
          {% else %}
            text-on-surface-variant dark:text-surface-variant hover:bg-primary/5 hover:text-primary dark:hover:bg-white/5 dark:hover:text-inverse-primary
          {% endif %}">
-         Galeri
+         {% trans "Galeri" %}
       </a>
 
     </div>
@@ -74,21 +74,21 @@
         <span class="material-symbols-outlined text-[16px] shrink-0 opacity-70">language</span>
         
         <a href="?lang=id" 
-           class="transition-colors duration-200 {% if request.GET.lang == 'en' %}hover:text-primary dark:hover:text-inverse-primary font-medium{% else %}text-primary dark:text-inverse-primary font-bold{% endif %}">
+           class="transition-colors duration-200 {% if request.LANGUAGE_CODE == 'id' or request.GET.lang == 'id' or not request.GET.lang and request.LANGUAGE_CODE != 'en' %}text-primary dark:text-inverse-primary font-bold{% else %}hover:text-primary dark:hover:text-inverse-primary font-medium{% endif %}">
           ID
         </a>
         
         <span class="opacity-30 text-[10px]">|</span>
         
         <a href="?lang=en" 
-           class="transition-colors duration-200 {% if request.GET.lang == 'en' %}text-primary dark:text-inverse-primary font-bold{% else %}hover:text-primary dark:hover:text-inverse-primary font-medium{% endif %}">
+           class="transition-colors duration-200 {% if request.LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}text-primary dark:text-inverse-primary font-bold{% else %}hover:text-primary dark:hover:text-inverse-primary font-medium{% endif %}">
           EN
         </a>
       </div>
 
       <a href="{% url 'contact' %}"
          class="inline-flex items-center justify-center bg-primary text-surface-white font-bold text-[11px] tracking-widest uppercase px-7 py-3 rounded-full shadow-[0_6px_20px_rgba(0,107,41,0.3)] hover:bg-forest-deep hover:shadow-[0_4px_10px_rgba(0,107,41,0.2)] hover:translate-y-[1px] transition-all duration-300">
-        Kontak
+        {% trans "Kontak" %}
       </a>
 
       <button aria-label="Menu" class="md:hidden text-primary">

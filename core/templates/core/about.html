@@ -1,24 +1,27 @@
 {% extends 'core/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Tentang BPH - Bhumi Pasa Hijau{% endblock %}
+{% block title %}{% trans "Tentang BPH - Bhumi Pasa Hijau" %}{% endblock %}
 
 {% block content %}
 <main class="flex-grow pt-[80px]">
 
-  {% include 'core/partials/hero-banner.html' with title="Tentang Kami" subtitle="Corporate Profile" desc="Bhumi Pasa Hijau (BPH) didirikan oleh para profesional muda di Bogor sebagai firma konsultan strategis yang berfokus pada pemahaman dan tata kelola sumber daya alam, lingkungan, serta sosial berkelanjutan." bg_image="images/about-hero.jpg" %}
+  {% trans "Tentang Kami" as hero_title %}
+  {% trans "Corporate Profile" as hero_subtitle %}
+  {% trans "Bhumi Pasa Hijau (BPH) didirikan oleh para profesional muda di Bogor sebagai firma konsultan strategis yang berfokus pada pemahaman dan tata kelola sumber daya alam, lingkungan, serta sosial berkelanjutan." as hero_desc %}
+  {% include 'core/partials/hero-banner.html' with title=hero_title subtitle=hero_subtitle desc=hero_desc bg_image="images/about-hero.jpg" %}
 
   <section class="max-w-container-max bg-surface mx-auto px-margin-mobile md:px-margin-desktop py-section-gap">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center">
       <div class="md:col-span-5 md:col-start-1">
         <h2 class="font-headline-xl text-headline-xl text-on-surface mb-stack-lg">
-          Membangun Masa Depan Keberlanjutan
+          {% trans "Membangun Masa Depan Keberlanjutan" %}
         </h2>
         <p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-md leading-relaxed">
-          Bhumi Pasa Hijau (BPH) didirikan dengan kesadaran mendalam akan pentingnya keseimbangan antara kemajuan industri dan pelestarian lingkungan. Sebagai firma manajemen lingkungan strategis, kami berdedikasi untuk menyediakan solusi berbasis data yang akurat dan dapat dipertanggungjawabkan.
+          {% trans "Bhumi Pasa Hijau (BPH) didirikan dengan kesadaran mendalam akan pentingnya keseimbangan antara kemajuan industri dan pelestarian lingkungan. Sebagai firma manajemen lingkungan strategis, kami berdedikasi untuk menyediakan solusi berbasis data yang akurat dan dapat dipertanggungjawabkan." %}
         </p>
         <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-          Sejak awal mula, komitmen kami adalah menjadi penghubung antara kebijakan lingkungan global dan implementasi praktis di lapangan, memastikan bahwa setiap langkah pembangunan membawa dampak positif yang terukur bagi ekosistem.
+          {% trans "Sejak awal mula, komitmen kami adalah menjadi penghubung antara kebijakan lingkungan global dan implementasi praktis di lapangan, memastikan bahwa setiap langkah pembangunan membawa dampak positif yang terukur bagi ekosistem." %}
         </p>
       </div>
       <div class="md:col-span-6 md:col-start-7 mt-12 md:mt-0 relative group">
@@ -39,9 +42,9 @@
           <div class="mb-stack-md text-primary">
             <span class="material-symbols-outlined text-[48px]" style="font-variation-settings: 'FILL' 1;">visibility</span>
           </div>
-          <h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">Visi Kami</h3>
+          <h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">{% trans "Visi Kami" %}</h3>
           <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed flex-grow">
-            Menjadi mitra strategis terpercaya yang memimpin dalam inovasi manajemen lingkungan, mengintegrasikan sains, kebijakan, and praktik terbaik untuk mewujudkan pelestarian alam berskala global.
+            {% trans "Menjadi mitra strategis terpercaya yang memimpin dalam inovasi manajemen lingkungan, mengintegrasikan sains, kebijakan, and praktik terbaik untuk mewujudkan pelestarian alam berskala global." %}
           </p>
         </div>
         
@@ -49,19 +52,19 @@
           <div class="mb-stack-md text-primary">
             <span class="material-symbols-outlined text-[48px]" style="font-variation-settings: 'FILL' 1;">track_changes</span>
           </div>
-          <h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">Misi Kami</h3>
+          <h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">{% trans "Misi Kami" %}</h3>
           <ul class="font-body-md text-body-md text-on-surface-variant space-y-stack-sm flex-grow">
             <li class="flex items-start">
               <span class="material-symbols-outlined text-primary mr-3 mt-1 text-[20px]">check_circle</span>
-              <span>Mengurangi dampak lingkungan industri melalui audit dan strategi mitigasi yang presisi.</span>
+              <span>{% trans "Mengurangi dampak lingkungan industri melalui audit dan strategi mitigasi yang presisi." %}</span>
             </li>
             <li class="flex items-start">
               <span class="material-symbols-outlined text-primary mr-3 mt-1 text-[20px]">check_circle</span>
-              <span>Menyediakan solusi berbasis pengetahuan and data empiris untuk pengambilan keputusan.</span>
+              <span>{% trans "Menyediakan solusi berbasis pengetahuan and data empiris untuk pengambilan keputusan." %}</span>
             </li>
             <li class="flex items-start">
               <span class="material-symbols-outlined text-primary mr-3 mt-1 text-[20px]">check_circle</span>
-              <span>Mendorong tata kelola perusahaan yang baik (Good Corporate Governance) berwawasan lingkungan.</span>
+              <span>{% trans "Mendorong tata kelola perusahaan yang baik (Good Corporate Governance) berwawasan lingkungan." %}</span>
             </li>
           </ul>
         </div>
@@ -73,9 +76,9 @@
   <section class="max-w-container-max bg-surface mx-auto px-margin-mobile md:px-margin-desktop py-section-gap">
     
     <div class="text-center max-w-2xl mx-auto mb-10">
-      <h2 class="font-headline-xl text-headline-xl text-on-surface mb-stack-md">Tim Ahli Kami</h2>
+      <h2 class="font-headline-xl text-headline-xl text-on-surface mb-stack-md">{% trans "Tim Ahli Kami" %}</h2>
       <p class="font-body-lg text-body-lg text-on-surface-variant">
-        Dedikasi profesional kami digerakkan oleh para ahli di bidang ekologi, manajemen strategis, dan kebijakan lingkungan.
+        {% trans "Dedikasi profesional kami digerakkan oleh para ahli di bidang ekologi, manajemen strategis, dan kebijakan lingkungan." %}
       </p>
     </div>
 
@@ -120,7 +123,7 @@
           {% endif %}
         </div>
         {% empty %}
-        <div class="col-span-full text-center py-12 text-slate-400">Belum ada data Senior Advisors.</div>
+        <div class="col-span-full text-center py-12 text-slate-400">{% trans "Belum ada data Senior Advisors." %}</div>
         {% endfor %}
       </div>
 
@@ -146,7 +149,7 @@
           {% endif %}
         </div>
         {% empty %}
-        <div class="col-span-full text-center py-12 text-slate-400">Belum ada data Executives.</div>
+        <div class="col-span-full text-center py-12 text-slate-400">{% trans "Belum ada data Executives." %}</div>
         {% endfor %}
       </div>
 
@@ -172,7 +175,7 @@
           {% endif %}
         </div>
         {% empty %}
-        <div class="col-span-full text-center py-12 text-slate-400">Belum ada data Staff Consultants.</div>
+        <div class="col-span-full text-center py-12 text-slate-400">{% trans "Belum ada data Staff Consultants." %}</div>
         {% endfor %}
       </div>
 
@@ -198,7 +201,7 @@
           {% endif %}
         </div>
         {% empty %}
-        <div class="col-span-full text-center py-12 text-slate-400">Belum ada data Associate Consultants.</div>
+        <div class="col-span-full text-center py-12 text-slate-400">{% trans "Belum ada data Associate Consultants." %}</div>
         {% endfor %}
       </div>
 

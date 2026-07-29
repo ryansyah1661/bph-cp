@@ -1,12 +1,8 @@
-from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from core import views
 
 urlpatterns = [
-    # Jembatan Utama bawaan Django Admin
-    path('admin/', admin.site.urls),
-
     # ROUTING FRONTEND WEBSITE (Halaman Utama Pengunjung)
     path('', views.homepage, name='homepage'),
     path('about/', views.about_view, name='about'),

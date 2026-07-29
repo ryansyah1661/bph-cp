@@ -22,6 +22,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
+    'modeltranslation',  # Ditambahkan untuk multi-bahasa data database
     'core', 
     'widget_tweaks',
     'django.contrib.admin',
@@ -36,6 +37,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',  # Ditambahkan untuk sistem terjemahan Django i18n
+    'core.middleware.LanguageSwitchMiddleware',   # Ditambahkan untuk switcher bahasa instan ?lang=id/en
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -88,6 +91,15 @@ LANGUAGE_CODE = 'id'
 TIME_ZONE = 'Asia/Jakarta'
 USE_I18N = True
 USE_TZ = True
+
+LANGUAGES = [
+    ('id', 'Bahasa Indonesia'),
+    ('en', 'English'),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [

@@ -1,5 +1,5 @@
 {% extends 'core/base.html' %}
-{% load static %}
+{% load static i18n %}
 
 {% block title %}Bhumi Pasa Hijau - Specializing in Natural Resources Management and Understanding{% endblock %}
 
@@ -14,7 +14,7 @@
     </div>
     <div class="relative z-20 w-full max-w-container-max mx-auto px-margin-mobile awning md:px-margin-desktop text-surface-white">
       <p class="font-label-caps text-label-caps uppercase text-tertiary mb-stack-md tracking-wider">
-        We are Bhumi Pasa Hijau (BPH)
+        {% trans "We are Bhumi Pasa Hijau (BPH)" %}
       </p>
       <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg max-w-5xl mb-stack-lg leading-tight">
         Specializing in Natural Resources
@@ -22,11 +22,10 @@
         <span class="text-tertiary typewriter-cursor pr-1" id="typewriter">Management</span>
       </h1>
       <p class="font-body-lg text-body-lg max-w-2xl mb-stack-lg text-surface-white">
-        Kami berkomitmen untuk mengurangi dampak lingkungan dan meminimalkan limbah dan polusi dari kegiatan kami. Kami akan menjadi mitra strategis
-        terpercaya dalam menghadirkan solusi keberlanjutan berbasis pengetahuan, lingkungan, sosial dan tata kelola yang berdampak nyata.
+        {% trans "Kami berkomitmen untuk mengurangi dampak lingkungan dan meminimalkan limbah dan polusi dari kegiatan kami. Kami akan menjadi mitra strategis terpercaya dalam menghadirkan solusi keberlanjutan berbasis pengetahuan, lingkungan, sosial dan tata kelola yang berdampak nyata." %}
       </p>
       <a class="inline-flex items-center justify-center bg-primary text-surface-white px-8 py-4 rounded font-label-caps text-label-caps uppercase hover:bg-forest-deep hover:-translate-y-[2px] transition-all duration-300"
-         href="{% url 'about' %}">Kenali Kami Lebih Dekat</a>
+         href="{% url 'about' %}">{% trans "Kenali Kami Lebih Dekat" %}</a>
     </div>
   </section>
 
@@ -34,10 +33,9 @@
   <section class="py-section-gap bg-surface w-full">
     <div class="max-w-3xl mx-auto text-center px-margin-mobile md:px-margin-desktop">
       <span class="material-symbols-outlined text-primary text-4xl mb-stack-md fill">eco</span>
-      <h2 class="font-headline-xl text-headline-xl text-on-surface mb-stack-lg">Komitmen Kami</h2>
+      <h2 class="font-headline-xl text-headline-xl text-on-surface mb-stack-lg">{% trans "Komitmen Kami" %}</h2>
       <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-        Kami berkomitmen untuk mengurangi dampak lingkungan dan meminimalkan limbah dan polusi dari kegiatan kami. Kami akan menjadi mitra strategis
-        terpercaya dalam menghadirkan solusi keberlanjutan berbasis pengetahuan, lingkungan, sosial dan tata kelola yang berdampak nyata.
+        {% trans "Kami berkomitmen untuk mengurangi dampak lingkungan dan meminimalkan limbah dan polusi dari kegiatan kami. Kami akan menjadi mitra strategis terpercaya dalam menghadirkan solusi keberlanjutan berbasis pengetahuan, lingkungan, sosial dan tata kelola yang berdampak nyata." %}
       </p>
     </div>
   </section>
@@ -47,13 +45,13 @@
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-4">
         <div>
-          <h2 class="font-headline-lg text-3xl font-bold text-on-surface mb-2">Artikel Terbaru</h2>
-          <p class="font-body-md text-sm text-on-surface-variant">Wawasan dan tindakan nyata untuk lingkungan.</p>
+          <h2 class="font-headline-lg text-3xl font-bold text-on-surface mb-2">{% trans "Artikel Terbaru" %}</h2>
+          <p class="font-body-md text-sm text-on-surface-variant">{% trans "Wawasan dan tindakan nyata untuk lingkungan." %}</p>
         </div>
         
         <a class="font-label-caps text-xs font-bold uppercase tracking-wider text-primary border border-primary px-7 py-3 rounded-full hover:bg-forest-deep hover:text-surface-white transition-all items-center inline-flex"
            href="{% url 'gallery' %}#seksi-artikel">
-          <span>Lihat Semua</span>
+          <span>{% trans "Lihat Semua" %}</span>
         </a>
       </div>
       
@@ -74,7 +72,7 @@
           </div>
           <div class="p-6 flex-1 flex flex-col">
             <p class="text-xs text-text-muted font-medium tracking-wide mb-2">
-              {{ article.tanggal|date:"d F Y" }} <span class="mx-1">•</span> Oleh {{ article.author }}
+              {{ article.tanggal|date:"d F Y" }} <span class="mx-1">•</span> {% trans "Oleh" %} {{ article.author }}
             </p>
             <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">
               {{ article.judul }}
@@ -84,7 +82,7 @@
             </p>
             <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
               <span class="relative inline-block pb-1 after:pointer-events-none after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-                Baca Selengkapnya
+                {% trans "Baca Selengkapnya" %}
               </span>
               <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
             </span>
@@ -94,8 +92,8 @@
         <!-- KOTAK KOSONG YANG DISAMAKAN DENGAN CERITA LAPANGAN -->
         <div class="bg-white border border-dashed border-slate-200 rounded-3xl p-12 text-center col-span-full">
           <span class="material-symbols-outlined text-5xl text-slate-300 mb-2">article</span>
-          <h3 class="text-base font-bold text-slate-700">Belum ada artikel yang dipublikasikan</h3>
-          <p class="text-xs text-slate-400 mt-1">Tambahkan data untuk menampilkan wawasan dan artikel terbaru.</p>
+          <h3 class="text-base font-bold text-slate-700">{% trans "Belum ada artikel yang dipublikasikan" %}</h3>
+          <p class="text-xs text-slate-400 mt-1">{% trans "Tambahkan data untuk menampilkan wawasan dan artikel terbaru." %}</p>
         </div>
         {% endfor %}
       </div>
@@ -109,11 +107,11 @@
       <!-- HEADER SEKSI CERITA LAPANGAN -->
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
         <div>
-          <h2 class="font-headline-lg text-3xl font-bold text-on-surface mb-2">Cerita dari Lapangan</h2>
-          <p class="font-body-md text-sm text-on-surface-variant">Catatan aksi dan narasi konservasi riil tim BPH.</p>
+          <h2 class="font-headline-lg text-3xl font-bold text-on-surface mb-2">{% trans "Cerita dari Lapangan" %}</h2>
+          <p class="font-body-md text-sm text-on-surface-variant">{% trans "Catatan aksi dan narasi konservasi riil tim BPH." %}</p>
         </div>
         <a href="{% url 'gallery' %}#seksi-cerita" class="font-label-caps text-xs font-bold uppercase tracking-wider text-primary border border-primary px-7 py-3 rounded-full hover:bg-forest-deep hover:text-surface-white transition-all items-center inline-flex" style="text-decoration: none;">
-          <span>Lihat Semua Cerita</span>
+          <span>{% trans "Lihat Semua Cerita" %}</span>
         </a>
       </div>
 
@@ -150,7 +148,7 @@
               <div class="flex items-center gap-3">
                 <span class="bg-emerald-50 text-emerald-800 border border-emerald-100 text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
                   <span class="material-symbols-outlined text-sm text-emerald-700">explore</span>
-                  <span>Cerita Lapangan</span>
+                  <span>{% trans "Cerita Lapangan" %}</span>
                 </span>
                 <span class="text-xs text-slate-400 font-medium">{{ latest_story.tanggal|date:"d F Y" }}</span>
               </div>
@@ -172,7 +170,7 @@
                    class="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300"
                    style="text-decoration: none;">
                   <span class="relative inline-block pb-1 after:pointer-events-none after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-                    Baca Selengkapnya
+                    {% trans "Baca Selengkapnya" %}
                   </span>
                   <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
                 </a>
@@ -185,8 +183,8 @@
       {% else %}
         <div class="bg-white border border-dashed border-slate-200 rounded-3xl p-12 text-center">
           <span class="material-symbols-outlined text-5xl text-slate-300 mb-2">potted_plant</span>
-          <h3 class="text-base font-bold text-slate-700">Belum ada cerita lapangan</h3>
-          <p class="text-xs text-slate-400 mt-1">Tambahkan data untuk menampilkan cerita lapangan terbaru.</p>
+          <h3 class="text-base font-bold text-slate-700">{% trans "Belum ada cerita lapangan" %}</h3>
+          <p class="text-xs text-slate-400 mt-1">{% trans "Tambahkan data untuk menampilkan cerita lapangan terbaru." %}</p>
         </div>
       {% endif %}
 
@@ -201,15 +199,15 @@
       
       <div class="space-y-2 text-center md:text-left z-10 max-w-xl">
         <h3 class="text-2xl md:text-3xl font-bold text-surface-white">
-          Siap Berkolaborasi Demi Masa Depan Hijau?
+          {% trans "Siap Berkolaborasi Demi Masa Depan Hijau?" %}
         </h3>
         <p class="text-surface-white/80 text-xs md:text-sm leading-relaxed">
-          Punya pertanyaan mengenai layanan konsultasi manajemen sumber daya alam atau ingin bermitra dalam proyek konservasi selanjutnya? Hubungi tim ahli kami sekarang.
+          {% trans "Punya pertanyaan mengenai layanan konsultasi manajemen sumber daya alam atau ingin bermitra dalam proyek konservasi selanjutnya? Hubungi tim ahli kami sekarang." %}
         </p>
       </div>
       <div class="z-10 shrink-0">
         <a href="{% url 'contact' %}" class="inline-flex items-center justify-center bg-surface-white text-primary font-bold text-xs tracking-widest uppercase px-8 py-4 rounded-full shadow-lg hover:bg-neutral-100 hover:-translate-y-[1px] active:translate-y-0 transition-all duration-300">
-          Hubungi Kami
+          {% trans "Hubungi Kami" %}
         </a>
       </div>
     </div>

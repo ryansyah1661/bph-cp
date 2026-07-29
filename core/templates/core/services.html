@@ -1,12 +1,15 @@
 {% extends 'core/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Layanan Kami - Bhumi Pasa Hijau{% endblock %}
+{% block title %}{% trans "Layanan Kami - Bhumi Pasa Hijau" %}{% endblock %}
 
 {% block content %}
 <main class="flex-grow pt-[80px]">
 
-  {% include 'core/partials/hero-banner.html' with title="Layanan Kami" subtitle="Expertise &amp; Solutions" desc="Solusi strategis untuk sumber daya alam Indonesia. Kami menyediakan manajemen berbasis data, pemahaman ekologis yang mendalam, dan alokasi sumber daya yang mumpuni." bg_image="images/forest-services.jpg" %}
+  {% trans "Layanan Kami" as hero_title %}
+  {% trans "Expertise &amp; Solutions" as hero_subtitle %}
+  {% trans "Solusi strategis untuk sumber daya alam Indonesia. Kami menyediakan manajemen berbasis data, pemahaman ekologis yang mendalam, dan alokasi sumber daya yang mumpuni." as hero_desc %}
+  {% include 'core/partials/hero-banner.html' with title=hero_title subtitle=hero_subtitle desc=hero_desc bg_image="images/forest-services.jpg" %}
   
   <section class="py-section-gap bg-surface w-full">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
@@ -40,14 +43,14 @@
             </p>
             <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
               <span class="relative inline-block pb-1 after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-                Lihat Selengkapnya
+                {% trans "Lihat Selengkapnya" %}
               </span>
               <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
             </span>
           </div>
         </a>
         {% empty %}
-        <p class="text-sm text-on-surface-variant col-span-full">Belum ada layanan NRM yang dipublikasikan.</p>
+        <p class="text-sm text-on-surface-variant col-span-full">{% trans "Belum ada layanan NRM yang dipublikasikan." %}</p>
         {% endfor %}
       </div>
     </div>
@@ -85,14 +88,14 @@
             </p>
             <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
               <span class="relative inline-block pb-1 after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-                Lihat Selengkapnya
+                {% trans "Lihat Selengkapnya" %}
               </span>
               <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
             </span>
           </div>
         </a>
         {% empty %}
-        <p class="text-sm text-on-surface-variant col-span-full">Belum ada layanan NRU yang dipublikasikan.</p>
+        <p class="text-sm text-on-surface-variant col-span-full">{% trans "Belum ada layanan NRU yang dipublikasikan." %}</p>
         {% endfor %}
       </div>
     </div>
@@ -109,13 +112,13 @@
           <div class="absolute inset-0 bg-gradient-to-r from-inverse-surface/90 via-inverse-surface/60 to-transparent"></div>
         </div>
         <div class="relative z-10 p-margin-mobile md:p-margin-desktop max-w-2xl text-surface-white">
-          <h2 class="font-headline-xl text-headline-xl mb-stack-md text-surface-white">Pelatihan &amp; Kapasitas</h2>
+          <h2 class="font-headline-xl text-headline-xl mb-stack-md text-surface-white">{% trans "Pelatihan &amp; Kapasitas" %}</h2>
           <p class="font-body-lg text-body-lg text-surface-variant mb-stack-lg opacity-90">
-            Empowering local communities, institutional staff, and corporate partners with the knowledge and tools necessary for effective environmental stewardship. Our "Social Training" programs bridge the gap between technical data and actionable field practice.
+            {% trans 'Empowering local communities, institutional staff, and corporate partners with the knowledge and tools necessary for effective environmental stewardship. Our "Social Training" programs bridge the gap between technical data and actionable field practice.' %}
           </p>
           <a class="inline-flex items-center justify-center px-6 py-3 bg-primary text-on-primary font-label-caps text-label-caps rounded hover:bg-forest-deep transition-all duration-300 hover:-translate-y-0.5" 
              href="{% url 'experience' %}?filter=pelatihan">
-            Selengkapnya
+            {% trans "Selengkapnya" %}
           </a>
         </div>
       </div>

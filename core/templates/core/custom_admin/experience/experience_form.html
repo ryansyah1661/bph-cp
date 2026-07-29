@@ -32,14 +32,21 @@
   <div class="flex gap-6 items-start">
     <div class="flex-1 space-y-5">
       <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-5">
-        <div class="block-input-group">
-          <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Proyek <span class="text-red-500">*</span></label>
-          <div class="django-input-wrapper">{{ form.name }}</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="block-input-group">
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Proyek (Bahasa Indonesia) <span class="text-red-500">*</span></label>
+            <div class="django-input-wrapper">{{ form.name_ind }}</div>
+          </div>
+          <div class="block-input-group">
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Proyek (English)</label>
+            <div class="django-input-wrapper">{{ form.name_en }}</div>
+          </div>
         </div>
+
         <div class="block-input-group">
           <label class="block text-sm font-semibold text-slate-700 mb-1">Slug <span class="text-red-500">*</span></label>
           <div class="django-input-wrapper">{{ form.slug }}</div>
-          <p class="text-xs text-gray-400 mt-1">Slug otomatis terisi dari nama proyek</p>
+          <p class="text-xs text-gray-400 mt-1">Slug otomatis terisi dari nama proyek (Indonesia)</p>
         </div>
         
         <div class="block-input-group">
@@ -70,10 +77,67 @@
         </div>
       </div>
 
+      <!-- DESKRIPSI INDONESIA (QUILL EDITOR) -->
       <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-        <label class="block text-sm font-semibold text-slate-700 mb-3">Deskripsi Proyek <span class="text-red-500">*</span></label>
-        {{ form.description }}
-        <div id="quill-editor" style="height: 350px;"></div>
+        <label class="block text-sm font-semibold text-slate-700 mb-3">Deskripsi Proyek (Bahasa Indonesia) <span class="text-red-500">*</span></label>
+        {{ form.description_ind }}
+        <div id="quill-editor-ind" style="height: 350px;"></div>
+      </div>
+
+      <!-- DESKRIPSI ENGLISH (QUILL EDITOR) -->
+      <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+        <label class="block text-sm font-semibold text-slate-700 mb-3">Deskripsi Proyek (English)</label>
+        {{ form.description_en }}
+        <div id="quill-editor-en" style="height: 350px;"></div>
+      </div>
+
+      <!-- DETAIL TAMBAHAN (STUDI KASUS / OPSIONAL) -->
+      <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-5">
+        <h3 class="text-sm font-bold text-slate-700 border-b border-gray-100 pb-3">Detail Studi Kasus (Opsional - Multi Bahasa)</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="block-input-group">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Intro (Bahasa Indonesia)</label>
+            <div class="django-input-wrapper">{{ form.intro_ind }}</div>
+          </div>
+          <div class="block-input-group">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Intro (English)</label>
+            <div class="django-input-wrapper">{{ form.intro_en }}</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="block-input-group">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Tantangan / Challenge (Bahasa Indonesia)</label>
+            <div class="django-input-wrapper">{{ form.challenge_ind }}</div>
+          </div>
+          <div class="block-input-group">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Tantangan / Challenge (English)</label>
+            <div class="django-input-wrapper">{{ form.challenge_en }}</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="block-input-group">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Metodologi (Bahasa Indonesia)</label>
+            <div class="django-input-wrapper">{{ form.methodology_ind }}</div>
+          </div>
+          <div class="block-input-group">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Metodologi (English)</label>
+            <div class="django-input-wrapper">{{ form.methodology_en }}</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="block-input-group">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Hasil / Result (Bahasa Indonesia)</label>
+            <div class="django-input-wrapper">{{ form.result_ind }}</div>
+          </div>
+          <div class="block-input-group">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Hasil / Result (English)</label>
+            <div class="django-input-wrapper">{{ form.result_en }}</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -167,60 +231,67 @@
     ['clean']
   ];
 
-  var quill = new Quill('#quill-editor', {
-    theme: 'snow',
-    modules: {
-      toolbar: {
-        container: toolbarOptions,
-        handlers: {
-          'image': function() {
-            var input = document.createElement('input');
-            input.setAttribute('type', 'file');
-            input.setAttribute('accept', 'image/png, image/jpeg, image/gif, image/webp');
-            input.click();
-            input.onchange = function() {
-              var file = input.files[0];
-              if (!file) return;
-              if (file.size > 5 * 1024 * 1024) { alert('Ukuran file terlalu besar. Maksimal 5MB.'); return; }
-              var formData = new FormData();
-              formData.append('image', file);
-              fetch('{% url "quill_image_upload" %}', {
-                method: 'POST',
-                headers: { 'X-CSRFToken': '{{ csrf_token }}' },
-                body: formData
-              })
-              .then(function(r) { return r.json(); })
-              .then(function(data) {
-                if (data.url) {
-                  var range = quill.getSelection(true);
-                  quill.insertEmbed(range.index, 'image', data.url);
-                  quill.setSelection(range.index + 1);
-                } else { alert(data.error || 'Gagal mengunggah gambar.'); }
-              })
-              .catch(function(err) { console.error('Upload error:', err); alert('Terjadi kesalahan saat mengunggah gambar.'); });
-            };
+  function setupQuillEditor(selector, textareaName) {
+    var editorElement = document.querySelector(selector);
+    var textareaElement = document.querySelector('textarea[name="' + textareaName + '"]');
+    if (!editorElement) return null;
+
+    var quill = new Quill(selector, {
+      theme: 'snow',
+      modules: {
+        toolbar: {
+          container: toolbarOptions,
+          handlers: {
+            'image': function() {
+              var input = document.createElement('input');
+              input.setAttribute('type', 'file');
+              input.setAttribute('accept', 'image/png, image/jpeg, image/gif, image/webp');
+              input.click();
+              input.onchange = function() {
+                var file = input.files[0];
+                if (!file) return;
+                if (file.size > 5 * 1024 * 1024) { alert('Ukuran file terlalu besar. Maksimal 5MB.'); return; }
+                var formData = new FormData();
+                formData.append('image', file);
+                fetch('{% url "quill_image_upload" %}', {
+                  method: 'POST',
+                  headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+                  body: formData
+                })
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                  if (data.url) {
+                    var range = quill.getSelection(true);
+                    quill.insertEmbed(range.index, 'image', data.url);
+                    quill.setSelection(range.index + 1);
+                  } else { alert(data.error || 'Gagal mengunggah gambar.'); }
+                })
+                .catch(function(err) { console.error('Upload error:', err); alert('Terjadi kesalahan saat mengunggah gambar.'); });
+              };
+            }
           }
         }
       }
+    });
+
+    if (textareaElement && textareaElement.value) {
+      quill.root.innerHTML = textareaElement.value;
     }
-  });
 
-  var descTextarea = document.querySelector('textarea[name="description"]');
+    function sync() {
+      if (textareaElement) {
+        textareaElement.value = quill.getText().trim().length > 0 ? quill.root.innerHTML : '';
+      }
+    }
 
-  if (descTextarea && descTextarea.value) {
-    quill.root.innerHTML = descTextarea.value;
+    quill.on('text-change', sync);
+    var formElement = document.getElementById('experience-form');
+    if(formElement) formElement.addEventListener('submit', sync);
+    return quill;
   }
 
-  var formElement = document.getElementById('experience-form');
-
-  function syncQuillToTextarea() {
-    if (descTextarea) {
-      descTextarea.value = quill.getText().trim().length > 0 ? quill.root.innerHTML : '';
-    }
-  }
-
-  quill.on('text-change', syncQuillToTextarea);
-  if(formElement) formElement.addEventListener('submit', syncQuillToTextarea);
+  setupQuillEditor('#quill-editor-ind', 'description_ind');
+  setupQuillEditor('#quill-editor-en', 'description_en');
 
   var tahunInput = document.getElementById('id_tahun');
   if (tahunInput) {
@@ -252,7 +323,7 @@
     tahunInput.parentNode.replaceChild(selectYear, tahunInput);
   }
 
-  var nameInput = document.getElementById('id_name');
+  var nameInput = document.getElementById('id_name_ind') || document.getElementById('id_name');
   var slugInput = document.getElementById('id_slug');
 
   if (nameInput && slugInput) {
@@ -332,7 +403,9 @@
 </script>
 
 <style>
-  textarea[name="description"] {
+  textarea[name="description"],
+  textarea[name="description_ind"],
+  textarea[name="description_en"] {
     position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; opacity: 0; pointer-events: none;
   }
   

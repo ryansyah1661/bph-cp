@@ -1,12 +1,15 @@
 {% extends 'core/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Kontak - Bhumi Pasa Hijau{% endblock %}
+{% block title %}{% trans "Kontak - Bhumi Pasa Hijau" %}{% endblock %}
 
 {% block content %}
 <main class="flex-grow pt-[80px] bg-background">
   
-  {% include 'core/partials/hero-banner.html' with title="Hubungi Kami" subtitle="Get In Touch" desc="Punya pertanyaan mengenai layanan konsultasi manajemen lingkungan atau ingin menjalin kemitraan strategis? Hubungi tim ahli kami sekarang." bg_image="images/contact.jpg" %}
+  {% trans "Hubungi Kami" as hero_title %}
+  {% trans "Get In Touch" as hero_subtitle %}
+  {% trans "Punya pertanyaan mengenai layanan konsultasi manajemen lingkungan atau ingin menjalin kemitraan strategis? Hubungi tim ahli kami sekarang." as hero_desc %}
+  {% include 'core/partials/hero-banner.html' with title=hero_title subtitle=hero_subtitle desc=hero_desc bg_image="images/contact.jpg" %}
 
   <section id="form-kontak" class="px-margin-mobile bg-surface md:px-margin-desktop max-w-container-max mx-auto py-section-gap">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -14,13 +17,13 @@
       <div class="lg:col-span-5 space-y-8">
         <div>
           <span class="font-label-caps text-[11px] font-bold tracking-widest text-primary uppercase bg-primary/10 px-3 py-1 rounded-full mb-4 inline-block">
-            Kontak Resmi
+            {% trans "Kontak Resmi" %}
           </span>
           <h2 class="font-headline-xl text-2xl md:text-3xl font-bold text-on-surface mb-4 leading-tight">
-            Mari Berdiskusi Demi Solusi Keberlanjutan
+            {% trans "Mari Berdiskusi Demi Solusi Keberlanjutan" %}
           </h2>
           <p class="font-body-md text-sm md:text-base text-on-surface-variant leading-relaxed">
-            Kantor pusat kami beroperasi penuh untuk melayani konsultasi teknis, audit lingkungan, hingga perencanaan program CSR konservasi seluruh Indonesia.
+            {% trans "Kantor pusat kami beroperasi penuh untuk melayani konsultasi teknis, audit lingkungan, hingga perencanaan program CSR konservasi seluruh Indonesia." %}
           </p>
         </div>
 
@@ -31,7 +34,7 @@
               <span class="material-symbols-outlined block text-2xl">location_on</span>
             </div>
             <div>
-              <h3 class="font-headline-md text-sm font-bold text-on-surface mb-1">Alamat Kantor Pusat</h3>
+              <h3 class="font-headline-md text-sm font-bold text-on-surface mb-1">{% trans "Alamat Kantor Pusat" %}</h3>
               <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">
                 Jl. Mawar Raya No.16, RT.08/RW.08, Curugmekar,<br>Kec. Bogor Barat, Kota Bogor, 16113
               </p>
@@ -55,7 +58,7 @@
               <span class="material-symbols-outlined block text-2xl">call</span>
             </div>
             <div>
-              <h3 class="font-headline-md text-sm font-bold text-on-surface mb-1">Hubungi Telepon / WhatsApp</h3>
+              <h3 class="font-headline-md text-sm font-bold text-on-surface mb-1">{% trans "Hubungi Telepon / WhatsApp" %}</h3>
               <p class="font-body-md text-sm text-on-surface-variant">
                 +62 812-2000-1060
               </p>
@@ -67,9 +70,9 @@
               <span class="material-symbols-outlined block text-2xl">schedule</span>
             </div>
             <div>
-              <h3 class="font-headline-md text-sm font-bold text-on-surface mb-1">Jam Operasional Kantor</h3>
+              <h3 class="font-headline-md text-sm font-bold text-on-surface mb-1">{% trans "Jam Operasional Kantor" %}</h3>
               <p class="font-body-md text-sm text-on-surface-variant">
-                Senin – Jumat <span class="mx-1.5">•</span> 08:00 – 17:00 WIB
+                {% trans "Senin – Jumat" %} <span class="mx-1.5">•</span> 08:00 – 17:00 WIB
               </p>
             </div>
           </div>
@@ -90,41 +93,41 @@
             </div>
           {% endif %}
 
-          <h3 class="font-headline-lg text-xl font-bold text-on-surface mb-2">Kirim Pesan Langsung</h3>
-          <p class="font-body-md text-sm text-on-surface-variant mb-8">Tim administrasi kami akan merespons surat Anda dalam waktu maksimal 1x24 jam kerja.</p>
+          <h3 class="font-headline-lg text-xl font-bold text-on-surface mb-2">{% trans "Kirim Pesan Langsung" %}</h3>
+          <p class="font-body-md text-sm text-on-surface-variant mb-8">{% trans "Tim administrasi kami akan merespons surat Anda dalam waktu maksimal 1x24 jam kerja." %}</p>
 
           <form method="POST" action="#form-kontak" class="space-y-6">
             {% csrf_token %}
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div class="space-y-2">
-                <label for="name" class="font-label-caps text-xs tracking-wide text-on-surface font-bold uppercase">Nama Lengkap</label>
-                <input type="text" id="name" name="nama_lengkap" required placeholder="Masukkan nama Anda"
+                <label for="name" class="font-label-caps text-xs tracking-wide text-on-surface font-bold uppercase">{% trans "Nama Lengkap" %}</label>
+                <input type="text" id="name" name="nama_lengkap" required placeholder="{% trans 'Masukkan nama Anda' %}"
                       class="w-full bg-surface border border-border-subtle rounded-lg px-4 py-3 font-body-sm text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all">
               </div>
               <div class="space-y-2">
-                <label for="email" class="font-label-caps text-xs tracking-wide text-on-surface font-bold uppercase">Alamat Email</label>
-                <input type="email" id="email" name="email" required placeholder="Masukkan email Anda"
+                <label for="email" class="font-label-caps text-xs tracking-wide text-on-surface font-bold uppercase">{% trans "Alamat Email" %}</label>
+                <input type="email" id="email" name="email" required placeholder="{% trans 'Masukkan email Anda' %}"
                       class="w-full bg-surface border border-border-subtle rounded-lg px-4 py-3 font-body-sm text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all">
               </div>
             </div>
 
             <div class="space-y-2">
-              <label for="subject" class="font-label-caps text-xs tracking-wide text-on-surface font-bold uppercase">Subjek / Nama Instansi</label>
-              <input type="text" id="subject" name="subjek" required placeholder="Contoh: Konsultasi Audit NRM - PT Sukses Bersama"
+              <label for="subject" class="font-label-caps text-xs tracking-wide text-on-surface font-bold uppercase">{% trans "Subjek / Nama Instansi" %}</label>
+              <input type="text" id="subject" name="subjek" required placeholder="{% trans 'Contoh: Konsultasi Audit NRM - PT Sukses Bersama' %}"
                     class="w-full bg-surface border border-border-subtle rounded-lg px-4 py-3 font-body-sm text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all">
             </div>
 
             <div class="space-y-2">
-              <label for="message" class="font-label-caps text-xs tracking-wide text-on-surface font-bold uppercase">Detail Pesan / Pertanyaan</label>
-              <textarea id="message" name="pesan" rows="5" required placeholder="Tuliskan detail kebutuhan proyek atau pertanyaan Anda di sini..."
+              <label for="message" class="font-label-caps text-xs tracking-wide text-on-surface font-bold uppercase">{% trans "Detail Pesan / Pertanyaan" %}</label>
+              <textarea id="message" name="pesan" rows="5" required placeholder="{% trans 'Tuliskan detail kebutuhan proyek atau pertanyaan Anda di sini...' %}"
                     class="w-full bg-surface border border-border-subtle rounded-lg px-4 py-3 font-body-sm text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none"></textarea>
             </div>
 
             <div class="pt-2">
               <button type="submit" 
                       class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-primary text-surface-white px-8 py-4 rounded-lg font-label-caps text-xs font-bold uppercase tracking-wider hover:bg-forest-deep hover:-translate-y-[1px] active:translate-y-0 transition-all duration-300 shadow-sm cursor-pointer">
-                <span>Kirim Pesan Sekarang</span>
+                <span>{% trans "Kirim Pesan Sekarang" %}</span>
                 <span class="material-symbols-outlined text-sm">send</span>
               </button>
             </div>

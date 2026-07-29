@@ -1,4 +1,4 @@
-{% load static %}
+{% load static i18n %}
 
 <footer class="bg-inverse-surface dark:bg-on-background w-full pt-16 pb-8 px-margin-mobile md:px-margin-desktop text-surface-variant font-body-md selection:bg-primary/30">
   
@@ -39,13 +39,13 @@
     
     <div class="flex flex-col items-start gap-4">
       <h4 class="font-headline-md text-xs md:text-sm font-semibold tracking-widest uppercase text-surface-white/90">
-        Profil
+        {% trans "Profil" %}
       </h4>
       <div class="flex flex-col gap-3 w-full">
-        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'about' %}">Tentang BPH</a>
-        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'services' %}">Layanan</a>
-        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'experience' %}">Pengalaman</a>
-        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'gallery' %}">Galeri</a>
+        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'about' %}">{% trans "Tentang BPH" %}</a>
+        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'services' %}">{% trans "Layanan" %}</a>
+        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'experience' %}">{% trans "Pengalaman" %}</a>
+        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'gallery' %}">{% trans "Galeri" %}</a>
         
         <!-- LINK UNDUH PROFIL PERUSAHAAN DENGAN STATIC PDF -->
         <div class="border-t border-white/5 pt-3 mt-1">
@@ -55,7 +55,7 @@
              target="_blank" 
              rel="noopener">
             <span class="material-symbols-outlined text-[18px] text-surface-white/40 group-hover:text-primary transition-colors duration-300">download</span>
-            <span>Unduh Profil Perusahaan</span>
+            <span>{% trans "Unduh Profil Perusahaan" %}</span>
           </a>
         </div>
       </div>
@@ -63,7 +63,7 @@
     
     <div class="flex flex-col items-start gap-4 md:col-span-2 md:pl-8">
       <h4 class="font-headline-md text-xs md:text-sm font-semibold tracking-widest uppercase text-surface-white/90">
-        Hubungi Kami
+        {% trans "Hubungi Kami" %}
       </h4>
       <div class="flex flex-col gap-4 w-full max-w-md">
         

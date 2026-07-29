@@ -1,13 +1,14 @@
 {% extends "core/base.html" %}
+{% load i18n %}
 
 {% block content %}
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="text-center max-w-3xl mx-auto mb-16">
         <h1 class="text-3xl sm:text-4xl font-extrabold text-emerald-900 tracking-tight">
-            Cerita Lapangan
+            {% trans "Cerita Lapangan" %}
         </h1>
         <p class="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed">
-            Kumpulan catatan, dokumentasi esensial, dan kisah nyata dari tim kami saat bergerak langsung di area konservasi dan pemberdayaan masyarakat.
+            {% trans "Kumpulan catatan, dokumentasi esensial, dan kisah nyata dari tim kami saat bergerak langsung di area konservasi dan pemberdayaan masyarakat." %}
         </p>
     </div>
 
@@ -54,7 +55,7 @@
 
                 <div class="pt-4 border-t border-slate-50">
                     <a href="{% url 'detail-story' story.slug %}" class="inline-flex items-center text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition gap-1 group">
-                        Baca Selengkapnya 
+                        {% trans "Baca Selengkapnya" %} 
                         <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition duration-200">arrow_forward</span>
                     </a>
                 </div>
@@ -63,7 +64,7 @@
         {% empty %}
         <div class="col-span-full py-16 text-center">
             <span class="material-symbols-outlined text-5xl text-slate-300 mb-2">auto_stories</span>
-            <p class="text-slate-500 font-medium">Belum ada cerita lapangan yang diterbitkan.</p>
+            <p class="text-slate-500 font-medium">{% trans "Belum ada cerita lapangan yang diterbitkan." %}</p>
         </div>
         {% endfor %}
     </div>

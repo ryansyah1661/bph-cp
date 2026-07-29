@@ -1,0 +1,842 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: BPH Website 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-28 15:24+0700\n"
+"PO-Revision-Date: 2026-07-28 12:45+0700\n"
+"Last-Translator: BPH Admin\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\core\templates\core\about.html:4
+#, fuzzy
+#| msgid "We are Bhumi Pasa Hijau (BPH)"
+msgid "Tentang BPH - Bhumi Pasa Hijau"
+msgstr "We are Bhumi Pasa Hijau (BPH)"
+
+#: .\core\templates\core\about.html:9
+#, fuzzy
+#| msgid "Tentang BPH"
+msgid "Tentang Kami"
+msgstr "About BPH"
+
+#: .\core\templates\core\about.html:10
+msgid "Corporate Profile"
+msgstr ""
+
+#: .\core\templates\core\about.html:11
+msgid ""
+"Bhumi Pasa Hijau (BPH) didirikan oleh para profesional muda di Bogor sebagai "
+"firma konsultan strategis yang berfokus pada pemahaman dan tata kelola "
+"sumber daya alam, lingkungan, serta sosial berkelanjutan."
+msgstr ""
+
+#: .\core\templates\core\about.html:18
+msgid "Membangun Masa Depan Keberlanjutan"
+msgstr ""
+
+#: .\core\templates\core\about.html:21
+msgid ""
+"Bhumi Pasa Hijau (BPH) didirikan dengan kesadaran mendalam akan pentingnya "
+"keseimbangan antara kemajuan industri dan pelestarian lingkungan. Sebagai "
+"firma manajemen lingkungan strategis, kami berdedikasi untuk menyediakan "
+"solusi berbasis data yang akurat dan dapat dipertanggungjawabkan."
+msgstr ""
+
+#: .\core\templates\core\about.html:24
+msgid ""
+"Sejak awal mula, komitmen kami adalah menjadi penghubung antara kebijakan "
+"lingkungan global dan implementasi praktis di lapangan, memastikan bahwa "
+"setiap langkah pembangunan membawa dampak positif yang terukur bagi "
+"ekosistem."
+msgstr ""
+
+#: .\core\templates\core\about.html:45
+msgid "Visi Kami"
+msgstr ""
+
+#: .\core\templates\core\about.html:47
+msgid ""
+"Menjadi mitra strategis terpercaya yang memimpin dalam inovasi manajemen "
+"lingkungan, mengintegrasikan sains, kebijakan, and praktik terbaik untuk "
+"mewujudkan pelestarian alam berskala global."
+msgstr ""
+
+#: .\core\templates\core\about.html:55
+msgid "Misi Kami"
+msgstr ""
+
+#: .\core\templates\core\about.html:59
+msgid ""
+"Mengurangi dampak lingkungan industri melalui audit dan strategi mitigasi "
+"yang presisi."
+msgstr ""
+
+#: .\core\templates\core\about.html:63
+msgid ""
+"Menyediakan solusi berbasis pengetahuan and data empiris untuk pengambilan "
+"keputusan."
+msgstr ""
+
+#: .\core\templates\core\about.html:67
+msgid ""
+"Mendorong tata kelola perusahaan yang baik (Good Corporate Governance) "
+"berwawasan lingkungan."
+msgstr ""
+
+#: .\core\templates\core\about.html:79
+msgid "Tim Ahli Kami"
+msgstr ""
+
+#: .\core\templates\core\about.html:81
+msgid ""
+"Dedikasi profesional kami digerakkan oleh para ahli di bidang ekologi, "
+"manajemen strategis, dan kebijakan lingkungan."
+msgstr ""
+
+#: .\core\templates\core\about.html:126
+msgid "Belum ada data Senior Advisors."
+msgstr ""
+
+#: .\core\templates\core\about.html:152
+msgid "Belum ada data Executives."
+msgstr ""
+
+#: .\core\templates\core\about.html:178
+msgid "Belum ada data Staff Consultants."
+msgstr ""
+
+#: .\core\templates\core\about.html:204
+msgid "Belum ada data Associate Consultants."
+msgstr ""
+
+#: .\core\templates\core\articles.html:4
+#, fuzzy
+#| msgid "We are Bhumi Pasa Hijau (BPH)"
+msgid "Artikel & Wawasan - Bhumi Pasa Hijau"
+msgstr "We are Bhumi Pasa Hijau (BPH)"
+
+#: .\core\templates\core\articles.html:9
+msgid "Artikel & Wawasan"
+msgstr ""
+
+#: .\core\templates\core\articles.html:10
+msgid "News & Insights"
+msgstr ""
+
+#: .\core\templates\core\articles.html:11
+msgid ""
+"Kumpulan pemikiran teknis, analisis data sekuestrasi karbon, laporan audit, "
+"dan panduan praktis manajemen lingkungan berkelanjutan."
+msgstr ""
+
+#: .\core\templates\core\articles.html:25
+#: .\core\templates\core\detail-articles.html:27
+#: .\core\templates\core\detail-story.html:27
+#: .\core\templates\core\homepage.html:75
+msgid "Oleh"
+msgstr "By"
+
+#: .\core\templates\core\articles.html:35
+#: .\core\templates\core\articles.html:54
+#: .\core\templates\core\articles.html:69
+#: .\core\templates\core\articles.html:84
+#: .\core\templates\core\gallery.html:139
+#: .\core\templates\core\gallery.html:178
+#: .\core\templates\core\homepage.html:85
+#: .\core\templates\core\homepage.html:173 .\core\templates\core\story.html:58
+msgid "Baca Selengkapnya"
+msgstr "Read More"
+
+#: .\core\templates\core\articles.html:94
+#: .\core\templates\core\gallery.html:153
+msgid "Muat Artikel Lebih Banyak"
+msgstr ""
+
+#: .\core\templates\core\contact.html:4
+#, fuzzy
+#| msgid "We are Bhumi Pasa Hijau (BPH)"
+msgid "Kontak - Bhumi Pasa Hijau"
+msgstr "We are Bhumi Pasa Hijau (BPH)"
+
+#: .\core\templates\core\contact.html:9
+#: .\core\templates\core\homepage.html:210
+#: .\core\templates\core\partials\footer.html:66
+msgid "Hubungi Kami"
+msgstr "Contact Us"
+
+#: .\core\templates\core\contact.html:10
+msgid "Get In Touch"
+msgstr ""
+
+#: .\core\templates\core\contact.html:11
+#, fuzzy
+#| msgid ""
+#| "Punya pertanyaan mengenai layanan konsultasi manajemen sumber daya alam "
+#| "atau ingin bermitra dalam proyek konservasi selanjutnya? Hubungi tim ahli "
+#| "kami sekarang."
+msgid ""
+"Punya pertanyaan mengenai layanan konsultasi manajemen lingkungan atau ingin "
+"menjalin kemitraan strategis? Hubungi tim ahli kami sekarang."
+msgstr ""
+"Have questions about our natural resource management consulting services or "
+"want to partner on your next conservation project? Contact our team of "
+"experts today."
+
+#: .\core\templates\core\contact.html:20
+#, fuzzy
+#| msgid "Kontak"
+msgid "Kontak Resmi"
+msgstr "Contact"
+
+#: .\core\templates\core\contact.html:23
+msgid "Mari Berdiskusi Demi Solusi Keberlanjutan"
+msgstr ""
+
+#: .\core\templates\core\contact.html:26
+msgid ""
+"Kantor pusat kami beroperasi penuh untuk melayani konsultasi teknis, audit "
+"lingkungan, hingga perencanaan program CSR konservasi seluruh Indonesia."
+msgstr ""
+
+#: .\core\templates\core\contact.html:37
+msgid "Alamat Kantor Pusat"
+msgstr ""
+
+#: .\core\templates\core\contact.html:61
+msgid "Hubungi Telepon / WhatsApp"
+msgstr ""
+
+#: .\core\templates\core\contact.html:73
+msgid "Jam Operasional Kantor"
+msgstr ""
+
+#: .\core\templates\core\contact.html:75
+msgid "Senin – Jumat"
+msgstr ""
+
+#: .\core\templates\core\contact.html:96
+msgid "Kirim Pesan Langsung"
+msgstr ""
+
+#: .\core\templates\core\contact.html:97
+msgid ""
+"Tim administrasi kami akan merespons surat Anda dalam waktu maksimal 1x24 "
+"jam kerja."
+msgstr ""
+
+#: .\core\templates\core\contact.html:104
+#, fuzzy
+#| msgid "Baca Selengkapnya"
+msgid "Nama Lengkap"
+msgstr "Read More"
+
+#: .\core\templates\core\contact.html:105
+msgid "Masukkan nama Anda"
+msgstr ""
+
+#: .\core\templates\core\contact.html:109
+msgid "Alamat Email"
+msgstr ""
+
+#: .\core\templates\core\contact.html:110
+msgid "Masukkan email Anda"
+msgstr ""
+
+#: .\core\templates\core\contact.html:116
+msgid "Subjek / Nama Instansi"
+msgstr ""
+
+#: .\core\templates\core\contact.html:117
+msgid "Contoh: Konsultasi Audit NRM - PT Sukses Bersama"
+msgstr ""
+
+#: .\core\templates\core\contact.html:122
+msgid "Detail Pesan / Pertanyaan"
+msgstr ""
+
+#: .\core\templates\core\contact.html:123
+msgid "Tuliskan detail kebutuhan proyek atau pertanyaan Anda di sini..."
+msgstr ""
+
+#: .\core\templates\core\contact.html:130
+msgid "Kirim Pesan Sekarang"
+msgstr ""
+
+#: .\core\templates\core\detail-articles.html:37
+#: .\core\templates\core\gallery.html:32
+msgid "Artikel &amp; Wawasan"
+msgstr ""
+
+#: .\core\templates\core\detail-articles.html:59
+#, fuzzy
+#| msgid "Artikel Terbaru"
+msgid "Artikel Terkait"
+msgstr "Latest Articles"
+
+#: .\core\templates\core\detail-articles.html:79
+#: .\core\templates\core\detail-story.html:88
+msgid "Baca"
+msgstr ""
+
+#: .\core\templates\core\detail-experience.html:9
+msgid "Analisis &amp; Restorasi Ekosistem Strategis"
+msgstr ""
+
+#: .\core\templates\core\detail-experience.html:10
+msgid "Studi Kasus Proyek"
+msgstr ""
+
+#: .\core\templates\core\detail-experience.html:28
+msgid "Tantangan &amp; Kondisi Awal"
+msgstr ""
+
+#: .\core\templates\core\detail-experience.html:41
+msgid "Pendekatan &amp; Metodologi Kerja"
+msgstr ""
+
+#: .\core\templates\core\detail-experience.html:54
+msgid "Hasil &amp; Dampak Ekologis Terukur"
+msgstr ""
+
+#: .\core\templates\core\detail-experience.html:66
+msgid "Matriks Capaian Kinerja Proyek"
+msgstr ""
+
+#: .\core\templates\core\detail-experience.html:72
+msgid "Parameter Monitoring"
+msgstr ""
+
+#: .\core\templates\core\detail-experience.html:73
+msgid "Target Awal"
+msgstr ""
+
+#: .\core\templates\core\detail-experience.html:74
+#, fuzzy
+#| msgid "Cerita dari Lapangan"
+msgid "Realisasi Akhir Lapangan"
+msgstr "Stories from the Field"
+
+#: .\core\templates\core\detail-experience.html:94
+msgid "Ringkasan Proyek"
+msgstr ""
+
+#: .\core\templates\core\detail-experience.html:97
+#: .\core\templates\core\experience.html:199
+msgid "Mitra / Klien"
+msgstr ""
+
+#: .\core\templates\core\detail-experience.html:101
+msgid "Lokasi Wilayah"
+msgstr ""
+
+#: .\core\templates\core\detail-experience.html:108
+msgid "Tahun Pelaksanaan"
+msgstr ""
+
+#: .\core\templates\core\detail-experience.html:115
+#, fuzzy
+#| msgid "Pengalaman"
+msgid "Kembali ke Pengalaman"
+msgstr "Experience"
+
+#: .\core\templates\core\detail-experience.html:144
+msgid "Dokumen Publikasi"
+msgstr ""
+
+#: .\core\templates\core\detail-experience.html:145
+msgid "Unduh Modul Laporan Teknis Resmi"
+msgstr ""
+
+#: .\core\templates\core\detail-experience.html:146
+msgid ""
+"Laporan komprehensif ini mencakup data mentah hasil pengujian lapangan, "
+"analisis spasial peta citra satelit, serta rekomendasi kebijakan lingkungan "
+"jangka panjang yang diserahkan secara resmi kepada mitra terkait."
+msgstr ""
+
+#: .\core\templates\core\detail-experience.html:149
+msgid "Buka &amp; Baca Modul (PDF)"
+msgstr ""
+
+#: .\core\templates\core\detail-experience.html:161
+#, fuzzy
+#| msgid "Pengalaman"
+msgid "Pengalaman Terkait"
+msgstr "Experience"
+
+#: .\core\templates\core\detail-experience.html:162
+msgid "Proyek lain dengan fokus kategori yang serupa."
+msgstr ""
+
+#: .\core\templates\core\detail-services.html:41
+#, fuzzy
+#| msgid "Belum ada cerita lapangan"
+msgid "Belum ada layanan NRM."
+msgstr "No field stories yet"
+
+#: .\core\templates\core\detail-services.html:59
+#, fuzzy
+#| msgid "Belum ada cerita lapangan"
+msgid "Belum ada layanan NRU."
+msgstr "No field stories yet"
+
+#: .\core\templates\core\detail-story.html:44
+#: .\core\templates\core\homepage.html:151 .\core\templates\core\story.html:8
+msgid "Cerita Lapangan"
+msgstr "Field Story"
+
+#: .\core\templates\core\detail-story.html:68
+#, fuzzy
+#| msgid "Cerita Lapangan"
+msgid "Cerita Lapangan Lainnya"
+msgstr "Field Story"
+
+#: .\core\templates\core\experience.html:4
+#, fuzzy
+#| msgid "We are Bhumi Pasa Hijau (BPH)"
+msgid "Pengalaman Kami - Bhumi Pasa Hijau"
+msgstr "We are Bhumi Pasa Hijau (BPH)"
+
+#: .\core\templates\core\experience.html:98
+#, fuzzy
+#| msgid "Pengalaman"
+msgid "Pengalaman BPH"
+msgstr "Experience"
+
+#: .\core\templates\core\experience.html:99
+msgid "Our Track Record"
+msgstr ""
+
+#: .\core\templates\core\experience.html:100
+msgid ""
+"Kami memberikan layanan terbaik untuk memberikan pengalaman yang tak "
+"terlupakan."
+msgstr ""
+
+#: .\core\templates\core\experience.html:110
+#: .\core\templates\core\experience.html:201
+#: .\core\templates\core\gallery.html:82
+msgid "Tahun"
+msgstr ""
+
+#: .\core\templates\core\experience.html:111
+#: .\core\templates\core\partials\footer.html:47
+#: .\core\templates\core\partials\navbar.html:56
+msgid "Pengalaman"
+msgstr "Experience"
+
+#: .\core\templates\core\experience.html:117
+msgid "Proyek"
+msgstr ""
+
+#: .\core\templates\core\experience.html:118
+msgid "Telah Dikerjakan"
+msgstr ""
+
+#: .\core\templates\core\experience.html:124
+msgid "Provinsi"
+msgstr ""
+
+#: .\core\templates\core\experience.html:125
+msgid "Lokasi Proyek"
+msgstr ""
+
+#: .\core\templates\core\experience.html:131
+msgid "Klien"
+msgstr ""
+
+#: .\core\templates\core\experience.html:132
+msgid "Dari Sektor Publik dan Swasta"
+msgstr ""
+
+#: .\core\templates\core\experience.html:142
+msgid "LOKASI"
+msgstr ""
+
+#: .\core\templates\core\experience.html:142
+msgid "PROYEK"
+msgstr ""
+
+#: .\core\templates\core\experience.html:143
+msgid "Click pin di bawah ini untuk melihat daftar proyek terkait"
+msgstr ""
+
+#: .\core\templates\core\experience.html:184
+msgid "Daftar Proyek Terkait"
+msgstr ""
+
+#: .\core\templates\core\experience.html:198
+msgid "Judul Proyek"
+msgstr ""
+
+#: .\core\templates\core\experience.html:200
+msgid "Lokasi"
+msgstr ""
+
+#: .\core\templates\core\experience.html:229
+msgid "Belum ada data proyek di provinsi ini."
+msgstr ""
+
+#: .\core\templates\core\experience.html:248
+msgid "MITRA"
+msgstr ""
+
+#: .\core\templates\core\experience.html:248
+msgid "KAMI"
+msgstr ""
+
+#: .\core\templates\core\experience.html:249
+msgid ""
+"PT Bhumi Pasa Hijau bergerak bersama berbagai instansi dalam melahirkan "
+"solusi pelestarian ekosistem yang terukur."
+msgstr ""
+
+#: .\core\templates\core\experience.html:254
+#: .\core\templates\core\experience.html:278
+msgid "SEKTOR"
+msgstr ""
+
+#: .\core\templates\core\experience.html:254
+msgid "SWASTA"
+msgstr ""
+
+#: .\core\templates\core\experience.html:265
+msgid "Sektor Swasta"
+msgstr ""
+
+#: .\core\templates\core\experience.html:270
+msgid "Belum ada data mitra sektor swasta."
+msgstr ""
+
+#: .\core\templates\core\experience.html:278
+msgid "PUBLIK"
+msgstr ""
+
+#: .\core\templates\core\experience.html:289
+msgid "Sektor Publik"
+msgstr ""
+
+#: .\core\templates\core\experience.html:294
+msgid "Belum ada data mitra sektor publik."
+msgstr ""
+
+#: .\core\templates\core\gallery.html:4
+#, fuzzy
+#| msgid "We are Bhumi Pasa Hijau (BPH)"
+msgid "Galeri Kegiatan - Bhumi Pasa Hijau"
+msgstr "We are Bhumi Pasa Hijau (BPH)"
+
+#: .\core\templates\core\gallery.html:9
+msgid "Galeri &amp; Publikasi"
+msgstr ""
+
+#: .\core\templates\core\gallery.html:10
+msgid "Visual &amp; Knowledge Hub"
+msgstr ""
+
+#: .\core\templates\core\gallery.html:11
+msgid ""
+"Mendokumentasikan upaya pelestarian lingkungan, rilis riset ilmiah, rilis "
+"berita, serta cerita aksi nyata tim BPH langsung dari lapangan."
+msgstr ""
+
+#: .\core\templates\core\gallery.html:19
+msgid "Kategori Hub"
+msgstr ""
+
+#: .\core\templates\core\gallery.html:24
+msgid "Galeri Dokumentasi"
+msgstr ""
+
+#: .\core\templates\core\gallery.html:40
+#: .\core\templates\core\gallery.html:160
+#, fuzzy
+#| msgid "Cerita dari Lapangan"
+msgid "Cerita Dari Lapang"
+msgstr "Stories from the Field"
+
+#: .\core\templates\core\gallery.html:48
+msgid "Modul Dokumentasi"
+msgstr ""
+
+#: .\core\templates\core\gallery.html:60
+#, fuzzy
+#| msgid "Cerita dari Lapangan"
+msgid "Dokumentasi Aksi Lapangan"
+msgstr "Stories from the Field"
+
+#: .\core\templates\core\gallery.html:61
+msgid "Filter dokumentasi berdasarkan fokus bidang kerja lapangan kami."
+msgstr ""
+
+#: .\core\templates\core\gallery.html:79
+msgid "Foto"
+msgstr ""
+
+#: .\core\templates\core\gallery.html:111
+msgid "Belum Ada Folder Dokumentasi"
+msgstr ""
+
+#: .\core\templates\core\gallery.html:112
+msgid "Folder arsip foto lapangan BPH akan segera diperbarui berkala di sini."
+msgstr ""
+
+#: .\core\templates\core\gallery.html:121
+msgid "Artikel &amp; Wawasan Teknis"
+msgstr ""
+
+#: .\core\templates\core\gallery.html:122
+msgid ""
+"Kumpulan pemikiran rilis riset, data karbon, dan panduan praktis lingkungan "
+"berkelanjutan."
+msgstr ""
+
+#: .\core\templates\core\gallery.html:145
+msgid "Belum Ada Artikel Berita"
+msgstr ""
+
+#: .\core\templates\core\gallery.html:146
+msgid ""
+"Rilis artikel ilmiah dan wawasan pelestarian lingkungan akan segera terbit."
+msgstr ""
+
+#: .\core\templates\core\gallery.html:152
+#: .\core\templates\core\gallery.html:191
+msgid "Muat Lebih Sedikit"
+msgstr ""
+
+#: .\core\templates\core\gallery.html:161
+msgid ""
+"Narasi humanis, catatan perjalanan rimbawan, dan tantangan konservasi riil "
+"dari jantung hutan."
+msgstr ""
+
+#: .\core\templates\core\gallery.html:184
+#, fuzzy
+#| msgid "Belum ada cerita lapangan"
+msgid "Belum Ada Cerita Lapangan"
+msgstr "No field stories yet"
+
+#: .\core\templates\core\gallery.html:185
+msgid ""
+"Catatan dan dokumentasi rimbawan dari tengah ekosistem hutan akan segera "
+"hadir."
+msgstr ""
+
+#: .\core\templates\core\gallery.html:192
+msgid "Muat Cerita Lebih Banyak"
+msgstr ""
+
+#: .\core\templates\core\gallery.html:199
+msgid "Modul Dokumentasi Strategis"
+msgstr ""
+
+#: .\core\templates\core\gallery.html:200
+msgid ""
+"Akses rangkuman teknis, panduan formal, dan data publikasi berkala dari tim "
+"ahli BPH."
+msgstr ""
+
+#: .\core\templates\core\gallery.html:214
+msgid "Diunggah"
+msgstr ""
+
+#: .\core\templates\core\gallery.html:220
+msgid "Belum Ada Berkas Modul"
+msgstr ""
+
+#: .\core\templates\core\gallery.html:221
+msgid "Modul panduan dan publikasi teknis PDF belum tersedia untuk diunduh."
+msgstr ""
+
+#: .\core\templates\core\homepage.html:17
+msgid "We are Bhumi Pasa Hijau (BPH)"
+msgstr "We are Bhumi Pasa Hijau (BPH)"
+
+#: .\core\templates\core\homepage.html:25
+#: .\core\templates\core\homepage.html:38
+msgid ""
+"Kami berkomitmen untuk mengurangi dampak lingkungan dan meminimalkan limbah "
+"dan polusi dari kegiatan kami. Kami akan menjadi mitra strategis terpercaya "
+"dalam menghadirkan solusi keberlanjutan berbasis pengetahuan, lingkungan, "
+"sosial dan tata kelola yang berdampak nyata."
+msgstr ""
+"We are committed to reducing environmental impact and minimizing waste and "
+"pollution from our activities. We strive to be a trusted strategic partner "
+"in delivering knowledge-based, environmental, social, and governance "
+"sustainability solutions that create tangible impact."
+
+#: .\core\templates\core\homepage.html:28
+msgid "Kenali Kami Lebih Dekat"
+msgstr "Get to Know Us Better"
+
+#: .\core\templates\core\homepage.html:36
+msgid "Komitmen Kami"
+msgstr "Our Commitment"
+
+#: .\core\templates\core\homepage.html:48
+msgid "Artikel Terbaru"
+msgstr "Latest Articles"
+
+#: .\core\templates\core\homepage.html:49
+msgid "Wawasan dan tindakan nyata untuk lingkungan."
+msgstr "Insights and real action for the environment."
+
+#: .\core\templates\core\homepage.html:54
+msgid "Lihat Semua"
+msgstr "View All"
+
+#: .\core\templates\core\homepage.html:95
+msgid "Belum ada artikel yang dipublikasikan"
+msgstr "No articles published yet"
+
+#: .\core\templates\core\homepage.html:96
+msgid "Tambahkan data untuk menampilkan wawasan dan artikel terbaru."
+msgstr "Add data to display the latest insights and articles."
+
+#: .\core\templates\core\homepage.html:110
+msgid "Cerita dari Lapangan"
+msgstr "Stories from the Field"
+
+#: .\core\templates\core\homepage.html:111
+msgid "Catatan aksi dan narasi konservasi riil tim BPH."
+msgstr "Records of actions and real conservation narratives from the BPH team."
+
+#: .\core\templates\core\homepage.html:114
+msgid "Lihat Semua Cerita"
+msgstr "View All Stories"
+
+#: .\core\templates\core\homepage.html:186
+msgid "Belum ada cerita lapangan"
+msgstr "No field stories yet"
+
+#: .\core\templates\core\homepage.html:187
+msgid "Tambahkan data untuk menampilkan cerita lapangan terbaru."
+msgstr "Add data to display the latest field stories."
+
+#: .\core\templates\core\homepage.html:202
+msgid "Siap Berkolaborasi Demi Masa Depan Hijau?"
+msgstr "Ready to Collaborate for a Green Future?"
+
+#: .\core\templates\core\homepage.html:205
+msgid ""
+"Punya pertanyaan mengenai layanan konsultasi manajemen sumber daya alam atau "
+"ingin bermitra dalam proyek konservasi selanjutnya? Hubungi tim ahli kami "
+"sekarang."
+msgstr ""
+"Have questions about our natural resource management consulting services or "
+"want to partner on your next conservation project? Contact our team of "
+"experts today."
+
+#: .\core\templates\core\partials\footer.html:42
+msgid "Profil"
+msgstr "Profile"
+
+#: .\core\templates\core\partials\footer.html:45
+#: .\core\templates\core\partials\navbar.html:36
+msgid "Tentang BPH"
+msgstr "About BPH"
+
+#: .\core\templates\core\partials\footer.html:46
+#: .\core\templates\core\partials\navbar.html:46
+msgid "Layanan"
+msgstr "Services"
+
+#: .\core\templates\core\partials\footer.html:48
+#: .\core\templates\core\partials\navbar.html:66
+msgid "Galeri"
+msgstr "Gallery"
+
+#: .\core\templates\core\partials\footer.html:58
+msgid "Unduh Profil Perusahaan"
+msgstr "Download Company Profile"
+
+#: .\core\templates\core\partials\navbar.html:26
+msgid "Beranda"
+msgstr "Home"
+
+#: .\core\templates\core\partials\navbar.html:91
+msgid "Kontak"
+msgstr "Contact"
+
+#: .\core\templates\core\services.html:4
+#, fuzzy
+#| msgid "We are Bhumi Pasa Hijau (BPH)"
+msgid "Layanan Kami - Bhumi Pasa Hijau"
+msgstr "We are Bhumi Pasa Hijau (BPH)"
+
+#: .\core\templates\core\services.html:9
+#, fuzzy
+#| msgid "Layanan"
+msgid "Layanan Kami"
+msgstr "Services"
+
+#: .\core\templates\core\services.html:10
+msgid "Expertise &amp; Solutions"
+msgstr ""
+
+#: .\core\templates\core\services.html:11
+msgid ""
+"Solusi strategis untuk sumber daya alam Indonesia. Kami menyediakan "
+"manajemen berbasis data, pemahaman ekologis yang mendalam, dan alokasi "
+"sumber daya yang mumpuni."
+msgstr ""
+
+#: .\core\templates\core\services.html:46
+#: .\core\templates\core\services.html:91
+#, fuzzy
+#| msgid "Baca Selengkapnya"
+msgid "Lihat Selengkapnya"
+msgstr "Read More"
+
+#: .\core\templates\core\services.html:53
+#, fuzzy
+#| msgid "Belum ada artikel yang dipublikasikan"
+msgid "Belum ada layanan NRM yang dipublikasikan."
+msgstr "No articles published yet"
+
+#: .\core\templates\core\services.html:98
+#, fuzzy
+#| msgid "Belum ada artikel yang dipublikasikan"
+msgid "Belum ada layanan NRU yang dipublikasikan."
+msgstr "No articles published yet"
+
+#: .\core\templates\core\services.html:115
+msgid "Pelatihan &amp; Kapasitas"
+msgstr ""
+
+#: .\core\templates\core\services.html:117
+msgid ""
+"Empowering local communities, institutional staff, and corporate partners "
+"with the knowledge and tools necessary for effective environmental "
+"stewardship. Our \"Social Training\" programs bridge the gap between "
+"technical data and actionable field practice."
+msgstr ""
+
+#: .\core\templates\core\services.html:121
+#, fuzzy
+#| msgid "Baca Selengkapnya"
+msgid "Selengkapnya"
+msgstr "Read More"
+
+#: .\core\templates\core\story.html:11
+msgid ""
+"Kumpulan catatan, dokumentasi esensial, dan kisah nyata dari tim kami saat "
+"bergerak langsung di area konservasi dan pemberdayaan masyarakat."
+msgstr ""
+
+#: .\core\templates\core\story.html:67
+#, fuzzy
+#| msgid "Belum ada cerita lapangan"
+msgid "Belum ada cerita lapangan yang diterbitkan."
+msgstr "No field stories yet"

@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Category, Service, ServiceStep, Location, Client, Project, Story, Article
+from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
+from .models import Category, Service, ServiceStep, Location, Client, Project, Story, Article, Modul
 
 base_index = admin.site.index
 
@@ -21,14 +22,14 @@ admin.site.index = custom_admin_index
 
 
 # ==============================================================================
-# REGISTRASI MODEL ADMIN
+# REGISTRASI MODEL ADMIN (DENGAN DUKUNGAN TRANSLATIONADMIN)
 # ==============================================================================
-class ServiceStepInline(admin.TabularInline):
+class ServiceStepInline(TranslationTabularInline):
     model = ServiceStep
     extra = 1
 
 @admin.register(Service)
-class ServiceAdmin(admin.ModelAdmin):
+class ServiceAdmin(TranslationAdmin):
     list_display = ('title', 'portfolio')
     search_fields = ('title',)
     prepopulated_fields = {'slug': ('title',)}
@@ -36,7 +37,7 @@ class ServiceAdmin(admin.ModelAdmin):
     inlines = [ServiceStepInline]
 
 @admin.register(Project)
-class ProjectAdmin(admin.ModelAdmin):
+class ProjectAdmin(TranslationAdmin):
     list_display = ('name', 'tahun', 'client')
     list_filter = ('tahun', 'categories')
     search_fields = ('name', 'description')
@@ -44,16 +45,21 @@ class ProjectAdmin(admin.ModelAdmin):
     filter_horizontal = ('locations', 'categories')
     
 @admin.register(Story)
-class StoryAdmin(admin.ModelAdmin):
+class StoryAdmin(TranslationAdmin):
     list_display = ('judul', 'tanggal', 'author')
     search_fields = ('judul', 'deskripsi')
     prepopulated_fields = {'slug': ('judul',)}
 
 @admin.register(Article)
-class ArticleAdmin(admin.ModelAdmin):
+class ArticleAdmin(TranslationAdmin):
     list_display = ('judul', 'tanggal', 'author')
     search_fields = ('judul', 'deskripsi')
     prepopulated_fields = {'slug': ('judul',)}
+
+@admin.register(Modul)
+class ModulAdmin(TranslationAdmin):
+    list_display = ('judul', 'tanggal_rilis')
+    search_fields = ('judul',)
 
 admin.site.register(Category)
 admin.site.register(Location)

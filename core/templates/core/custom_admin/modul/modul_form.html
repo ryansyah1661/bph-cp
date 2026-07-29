@@ -18,9 +18,15 @@
 
   <!-- Container Form Input Utama (Tombol Aksi Disatukan di Dalamnya) -->
   <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-5">
-    <div>
-      <label class="block text-sm font-semibold text-slate-700 mb-1">Judul Dokumen Publikasi <span class="text-red-500">*</span></label>
-      {{ form.judul }}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1">Judul Dokumen Publikasi (Bahasa Indonesia) <span class="text-red-500">*</span></label>
+        {{ form.judul_ind }}
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1">Judul Dokumen Publikasi (English)</label>
+        {{ form.judul_en }}
+      </div>
     </div>
 
     <div>

@@ -1,12 +1,14 @@
 {% extends 'core/base.html' %}
-{% load static %}
+{% load static i18n %}
 
 {% block title %}{{ project.name|default:"Detail Studi Kasus Proyek" }} - Bhumi Pasa Hijau{% endblock %}
 
 {% block content %}
 <main class="flex-grow pt-[80px] bg-background">
   
-  {% include 'core/partials/hero-banner.html' with title=project.name|default:"Analisis &amp; Restorasi Ekosistem Strategis" subtitle="Studi Kasus Proyek" bg_image=project.image|default:"images/about-hero.jpg" %}
+  {% trans "Analisis &amp; Restorasi Ekosistem Strategis" as hero_title %}
+  {% trans "Studi Kasus Proyek" as hero_subtitle %}
+  {% include 'core/partials/hero-banner.html' with title=project.name|default:hero_title subtitle=hero_subtitle bg_image=project.image|default:"images/about-hero.jpg" %}
 
   <section class="w-full bg-background py-16">
     <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -23,7 +25,7 @@
         <div class="space-y-4">
           <div class="flex items-center gap-3 text-primary">
             <span class="material-symbols-outlined text-2xl font-bold">warning</span>
-            <h2 class="font-headline-lg text-xl md:text-2xl font-bold text-on-surface">Tantangan &amp; Kondisi Awal</h2>
+            <h2 class="font-headline-lg text-xl md:text-2xl font-bold text-on-surface">{% trans "Tantangan &amp; Kondisi Awal" %}</h2>
           </div>
           <!-- FIX 2: Ditambahkan |safe untuk merender format html tantangan dari Quill -->
           <div class="font-body-md text-sm md:text-base text-on-surface-variant leading-relaxed text-justify md:text-left">
@@ -36,7 +38,7 @@
         <div class="space-y-4">
           <div class="flex items-center gap-3 text-primary">
             <span class="material-symbols-outlined text-2xl font-bold">biotech</span>
-            <h2 class="font-headline-lg text-xl md:text-2xl font-bold text-on-surface">Pendekatan &amp; Metodologi Kerja</h2>
+            <h2 class="font-headline-lg text-xl md:text-2xl font-bold text-on-surface">{% trans "Pendekatan &amp; Metodologi Kerja" %}</h2>
           </div>
           <!-- FIX 3: Ditambahkan |safe untuk merender format html metodologi dari Quill -->
           <div class="font-body-md text-sm md:text-base text-on-surface-variant leading-relaxed text-justify md:text-left">
@@ -49,7 +51,7 @@
         <div class="space-y-4">
           <div class="flex items-center gap-3 text-primary">
             <span class="material-symbols-outlined text-2xl font-bold">task_alt</span>
-            <h2 class="font-headline-lg text-xl md:text-2xl font-bold text-on-surface">Hasil &amp; Dampak Ekologis Terukur</h2>
+            <h2 class="font-headline-lg text-xl md:text-2xl font-bold text-on-surface">{% trans "Hasil &amp; Dampak Ekologis Terukur" %}</h2>
           </div>
           <!-- FIX 4: Ditambahkan |safe untuk merender format html hasil evaluasi dari Quill -->
           <div class="font-body-md text-sm md:text-base text-on-surface-variant leading-relaxed text-justify md:text-left">
@@ -61,15 +63,15 @@
         {% if project.metrics.all %}
         <div class="bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)] mt-8">
           <div class="bg-surface-container px-6 py-4 border-b border-border-subtle">
-            <h3 class="font-headline-md text-sm font-bold text-on-surface uppercase tracking-wider">Matriks Capaian Kinerja Proyek</h3>
+            <h3 class="font-headline-md text-sm font-bold text-on-surface uppercase tracking-wider">{% trans "Matriks Capaian Kinerja Proyek" %}</h3>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
               <thead>
                 <tr class="bg-surface border-b border-border-subtle text-xs font-bold uppercase tracking-wider text-on-surface-variant">
-                  <th class="p-4 pl-6">Parameter Monitoring</th>
-                  <th class="p-4">Target Awal</th>
-                  <th class="p-4 pr-6">Realisasi Akhir Lapangan</th>
+                  <th class="p-4 pl-6">{% trans "Parameter Monitoring" %}</th>
+                  <th class="p-4">{% trans "Target Awal" %}</th>
+                  <th class="p-4 pr-6">{% trans "Realisasi Akhir Lapangan" %}</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-border-subtle font-body-md text-sm text-on-surface-variant">
@@ -89,28 +91,28 @@
 
       <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-[100px]">
         <div class="bg-surface-white border border-border-subtle rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.01)] space-y-5">
-          <h3 class="font-headline-lg text-base font-bold text-on-surface border-b border-border-subtle pb-3">Ringkasan Proyek</h3>
+          <h3 class="font-headline-lg text-base font-bold text-on-surface border-b border-border-subtle pb-3">{% trans "Ringkasan Proyek" %}</h3>
           <div class="space-y-4 font-body-sm text-sm">
             <div>
-              <span class="text-text-muted block text-xs uppercase tracking-wider font-bold">Mitra / Klien</span>
+              <span class="text-text-muted block text-xs uppercase tracking-wider font-bold">{% trans "Mitra / Klien" %}</span>
               <span class="text-on-surface font-semibold text-base mt-0.5 block">{{ project.client.nama|default:"Kemitraan Strategis BPH" }}</span>
             </div>
             <div>
-              <span class="text-text-muted block text-xs uppercase tracking-wider font-bold">Lokasi Wilayah</span>
+              <span class="text-text-muted block text-xs uppercase tracking-wider font-bold">{% trans "Lokasi Wilayah" %}</span>
               <span class="text-on-surface font-semibold mt-0.5 block flex items-center gap-1">
                 <span class="material-symbols-outlined text-sm text-primary">location_on</span>
                 {{ project.location.nama_provinsi|default:"Kawasan Kerja Lapangan Indonesia" }}
               </span>
             </div>
             <div>
-              <span class="text-text-muted block text-xs uppercase tracking-wider font-bold">Tahun Pelaksanaan</span>
+              <span class="text-text-muted block text-xs uppercase tracking-wider font-bold">{% trans "Tahun Pelaksanaan" %}</span>
               <span class="text-on-surface font-semibold mt-0.5 block">{{ project.tahun|default:"2026" }}</span>
             </div>
           </div>
         </div>
         <a href="{% url 'experience' %}" class="w-full inline-flex items-center justify-center gap-2 border-2 border-border-subtle text-on-surface-variant font-label-caps text-xs font-bold uppercase tracking-wider py-3.5 rounded-xl hover:border-primary hover:text-primary transition-all duration-300" style="text-decoration: none;">
           <span class="material-symbols-outlined text-sm">arrow_back</span>
-          <span>Kembali ke Pengalaman</span>
+          <span>{% trans "Kembali ke Pengalaman" %}</span>
         </a>
       </aside>
 
@@ -139,12 +141,12 @@
       </div>
 
       <div class="md:col-span-7 md:col-start-6 lg:col-span-8 lg:col-start-5 mt-8 md:mt-0 flex flex-col items-start">
-        <span class="font-label-caps text-[11px] font-bold tracking-widest text-primary uppercase bg-primary/10 px-3 py-1 rounded-full mb-4">Dokumen Publikasi</span>
-        <h2 class="font-headline-xl text-2xl md:text-3xl font-bold text-on-surface mb-3 leading-tight">Unduh Modul Laporan Teknis Resmi</h2>
-        <p class="font-body-md text-sm md:text-base text-on-surface-variant mb-6 leading-relaxed text-justify md:text-left">Laporan komprehensif ini mencakup data mentah hasil pengujian lapangan, analisis spasial peta citra satelit, serta rekomendasi kebijakan lingkungan jangka panjang yang diserahkan secara resmi kepada mitra terkait.</p>
+        <span class="font-label-caps text-[11px] font-bold tracking-widest text-primary uppercase bg-primary/10 px-3 py-1 rounded-full mb-4">{% trans "Dokumen Publikasi" %}</span>
+        <h2 class="font-headline-xl text-2xl md:text-3xl font-bold text-on-surface mb-3 leading-tight">{% trans "Unduh Modul Laporan Teknis Resmi" %}</h2>
+        <p class="font-body-md text-sm md:text-base text-on-surface-variant mb-6 leading-relaxed text-justify md:text-left">{% trans "Laporan komprehensif ini mencakup data mentah hasil pengujian lapangan, analisis spasial peta citra satelit, serta rekomendasi kebijakan lingkungan jangka panjang yang diserahkan secara resmi kepada mitra terkait." %}</p>
         
         <a class="group inline-flex items-center gap-2 bg-primary text-surface-white px-7 py-4 rounded-xl font-label-caps text-xs font-bold uppercase tracking-wider hover:bg-forest-deep hover:-translate-y-[1px] active:translate-y-0 transition-all duration-300 shadow-md cursor-pointer" href="{{ project.pdf_file.url }}" target="_blank" rel="noopener" style="text-decoration: none;">
-          <span>Buka &amp; Baca Modul (PDF)</span><span class="material-symbols-outlined text-sm font-bold">download</span>
+          <span>{% trans "Buka &amp; Baca Modul (PDF)" %}</span><span class="material-symbols-outlined text-sm font-bold">download</span>
         </a>
       </div>
 
@@ -156,8 +158,8 @@
   <section class="w-full bg-surface-container-lowest border-t border-border-subtle py-20">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
       <div class="mb-8">
-        <h2 class="font-headline-lg text-2xl md:text-3xl font-bold text-on-surface mb-2">Pengalaman Terkait</h2>
-        <p class="font-body-md text-sm text-on-surface-variant">Proyek lain dengan fokus kategori yang serupa.</p>
+        <h2 class="font-headline-lg text-2xl md:text-3xl font-bold text-on-surface mb-2">{% trans "Pengalaman Terkait" %}</h2>
+        <p class="font-body-md text-sm text-on-surface-variant">{% trans "Proyek lain dengan fokus kategori yang serupa." %}</p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         {% for rp in related_projects %}

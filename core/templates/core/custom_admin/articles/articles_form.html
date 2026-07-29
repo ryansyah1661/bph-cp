@@ -26,15 +26,21 @@
 
       <!-- CARD 1: INFORMASI UTAMA -->
       <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-5">
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1">Judul <span class="text-red-500">*</span></label>
-          {{ form.judul }}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Judul (Bahasa Indonesia) <span class="text-red-500">*</span></label>
+            {{ form.judul_ind }}
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Judul (English)</label>
+            {{ form.judul_en }}
+          </div>
         </div>
 
         <div>
           <label class="block text-sm font-semibold text-slate-700 mb-1">Slug <span class="text-red-500">*</span></label>
           {{ form.slug }}
-          <p class="text-xs text-gray-400 mt-1">Slug otomatis terisi dari judul</p>
+          <p class="text-xs text-gray-400 mt-1">Slug otomatis terisi dari judul Indonesia</p>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -48,22 +54,40 @@
           </div>
         </div>
 
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1">Ringkasan</label>
-          <div class="short-textarea-wrapper">
-            {{ form.short }}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Ringkasan (Bahasa Indonesia)</label>
+            <div class="short-textarea-wrapper">
+              {{ form.short_ind }}
+            </div>
+            <p class="text-xs text-gray-400 mt-1">Ringkasan singkat untuk tampilan card (ID)</p>
           </div>
-          <p class="text-xs text-gray-400 mt-1">Ringkasan singkat untuk tampilan card</p>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Ringkasan (English)</label>
+            <div class="short-textarea-wrapper">
+              {{ form.short_en }}
+            </div>
+            <p class="text-xs text-gray-400 mt-1">Ringkasan singkat untuk tampilan card (EN)</p>
+          </div>
         </div>
       </div>
 
-      <!-- CARD 2: ISI ARTIKEL (QUILL EDITOR) -->
+      <!-- CARD 2: ISI ARTIKEL INDONESIA (QUILL EDITOR) -->
       <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-        <label class="block text-sm font-semibold text-slate-700 mb-3">Isi Artikel <span class="text-red-500">*</span></label>
+        <label class="block text-sm font-semibold text-slate-700 mb-3">Isi Artikel (Bahasa Indonesia) <span class="text-red-500">*</span></label>
         <div class="hidden-textarea-wrapper">
-          {{ form.deskripsi }}
+          {{ form.deskripsi_ind }}
         </div>
-        <div id="quill-editor" style="height: 350px;"></div>
+        <div id="quill-editor-ind" style="height: 350px;"></div>
+      </div>
+
+      <!-- CARD 3: ISI ARTIKEL ENGLISH (QUILL EDITOR) -->
+      <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+        <label class="block text-sm font-semibold text-slate-700 mb-3">Isi Artikel (English)</label>
+        <div class="hidden-textarea-wrapper">
+          {{ form.deskripsi_en }}
+        </div>
+        <div id="quill-editor-en" style="height: 350px;"></div>
       </div>
 
     </div>
@@ -110,82 +134,81 @@
     ['clean']
   ];
 
-  var quill = new Quill('#quill-editor', {
-    theme: 'snow',
-    modules: {
-      toolbar: {
-        container: toolbarOptions,
-        handlers: {
-          'image': function() {
-            var input = document.createElement('input');
-            input.setAttribute('type', 'file');
-            input.setAttribute('accept', 'image/png, image/jpeg, image/gif, image/webp');
-            input.click();
-            input.onchange = function() {
-              var file = input.files[0];
-              if (!file) return;
+  function setupQuillEditor(selector, textareaName) {
+    var editorElement = document.querySelector(selector);
+    var textareaElement = document.querySelector('textarea[name="' + textareaName + '"]');
+    if (!editorElement) return null;
 
-              if (file.size > 5 * 1024 * 1024) {
-                alert('Ukuran file terlalu besar. Maksimal 5MB.');
-                return;
-              }
-
-              var formData = new FormData();
-              formData.append('image', file);
-
-              fetch('{% url "quill_image_upload" %}', {
-                method: 'POST',
-                headers: {
-                  'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: formData
-              })
-              .then(function(response) { return response.json(); })
-              .then(function(data) {
-                if (data.url) {
-                  var range = quill.getSelection(true);
-                  quill.insertEmbed(range.index, 'image', data.url);
-                  quill.setSelection(range.index + 1);
-                } else {
-                  alert(data.error || 'Gagal mengunggah gambar.');
+    var quill = new Quill(selector, {
+      theme: 'snow',
+      modules: {
+        toolbar: {
+          container: toolbarOptions,
+          handlers: {
+            'image': function() {
+              var input = document.createElement('input');
+              input.setAttribute('type', 'file');
+              input.setAttribute('accept', 'image/png, image/jpeg, image/gif, image/webp');
+              input.click();
+              input.onchange = function() {
+                var file = input.files[0];
+                if (!file) return;
+                if (file.size > 5 * 1024 * 1024) {
+                  alert('Ukuran file terlalu besar. Maksimal 5MB.');
+                  return;
                 }
-              })
-              .catch(function(err) {
-                console.error('Upload error:', err);
-                alert('Terjadi kesalahan saat mengunggah gambar.');
-              });
-            };
+                var formData = new FormData();
+                formData.append('image', file);
+                fetch('{% url "quill_image_upload" %}', {
+                  method: 'POST',
+                  headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+                  body: formData
+                })
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                  if (data.url) {
+                    var range = quill.getSelection(true);
+                    quill.insertEmbed(range.index, 'image', data.url);
+                    quill.setSelection(range.index + 1);
+                  } else {
+                    alert(data.error || 'Gagal mengunggah gambar.');
+                  }
+                })
+                .catch(function(err) {
+                  console.error('Upload error:', err);
+                  alert('Terjadi kesalahan saat mengunggah gambar.');
+                });
+              };
+            }
           }
         }
       }
+    });
+
+    if (textareaElement && textareaElement.value) {
+      quill.root.innerHTML = textareaElement.value;
     }
-  });
 
-  var descTextarea = document.querySelector('textarea[name="deskripsi"]');
-
-  if (descTextarea && descTextarea.value) {
-    quill.root.innerHTML = descTextarea.value;
-  }
-
-  var formElement = document.getElementById('article-form');
-
-  function syncQuillToTextarea() {
-    if (descTextarea) {
-      descTextarea.value = quill.getText().trim().length > 0 ? quill.root.innerHTML : '';
+    function sync() {
+      if (textareaElement) {
+        textareaElement.value = quill.getText().trim().length > 0 ? quill.root.innerHTML : '';
+      }
     }
+    quill.on('text-change', sync);
+    var form = document.getElementById('article-form');
+    if (form) form.addEventListener('submit', sync);
+    return quill;
   }
 
-  quill.on('text-change', syncQuillToTextarea);
-  if (formElement) {
-    formElement.addEventListener('submit', syncQuillToTextarea);
-  }
+  setupQuillEditor('#quill-editor-ind', 'deskripsi_ind');
+  setupQuillEditor('#quill-editor-en', 'deskripsi_en');
 
   var tanggalInput = document.querySelector('input[name="tanggal"]');
   if (tanggalInput) {
     tanggalInput.setAttribute('type', 'date');
   }
 
-  var judulInput = document.querySelector('input[name="judul"]');
+  var judulInput = document.querySelector('input[name="judul_ind"]') || document.querySelector('input[name="judul"]');
   var slugInput = document.querySelector('input[name="slug"]');
 
   if (judulInput && slugInput) {
@@ -251,7 +274,9 @@
 
 <style>
   .hidden-textarea-wrapper textarea,
-  textarea[name="deskripsi"] {
+  textarea[name="deskripsi"],
+  textarea[name="deskripsi_ind"],
+  textarea[name="deskripsi_en"] {
     display: none !important;
     position: absolute !important;
     width: 0 !important;
@@ -262,7 +287,9 @@
   }
 
   .short-textarea-wrapper textarea,
-  textarea[name="short"] {
+  textarea[name="short"],
+  textarea[name="short_ind"],
+  textarea[name="short_en"] {
     width: 100% !important;
     height: 90px !important;
     padding: 8px 12px !important;
@@ -275,7 +302,9 @@
     resize: vertical !important;
   }
   .short-textarea-wrapper textarea:focus,
-  textarea[name="short"]:focus {
+  textarea[name="short"]:focus,
+  textarea[name="short_ind"]:focus,
+  textarea[name="short_en"]:focus {
     outline: none !important;
     border-color: #059669 !important;
     box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1) !important;

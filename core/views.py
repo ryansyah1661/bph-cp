@@ -275,12 +275,12 @@ class ArticleListView(AdminRequiredMixin, ListView):
 class ArticleCreateView(AdminRequiredMixin, CreateView):
     model = Article
     template_name = 'core/custom_admin/articles/articles_form.html'
-    fields = ['judul', 'slug', 'author', 'short', 'deskripsi', 'tanggal', 'gambar']
+    fields = ['judul_ind', 'judul_en', 'slug', 'author', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'tanggal', 'gambar']
     success_url = reverse_lazy('article_list')
 
     def form_valid(self, form):
         from django.utils.text import slugify
-        base_slug = form.cleaned_data.get('slug') or slugify(form.cleaned_data.get('judul'))
+        base_slug = form.cleaned_data.get('slug') or slugify(form.cleaned_data.get('judul_ind') or form.cleaned_data.get('judul'))
         slug = base_slug[:200]
         
         queryset = Article.objects.filter(slug=slug)
@@ -298,12 +298,12 @@ class ArticleCreateView(AdminRequiredMixin, CreateView):
 class ArticleUpdateView(AdminRequiredMixin, UpdateView):
     model = Article
     template_name = 'core/custom_admin/articles/articles_form.html'
-    fields = ['judul', 'slug', 'author', 'short', 'deskripsi', 'tanggal', 'gambar']
+    fields = ['judul_ind', 'judul_en', 'slug', 'author', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'tanggal', 'gambar']
     success_url = reverse_lazy('article_list')
 
     def form_valid(self, form):
         from django.utils.text import slugify
-        base_slug = form.cleaned_data.get('slug') or slugify(form.cleaned_data.get('judul'))
+        base_slug = form.cleaned_data.get('slug') or slugify(form.cleaned_data.get('judul_ind') or form.cleaned_data.get('judul'))
         slug = base_slug[:200]
         
         queryset = Article.objects.filter(slug=slug).exclude(pk=self.object.pk)
@@ -342,7 +342,7 @@ class ProjectListView(AdminRequiredMixin, ListView):
 class ProjectCreateView(AdminRequiredMixin, CreateView):
     model = Project
     template_name = 'core/custom_admin/experience/experience_form.html'
-    fields = ['name', 'slug', 'description', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'categories']
+    fields = ['name_ind', 'name_en', 'slug', 'description_ind', 'description_en', 'intro_ind', 'intro_en', 'challenge_ind', 'challenge_en', 'methodology_ind', 'methodology_en', 'result_ind', 'result_en', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'categories']
     success_url = reverse_lazy('project_list')
 
     def form_valid(self, form):
@@ -352,7 +352,7 @@ class ProjectCreateView(AdminRequiredMixin, CreateView):
 class ProjectUpdateView(AdminRequiredMixin, UpdateView):
     model = Project
     template_name = 'core/custom_admin/experience/experience_form.html'
-    fields = ['name', 'slug', 'description', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'categories']
+    fields = ['name_ind', 'name_en', 'slug', 'description_ind', 'description_en', 'intro_ind', 'intro_en', 'challenge_ind', 'challenge_en', 'methodology_ind', 'methodology_en', 'result_ind', 'result_en', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'categories']
     success_url = reverse_lazy('project_list')
 
     def form_valid(self, form):
@@ -464,7 +464,7 @@ class ServiceListView(AdminRequiredMixin, ListView):
 class ServiceCreateView(AdminRequiredMixin, CreateView):
     model = Service
     template_name = 'core/custom_admin/services/services_form.html'
-    fields = ['title', 'slug', 'approach', 'portfolio', 'icon', 'thumbnail', 'bg_image', 'categories']
+    fields = ['title_ind', 'title_en', 'slug', 'approach_ind', 'approach_en', 'portfolio', 'icon', 'thumbnail', 'bg_image', 'categories']
     success_url = reverse_lazy('service_list')
 
     def form_valid(self, form):
@@ -474,7 +474,7 @@ class ServiceCreateView(AdminRequiredMixin, CreateView):
 class ServiceUpdateView(AdminRequiredMixin, UpdateView):
     model = Service
     template_name = 'core/custom_admin/services/services_form.html'
-    fields = ['title', 'slug', 'approach', 'portfolio', 'icon', 'thumbnail', 'bg_image', 'categories']
+    fields = ['title_ind', 'title_en', 'slug', 'approach_ind', 'approach_en', 'portfolio', 'icon', 'thumbnail', 'bg_image', 'categories']
     success_url = reverse_lazy('service_list')
 
     def form_valid(self, form):
