@@ -14,32 +14,8 @@
 {% block content %}
 <main class="flex-grow pt-[80px]">
 
-  <!-- HERO SECTION (DISAMAKAN DENGAN ABOUT: POSISI TENGAH & EFEK AWAN) -->
-  <section class="relative h-[70vh] min-h-[500px] w-full flex items-center justify-center text-center overflow-hidden bg-on-background">
-    <div class="absolute inset-0 z-0">
-      <div class="absolute inset-0 bg-gradient-to-t from-surface via-on-background/50 to-on-background/70 z-10"></div>
-      <img alt="Services Hero" class="w-full h-full object-cover" src="{% static 'images/forest-services.jpg' %}" />
-    </div>
-    <div class="relative z-20 w-full max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop text-surface-white">
-      <p class="font-label-caps text-label-caps uppercase text-tertiary mb-3 tracking-wider">
-        Expertise & Solutions
-      </p>
-      <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-4 leading-tight">
-        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-          Our Services
-        {% else %}
-          Layanan Kami
-        {% endif %}
-      </h1>
-      <p class="font-body-lg text-body-lg max-w-2xl mx-auto text-surface-white/90 leading-relaxed">
-        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-          Strategic solutions for Indonesia's natural resources. We provide data-driven management, deep ecological understanding, and robust resource allocation.
-        {% else %}
-          Solusi strategis untuk sumber daya alam Indonesia. Kami menyediakan manajemen berbasis data, pemahaman ekologis yang mendalam, dan alokasi sumber daya yang mumpuni.
-        {% endif %}
-      </p>
-    </div>
-  </section>
+  <!-- HERO BANNER (RINGKAS & TIDAK PADAT) -->
+  {% include 'core/partials/hero-banner.html' with title="Layanan Kami" title_en="Our Services" subtitle="Expertise & Solutions" subtitle_en="Expertise & Solutions" desc="Solusi strategis untuk sumber daya alam Indonesia. Kami menyediakan manajemen berbasis data, pemahaman ekologis yang mendalam, dan alokasi sumber daya yang mumpuni." desc_en="Strategic solutions for Indonesia's natural resources. We provide data-driven management, deep ecological understanding, and robust resource allocation." bg_image="images/forest-services.jpg" %}
   
   <!-- SECTION NRM -->
   <section class="py-section-gap bg-surface w-full">
@@ -51,7 +27,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {% for service in services_nrm %}
-        <a href="{% url 'detail-services' slug=service.slug %}"
+        <a href="{% url 'detail-services' slug=service.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}"
              class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             {% if service.thumbnail %}
@@ -99,7 +75,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {% for service in services_nru %}
-        <a href="{% url 'detail-services' slug=service.slug %}"
+        <a href="{% url 'detail-services' slug=service.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}"
              class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             {% if service.thumbnail %}
@@ -160,7 +136,7 @@
             {% endif %}
           </p>
           <a class="inline-flex items-center justify-center px-6 py-3 bg-primary text-on-primary font-label-caps text-label-caps rounded hover:bg-forest-deep transition-all duration-300 hover:-translate-y-0.5" 
-               href="{% url 'experience' %}?filter=pelatihan">
+               href="{% url 'experience' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}&filter=pelatihan">
             {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}More Details{% else %}Selengkapnya{% endif %}
           </a>
         </div>

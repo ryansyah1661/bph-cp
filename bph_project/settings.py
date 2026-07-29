@@ -135,6 +135,6 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  
 DEFAULT_FROM_EMAIL = 'Bhumi Pasa Hijau <no-reply@bhumipasahijau.com>'
 
-BPH_NOTIFICATION_EMAIL = 'muhammadrian1602@gmail.com'
+BPH_NOTIFICATION_EMAIL = 'support@bhumipasahijau.com'
 
 PASSWORD_RESET_TIMEOUT = 14400 # link aktif selama 4 jam (dalam detik)

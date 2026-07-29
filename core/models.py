@@ -214,6 +214,7 @@ class Story(models.Model):
 class Article(models.Model):
     judul = models.CharField(max_length=250)
     slug = models.SlugField(max_length=200, unique=True, blank=True)
+    slug_en = models.SlugField(unique=True, blank=True, null=True)
     tanggal = models.DateField(verbose_name="Tanggal Terbit")
     author = models.CharField(max_length=100, default="Admin BPH")
     short = models.TextField(help_text="Ringkasan pendek artikel")

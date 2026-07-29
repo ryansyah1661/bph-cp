@@ -1,13 +1,13 @@
-{% load static %}
-<section class="relative w-full h-[614px] min-h-[500px] flex items-center justify-center overflow-hidden bg-surface-container-highest">
-  
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<section class="relative w-full h-[614px] min-h-[500px] flex items-center justify-center overflow-hidden bg-on-background">
   <div class="absolute inset-0 z-0">
     <img class="w-full h-full object-cover" 
          alt="{{ title }}" 
          src="{% static '' %}{{ bg_image }}"/>
     
     <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-transparent"></div>
-    
     <div class="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background via-background/60 to-transparent"></div>
   </div>
 
@@ -15,17 +15,17 @@
     
     {% if subtitle %}
     <span class="font-label-caps text-label-caps text-tertiary tracking-widest uppercase mb-4 block drop-shadow-md">
-      {{ subtitle }}
+      {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}{{ subtitle_en|default:subtitle }}{% else %}{{ subtitle }}{% endif %}
     </span>
     {% endif %}
 
     <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-surface-white drop-shadow-lg leading-tight {% if desc %}mb-6{% endif %}">
-      {{ title }}
+      {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}{{ title_en|default:title }}{% else %}{{ title }}{% endif %}
     </h1>
 
     {% if desc %}
     <p class="font-body-lg text-body-lg text-surface-white/90 mx-auto max-w-2xl leading-relaxed drop-shadow-sm">
-      {{ desc }}
+      {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}{{ desc_en|default:desc }}{% else %}{{ desc }}{% endif %}
     </p>
     {% endif %}
 

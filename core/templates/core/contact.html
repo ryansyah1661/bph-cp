@@ -14,32 +14,8 @@
 {% block content %}
 <main class="flex-grow pt-[80px] bg-background">
   
-  <!-- HERO SECTION (POSISI TENGAH & EFEK AWAN) -->
-  <section class="relative h-[70vh] min-h-[500px] w-full flex items-center justify-center text-center overflow-hidden bg-on-background">
-    <div class="absolute inset-0 z-0">
-      <div class="absolute inset-0 bg-gradient-to-t from-surface via-on-background/50 to-on-background/70 z-10"></div>
-      <img alt="Contact Hero" class="w-full h-full object-cover" src="{% static 'images/contact.jpg' %}" />
-    </div>
-    <div class="relative z-20 w-full max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop text-surface-white">
-      <p class="font-label-caps text-label-caps uppercase text-tertiary mb-3 tracking-wider">
-        GET IN TOUCH
-      </p>
-      <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-4 leading-tight">
-        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-          Contact Us
-        {% else %}
-          Hubungi Kami
-        {% endif %}
-      </h1>
-      <p class="font-body-lg text-body-lg max-w-2xl mx-auto text-surface-white/90 leading-relaxed">
-        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-          Have questions regarding environmental management consulting services or want to establish a strategic partnership? Contact our team of experts today.
-        {% else %}
-          Punya pertanyaan mengenai layanan konsultasi manajemen lingkungan atau ingin menjalin kemitraan strategis? Hubungi tim ahli kami sekarang.
-        {% endif %}
-      </p>
-    </div>
-  </section>
+  <!-- HERO BANNER (RINGKAS & TIDAK PADAT) -->
+  {% include 'core/partials/hero-banner.html' with title="Hubungi Kami" title_en="Contact Us" subtitle="GET IN TOUCH" subtitle_en="GET IN TOUCH" desc="Punya pertanyaan mengenai layanan konsultasi manajemen lingkungan atau ingin menjalin kemitraan strategis? Hubungi tim ahli kami sekarang." desc_en="Have questions regarding environmental management consulting services or want to establish a strategic partnership? Contact our team of experts today." bg_image="images/contact.jpg" %}
 
   <section id="form-kontak" class="px-margin-mobile bg-surface md:px-margin-desktop max-w-container-max mx-auto py-section-gap">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -123,16 +99,6 @@
       <div class="lg:col-span-7">
         <div class="bg-surface-white border border-border-subtle rounded-2xl p-6 md:p-10 shadow-[0_4px_20px_rgba(0,0,0,0.01)]">
           
-          {% if messages %}
-            <div class="space-y-3 mb-6">
-              {% for message in messages %}
-                <div class="p-4 text-sm rounded-xl border {% if message.tags == 'error' %}text-rose-800 bg-rose-50 border-rose-100{% else %}text-emerald-800 bg-emerald-50 border-emerald-100{% endif %} shadow-xs">
-                  {{ message }}
-                </div>
-              {% endfor %}
-            </div>
-          {% endif %}
-
           <h3 class="font-headline-lg text-xl font-bold text-on-surface mb-2">
             {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Send Direct Message{% else %}Kirim Pesan Langsung{% endif %}
           </h3>

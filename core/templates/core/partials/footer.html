@@ -15,7 +15,7 @@
         PT Bhumi Pasa Hijau
       </div>
       <p class="text-sm text-surface-variant/70 leading-relaxed max-w-[280px] text-justify md:text-left italic">
-        Specializing in Natural Resources Management and Understanding.[cite: 1]
+        Specializing in Natural Resources Management and Understanding.
       </p>
       
       <div class="flex items-center gap-3 mt-6">
@@ -42,10 +42,10 @@
         {% trans "Profil" %}
       </h4>
       <div class="flex flex-col gap-3 w-full">
-        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'about' %}">{% trans "Tentang BPH" %}</a>
-        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'services' %}">{% trans "Layanan" %}</a>
-        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'experience' %}">{% trans "Pengalaman" %}</a>
-        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'gallery' %}">{% trans "Galeri" %}</a>
+        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'about' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}">{% trans "Tentang BPH" %}</a>
+        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'services' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}">{% trans "Layanan" %}</a>
+        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'experience' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}">{% trans "Pengalaman" %}</a>
+        <a class="text-sm md:text-base text-surface-variant/70 hover:text-primary hover:translate-x-1 transition-all duration-300 block" href="{% url 'gallery' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}">{% trans "Galeri" %}</a>
         
         <!-- LINK UNDUH PROFIL PERUSAHAAN DENGAN STATIC PDF -->
         <div class="border-t border-white/5 pt-3 mt-1">

@@ -1,7 +1,15 @@
 {% extends 'core/base.html' %}
 {% load static i18n %}
 
-{% block title %}{{ article.judul|default:"Detail Artikel" }} - Bhumi Pasa Hijau{% endblock %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block title %}
+    {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+        {{ article.judul_en|default:article.judul }} - Bhumi Pasa Hijau
+    {% else %}
+        {{ article.judul|default:"Detail Artikel" }} - Bhumi Pasa Hijau
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 <!-- HERO BANNER: GAMBAR DI BELAKANG JUDUL -->
@@ -17,14 +25,18 @@
 
     <div class="relative z-20 w-full max-w-4xl mx-auto px-6 text-center text-surface-white pt-20">
         <h1 class="font-display-lg-mobile md:text-4xl font-extrabold text-white leading-tight mb-6 drop-shadow-md">
-            {{ article.judul }}
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+                {{ article.judul_en|default:article.judul }}
+            {% else %}
+                {{ article.judul }}
+            {% endif %}
         </h1>
 
         <!-- METADATA: PENULIS, TANGGAL, & KATEGORI -->
         <div class="flex flex-wrap items-center justify-center gap-3 text-xs md:text-sm text-surface-white/90">
             <div class="flex items-center gap-1.5 bg-black/30 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10">
                 <span class="material-symbols-outlined text-base text-primary">person</span>
-                <span>{% trans "Oleh" %} <strong class="text-white font-semibold">{{ article.author }}</strong></span>
+                <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}By{% else %}{% trans "Oleh" %}{% endif %} <strong class="text-white font-semibold">{{ article.author }}</strong></span>
             </div>
             
             <div class="flex items-center gap-1.5 bg-black/30 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10">
@@ -34,7 +46,7 @@
 
             <span class="bg-blue-500/80 backdrop-blur-md text-white text-xs font-semibold px-3.5 py-1.5 rounded-full border border-blue-400/30 flex items-center gap-1">
                 <span class="material-symbols-outlined text-xs">newspaper</span>
-                {% trans "Artikel &amp; Wawasan" %}
+                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Articles & Insights{% else %}{% trans "Artikel &amp; Wawasan" %}{% endif %}
             </span>
 
             {% if article.kategori %}
@@ -49,17 +61,24 @@
 <!-- ISI KONTEN ARTIKEL -->
 <main class="w-full bg-white py-16">
     <div class="max-w-3xl mx-auto px-margin-mobile md:px-0">
-        <article class="prose max-w-none text-on-surface-variant font-body-md text-base leading-relaxed space-y-6 text-justify md:text-left">
-            {{ article.deskripsi|safe }}
+        <article class="prose prose-sm md:prose-base max-w-none text-on-surface-variant font-body-md text-base leading-relaxed text-left">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+                {{ article.deskripsi_en|default:article.deskripsi|safe }}
+            {% else %}
+                {{ article.deskripsi|safe }}
+            {% endif %}
         </article>
 
         <!-- OTHER POSTS / ARTIKEL TERKAIT -->
         {% if related_articles %}
         <div class="mt-20 pt-12 border-t border-border-subtle">
-            <h3 class="text-2xl font-bold text-on-surface mb-8">{% trans "Artikel Terkait" %}</h3>
+            <h3 class="text-2xl font-bold text-on-surface mb-8">
+                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Related Articles{% else %}{% trans "Artikel Terkait" %}{% endif %}
+            </h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {% for rel in related_articles %}
-                <a href="{% url 'detail-articles' slug=rel.slug %}" class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300" style="text-decoration: none;">
+                <!-- Perbaikan link slug: otomatis mendeteksi slug_en jika mode EN aktif -->
+                <a href="{% url 'detail-articles' slug=article.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}" class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300" style="text-decoration: none;">
                     <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
                         {% if rel.gambar %}
                         <img src="{{ rel.gambar.url }}" alt="{{ rel.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
@@ -70,13 +89,13 @@
                     <div class="p-5 flex-1 flex flex-col">
                         <p class="text-[11px] text-text-muted font-medium mb-1.5">{{ rel.tanggal|date:"d F Y" }}</p>
                         <h4 class="font-headline-md text-base font-bold text-on-surface mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                            {{ rel.judul }}
+                            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}{{ rel.judul_en|default:rel.judul }}{% else %}{{ rel.judul }}{% endif %}
                         </h4>
                         <p class="text-xs text-on-surface-variant line-clamp-2 mb-4">
-                            {{ rel.short }}
+                            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}{{ rel.short_en|default:rel.short }}{% else %}{{ rel.short }}{% endif %}
                         </p>
                         <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary">
-                            {% trans "Baca" %} <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
+                            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Read{% else %}{% trans "Baca" %}{% endif %} <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
                         </span>
                     </div>
                 </a>

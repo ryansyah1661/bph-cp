@@ -14,32 +14,8 @@
 {% block content %}
 <main class="flex-grow pt-[80px] bg-background">
   
-  <!-- HERO SECTION (POSISI TENGAH & EFEK AWAN) -->
-  <section class="relative h-[70vh] min-h-[500px] w-full flex items-center justify-center text-center overflow-hidden bg-on-background">
-    <div class="absolute inset-0 z-0">
-      <div class="absolute inset-0 bg-gradient-to-t from-surface via-on-background/50 to-on-background/70 z-10"></div>
-      <img alt="Gallery Hero" class="w-full h-full object-cover" src="{% static 'images/forest-services.jpg' %}" />
-    </div>
-    <div class="relative z-20 w-full max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop text-surface-white">
-      <p class="font-label-caps text-label-caps uppercase text-tertiary mb-3 tracking-wider">
-        VISUAL & KNOWLEDGE HUB
-      </p>
-      <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-4 leading-tight">
-        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-          Gallery & Publications
-        {% else %}
-          Galeri & Publikasi
-        {% endif %}
-      </h1>
-      <p class="font-body-lg text-body-lg max-w-2xl mx-auto text-surface-white/90 leading-relaxed">
-        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-          Documenting environmental conservation efforts, scientific research releases, news releases, and real action stories of the BPH team directly from the field.
-        {% else %}
-          Mendokumentasikan upaya pelestarian lingkungan, rilis riset ilmiah, rilis berita, serta cerita aksi nyata tim BPH langsung dari lapangan.
-        {% endif %}
-      </p>
-    </div>
-  </section>
+  <!-- HERO BANNER (RINGKAS & TIDAK PADAT) -->
+  {% include 'core/partials/hero-banner.html' with title="Galeri & Publikasi" title_en="Gallery & Publications" subtitle="VISUAL & KNOWLEDGE HUB" subtitle_en="VISUAL & KNOWLEDGE HUB" desc="Mendokumentasikan upaya pelestarian lingkungan, rilis riset ilmiah, rilis berita, serta cerita aksi nyata tim BPH langsung dari lapangan." desc_en="Documenting environmental conservation efforts, scientific research releases, news releases, and real action stories of the BPH team directly from the field." bg_image="images/forest-services.jpg" %}
 
   <section class="w-full bg-surface py-16">
     <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -169,22 +145,22 @@
           <div id="article-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for article in articles %}
             <a href="{% url 'detail-articles' slug=article.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}" class="article-card group flex flex-col bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer" style="text-decoration: none;">
-              <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-                {% if article.gambar %}
-                <img src="{{ article.gambar.url }}" alt="{{ article.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                {% else %}
-                <img src="{% static 'images/services1.jpg' %}" alt="{{ article.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                {% endif %}
-              </div>
-              <div class="p-4 flex-1 flex flex-col">
-                <p class="text-[10px] text-text-muted font-medium mb-1">{{ article.tanggal|date:"d F Y" }} • {{ article.author }}</p>
-                <h3 class="font-headline-md text-sm font-bold text-on-surface mb-1.5 line-clamp-2 group-hover:text-primary transition-colors leading-snug">{{ article.judul }}</h3>
-                <p class="text-[11px] text-on-surface-variant line-clamp-3 mb-3 leading-relaxed">{{ article.short }}</p>
-                <span class="mt-auto text-[11px] font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">
-                  {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Read More{% else %}Baca Selengkapnya{% endif %} <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
-                </span>
-              </div>
-            </a>
+  <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+    {% if article.gambar %}
+    <img src="{{ article.gambar.url }}" alt="{{ article.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+    {% else %}
+    <img src="{% static 'images/services1.jpg' %}" alt="{{ article.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+    {% endif %}
+  </div>
+  <div class="p-4 flex-1 flex flex-col">
+    <p class="text-[10px] text-text-muted font-medium mb-1">{{ article.tanggal|date:"d F Y" }} • {{ article.author }}</p>
+    <h3 class="font-headline-md text-sm font-bold text-on-surface mb-1.5 line-clamp-2 group-hover:text-primary transition-colors leading-snug">{{ article.judul }}</h3>
+    <p class="text-[11px] text-on-surface-variant line-clamp-3 mb-3 leading-relaxed">{{ article.short }}</p>
+    <span class="mt-auto text-[11px] font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">
+      {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Read More{% else %}Baca Selengkapnya{% endif %} <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
+    </span>
+  </div>
+</a>
             {% empty %}
             <div class="col-span-full py-16 px-4 flex flex-col items-center justify-center text-center bg-white rounded-2xl border border-dashed border-slate-200 shadow-sm">
               <span class="material-symbols-outlined text-5xl text-slate-300 mb-3">article</span>

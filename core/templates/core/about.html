@@ -14,32 +14,8 @@
 {% block content %}
 <main class="flex-grow pt-[80px]">
 
-  <!-- HERO SECTION -->
-  <section class="relative h-[70vh] min-h-[500px] w-full flex items-center justify-center text-center overflow-hidden bg-on-background">
-    <div class="absolute inset-0 z-0">
-      <div class="absolute inset-0 bg-gradient-to-t from-surface via-on-background/50 to-on-background/70 z-10"></div>
-      <img alt="About Hero" class="w-full h-full object-cover" src="{% static 'images/about-hero.jpg' %}" />
-    </div>
-    <div class="relative z-20 w-full max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop text-surface-white">
-      <p class="font-label-caps text-label-caps uppercase text-tertiary mb-3 tracking-wider">
-        Corporate Profile
-      </p>
-      <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-4 leading-tight">
-        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-          About Us
-        {% else %}
-          Tentang Kami
-        {% endif %}
-      </h1>
-      <p class="font-body-lg text-body-lg max-w-2xl mx-auto text-surface-white/90 leading-relaxed">
-        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-          Bhumi Pasa Hijau (BPH) was founded by young professionals in Bogor as a strategic consulting firm focusing on the understanding and governance of natural resources, environment, and sustainable social development.
-        {% else %}
-          Bhumi Pasa Hijau (BPH) didirikan oleh para profesional muda di Bogor sebagai firma konsultan strategis yang berfokus pada pemahaman dan tata kelola sumber daya alam, lingkungan, serta sosial berkelanjutan.
-        {% endif %}
-      </p>
-    </div>
-  </section>
+  <!-- HERO BANNER (RINGKAS & TIDAK PADAT) -->
+  {% include 'core/partials/hero-banner.html' with title="Tentang Kami" title_en="About Us" subtitle="Corporate Profile" subtitle_en="Corporate Profile" desc="Bhumi Pasa Hijau (BPH) didirikan oleh para profesional muda di Bogor sebagai firma konsultan strategis yang berfokus pada pemahaman dan tata kelola sumber daya alam, lingkungan, serta sosial berkelanjutan." desc_en="Bhumi Pasa Hijau (BPH) was founded by young professionals in Bogor as a strategic consulting firm focusing on the understanding and governance of natural resources, environment, and sustainable social development." bg_image="images/about-hero.jpg" %}
 
   <!-- SEKSI MEMBANGUN MASA DEPAN -->
   <section class="max-w-container-max bg-surface mx-auto px-margin-mobile md:px-margin-desktop py-section-gap">

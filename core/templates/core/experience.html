@@ -103,32 +103,8 @@
 
 <main class="flex-grow pt-[80px] bg-background">
 
-  <!-- HERO SECTION (DISAMAKAN DENGAN ABOUT & SERVICES: POSISI TENGAH & EFEK AWAN) -->
-  <section class="relative h-[70vh] min-h-[500px] w-full flex items-center justify-center text-center overflow-hidden bg-on-background">
-    <div class="absolute inset-0 z-0">
-      <div class="absolute inset-0 bg-gradient-to-t from-surface via-on-background/50 to-on-background/70 z-10"></div>
-      <img alt="Experience Hero" class="w-full h-full object-cover" src="{% static 'images/about-hero.jpg' %}" />
-    </div>
-    <div class="relative z-20 w-full max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop text-surface-white">
-      <p class="font-label-caps text-label-caps uppercase text-tertiary mb-3 tracking-wider">
-        OUR TRACK RECORD
-      </p>
-      <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-4 leading-tight">
-        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-          BPH Experience
-        {% else %}
-          Pengalaman BPH
-        {% endif %}
-      </h1>
-      <p class="font-body-lg text-body-lg max-w-2xl mx-auto text-surface-white/90 leading-relaxed">
-        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-          We provide the best services to deliver an unforgettable experience.
-        {% else %}
-          Kami memberikan layanan terbaik untuk memberikan pengalaman yang tak terlupakan.
-        {% endif %}
-      </p>
-    </div>
-  </section>
+  <!-- HERO BANNER (RINGKAS & TIDAK PADAT) -->
+  {% include 'core/partials/hero-banner.html' with title="Pengalaman BPH" title_en="BPH Experience" subtitle="OUR TRACK RECORD" subtitle_en="OUR TRACK RECORD" desc="Kami memberikan layanan terbaik untuk memberikan pengalaman yang tak terlupakan." desc_en="We provide the best services to deliver an unforgettable experience." bg_image="images/about-hero.jpg" %}
 
   <!-- STATISTIK SECTION -->
   <section class="w-full bg-white py-14 border-b border-gray-100">
