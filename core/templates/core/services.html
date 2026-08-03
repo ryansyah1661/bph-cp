@@ -25,10 +25,10 @@
         <h2 class="font-headline-xl text-headline-xl text-on-surface">Natural Resources Management (NRM)</h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="nrm-grid">
         {% for service in services_nrm %}
         <a href="{% url 'detail-services' slug=service.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}"
-             class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+           class="nrm-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             {% if service.thumbnail %}
             <img alt="{{ service.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{{ service.thumbnail.url }}" />
@@ -62,6 +62,17 @@
         </p>
         {% endfor %}
       </div>
+
+      <!-- Tombol Paginasi NRM -->
+      <div class="flex justify-start gap-4 pt-8">
+        <button id="nrm-less-btn" class="hidden font-label-caps text-xs font-bold px-6 py-2.5 bg-white border-2 border-primary text-primary rounded-lg hover:bg-forest-deep hover:text-white transition-all duration-300 cursor-pointer">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Load Less{% else %}Muat Lebih Sedikit{% endif %}
+        </button>
+        <button id="nrm-more-btn" class="hidden font-label-caps text-xs font-bold px-6 py-2.5 bg-transparent border-2 border-primary text-primary rounded-lg hover:bg-forest-deep hover:text-white transition-all duration-300 cursor-pointer">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Load More Services{% else %}Muat Layanan Lebih Banyak{% endif %}
+        </button>
+      </div>
+
     </div>
   </section>
 
@@ -73,10 +84,10 @@
         <h2 class="font-headline-xl text-headline-xl text-on-surface">Natural Resources Understanding (NRU)</h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="nru-grid">
         {% for service in services_nru %}
         <a href="{% url 'detail-services' slug=service.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}"
-             class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+           class="nru-card group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
           <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
             {% if service.thumbnail %}
             <img alt="{{ service.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{{ service.thumbnail.url }}" />
@@ -110,39 +121,99 @@
         </p>
         {% endfor %}
       </div>
-    </div>
-  </section>
 
-  <!-- SECTION TRAINING -->
-  {% comment %} <section class="py-section-gap bg-background w-full">
-    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-      
-      <div class="relative w-full rounded-2xl overflow-hidden bg-surface-container-high h-[400px] flex items-center group shadow-[0_4px_20px_rgba(0,0,0,0.01)] border border-border-subtle/40">
-        <div class="absolute inset-0 w-full h-full">
-          <img class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
-               alt="Environmental training session outdoors" 
-               src="{% static 'images/services-training.jpg' %}">
-          <div class="absolute inset-0 bg-gradient-to-r from-inverse-surface/90 via-inverse-surface/60 to-transparent"></div>
-        </div>
-        <div class="relative z-10 p-margin-mobile md:p-margin-desktop max-w-2xl text-surface-white">
-          <h2 class="font-headline-xl text-headline-xl mb-stack-md text-surface-white">
-            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Training & Capacity{% else %}Pelatihan & Kapasitas{% endif %}
-          </h2>
-          <p class="font-body-lg text-body-lg text-surface-variant mb-stack-lg opacity-90">
-            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-              Empowering local communities, institutional staff, and corporate partners with the knowledge and tools necessary for effective environmental stewardship. Our "Social Training" programs bridge the gap between technical data and actionable field practice.
-            {% else %}
-              Memberdayakan masyarakat lokal, staf institusi, dan mitra korporat dengan pengetahuan serta alat yang diperlukan untuk pengelolaan lingkungan yang efektif. Program "Social Training" kami menjembatani kesenjangan antara data teknis dan praktik lapangan yang dapat dieksekusi.
-            {% endif %}
-          </p>
-          <a class="inline-flex items-center justify-center px-6 py-3 bg-primary text-on-primary font-label-caps text-label-caps rounded hover:bg-forest-deep transition-all duration-300 hover:-translate-y-0.5" 
-               href="{% url 'experience' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}&filter=pelatihan">
-            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}More Details{% else %}Selengkapnya{% endif %}
-          </a>
-        </div>
+      <!-- Tombol Paginasi NRU -->
+      <div class="flex justify-start gap-4 pt-8">
+        <button id="nru-less-btn" class="hidden font-label-caps text-xs font-bold px-6 py-2.5 bg-white border-2 border-primary text-primary rounded-lg hover:bg-forest-deep hover:text-white transition-all duration-300 cursor-pointer">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Load Less{% else %}Muat Lebih Sedikit{% endif %}
+        </button>
+        <button id="nru-more-btn" class="hidden font-label-caps text-xs font-bold px-6 py-2.5 bg-transparent border-2 border-primary text-primary rounded-lg hover:bg-forest-deep hover:text-white transition-all duration-300 cursor-pointer">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Load More Services{% else %}Muat Layanan Lebih Banyak{% endif %}
+        </button>
       </div>
 
     </div>
-  </section> {% endcomment %}
+  </section>
+
 </main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    
+    // --- PAGINASI NRM ---
+    const nrmCards = document.querySelectorAll('.nrm-card');
+    const nrmMoreBtn = document.getElementById('nrm-more-btn');
+    const nrmLessBtn = document.getElementById('nrm-less-btn');
+    let nrmLimit = 3;
+
+    function calculateNrm() {
+      nrmCards.forEach((card, idx) => {
+        if (idx < nrmLimit) card.classList.remove('hidden');
+        else card.classList.add('hidden');
+      });
+      
+      if (nrmCards.length > nrmLimit) nrmMoreBtn.classList.remove('hidden');
+      else nrmMoreBtn.classList.add('hidden');
+
+      if (nrmLimit > 3) nrmLessBtn.classList.remove('hidden');
+      else nrmLessBtn.classList.add('hidden');
+    }
+
+    if(nrmMoreBtn) {
+      nrmMoreBtn.addEventListener('click', () => { 
+        nrmLimit += 3; 
+        calculateNrm(); 
+      });
+    }
+    if(nrmLessBtn) {
+      nrmLessBtn.addEventListener('click', () => {
+        if (nrmLimit > 3) {
+          nrmLimit -= 3; 
+          calculateNrm();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    }
+
+    // --- PAGINASI NRU ---
+    const nruCards = document.querySelectorAll('.nru-card');
+    const nruMoreBtn = document.getElementById('nru-more-btn');
+    const nruLessBtn = document.getElementById('nru-less-btn');
+    let nruLimit = 3;
+
+    function calculateNru() {
+      nruCards.forEach((card, idx) => {
+        if (idx < nruLimit) card.classList.remove('hidden');
+        else card.classList.add('hidden');
+      });
+
+      if (nruCards.length > nruLimit) nruMoreBtn.classList.remove('hidden');
+      else nruMoreBtn.classList.add('hidden');
+
+      if (nruLimit > 3) nruLessBtn.classList.remove('hidden');
+      else nruLessBtn.classList.add('hidden');
+    }
+
+    if(nruMoreBtn) {
+      nruMoreBtn.addEventListener('click', () => { 
+        nruLimit += 3; 
+        calculateNru(); 
+      });
+    }
+    if(nruLessBtn) {
+      nruLessBtn.addEventListener('click', () => {
+        if (nruLimit > 3) {
+          nruLimit -= 3; 
+          calculateNru();
+          window.scrollTo({ top: 400, behavior: 'smooth' });
+        }
+      });
+    }
+
+    calculateNrm();
+    calculateNru();
+  });
+</script>
 {% endblock %}
