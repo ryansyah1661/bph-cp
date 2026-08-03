@@ -170,7 +170,7 @@ def story_view(request):
 # JALUR FRONTEND HALAMAN DETAIL
 # ==========================================
 def detail_articles_view(request, slug):
-    article_data = get_object_or_404(Article, slug=slug)
+    article_data = get_object_or_404(Article, Q(slug_ind=slug) | Q(slug_en=slug) if hasattr(Article, 'slug_en') else Q(slug=slug))
     
     related_articles = Article.objects.filter(
         Q(author=article_data.author)
@@ -188,20 +188,25 @@ def detail_articles_view(request, slug):
 def detail_experience_view(request, slug):
     project_data = get_object_or_404(
         Project.objects.select_related('client', 'service_portfolio').prefetch_related('locations', 'categories', 'metrics'),
-        slug=slug
+        Q(slug_ind=slug) | Q(slug_en=slug) if hasattr(Project, 'slug_en') else Q(slug=slug)
     )
     related_projects = Project.objects.filter(
         categories__in=project_data.categories.all()
     ).exclude(pk=project_data.pk).distinct().order_by('-tahun', '-id')[:3]
+    
     return render(request, 'core/detail-experience.html', {
         'project': project_data,
         'related_projects': related_projects,
     })
 
 def detail_services_view(request, slug):
-    service_data = get_object_or_404(Service, slug=slug)
+    # Menggunakan Q(slug_ind=slug) | Q(slug_en=slug) agar aman mendeteksi slug ID maupun EN
+    query_condition = Q(slug_ind=slug) | Q(slug_en=slug) if hasattr(Service, 'slug_en') else Q(slug=slug)
+    service_data = get_object_or_404(Service, query_condition)
+    
     nrm_services = Service.objects.filter(portfolio='NRM')
     nru_services = Service.objects.filter(portfolio='NRU')
+    
     return render(request, 'core/detail-services.html', {
         'service': service_data,
         'nrm_services': nrm_services,
@@ -209,7 +214,10 @@ def detail_services_view(request, slug):
     })
 
 def detail_story_view(request, slug):
-    story_data = get_object_or_404(Story.objects.select_related('lokasi', 'project'), slug=slug)
+    story_data = get_object_or_404(
+        Story.objects.select_related('lokasi', 'project'), 
+        Q(slug_ind=slug) | Q(slug_en=slug) if hasattr(Story, 'slug_en') else Q(slug=slug)
+    )
     
     related_stories = Story.objects.filter(
         Q(author=story_data.author) | Q(lokasi=story_data.lokasi)
@@ -281,7 +289,6 @@ class ArticleCreateView(AdminRequiredMixin, CreateView):
     def form_valid(self, form):
         from django.utils.text import slugify
         
-        # Author diisi otomatis dari akun yang login
         user = self.request.user
         form.instance.author = user.profile.nama_lengkap if hasattr(user, 'profile') and user.profile.nama_lengkap else user.username
 
@@ -309,7 +316,6 @@ class ArticleUpdateView(AdminRequiredMixin, UpdateView):
     def form_valid(self, form):
         from django.utils.text import slugify
         
-        # Author diisi otomatis dari akun yang login
         user = self.request.user
         form.instance.author = user.profile.nama_lengkap if hasattr(user, 'profile') and user.profile.nama_lengkap else user.username
 
@@ -767,7 +773,7 @@ def folder_delete_view(request, pk):
     folder = get_object_or_404(Folder, pk=pk)
     if request.method == 'POST':
         folder.delete()
-        messages.success(self.request, 'Data folder berhasil dihapus!')
+        messages.success(request, 'Data folder berhasil dihapus!')
     return redirect('folder_list')
 
 
@@ -831,10 +837,6 @@ class SuperuserRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
 # ==========================================
 # 11. MANAGEMENT USER / PENGGUNA
 # ==========================================
-from django import forms
-from django.contrib.auth.models import User
-from .models import Profile
-
 class UserCreateForm(forms.ModelForm):
     nama_lengkap = forms.CharField(max_length=150, required=True, label="Nama Lengkap")
 
@@ -868,6 +870,7 @@ class UserUpdateForm(forms.ModelForm):
         if qs.exists():
             raise forms.ValidationError("Nama ini sudah digunakan. Silakan gunakan nama lain.")
         return nama
+
 class UserListView(SuperuserRequiredMixin, ListView):
     model = User
     template_name = 'core/custom_admin/user/user_list.html'
@@ -885,14 +888,12 @@ class UserCreateView(SuperuserRequiredMixin, CreateView):
     def form_valid(self, form):
         user = form.save(commit=False)
         user.set_password(form.cleaned_data['password'])
-        user.save()  # Triggers signal that creates Profile
+        user.save()  
         
-        # Fetch the newly created profile and update it
         profile = Profile.objects.get(user=user)
         profile.nama_lengkap = form.cleaned_data['nama_lengkap']
         profile.save()
         
-        # Refresh the profile cache on the user object so the next save doesn't overwrite with stale data
         user.profile = profile 
         
         messages.success(self.request, 'Pengguna baru berhasil ditambahkan!')
@@ -916,9 +917,8 @@ class UserUpdateView(SuperuserRequiredMixin, UpdateView):
 
 @login_required(login_url='/be/login/')
 def user_delete_view(request, pk):
-    # Validasi langsung di dalam view untuk fungsi hapus
     if not request.user.is_superuser:
-        messages.error(self.request, 'Akses ditolak! Penghapusan pengguna hanya dapat dilakukan oleh Superuser.')
+        messages.error(request, 'Akses ditolak! Penghapusan pengguna hanya dapat dilakukan oleh Superuser.')
         return redirect('custom_dashboard')
         
     user = get_object_or_404(User, pk=pk)
