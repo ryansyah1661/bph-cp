@@ -19,6 +19,7 @@
         <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
           <th class="p-4 font-semibold w-14 text-center">No.</th>
           <th class="p-4 font-semibold">Username</th>
+          <th class="p-4 font-semibold">Nama Lengkap</th>
           <th class="p-4 font-semibold">Email</th>
           <th class="p-4 font-semibold text-center whitespace-nowrap">Status Staff</th>
           <th class="p-4 font-semibold text-center whitespace-nowrap">Status Aktif</th>
@@ -34,6 +35,10 @@
 
           <td class="p-4 font-semibold text-slate-800 align-middle text-base break-words">
             {{ u.username }}
+          </td>
+          
+          <td class="p-4 align-middle text-slate-600 break-words font-medium">
+            {% if u.profile.nama_lengkap %}{{ u.profile.nama_lengkap }}{% else %}<span class="text-gray-400 italic">Belum diatur</span>{% endif %}
           </td>
 
           <td class="p-4 align-middle text-slate-600 break-all font-medium">

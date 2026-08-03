@@ -20,9 +20,15 @@
     
     <div class="flex-1 space-y-5">
       <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-5">
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1">Keterangan / Caption Foto <span class="text-red-500">*</span></label>
-          {{ form.caption }}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Keterangan / Caption Foto (Bahasa Indonesia) <span class="text-red-500">*</span></label>
+            {{ form.caption_ind }}
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Keterangan / Caption Foto (English)</label>
+            {{ form.caption_en }}
+          </div>
         </div>
 
         <div>

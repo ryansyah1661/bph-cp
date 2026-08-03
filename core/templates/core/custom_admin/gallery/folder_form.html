@@ -17,10 +17,16 @@
   {% endif %}
 
   <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-5">
-    <div>
-      <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Folder / Album <span class="text-red-500">*</span></label>
-      {{ form.nama }}
-      <p class="text-[11px] text-gray-400 mt-1">Contoh: Penanaman Mangrove Teluk Hijau, Pelatihan GIS Rimbawan, dll.</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Folder / Album (Bahasa Indonesia) <span class="text-red-500">*</span></label>
+        {{ form.nama_ind }}
+        <p class="text-[11px] text-gray-400 mt-1">Contoh: Penanaman Mangrove Teluk Hijau, Pelatihan GIS Rimbawan, dll.</p>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Folder / Album (English)</label>
+        {{ form.nama_en }}
+      </div>
     </div>
 
     <div>

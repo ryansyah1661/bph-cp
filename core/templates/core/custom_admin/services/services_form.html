@@ -36,10 +36,16 @@
           </div>
         </div>
         
-        <div class="block-input-group">
-          <label class="block text-sm font-semibold text-slate-700 mb-1">Slug <span class="text-red-500">*</span></label>
-          <div class="django-input-wrapper">{{ form.slug }}</div>
-          <p class="text-xs text-gray-400 mt-1">Slug otomatis terisi dari nama bidang layanan (Indonesia)</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="block-input-group">
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Slug <span class="text-red-500">*</span></label>
+            <div class="django-input-wrapper">{{ form.slug_ind }}</div>
+            <p class="text-xs text-gray-400 mt-1">Slug otomatis terisi dari nama bidang layanan (Indonesia)</p>
+          </div>
+          <div class="block-input-group">
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Slug (English) <span class="text-red-500">*</span></label>
+            <div class="django-input-wrapper">{{ form.slug_en }}</div>
+          </div>
         </div>
         
         <div class="block-input-group">
@@ -169,20 +175,40 @@
   setupQuillEditor('#quill-editor-ind', 'approach_ind');
   setupQuillEditor('#quill-editor-en', 'approach_en');
 
-  var titleInput = document.getElementById('id_title_ind') || document.getElementById('id_title');
-  var slugInput = document.getElementById('id_slug');
+  
+  // Auto-slug script
+  const titleFields = [
+    { source: 'judul_ind', target: 'slug_ind' },
+    { source: 'judul_en', target: 'slug_en' },
+    { source: 'title_ind', target: 'slug_ind' },
+    { source: 'title_en', target: 'slug_en' },
+    { source: 'name_ind', target: 'slug_ind' },
+    { source: 'name_en', target: 'slug_en' },
+    { source: 'nama_ind', target: 'slug_ind' },
+    { source: 'nama_en', target: 'slug_en' },
+    { source: 'judul', target: 'slug' },
+    { source: 'title', target: 'slug' },
+    { source: 'name', target: 'slug' },
+    { source: 'nama', target: 'slug' }
+  ];
 
-  if (titleInput && slugInput) {
-    titleInput.addEventListener('input', function() {
-      var slugify = titleInput.value
-        .toLowerCase()
-        .trim()
-        .replace(/[^\w\s-]/g, '')
-        .replace(/[\s_]+/g, '-')
-        .replace(/^-+|-+$/g, '');
-      slugInput.value = slugify;
-    });
-  }
+  titleFields.forEach(function(field) {
+    var sourceInput = document.querySelector('input[name="' + field.source + '"]');
+    var targetInput = document.querySelector('input[name="' + field.target + '"]');
+    
+    if (sourceInput && targetInput) {
+      sourceInput.addEventListener('input', function() {
+        var slugify = sourceInput.value
+          .toLowerCase()
+          .trim()
+          .replace(/[^\w\s-]/g, '')
+          .replace(/[\s_]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        targetInput.value = slugify;
+      });
+    }
+  });
+
 
   const fileInput = document.getElementById('id_thumbnail');
   const fileNameDisplay = document.getElementById('file-name-display');
@@ -227,7 +253,7 @@
   textarea[name="approach"],
   textarea[name="approach_ind"],
   textarea[name="approach_en"] { 
-    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; opacity: 0; pointer-events: none; 
+    display: none !important; 
   }
   
   .bph-hidden-file-input {

@@ -49,9 +49,7 @@ class Service(models.Model):
     thumbnail = models.ImageField(upload_to='services/thumbs/', blank=True, verbose_name="Foto Kartu Layanan")
     bg_image = models.ImageField(upload_to='services/banners/', blank=True, verbose_name="Foto Banner Atas")
     
-    # Field intro sudah dihapus sesuai permintaan
     approach = models.TextField(verbose_name="Detail Deskripsi Cakupan Kerja")
-    
     categories = models.ManyToManyField(Category, blank=True, related_name='services')
 
     class Meta:
@@ -101,8 +99,6 @@ class Location(models.Model):
     kode_wilayah = models.CharField(
         max_length=2, choices=PROVINCE_CODE_CHOICES, unique=True, null=True, blank=True, verbose_name="Kode Provinsi BPS"
     )
-    
-    # Kolom PostGIS untuk menyimpan poligon batas wilayah peta
     geom = gis_models.MultiPolygonField(srid=4326, null=True, blank=True, verbose_name="Geometri Poligon Peta")
 
     class Meta:
@@ -155,9 +151,7 @@ class Project(models.Model):
 
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True, related_name='projects')
     service_portfolio = models.ForeignKey(Service, on_delete=models.SET_NULL, null=True, related_name='projects', verbose_name="Sesuai Portofolio Layanan")
-    
     locations = models.ManyToManyField(Location, related_name='projects', verbose_name="Lokasi Wilayah Provinsi")
-
     categories = models.ManyToManyField(Category, related_name='projects', verbose_name="Kategori Proyek")
 
     class Meta:
@@ -186,17 +180,16 @@ class ProjectMetric(models.Model):
     
 # === 7. TABEL CERITA LAPANGAN (Stories) ===
 class Story(models.Model):
-    judul = models.CharField(max_length=250)
+    judul = models.CharField(max_length=250, verbose_name="Judul Cerita")
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     tanggal = models.DateField(verbose_name="Tanggal Rilis")
-    author = models.CharField(max_length=100, default="Admin BPH")
-    
+
+    author = models.CharField(max_length=100, blank=True, verbose_name="Penulis")
+
     lokasi = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, related_name='stories', verbose_name="Lokasi Wilayah")
-    
     short = models.TextField(help_text="Ringkasan pendek yang muncul di kartu depan")
     deskripsi = models.TextField(verbose_name="Isi Cerita Lengkap")
     gambar = models.ImageField(upload_to='stories/', verbose_name="Foto Cerita")
-    
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, blank=True, related_name='stories')
 
     class Meta:
@@ -212,11 +205,13 @@ class Story(models.Model):
     
 # === 8. TABEL ARTIKEL (Articles) ===
 class Article(models.Model):
-    judul = models.CharField(max_length=250)
+    judul = models.CharField(max_length=250, verbose_name="Judul Artikel")
     slug = models.SlugField(max_length=200, unique=True, blank=True)
-    slug_en = models.SlugField(unique=True, blank=True, null=True)
     tanggal = models.DateField(verbose_name="Tanggal Terbit")
-    author = models.CharField(max_length=100, default="Admin BPH")
+    
+    # Author otomatis mengambil nama user login dan terkunci
+    author = models.CharField(max_length=100, blank=True, verbose_name="Penulis")
+    
     short = models.TextField(help_text="Ringkasan pendek artikel")
     deskripsi = models.TextField(verbose_name="Konten Artikel Lengkap")
     gambar = models.ImageField(upload_to='articles/', verbose_name="Foto Utama Artikel")
@@ -251,7 +246,6 @@ class ContactMessage(models.Model):
     subjek = models.CharField(max_length=200, verbose_name="Subjek / Nama Instansi")
     pesan = models.TextField(verbose_name="Detail Pesan / Pertanyaan")
     tanggal_kirim = models.DateTimeField(auto_now_add=True, verbose_name="Waktu Kirim")
-
     is_read = models.BooleanField(default=False, verbose_name="Sudah Dibaca")
     
     class Meta:
@@ -264,7 +258,6 @@ class ContactMessage(models.Model):
 class Gallery(models.Model):
     caption = models.CharField(max_length=250, verbose_name="Keterangan Foto / Caption")
     gambar = models.ImageField(upload_to='gallery/', verbose_name="File Foto")
-    
     folder = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name='images', null=True, blank=True, verbose_name="Dimasukkan ke Folder")
     kategori = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='galleries', verbose_name="Kategori Filter")
     tanggal_upload = models.DateField(verbose_name="Tanggal Dokumentasi")
@@ -278,7 +271,7 @@ class Gallery(models.Model):
 # === 12. TABEL KUSTOM EKSTENSI PROFIL USER PENGGUNA ===
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    nama_lengkap = models.CharField(max_length=150, blank=True, null=True, verbose_name="Nama Lengkap")
+    nama_lengkap = models.CharField(max_length=150, unique=True, blank=True, null=True, verbose_name="Nama Lengkap")
     foto_profil = models.ImageField(upload_to='profile_pics/', blank=True, null=True, verbose_name="Foto Profil")
 
     def __str__(self):

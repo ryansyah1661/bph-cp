@@ -16,26 +16,48 @@
     <form method="post" class="space-y-6">
       {% csrf_token %}
       
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-bold text-neutral-700">Nama Kategori <span class="text-red-500">*</span></label>
-        <div class="django-input-wrapper">
-          {{ form.name }}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-bold text-neutral-700">Nama Kategori (Bahasa Indonesia) <span class="text-red-500">*</span></label>
+          <div class="django-input-wrapper">
+            {{ form.name_ind }}
+          </div>
+          {% if form.name_ind.errors %}
+            <span class="text-xs font-medium text-red-500 mt-1">{{ form.name_ind.errors.0 }}</span>
+          {% endif %}
         </div>
-        {% if form.name.errors %}
-          <span class="text-xs font-medium text-red-500 mt-1">{{ form.name.errors.0 }}</span>
-        {% endif %}
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-bold text-neutral-700">Nama Kategori (English)</label>
+          <div class="django-input-wrapper">
+            {{ form.name_en }}
+          </div>
+          {% if form.name_en.errors %}
+            <span class="text-xs font-medium text-red-500 mt-1">{{ form.name_en.errors.0 }}</span>
+          {% endif %}
+        </div>
       </div>
 
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-bold text-neutral-700">Slug (URL)</label>
-        <div class="django-input-wrapper">
-          {{ form.slug }}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-bold text-neutral-700">Slug</label>
+          <div class="django-input-wrapper">
+            {{ form.slug_ind }}
+          </div>
+          {% if form.slug_ind.errors %}
+            <span class="text-xs font-medium text-red-500 mt-1">{{ form.slug_ind.errors.0 }}</span>
+          {% endif %}
         </div>
-        {% if form.slug.errors %}
-          <span class="text-xs font-medium text-red-500 mt-1">{{ form.slug.errors.0 }}</span>
-        {% endif %}
-        <p class="text-[11px] text-neutral-400 font-medium">Slug otomatis terisi secara real-time dari nama kategori.</p>
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-bold text-neutral-700">Slug (English)</label>
+          <div class="django-input-wrapper">
+            {{ form.slug_en }}
+          </div>
+          {% if form.slug_en.errors %}
+            <span class="text-xs font-medium text-red-500 mt-1">{{ form.slug_en.errors.0 }}</span>
+          {% endif %}
+        </div>
       </div>
+      <p class="text-[11px] text-neutral-400 font-medium mb-5">Slug otomatis terisi secara real-time dari nama kategori.</p>
 
       <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100" style="display: flex; gap: 12px;">
         <a href="{% url 'category_list' %}" class="py-2.5 px-5 rounded-xl border border-neutral-200 text-sm font-semibold text-neutral-600 hover:bg-neutral-50 transition-colors cursor-pointer bg-white text-decoration-none" style="text-decoration: none;">
@@ -51,21 +73,40 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const nameInput = document.getElementById('id_name'); 
-  const slugInput = document.getElementById('id_slug'); 
+  
+  // Auto-slug script
+  const titleFields = [
+    { source: 'judul_ind', target: 'slug_ind' },
+    { source: 'judul_en', target: 'slug_en' },
+    { source: 'title_ind', target: 'slug_ind' },
+    { source: 'title_en', target: 'slug_en' },
+    { source: 'name_ind', target: 'slug_ind' },
+    { source: 'name_en', target: 'slug_en' },
+    { source: 'nama_ind', target: 'slug_ind' },
+    { source: 'nama_en', target: 'slug_en' },
+    { source: 'judul', target: 'slug' },
+    { source: 'title', target: 'slug' },
+    { source: 'name', target: 'slug' },
+    { source: 'nama', target: 'slug' }
+  ];
 
-  if (nameInput && slugInput) {
-    nameInput.addEventListener('input', function() {
-      let slugText = this.value
-        .toLowerCase()
-        .trim()
-        .replace(/[^\w\s-]/g, '')   
-        .replace(/[\s_]+/g, '-')    
-        .replace(/^-+|-+$/g, '');   
-      
-      slugInput.value = slugText;
-    });
-  }
+  titleFields.forEach(function(field) {
+    var sourceInput = document.querySelector('input[name="' + field.source + '"]');
+    var targetInput = document.querySelector('input[name="' + field.target + '"]');
+    
+    if (sourceInput && targetInput) {
+      sourceInput.addEventListener('input', function() {
+        var slugify = sourceInput.value
+          .toLowerCase()
+          .trim()
+          .replace(/[^\w\s-]/g, '')
+          .replace(/[\s_]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        targetInput.value = slugify;
+      });
+    }
+  });
+
 });
 </script>
 

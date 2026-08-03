@@ -275,11 +275,16 @@ class ArticleListView(AdminRequiredMixin, ListView):
 class ArticleCreateView(AdminRequiredMixin, CreateView):
     model = Article
     template_name = 'core/custom_admin/articles/articles_form.html'
-    fields = ['judul_ind', 'judul_en', 'slug', 'author', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'tanggal', 'gambar']
+    fields = ['judul_ind', 'judul_en', 'slug_ind', 'slug_en', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'tanggal', 'gambar']
     success_url = reverse_lazy('article_list')
 
     def form_valid(self, form):
         from django.utils.text import slugify
+        
+        # Author diisi otomatis dari akun yang login
+        user = self.request.user
+        form.instance.author = user.profile.nama_lengkap if hasattr(user, 'profile') and user.profile.nama_lengkap else user.username
+
         base_slug = form.cleaned_data.get('slug') or slugify(form.cleaned_data.get('judul_ind') or form.cleaned_data.get('judul'))
         slug = base_slug[:200]
         
@@ -298,11 +303,16 @@ class ArticleCreateView(AdminRequiredMixin, CreateView):
 class ArticleUpdateView(AdminRequiredMixin, UpdateView):
     model = Article
     template_name = 'core/custom_admin/articles/articles_form.html'
-    fields = ['judul_ind', 'judul_en', 'slug', 'author', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'tanggal', 'gambar']
+    fields = ['judul_ind', 'judul_en', 'slug_ind', 'slug_en', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'tanggal', 'gambar']
     success_url = reverse_lazy('article_list')
 
     def form_valid(self, form):
         from django.utils.text import slugify
+        
+        # Author diisi otomatis dari akun yang login
+        user = self.request.user
+        form.instance.author = user.profile.nama_lengkap if hasattr(user, 'profile') and user.profile.nama_lengkap else user.username
+
         base_slug = form.cleaned_data.get('slug') or slugify(form.cleaned_data.get('judul_ind') or form.cleaned_data.get('judul'))
         slug = base_slug[:200]
         
@@ -342,7 +352,7 @@ class ProjectListView(AdminRequiredMixin, ListView):
 class ProjectCreateView(AdminRequiredMixin, CreateView):
     model = Project
     template_name = 'core/custom_admin/experience/experience_form.html'
-    fields = ['name_ind', 'name_en', 'slug', 'description_ind', 'description_en', 'intro_ind', 'intro_en', 'challenge_ind', 'challenge_en', 'methodology_ind', 'methodology_en', 'result_ind', 'result_en', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'categories']
+    fields = ['name_ind', 'name_en', 'slug_ind', 'slug_en', 'description_ind', 'description_en', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'categories']
     success_url = reverse_lazy('project_list')
 
     def form_valid(self, form):
@@ -352,7 +362,7 @@ class ProjectCreateView(AdminRequiredMixin, CreateView):
 class ProjectUpdateView(AdminRequiredMixin, UpdateView):
     model = Project
     template_name = 'core/custom_admin/experience/experience_form.html'
-    fields = ['name_ind', 'name_en', 'slug', 'description_ind', 'description_en', 'intro_ind', 'intro_en', 'challenge_ind', 'challenge_en', 'methodology_ind', 'methodology_en', 'result_ind', 'result_en', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'categories']
+    fields = ['name_ind', 'name_en', 'slug_ind', 'slug_en', 'description_ind', 'description_en', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'categories']
     success_url = reverse_lazy('project_list')
 
     def form_valid(self, form):
@@ -382,20 +392,54 @@ class StoryListView(AdminRequiredMixin, ListView):
 class StoryCreateView(AdminRequiredMixin, CreateView):
     model = Story
     template_name = 'core/custom_admin/story/story_form.html'
-    fields = '__all__'
+    fields = ['judul_ind', 'judul_en', 'slug_ind', 'slug_en', 'tanggal', 'lokasi', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'gambar', 'project']
     success_url = reverse_lazy('story_list')
 
     def form_valid(self, form):
+        from django.utils.text import slugify
+
+        user = self.request.user
+        form.instance.author = user.profile.nama_lengkap if hasattr(user, 'profile') and user.profile.nama_lengkap else user.username
+
+        base_slug = form.cleaned_data.get('slug') or slugify(form.cleaned_data.get('judul_ind'))
+        slug = base_slug[:200]
+
+        queryset = Story.objects.filter(slug=slug)
+        if queryset.exists():
+            original_slug = slug
+            counter = 1
+            while Story.objects.filter(slug=slug).exists():
+                slug = f"{original_slug}-{counter}"
+                counter += 1
+
+        form.instance.slug = slug
         messages.success(self.request, 'Cerita lapangan baru berhasil ditambahkan!')
         return super().form_valid(form)
 
 class StoryUpdateView(AdminRequiredMixin, UpdateView):
     model = Story
     template_name = 'core/custom_admin/story/story_form.html'
-    fields = '__all__'
+    fields = ['judul_ind', 'judul_en', 'slug_ind', 'slug_en', 'tanggal', 'lokasi', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'gambar', 'project']
     success_url = reverse_lazy('story_list')
 
     def form_valid(self, form):
+        from django.utils.text import slugify
+
+        user = self.request.user
+        form.instance.author = user.profile.nama_lengkap if hasattr(user, 'profile') and user.profile.nama_lengkap else user.username
+
+        base_slug = form.cleaned_data.get('slug') or slugify(form.cleaned_data.get('judul_ind'))
+        slug = base_slug[:200]
+
+        queryset = Story.objects.filter(slug=slug).exclude(pk=self.object.pk)
+        if queryset.exists():
+            original_slug = slug
+            counter = 1
+            while Story.objects.filter(slug=slug).exclude(pk=self.object.pk).exists():
+                slug = f"{original_slug}-{counter}"
+                counter += 1
+
+        form.instance.slug = slug
         messages.success(self.request, 'Perubahan cerita lapangan berhasil disimpan!')
         return super().form_valid(form)
 
@@ -423,7 +467,7 @@ class ClientListView(AdminRequiredMixin, ListView):
 class ClientCreateView(AdminRequiredMixin, CreateView):
     model = Client
     template_name = 'core/custom_admin/client/client_form.html'
-    fields = ['nama', 'sektor', 'logo']
+    fields = ['nama_ind', 'nama_en', 'sektor', 'logo']
     success_url = reverse_lazy('client_list')
 
     def form_valid(self, form):
@@ -433,7 +477,7 @@ class ClientCreateView(AdminRequiredMixin, CreateView):
 class ClientUpdateView(AdminRequiredMixin, UpdateView):
     model = Client
     template_name = 'core/custom_admin/client/client_form.html'
-    fields = ['nama', 'sektor', 'logo']
+    fields = ['nama_ind', 'nama_en', 'sektor', 'logo']
     success_url = reverse_lazy('client_list')
 
     def form_valid(self, form):
@@ -464,7 +508,7 @@ class ServiceListView(AdminRequiredMixin, ListView):
 class ServiceCreateView(AdminRequiredMixin, CreateView):
     model = Service
     template_name = 'core/custom_admin/services/services_form.html'
-    fields = ['title_ind', 'title_en', 'slug', 'approach_ind', 'approach_en', 'portfolio', 'icon', 'thumbnail', 'bg_image', 'categories']
+    fields = ['title_ind', 'title_en', 'slug_ind', 'slug_en', 'approach_ind', 'approach_en', 'portfolio', 'icon', 'thumbnail', 'bg_image', 'categories']
     success_url = reverse_lazy('service_list')
 
     def form_valid(self, form):
@@ -474,7 +518,7 @@ class ServiceCreateView(AdminRequiredMixin, CreateView):
 class ServiceUpdateView(AdminRequiredMixin, UpdateView):
     model = Service
     template_name = 'core/custom_admin/services/services_form.html'
-    fields = ['title_ind', 'title_en', 'slug', 'approach_ind', 'approach_en', 'portfolio', 'icon', 'thumbnail', 'bg_image', 'categories']
+    fields = ['title_ind', 'title_en', 'slug_ind', 'slug_en', 'approach_ind', 'approach_en', 'portfolio', 'icon', 'thumbnail', 'bg_image', 'categories']
     success_url = reverse_lazy('service_list')
 
     def form_valid(self, form):
@@ -505,7 +549,7 @@ class LocationListView(AdminRequiredMixin, ListView):
 class LocationCreateView(AdminRequiredMixin, CreateView):
     model = Location
     template_name = 'core/custom_admin/location/location_form.html'
-    fields = '__all__'
+    fields = ['nama_provinsi_ind', 'nama_provinsi_en', 'slug_ind', 'slug_en', 'kode_wilayah', 'geom']
     success_url = reverse_lazy('location_list')
 
     def form_valid(self, form):
@@ -515,7 +559,7 @@ class LocationCreateView(AdminRequiredMixin, CreateView):
 class LocationUpdateView(AdminRequiredMixin, UpdateView):
     model = Location
     template_name = 'core/custom_admin/location/location_form.html'
-    fields = '__all__'
+    fields = ['nama_provinsi_ind', 'nama_provinsi_en', 'slug_ind', 'slug_en', 'kode_wilayah', 'geom']
     success_url = reverse_lazy('location_list')
 
     def form_valid(self, form):
@@ -546,7 +590,7 @@ class CategoryListView(AdminRequiredMixin, ListView):
 class CategoryCreateView(AdminRequiredMixin, CreateView):
     model = Category
     template_name = 'core/custom_admin/category/category_form.html'
-    fields = '__all__'
+    fields = ['name_ind', 'name_en', 'slug_ind', 'slug_en']
     success_url = reverse_lazy('category_list')
 
     def form_valid(self, form):
@@ -556,7 +600,7 @@ class CategoryCreateView(AdminRequiredMixin, CreateView):
 class CategoryUpdateView(AdminRequiredMixin, UpdateView):
     model = Category
     template_name = 'core/custom_admin/category/category_form.html'
-    fields = '__all__'
+    fields = ['name_ind', 'name_en', 'slug_ind', 'slug_en']
     success_url = reverse_lazy('category_list')
 
     def form_valid(self, form):
@@ -659,7 +703,7 @@ class GalleryListView(AdminRequiredMixin, ListView):
 class GalleryCreateView(AdminRequiredMixin, CreateView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_form.html'
-    fields = ['caption', 'gambar', 'folder', 'kategori', 'tanggal_upload']
+    fields = ['caption_ind', 'caption_en', 'gambar', 'folder', 'kategori', 'tanggal_upload']
     success_url = reverse_lazy('gallery_admin_list')
 
     def form_valid(self, form):
@@ -669,7 +713,7 @@ class GalleryCreateView(AdminRequiredMixin, CreateView):
 class GalleryUpdateView(AdminRequiredMixin, UpdateView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_form.html'
-    fields = ['caption', 'gambar', 'folder', 'kategori', 'tanggal_upload']
+    fields = ['caption_ind', 'caption_en', 'gambar', 'folder', 'kategori', 'tanggal_upload']
     success_url = reverse_lazy('gallery_admin_list')
 
     def form_valid(self, form):
@@ -700,7 +744,7 @@ class FolderListView(AdminRequiredMixin, ListView):
 class FolderCreateView(AdminRequiredMixin, CreateView):
     model = Folder
     template_name = 'core/custom_admin/gallery/folder_form.html'
-    fields = ['nama', 'tahun']
+    fields = ['nama_ind', 'nama_en', 'tahun']
     success_url = reverse_lazy('folder_list')
 
     def form_valid(self, form):
@@ -710,7 +754,7 @@ class FolderCreateView(AdminRequiredMixin, CreateView):
 class FolderUpdateView(AdminRequiredMixin, UpdateView):
     model = Folder
     template_name = 'core/custom_admin/gallery/folder_form.html'
-    fields = ['nama', 'tahun']
+    fields = ['nama_ind', 'nama_en', 'tahun']
     success_url = reverse_lazy('folder_list')
 
     def form_valid(self, form):
@@ -723,7 +767,7 @@ def folder_delete_view(request, pk):
     folder = get_object_or_404(Folder, pk=pk)
     if request.method == 'POST':
         folder.delete()
-        messages.success(request, 'Data folder berhasil dihapus!')
+        messages.success(self.request, 'Data folder berhasil dihapus!')
     return redirect('folder_list')
 
 
@@ -741,7 +785,7 @@ class TeamListView(AdminRequiredMixin, ListView):
 class TeamCreateView(AdminRequiredMixin, CreateView):
     model = TeamMember
     template_name = 'core/custom_admin/team/team_form.html'
-    fields = ['nama', 'jabatan', 'bio', 'kategori', 'urutan', 'foto']
+    fields = ['nama', 'jabatan_ind', 'jabatan_en', 'bio_ind', 'bio_en', 'kategori_ind', 'kategori_en', 'urutan', 'foto']
     success_url = reverse_lazy('team_list')
 
     def form_valid(self, form):
@@ -751,7 +795,7 @@ class TeamCreateView(AdminRequiredMixin, CreateView):
 class TeamUpdateView(AdminRequiredMixin, UpdateView):
     model = TeamMember
     template_name = 'core/custom_admin/team/team_form.html'
-    fields = ['nama', 'jabatan', 'bio', 'kategori', 'urutan', 'foto']
+    fields = ['nama', 'jabatan_ind', 'jabatan_en', 'bio_ind', 'bio_en', 'kategori_ind', 'kategori_en', 'urutan', 'foto']
     success_url = reverse_lazy('team_list')
 
     def form_valid(self, form):
@@ -787,6 +831,43 @@ class SuperuserRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
 # ==========================================
 # 11. MANAGEMENT USER / PENGGUNA
 # ==========================================
+from django import forms
+from django.contrib.auth.models import User
+from .models import Profile
+
+class UserCreateForm(forms.ModelForm):
+    nama_lengkap = forms.CharField(max_length=150, required=True, label="Nama Lengkap")
+
+    class Meta:
+        model = User
+        fields = ['username', 'nama_lengkap', 'email', 'password', 'is_staff', 'is_active', 'is_superuser']
+
+    def clean_nama_lengkap(self):
+        nama = self.cleaned_data.get('nama_lengkap')
+        if Profile.objects.filter(nama_lengkap=nama).exists():
+            raise forms.ValidationError("Nama ini sudah digunakan. Silakan gunakan nama lain.")
+        return nama
+
+class UserUpdateForm(forms.ModelForm):
+    nama_lengkap = forms.CharField(max_length=150, required=True, label="Nama Lengkap")
+
+    class Meta:
+        model = User
+        fields = ['username', 'nama_lengkap', 'email', 'is_staff', 'is_active', 'is_superuser']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and hasattr(self.instance, 'profile'):
+            self.fields['nama_lengkap'].initial = self.instance.profile.nama_lengkap
+
+    def clean_nama_lengkap(self):
+        nama = self.cleaned_data.get('nama_lengkap')
+        qs = Profile.objects.filter(nama_lengkap=nama)
+        if self.instance and self.instance.pk:
+            qs = qs.exclude(user=self.instance)
+        if qs.exists():
+            raise forms.ValidationError("Nama ini sudah digunakan. Silakan gunakan nama lain.")
+        return nama
 class UserListView(SuperuserRequiredMixin, ListView):
     model = User
     template_name = 'core/custom_admin/user/user_list.html'
@@ -798,31 +879,46 @@ class UserListView(SuperuserRequiredMixin, ListView):
 class UserCreateView(SuperuserRequiredMixin, CreateView):
     model = User
     template_name = 'core/custom_admin/user/user_form.html'
-    fields = ['username', 'email', 'password', 'is_staff', 'is_active', 'is_superuser']
+    form_class = UserCreateForm
     success_url = reverse_lazy('user_list')
 
     def form_valid(self, form):
         user = form.save(commit=False)
         user.set_password(form.cleaned_data['password'])
-        user.save()
+        user.save()  # Triggers signal that creates Profile
+        
+        # Fetch the newly created profile and update it
+        profile = Profile.objects.get(user=user)
+        profile.nama_lengkap = form.cleaned_data['nama_lengkap']
+        profile.save()
+        
+        # Refresh the profile cache on the user object so the next save doesn't overwrite with stale data
+        user.profile = profile 
+        
         messages.success(self.request, 'Pengguna baru berhasil ditambahkan!')
-        return super().form_valid(form)
+        return super(CreateView, self).form_valid(form)
 
 class UserUpdateView(SuperuserRequiredMixin, UpdateView):
     model = User
     template_name = 'core/custom_admin/user/user_form.html'
-    fields = ['username', 'email', 'is_staff', 'is_active', 'is_superuser']
+    form_class = UserUpdateForm
     success_url = reverse_lazy('user_list')
 
     def form_valid(self, form):
+        response = super().form_valid(form)
+        
+        profile, _ = Profile.objects.get_or_create(user=self.object)
+        profile.nama_lengkap = form.cleaned_data['nama_lengkap']
+        profile.save()
+        
         messages.success(self.request, 'Data pengguna berhasil diperbarui!')
-        return super().form_valid(form)
+        return response
 
 @login_required(login_url='/be/login/')
 def user_delete_view(request, pk):
     # Validasi langsung di dalam view untuk fungsi hapus
     if not request.user.is_superuser:
-        messages.error(request, 'Akses ditolak! Penghapusan pengguna hanya dapat dilakukan oleh Superuser.')
+        messages.error(self.request, 'Akses ditolak! Penghapusan pengguna hanya dapat dilakukan oleh Superuser.')
         return redirect('custom_dashboard')
         
     user = get_object_or_404(User, pk=pk)
@@ -839,6 +935,15 @@ class ProfileProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['nama_lengkap', 'foto_profil']
+
+    def clean_nama_lengkap(self):
+        nama = self.cleaned_data.get('nama_lengkap')
+        qs = Profile.objects.filter(nama_lengkap=nama)
+        if self.instance and self.instance.pk:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise forms.ValidationError("Nama ini sudah digunakan. Silakan gunakan nama lain.")
+        return nama
 
 @login_required(login_url='/be/login/')
 def user_edit_profile(request):
