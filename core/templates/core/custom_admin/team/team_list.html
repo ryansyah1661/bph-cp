@@ -58,7 +58,7 @@
         {% for member in members %}
         <tr class="hover:bg-slate-50/50 transition">
           <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
-            {{ forloop.counter }}
+            {% if is_paginated %}{{ page_obj.start_index|add:forloop.counter0 }}{% else %}{{ forloop.counter }}{% endif %}
           </td>
 
           <td class="p-4 align-middle text-center">
@@ -115,6 +115,8 @@
       </tbody>
     </table>
   </div>
+
+  {% include 'core/custom_admin/partials/pagination.html' %}
 
   <div id="delete-team-modal" class="bph-modal-overlay">
     <div class="bg-white rounded-2xl max-w-lg w-full p-10 shadow-2xl border border-slate-100 text-center scale-95 transition-transform duration-200">

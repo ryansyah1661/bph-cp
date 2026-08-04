@@ -30,7 +30,7 @@
         {% for u in users %}
         <tr class="hover:bg-slate-50/50 transition">
           <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
-            {{ forloop.counter }}
+            {% if is_paginated %}{{ page_obj.start_index|add:forloop.counter0 }}{% else %}{{ forloop.counter }}{% endif %}
           </td>
 
           <td class="p-4 font-semibold text-slate-800 align-middle text-base break-words">
@@ -86,6 +86,8 @@
       </tbody>
     </table>
   </div>
+
+  {% include 'core/custom_admin/partials/pagination.html' %}
 
 </div>
 {% endblock %}

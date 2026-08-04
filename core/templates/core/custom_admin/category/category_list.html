@@ -31,11 +31,11 @@
         {% for category in categories %}
         <tr class="hover:bg-slate-50/50 transition-colors">
           <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
-            {{ forloop.counter }}
+            {% if is_paginated %}{{ page_obj.start_index|add:forloop.counter0 }}{% else %}{{ forloop.counter }}{% endif %}
           </td>
           
           <td class="p-4 font-semibold text-slate-800 align-middle text-base hover:text-emerald-700 transition">
-            {{ category.name }}
+            {{ category.name_ind }}
           </td>
           
           <td class="p-4 text-center align-middle whitespace-nowrap">
@@ -60,6 +60,8 @@
       </tbody>
     </table>
   </div>
+
+  {% include 'core/custom_admin/partials/pagination.html' %}
 </div>
 
 <!-- MODAL POPUP KONFIRMASI HAPUS -->

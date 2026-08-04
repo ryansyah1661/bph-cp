@@ -276,6 +276,7 @@ class ArticleListView(AdminRequiredMixin, ListView):
     model = Article
     template_name = 'core/custom_admin/articles/articles_list.html'
     context_object_name = 'articles'
+    paginate_by = 10
 
     def get_queryset(self):
         return Article.objects.all().order_by('-tanggal', '-id')
@@ -351,6 +352,7 @@ class ProjectListView(AdminRequiredMixin, ListView):
     model = Project
     template_name = 'core/custom_admin/experience/experience_list.html'
     context_object_name = 'projects'
+    paginate_by = 10
 
     def get_queryset(self):
         return Project.objects.all().order_by('-tahun', '-id')
@@ -362,6 +364,8 @@ class ProjectCreateView(AdminRequiredMixin, CreateView):
     success_url = reverse_lazy('project_list')
 
     def form_valid(self, form):
+        if not form.instance.slug_en and form.instance.slug_ind:
+            form.instance.slug_en = form.instance.slug_ind
         messages.success(self.request, 'Proyek baru berhasil ditambahkan!')
         return super().form_valid(form)
 
@@ -372,6 +376,8 @@ class ProjectUpdateView(AdminRequiredMixin, UpdateView):
     success_url = reverse_lazy('project_list')
 
     def form_valid(self, form):
+        if not form.instance.slug_en and form.instance.slug_ind:
+            form.instance.slug_en = form.instance.slug_ind
         messages.success(self.request, 'Perubahan data proyek berhasil disimpan!')
         return super().form_valid(form)
 
@@ -391,6 +397,7 @@ class StoryListView(AdminRequiredMixin, ListView):
     model = Story
     template_name = 'core/custom_admin/story/story_list.html'
     context_object_name = 'stories'
+    paginate_by = 10
 
     def get_queryset(self):
         return Story.objects.all().order_by('-tanggal', '-id')
@@ -466,6 +473,7 @@ class ClientListView(AdminRequiredMixin, ListView):
     model = Client
     template_name = 'core/custom_admin/client/client_list.html'
     context_object_name = 'clients'
+    paginate_by = 10
 
     def get_queryset(self):
         return Client.objects.all().order_by('-id')
@@ -507,6 +515,7 @@ class ServiceListView(AdminRequiredMixin, ListView):
     model = Service
     template_name = 'core/custom_admin/services/services_list.html'
     context_object_name = 'services'
+    paginate_by = 10
 
     def get_queryset(self):
         return Service.objects.all().order_by('-id')
@@ -548,6 +557,7 @@ class LocationListView(AdminRequiredMixin, ListView):
     model = Location
     template_name = 'core/custom_admin/location/location_list.html'
     context_object_name = 'locations'
+    paginate_by = 10
 
     def get_queryset(self):
         return Location.objects.all().order_by('-id')
@@ -559,6 +569,8 @@ class LocationCreateView(AdminRequiredMixin, CreateView):
     success_url = reverse_lazy('location_list')
 
     def form_valid(self, form):
+        if not form.instance.slug_en and form.instance.slug_ind:
+            form.instance.slug_en = form.instance.slug_ind
         messages.success(self.request, 'Lokasi baru berhasil ditambahkan!')
         return super().form_valid(form)
 
@@ -569,6 +581,8 @@ class LocationUpdateView(AdminRequiredMixin, UpdateView):
     success_url = reverse_lazy('location_list')
 
     def form_valid(self, form):
+        if not form.instance.slug_en and form.instance.slug_ind:
+            form.instance.slug_en = form.instance.slug_ind
         messages.success(self.request, 'Data lokasi berhasil diperbarui!')
         return super().form_valid(form)
 
@@ -589,6 +603,7 @@ class CategoryListView(AdminRequiredMixin, ListView):
     model = Category
     template_name = 'core/custom_admin/category/category_list.html'
     context_object_name = 'categories'
+    paginate_by = 10
 
     def get_queryset(self):
         return Category.objects.all().order_by('-id')
@@ -600,6 +615,8 @@ class CategoryCreateView(AdminRequiredMixin, CreateView):
     success_url = reverse_lazy('category_list')
 
     def form_valid(self, form):
+        if not form.instance.slug_en and form.instance.slug_ind:
+            form.instance.slug_en = form.instance.slug_ind
         messages.success(self.request, 'Kategori baru berhasil ditambahkan!')
         return super().form_valid(form)
 
@@ -610,6 +627,8 @@ class CategoryUpdateView(AdminRequiredMixin, UpdateView):
     success_url = reverse_lazy('category_list')
 
     def form_valid(self, form):
+        if not form.instance.slug_en and form.instance.slug_ind:
+            form.instance.slug_en = form.instance.slug_ind
         messages.success(self.request, 'Data kategori berhasil diperbarui!')
         return super().form_valid(form)
 
@@ -671,6 +690,7 @@ class ContactListView(AdminRequiredMixin, ListView):
     model = ContactMessage
     template_name = 'core/custom_admin/contact/contact_list.html'
     context_object_name = 'contacts'
+    paginate_by = 10
 
     def get_queryset(self):
         return ContactMessage.objects.all().order_by('-tanggal_kirim')
@@ -702,6 +722,7 @@ class GalleryListView(AdminRequiredMixin, ListView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_list.html'
     context_object_name = 'items'
+    paginate_by = 10
 
     def get_queryset(self):
         return Gallery.objects.all().order_by('-tanggal_upload', '-id')
@@ -743,6 +764,7 @@ class FolderListView(AdminRequiredMixin, ListView):
     model = Folder
     template_name = 'core/custom_admin/gallery/folder_list.html'
     context_object_name = 'folders'
+    paginate_by = 10
 
     def get_queryset(self):
         return Folder.objects.all().order_by('-tahun', '-id')
@@ -784,6 +806,7 @@ class TeamListView(AdminRequiredMixin, ListView):
     model = TeamMember
     template_name = 'core/custom_admin/team/team_list.html'
     context_object_name = 'members'
+    paginate_by = 10
 
     def get_queryset(self):
         return TeamMember.objects.all().order_by('urutan', '-id')
@@ -875,6 +898,7 @@ class UserListView(SuperuserRequiredMixin, ListView):
     model = User
     template_name = 'core/custom_admin/user/user_list.html'
     context_object_name = 'users'
+    paginate_by = 10
 
     def get_queryset(self):
         return User.objects.all().order_by('-date_joined')
