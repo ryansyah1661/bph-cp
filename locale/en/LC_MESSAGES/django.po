@@ -567,8 +567,8 @@ msgid "Galeri Kegiatan - Bhumi Pasa Hijau"
 msgstr "Activity Gallery - Bhumi Pasa Hijau"
 
 #: .\core\templates\core\gallery.html:9
-msgid "Galeri &amp; Publikasi"
-msgstr "Gallery &amp; Publications"
+msgid "Publikasi"
+msgstr "Publications"
 
 #: .\core\templates\core\gallery.html:10
 msgid "Visual &amp; Knowledge Hub"
@@ -797,8 +797,8 @@ msgstr "Experience"
 
 #: .\core\templates\core\partials\footer.html:48
 #: .\core\templates\core\partials\navbar.html:66
-msgid "Galeri"
-msgstr "Gallery"
+msgid "Publikasi"
+msgstr "Publications"
 
 #: .\core\templates\core\partials\footer.html:58
 msgid "Unduh Profil Perusahaan"

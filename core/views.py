@@ -862,6 +862,7 @@ class SuperuserRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
 # ==========================================
 class UserCreateForm(forms.ModelForm):
     nama_lengkap = forms.CharField(max_length=150, required=True, label="Nama Lengkap")
+    role = forms.ChoiceField(choices=Profile.ROLE_CHOICES, required=True, label="Role Pengguna")
 
     class Meta:
         model = User
@@ -875,6 +876,7 @@ class UserCreateForm(forms.ModelForm):
 
 class UserUpdateForm(forms.ModelForm):
     nama_lengkap = forms.CharField(max_length=150, required=True, label="Nama Lengkap")
+    role = forms.ChoiceField(choices=Profile.ROLE_CHOICES, required=True, label="Role Pengguna")
 
     class Meta:
         model = User
@@ -884,6 +886,7 @@ class UserUpdateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if self.instance and hasattr(self.instance, 'profile'):
             self.fields['nama_lengkap'].initial = self.instance.profile.nama_lengkap
+            self.fields['role'].initial = self.instance.profile.role
 
     def clean_nama_lengkap(self):
         nama = self.cleaned_data.get('nama_lengkap')
@@ -916,6 +919,7 @@ class UserCreateView(SuperuserRequiredMixin, CreateView):
         
         profile = Profile.objects.get(user=user)
         profile.nama_lengkap = form.cleaned_data['nama_lengkap']
+        profile.role = form.cleaned_data['role']
         profile.save()
         
         user.profile = profile 
@@ -934,6 +938,7 @@ class UserUpdateView(SuperuserRequiredMixin, UpdateView):
         
         profile, _ = Profile.objects.get_or_create(user=self.object)
         profile.nama_lengkap = form.cleaned_data['nama_lengkap']
+        profile.role = form.cleaned_data['role']
         profile.save()
         
         messages.success(self.request, 'Data pengguna berhasil diperbarui!')

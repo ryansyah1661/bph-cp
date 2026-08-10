@@ -270,9 +270,14 @@ class Gallery(models.Model):
 
 # === 12. TABEL KUSTOM EKSTENSI PROFIL USER PENGGUNA ===
 class Profile(models.Model):
+    ROLE_CHOICES = [
+        ('admin', 'Admin'),
+        ('contributor', 'Contributor'),
+    ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     nama_lengkap = models.CharField(max_length=150, unique=True, blank=True, null=True, verbose_name="Nama Lengkap")
     foto_profil = models.ImageField(upload_to='profile_pics/', blank=True, null=True, verbose_name="Foto Profil")
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='admin', verbose_name="Role Pengguna")
 
     def __str__(self):
         return f"Profile {self.user.username}"

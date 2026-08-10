@@ -3,9 +3,9 @@
 
 {% block title %}
   {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-    Gallery & Publications - Bhumi Pasa Hijau
+    Publications - Bhumi Pasa Hijau
   {% else %}
-    Galeri Kegiatan - Bhumi Pasa Hijau
+    Publikasi - Bhumi Pasa Hijau
   {% endif %}
 {% endblock %}
 
@@ -13,11 +13,11 @@
 <main class="flex-grow pt-[80px] bg-background">
   
   {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-    {% with hero_title="Gallery &amp; Publications" hero_subtitle="Visual &amp; Knowledge Hub" hero_desc="Documenting environmental preservation efforts, scientific research releases, news releases, and real action stories from the BPH team directly from the field." %}
+    {% with hero_title="Publications" hero_subtitle="Visual &amp; Knowledge Hub" hero_desc="Documenting environmental preservation efforts, scientific research releases, news releases, and real action stories from the BPH team directly from the field." %}
       {% include 'core/partials/hero-banner.html' with title=hero_title subtitle=hero_subtitle desc=hero_desc bg_image="images/forest-services.jpg" %}
     {% endwith %}
   {% else %}
-    {% with hero_title="Galeri &amp; Publikasi" hero_subtitle="Visual &amp; Knowledge Hub" hero_desc="Mendokumentasikan upaya pelestarian lingkungan, rilis riset ilmiah, rilis berita, serta cerita aksi nyata tim BPH langsung dari lapangan." %}
+    {% with hero_title="Publikasi" hero_subtitle="Visual &amp; Knowledge Hub" hero_desc="Mendokumentasikan upaya pelestarian lingkungan, rilis riset ilmiah, rilis berita, serta cerita aksi nyata tim BPH langsung dari lapangan." %}
       {% include 'core/partials/hero-banner.html' with title=hero_title subtitle=hero_subtitle desc=hero_desc bg_image="images/forest-services.jpg" %}
     {% endwith %}
   {% endif %}

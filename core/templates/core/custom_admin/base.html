@@ -171,7 +171,7 @@
           {% endif %}
           <div class="flex-1 min-w-0">
             <p class="text-sm font-semibold text-white truncate">{% if request.user.profile.nama_lengkap %}{{ request.user.profile.nama_lengkap }}{% else %}{{ request.user.username }}{% endif %}</p>
-            <p class="text-[10px] text-slate-500 truncate">Administrator</p>
+            <p class="text-[10px] text-slate-500 truncate">{% if request.user.profile.role %}{{ request.user.profile.get_role_display }}{% else %}Administrator{% endif %}</p>
           </div>
         </div>
       </div>

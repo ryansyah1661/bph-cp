@@ -63,7 +63,7 @@
          {% else %}
            text-on-surface-variant dark:text-surface-variant hover:bg-primary/5 hover:text-primary dark:hover:bg-white/5 dark:hover:text-inverse-primary
          {% endif %}">
-         {% trans "Galeri" %}
+         {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Publications{% else %}Publikasi{% endif %}
       </a>
 
     </div>
