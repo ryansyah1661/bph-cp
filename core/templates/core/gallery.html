@@ -17,7 +17,7 @@
       {% include 'core/partials/hero-banner.html' with title=hero_title subtitle=hero_subtitle desc=hero_desc bg_image="images/forest-services.jpg" %}
     {% endwith %}
   {% else %}
-    {% with hero_title="Publikasi" hero_subtitle="Visual &amp; Knowledge Hub" hero_desc="Mendokumentasikan upaya pelestarian lingkungan, rilis riset ilmiah, rilis berita, serta cerita aksi nyata tim BPH langsung dari lapangan." %}
+    {% with hero_title="Publikasi" hero_subtitle="Visual &amp; Knowledge Hub" hero_desc="Mendokumentasikan artikel berita tematik, cerita lapangan, galeri foto, infografis, video, serta modul dokumentasi resmi BPH." %}
       {% include 'core/partials/hero-banner.html' with title=hero_title subtitle=hero_subtitle desc=hero_desc bg_image="images/forest-services.jpg" %}
     {% endwith %}
   {% endif %}
@@ -25,88 +25,193 @@
   <section class="w-full bg-surface py-16">
     <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
-      <!-- SIDEBAR KATEGORI HUB -->
+      <!-- SIDEBAR KATEGORI PUBLIKASI -->
       <aside class="lg:col-span-3 bg-white border border-border-subtle rounded-2xl p-5 shadow-[0_4px_20px_rgba(0,0,0,0.01)] lg:sticky lg:top-[100px] z-30 space-y-2">
-        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-4">
-          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Hub Category{% else %}{% trans "Kategori Hub" %}{% endif %}
+        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest px-3 mb-3">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Publication Menu{% else %}Kategori Publikasi{% endif %}
         </h3>
         
-        <button data-tab="seksi-galeri" class="tab-menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 text-left bg-primary text-surface-white shadow-sm border-none cursor-pointer group">
-          <div class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-lg">gallery_thumbnail</span>
-            <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Documentation Gallery{% else %}{% trans "Galeri Dokumentasi" %}{% endif %}</span>
+        <!-- DROPDOWN ARTIKEL -->
+        <div class="space-y-1">
+          <button id="dropdown-toggle-btn" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 text-left text-on-surface-variant hover:bg-slate-50 border-none bg-transparent cursor-pointer">
+            <span class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-lg text-primary">article</span>
+              <span>Artikel</span>
+            </span>
+            <span id="dropdown-arrow" class="material-symbols-outlined text-sm transition-transform duration-300">expand_more</span>
+          </button>
+          
+          <!-- Sub-menu Artikel -->
+          <div id="dropdown-menu-content" class="space-y-1 pl-3 pr-1 py-1">
+            <button data-tab="seksi-berita" class="tab-menu-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 text-left bg-primary text-surface-white shadow-sm border-none cursor-pointer">
+              <span>Berita</span>
+              <span class="tab-counter text-[11px] px-2 py-0.5 rounded-full bg-white text-primary font-extrabold">{{ articles.count|default:"0" }}</span>
+            </button>
+
+            <button data-tab="seksi-cerita" class="tab-menu-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 text-left text-on-surface-variant hover:bg-slate-50 border-none bg-transparent cursor-pointer">
+              <span>Cerita dari Lapangan</span>
+              <span class="tab-counter text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-extrabold">{{ stories.count|default:"0" }}</span>
+            </button>
           </div>
-          <span class="tab-counter text-[11px] px-2 py-0.5 rounded-full bg-white/20 text-white font-extrabold">{{ gallery_items.count|default:"0" }}</span>
+        </div>
+        
+        <!-- INFOGRAFIS -->
+        <button data-tab="seksi-infografis" class="tab-menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 text-left text-on-surface-variant hover:bg-slate-50 border-none bg-transparent cursor-pointer">
+          <span class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-lg text-primary menu-icon">bar_chart</span>
+            <span>Infografis</span>
+          </span>
+          <span class="tab-counter text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-extrabold">0</span>
         </button>
         
-        <button data-tab="seksi-artikel" class="tab-menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 text-left text-on-surface-variant hover:bg-slate-50 border-none bg-transparent cursor-pointer group">
-          <div class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-lg">newspaper</span>
-            <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Articles & Insights{% else %}{% trans "Artikel &amp; Wawasan" %}{% endif %}</span>
-          </div>
-          <span class="tab-counter text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-extrabold group-hover:bg-slate-200 transition-colors">{{ articles.count|default:"0" }}</span>
+        <!-- FOTO & ALBUM -->
+        <button data-tab="seksi-galeri" class="tab-menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 text-left text-on-surface-variant hover:bg-slate-50 border-none bg-transparent cursor-pointer">
+          <span class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-lg text-primary menu-icon">photo_library</span>
+            <span>Foto &amp; Album</span>
+          </span>
+          <span class="tab-counter text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-extrabold">{{ gallery_items.count|default:"0" }}</span>
+        </button>
+
+        <!-- VIDEO -->
+        <button data-tab="seksi-video" class="tab-menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 text-left text-on-surface-variant hover:bg-slate-50 border-none bg-transparent cursor-pointer">
+          <span class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-lg text-primary menu-icon">play_circle</span>
+            <span>Video Kegiatan</span>
+          </span>
+          <span class="tab-counter text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-extrabold">0</span>
         </button>
         
-        <button data-tab="seksi-cerita" class="tab-menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 text-left text-on-surface-variant hover:bg-slate-50 border-none bg-transparent cursor-pointer group">
-          <div class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-lg">explore</span>
-            <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Stories from the Field{% else %}{% trans "Cerita Dari Lapang" %}{% endif %}</span>
-          </div>
-          <span class="tab-counter text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-extrabold group-hover:bg-slate-200 transition-colors">{{ stories.count|default:"0" }}</span>
-        </button>
-        
-        <button data-tab="seksi-modul" class="tab-menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 text-left text-on-surface-variant hover:bg-slate-50 border-none bg-transparent cursor-pointer group">
-          <div class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-lg">folder_open</span>
-            <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Documentation Modules{% else %}{% trans "Modul Dokumentasi" %}{% endif %}</span>
-          </div>
-          <span class="tab-counter text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-extrabold group-hover:bg-slate-200 transition-colors">{{ documents.count|default:"0" }}</span>
+        <!-- MODUL & BUKU -->
+        <button data-tab="seksi-modul" class="tab-menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 text-left text-on-surface-variant hover:bg-slate-50 border-none bg-transparent cursor-pointer">
+          <span class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-lg text-primary menu-icon">menu_book</span>
+            <span>Modul &amp; Buku</span>
+          </span>
+          <span class="tab-counter text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-extrabold">{{ documents.count|default:"0" }}</span>
         </button>
       </aside>
 
       <!-- CONTENT MAIN TAB -->
       <div class="lg:col-span-9 bg-slate-50/70 border border-border-subtle/80 rounded-2xl p-6 md:p-8 shadow-[0_4px_25px_rgba(0,0,0,0.01)]">
         
-        <!-- 1. SEKSI GALERI -->
-        <div id="seksi-galeri" class="tab-content-block space-y-6">
+        <!-- BERITA -->
+        <div id="seksi-berita" class="tab-content-block space-y-6">
           <div class="max-w-2xl text-left">
-            <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface mb-1">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Field Action Documentation{% else %}{% trans "Dokumentasi Aksi Lapangan" %}{% endif %}
-            </h2>
-            <p class="text-xs md:text-sm text-on-surface-variant">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Filter documentation based on our field work focus areas.{% else %}{% trans "Filter dokumentasi berdasarkan fokus bidang kerja lapangan kami." %}{% endif %}
-            </p>
+            <span class="text-xs font-bold text-primary uppercase tracking-widest block mb-1">Artikel / Berita</span>
+            <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface mb-1">Berita</h2>
+            <p class="text-xs md:text-sm text-on-surface-variant">Informasi, edukasi, wawasan riset, serta tulisan feature seputar isu lingkungan dan keberlanjutan.</p>
           </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for article in articles %}
+            <a href="{% url 'detail-articles' slug=article.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}" class="article-card group flex flex-col bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer" style="text-decoration: none;">
+              <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+                {% if article.gambar %}
+                <img src="{{ article.gambar.url }}" alt="{{ article.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                {% else %}
+                <img src="{% static 'images/services1.jpg' %}" alt="{{ article.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                {% endif %}
+              </div>
+              <div class="p-4 flex-1 flex flex-col">
+                <p class="text-[10px] text-text-muted font-medium mb-1">{{ article.tanggal|date:"d F Y" }} • Oleh {{ article.author }}</p>
+                <h3 class="font-headline-md text-sm font-bold text-on-surface mb-1.5 line-clamp-2 group-hover:text-primary transition-colors leading-snug">{{ article.judul }}</h3>
+                <p class="text-[11px] text-on-surface-variant line-clamp-3 mb-3 leading-relaxed">{{ article.short }}</p>
+                <span class="mt-auto text-[11px] font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">
+                  Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
+                </span>
+              </div>
+            </a>
+            {% empty %}
+            <div class="col-span-full py-16 px-4 flex flex-col items-center justify-center text-center bg-white rounded-2xl border border-dashed border-slate-200 shadow-sm">
+              <span class="material-symbols-outlined text-5xl text-slate-300 mb-3">article</span>
+              <h4 class="text-sm font-bold text-slate-700">Belum Ada Berita</h4>
+              <p class="text-xs text-slate-400 max-w-xs mt-1">Rilis artikel berita akan segera terbit.</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
 
+        <!-- CERITA LAPANGAN -->
+        <div id="seksi-cerita" class="tab-content-block hidden space-y-6">
+          <div class="max-w-2xl text-left">
+            <span class="text-xs font-bold text-primary uppercase tracking-widest block mb-1">Artikel / Cerita Lapangan</span>
+            <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface mb-1">Cerita dari Lapangan</h2>
+            <p class="text-xs md:text-sm text-on-surface-variant">Catatan perjalanan, temuan riset riil, dan narasi aksi nyata tim BPH langsung dari jantung ekosistem.</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for story in stories %}
+            <a href="{% url 'detail-story' slug=story.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}" class="story-card group flex flex-col bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer" style="text-decoration: none;">
+              <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+                {% if story.gambar %}
+                <img src="{{ story.gambar.url }}" alt="{{ story.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                {% else %}
+                <img src="{% static 'images/experience-1.jpg' %}" alt="{{ story.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                {% endif %}
+              </div>
+              <div class="p-4 flex-1 flex flex-col">
+                <p class="text-[10px] text-text-muted font-medium mb-1">{{ story.tanggal|date:"d F Y" }} • Oleh {{ story.author }}</p>
+                <h3 class="font-headline-md text-sm font-bold text-on-surface mb-1.5 line-clamp-2 group-hover:text-primary transition-colors leading-snug">{{ story.judul }}</h3>
+                <p class="text-[11px] text-on-surface-variant line-clamp-3 mb-3 leading-relaxed">{{ story.short }}</p>
+                <span class="mt-auto text-[11px] font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">
+                  Baca Selengkapnya <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
+                </span>
+              </div>
+            </a>
+            {% empty %}
+            <div class="col-span-full py-16 px-4 flex flex-col items-center justify-center text-center bg-white rounded-2xl border border-dashed border-slate-200 shadow-sm">
+              <span class="material-symbols-outlined text-5xl text-slate-300 mb-3">potted_plant</span>
+              <h4 class="text-sm font-bold text-slate-700">Belum Ada Cerita Lapangan</h4>
+              <p class="text-xs text-slate-400 max-w-xs mt-1">Catatan dan dokumentasi rimbawan akan segera hadir.</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- INFOGRAFIS -->
+        <div id="seksi-infografis" class="tab-content-block hidden space-y-6">
+          <div class="max-w-2xl text-left">
+            <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface mb-1">Infografis &amp; Data Visual</h2>
+            <p class="text-xs md:text-sm text-on-surface-variant">Rangkuman data ekologis, statistik karbon, dan peta tematik dalam bentuk visual informatif.</p>
+          </div>
+          <div class="py-16 px-4 flex flex-col items-center justify-center text-center bg-white rounded-2xl border border-dashed border-slate-200 shadow-sm">
+            <span class="material-symbols-outlined text-5xl text-slate-300 mb-3">bar_chart</span>
+            <h4 class="text-sm font-bold text-slate-700">Belum Ada Infografis</h4>
+            <p class="text-xs text-slate-400 max-w-xs mt-1">Materi infografis visual akan segera diperbarui secara berkala.</p>
+          </div>
+        </div>
+
+        <!-- FOTO & ALBUM -->
+        <div id="seksi-galeri" class="tab-content-block hidden space-y-6">
+          <div class="max-w-2xl text-left">
+            <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface mb-1">Foto &amp; Album Dokumentasi</h2>
+            <p class="text-xs md:text-sm text-on-surface-variant">Arsip galeri foto kegiatan lapangan berdasarkan kategori dan tahun pelaksanaan.</p>
+          </div>
           <div class="flex flex-wrap justify-start gap-2.5" id="gallery-filter-container">
             <button data-filter="all" class="gallery-filter-btn font-label-caps text-xs font-bold px-5 py-2 rounded-full bg-primary text-surface-white transition-all duration-300 shadow-sm cursor-pointer border-none">All</button>
             {% for cat in categories %}
             <button data-filter="{{ cat.slug }}" class="gallery-filter-btn font-label-caps text-xs font-semibold px-5 py-2 rounded-full border border-border-subtle text-on-surface-variant bg-white hover:border-primary hover:text-primary transition-all duration-300 cursor-pointer">{{ cat.name }}</button>
             {% endfor %}
           </div>
-
           <div id="gallery-sections-container" class="space-y-12">
             {% for folder in folders %}
             <div class="gallery-folder-group space-y-4" data-folder-tags="{{ folder.kategori.slug|default:'tanpa-kategori' }}">
-              
               <div class="flex flex-wrap items-center justify-between border-b border-slate-200/60 pb-2">
                 <div class="flex items-center gap-2.5">
                   <span class="material-symbols-outlined text-primary text-base font-bold">folder_open</span>
                   <h3 class="text-sm md:text-base font-extrabold text-slate-800">{{ folder.nama }}</h3>
-                  <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200/40">{{ folder.images.all|length }} {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Photos{% else %}{% trans "Foto" %}{% endif %}</span>
+                  <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200/40">{{ folder.images.all|length }} Foto</span>
                 </div>
                 <div class="flex items-center gap-2 text-xs font-medium text-slate-400 mt-1 sm:mt-0">
-                  <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Year{% else %}{% trans "Tahun" %}{% endif %} {{ folder.tahun }}</span>
+                  <span>Tahun {{ folder.tahun }}</span>
                   {% if folder.kategori %}
                     <span>|</span>
                     <span class="text-primary font-bold text-[10px] uppercase tracking-wider">{{ folder.kategori.name }}</span>
                   {% endif %}
                 </div>
               </div>
-
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {% for item in folder.images.all %}
-                <div class="gallery-card group flex flex-col bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300">
+                <div class="gallery-card group flex flex-col bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)]">
                   <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
                     {% if item.gambar %}
                     <img alt="{{ item.caption }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{{ item.gambar.url }}">
@@ -120,141 +225,36 @@
                 </div>
                 {% endfor %}
               </div>
-
             </div>
             {% empty %}
             <div class="py-16 px-4 flex flex-col items-center justify-center text-center bg-white rounded-2xl border border-dashed border-slate-200 shadow-sm">
               <span class="material-symbols-outlined text-5xl text-slate-300 mb-3">folder_managed</span>
-              <h4 class="text-sm font-bold text-slate-700">
-                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No Documentation Folders Yet{% else %}{% trans "Belum Ada Folder Dokumentasi" %}{% endif %}
-              </h4>
-              <p class="text-xs text-slate-400 max-w-xs mt-1">
-                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}BPH field photo archive folders will be updated regularly here.{% else %}{% trans "Folder arsip foto lapangan BPH akan segera diperbarui berkala di sini." %}{% endif %}
-              </p>
+              <h4 class="text-sm font-bold text-slate-700">Belum Ada Folder Dokumentasi</h4>
+              <p class="text-xs text-slate-400 max-w-xs mt-1">Folder arsip foto lapangan akan segera diperbarui secara berkala.</p>
             </div>
             {% endfor %}
           </div>
         </div>
 
-        <!-- 2. SEKSI ARTIKEL -->
-        <div id="seksi-artikel" class="tab-content-block hidden space-y-6">
+        <!-- VIDEO -->
+        <div id="seksi-video" class="tab-content-block hidden space-y-6">
           <div class="max-w-2xl text-left">
-            <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface mb-1">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Articles & Technical Insights{% else %}{% trans "Artikel &amp; Wawasan Teknis" %}{% endif %}
-            </h2>
-            <p class="text-xs md:text-sm text-on-surface-variant">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}A collection of research release thoughts, carbon data, and practical sustainable environmental guides.{% else %}{% trans "Kumpulan pemikiran rilis riset, data karbon, dan panduan praktis lingkungan berkelanjutan." %}{% endif %}
-            </p>
+            <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface mb-1">Video Dokumenter Kegiatan</h2>
+            <p class="text-xs md:text-sm text-on-surface-variant">Dokumentasi video pelaksanaan proyek dan aksi nyata konservasi di lapangan.</p>
           </div>
-
-          <div id="article-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {% for article in articles %}
-            <a href="{% url 'detail-articles' slug=article.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}" class="article-card group flex flex-col bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer" style="text-decoration: none;">
-              <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-                {% if article.gambar %}
-                <img src="{{ article.gambar.url }}" alt="{{ article.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                {% else %}
-                <img src="{% static 'images/services1.jpg' %}" alt="{{ article.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                {% endif %}
-              </div>
-              <div class="p-4 flex-1 flex flex-col">
-                <p class="text-[10px] text-text-muted font-medium mb-1">{{ article.tanggal|date:"d F Y" }} • {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}By{% else %}Oleh{% endif %} {{ article.author }}</p>
-                <h3 class="font-headline-md text-sm font-bold text-on-surface mb-1.5 line-clamp-2 group-hover:text-primary transition-colors leading-snug">{{ article.judul }}</h3>
-                <p class="text-[11px] text-on-surface-variant line-clamp-3 mb-3 leading-relaxed">{{ article.short }}</p>
-                <span class="mt-auto text-[11px] font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">
-                  {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Read More{% else %}{% trans "Baca Selengkapnya" %}{% endif %} 
-                  <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
-                </span>
-              </div>
-            </a>
-            {% empty %}
-            <div class="col-span-full py-16 px-4 flex flex-col items-center justify-center text-center bg-white rounded-2xl border border-dashed border-slate-200 shadow-sm">
-              <span class="material-symbols-outlined text-5xl text-slate-300 mb-3">article</span>
-              <h4 class="text-sm font-bold text-slate-700">
-                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No News Articles Yet{% else %}{% trans "Belum Ada Artikel Berita" %}{% endif %}
-              </h4>
-              <p class="text-xs text-slate-400 max-w-xs mt-1">
-                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Scientific research articles and environmental preservation insights will be published soon.{% else %}{% trans "Rilis artikel ilmiah dan wawasan pelestarian lingkungan akan segera terbit." %}{% endif %}
-              </p>
-            </div>
-            {% endfor %}
-          </div>
-
-          <div class="flex justify-start gap-4 pt-2">
-            <button id="article-less-btn" class="hidden font-label-caps text-xs font-bold px-6 py-2.5 bg-white border-2 border-primary text-primary rounded-lg hover:bg-[#1e5823] hover:text-white transition-all duration-300 cursor-pointer">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Load Less{% else %}{% trans "Muat Lebih Sedikit" %}{% endif %}
-            </button>
-            <button id="article-more-btn" class="hidden font-label-caps text-xs font-bold px-6 py-2.5 bg-transparent border-2 border-primary text-primary rounded-lg hover:bg-[#1e5823] hover:text-white transition-all duration-300 cursor-pointer">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Load More Articles{% else %}{% trans "Muat Artikel Lebih Banyak" %}{% endif %}
-            </button>
+          <div class="py-16 px-4 flex flex-col items-center justify-center text-center bg-white rounded-2xl border border-dashed border-slate-200 shadow-sm">
+            <span class="material-symbols-outlined text-5xl text-slate-300 mb-3">play_circle</span>
+            <h4 class="text-sm font-bold text-slate-700">Belum Ada Video</h4>
+            <p class="text-xs text-slate-400 max-w-xs mt-1">Berkas video kegiatan akan segera ditambahkan.</p>
           </div>
         </div>
 
-        <!-- 3. SEKSI CERITA LAPANGAN -->
-        <div id="seksi-cerita" class="tab-content-block hidden space-y-6">
-          <div class="max-w-2xl text-left">
-            <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface mb-1">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Stories from the Field{% else %}{% trans "Cerita Dari Lapang" %}{% endif %}
-            </h2>
-            <p class="text-xs md:text-sm text-on-surface-variant">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Humanist narratives, forester travel notes, and real conservation challenges from the heart of the forest.{% else %}{% trans "Narasi humanis, catatan perjalanan rimbawan, dan tantangan konservasi riil dari jantung hutan." %}{% endif %}
-            </p>
-          </div>
-
-          <div id="story-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {% for story in stories %}
-            <a href="{% url 'detail-story' slug=story.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}" class="story-card group flex flex-col bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer" style="text-decoration: none;">
-              <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-                {% if story.gambar %}
-                <img src="{{ story.gambar.url }}" alt="{{ story.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                {% else %}
-                <img src="{% static 'images/experience-1.jpg' %}" alt="{{ story.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                {% endif %}
-              </div>
-              <div class="p-4 flex-1 flex flex-col">
-                <p class="text-[10px] text-text-muted font-medium mb-1">{{ story.tanggal|date:"d F Y" }} • {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}By{% else %}Oleh{% endif %} {{ story.author }}</p>
-                <h3 class="font-headline-md text-sm font-bold text-on-surface mb-1.5 line-clamp-2 group-hover:text-primary transition-colors leading-snug">{{ story.judul }}</h3>
-                <p class="text-[11px] text-on-surface-variant line-clamp-3 mb-3 leading-relaxed">{{ story.short }}</p>
-                <span class="mt-auto text-[11px] font-bold text-primary uppercase tracking-widest inline-flex items-center gap-1">
-                  {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Read More{% else %}{% trans "Baca Selengkapnya" %}{% endif %} 
-                  <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
-                </span>
-              </div>
-            </a>
-            {% empty %}
-            <div class="col-span-full py-16 px-4 flex flex-col items-center justify-center text-center bg-white rounded-2xl border border-dashed border-slate-200 shadow-sm">
-              <span class="material-symbols-outlined text-5xl text-slate-300 mb-3">potted_plant</span>
-              <h4 class="text-sm font-bold text-slate-700">
-                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No Field Stories Yet{% else %}{% trans "Belum Ada Cerita Lapangan" %}{% endif %}
-              </h4>
-              <p class="text-xs text-slate-400 max-w-xs mt-1">
-                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Notes and forester documentation from the middle of the forest ecosystem will arrive soon.{% else %}{% trans "Catatan dan dokumentasi rimbawan dari tengah ekosistem hutan akan segera hadir." %}{% endif %}
-              </p>
-            </div>
-            {% endfor %}
-          </div>
-
-          <div class="flex justify-start gap-4 pt-2">
-            <button id="story-less-btn" class="hidden font-label-caps text-xs font-bold px-6 py-2.5 bg-white border-2 border-primary text-primary rounded-lg hover:bg-[#1e5823] hover:text-white transition-all duration-300 cursor-pointer">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Load Less{% else %}{% trans "Muat Lebih Sedikit" %}{% endif %}
-            </button>
-            <button id="story-more-btn" class="hidden font-label-caps text-xs font-bold px-6 py-2.5 bg-transparent border-2 border-primary text-primary rounded-lg hover:bg-[#1e5823] hover:text-white transition-all duration-300 cursor-pointer">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Load More Stories{% else %}{% trans "Muat Cerita Lebih Banyak" %}{% endif %}
-            </button>
-          </div>
-        </div>
-
-        <!-- 4. SEKSI MODUL DOKUMENTASI -->
+        <!-- MODUL & BUKU -->
         <div id="seksi-modul" class="tab-content-block hidden space-y-6">
           <div class="mb-6 text-left">
-            <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface leading-tight mb-1">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Strategic Documentation Modules{% else %}{% trans "Modul Dokumentasi Strategis" %}{% endif %}
-            </h2>
-            <p class="text-xs md:text-sm text-on-surface-variant">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Access technical summaries, formal guidelines, and periodic publication data from BPH experts.{% else %}{% trans "Akses rangkuman teknis, panduan formal, dan data publikasi berkala dari tim ahli BPH." %}{% endif %}
-            </p>
+            <h2 class="font-headline-xl text-xl md:text-2xl font-bold text-on-surface leading-tight mb-1">Modul, Laporan &amp; Buku</h2>
+            <p class="text-xs md:text-sm text-on-surface-variant">Akses rangkuman teknis, panduan formal, dan data publikasi berkala (PDF/Buku) dari tim ahli BPH.</p>
           </div>
-
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
             {% for doc in documents %}
             <a href="{{ doc.file_dokumen.url }}" target="_blank" rel="noopener" class="group" style="text-decoration: none;">
@@ -266,20 +266,14 @@
               </div>
               <div class="mt-3 text-left">
                 <h3 class="font-headline-md text-xs font-bold text-on-surface group-hover:text-primary transition-colors line-clamp-2 leading-snug">{{ doc.judul }}</h3>
-                <p class="text-[10px] text-on-surface-variant mt-0.5">
-                  {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Uploaded{% else %}{% trans "Diunggah" %}{% endif %} {{ doc.tanggal_rilis|date:"d F Y" }}
-                </p>
+                <p class="text-[10px] text-on-surface-variant mt-0.5">Diunggah {{ doc.tanggal_rilis|date:"d F Y" }}</p>
               </div>
             </a>
             {% empty %}
             <div class="col-span-full py-16 px-4 flex flex-col items-center justify-center text-center bg-white rounded-2xl border border-dashed border-slate-200 shadow-sm">
               <span class="material-symbols-outlined text-5xl text-slate-300 mb-3">folder_open</span>
-              <h4 class="text-sm font-bold text-slate-700">
-                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No Module Files Yet{% else %}{% trans "Belum Ada Berkas Modul" %}{% endif %}
-              </h4>
-              <p class="text-xs text-slate-400 max-w-xs mt-1">
-                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Guide modules and technical PDF publications are not available for download yet.{% else %}{% trans "Modul panduan dan publikasi teknis PDF belum tersedia untuk diunduh." %}{% endif %}
-              </p>
+              <h4 class="text-sm font-bold text-slate-700">Belum Ada Berkas Modul</h4>
+              <p class="text-xs text-slate-400 max-w-xs mt-1">Modul panduan dan publikasi PDF belum tersedia untuk diunduh.</p>
             </div>
             {% endfor %}
           </div>
@@ -290,21 +284,30 @@
     </div>
   </section>
 </main>
-
 {% endblock %}
 
 {% block extra_js %}
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    
     const tabButtons = document.querySelectorAll('.tab-menu-btn');
     const tabContents = document.querySelectorAll('.tab-content-block');
+    
+    const dropdownToggleBtn = document.getElementById('dropdown-toggle-btn');
+    const dropdownMenuContent = document.getElementById('dropdown-menu-content');
+    const dropdownArrow = document.getElementById('dropdown-arrow');
 
     function activateTab(targetTabId) {
       tabButtons.forEach(b => {
         b.classList.remove('bg-primary', 'text-surface-white', 'shadow-sm');
         b.classList.add('bg-transparent', 'text-on-surface-variant', 'hover:bg-slate-50');
         
+        // Kembalikan warna ikon menjadi primary jika tidak aktif
+        const icon = b.querySelector('.menu-icon');
+        if (icon) {
+          icon.classList.remove('text-white');
+          icon.classList.add('text-primary');
+        }
+
         const cnt = b.querySelector('.tab-counter');
         if(cnt) {
           cnt.className = "tab-counter text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-extrabold transition-colors";
@@ -313,6 +316,13 @@
         if (b.getAttribute('data-tab') === targetTabId) {
           b.classList.add('bg-primary', 'text-surface-white', 'shadow-sm');
           b.classList.remove('bg-transparent', 'text-on-surface-variant', 'hover:bg-slate-50');
+          
+          // Ubah warna ikon jadi putih saat aktif agar kontras dengan latar hijau
+          if (icon) {
+            icon.classList.remove('text-primary');
+            icon.classList.add('text-white');
+          }
+
           const activeCnt = b.querySelector('.tab-counter');
           if(activeCnt) {
             activeCnt.className = "tab-counter text-[11px] px-2 py-0.5 rounded-full bg-white text-primary font-extrabold transition-colors";
@@ -325,6 +335,16 @@
         else content.classList.add('hidden');
       });
 
+      if (targetTabId === 'seksi-berita' || targetTabId === 'seksi-cerita') {
+        dropdownMenuContent.classList.remove('hidden');
+        dropdownArrow.style.transform = 'rotate(180deg)';
+        dropdownToggleBtn.classList.add('text-primary');
+      } else {
+        dropdownMenuContent.classList.add('hidden');
+        dropdownArrow.style.transform = 'rotate(0deg)';
+        dropdownToggleBtn.classList.remove('text-primary');
+      }
+
       const mainCol = document.querySelector('.lg\\:col-span-9');
       if (mainCol) {
         const offsetTarget = mainCol.offsetTop - 110;
@@ -332,7 +352,17 @@
       }
     }
 
-    // --- AKSI SWAP TAB SIDEBAR VIA KLIK ---
+    dropdownToggleBtn.addEventListener('click', () => {
+      dropdownMenuContent.classList.toggle('hidden');
+      if (!dropdownMenuContent.classList.contains('hidden')) {
+        dropdownArrow.style.transform = 'rotate(180deg)';
+        dropdownToggleBtn.classList.add('text-primary');
+      } else {
+        dropdownArrow.style.transform = 'rotate(0deg)';
+        dropdownToggleBtn.classList.remove('text-primary');
+      }
+    });
+
     tabButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         const targetTabId = btn.getAttribute('data-tab');
@@ -340,36 +370,32 @@
       });
     });
 
-    // --- DETEKSI HASH URL (Contoh: /gallery/#seksi-artikel) ---
     const urlHash = window.location.hash.replace('#', '');
     if (urlHash) {
       const targetBlock = document.getElementById(urlHash);
       if (targetBlock) {
-        setTimeout(() => {
-          activateTab(urlHash);
-        }, 100);
+        setTimeout(() => { activateTab(urlHash); }, 100);
       }
+    } else {
+      activateTab('seksi-berita');
     }
 
-    // --- FILTER FOLDER GALERI ---
+    // Filter folder galeri foto
     const galleryButtons = document.querySelectorAll('.gallery-filter-btn');
     const folderGroups = document.querySelectorAll('.gallery-folder-group');
 
     galleryButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         const filterValue = btn.getAttribute('data-filter');
-
         galleryButtons.forEach(b => {
           b.classList.remove('bg-primary', 'text-surface-white', 'shadow-sm');
           b.classList.add('bg-white', 'border', 'border-border-subtle', 'text-on-surface-variant', 'hover:border-primary', 'hover:text-primary');
         });
-
         btn.classList.add('bg-primary', 'text-surface-white', 'shadow-sm');
         btn.classList.remove('bg-white', 'border', 'border-border-subtle', 'text-on-surface-variant', 'hover:border-primary', 'hover:text-primary');
 
         folderGroups.forEach(group => {
           const folderTag = group.getAttribute('data-folder-tags');
-          
           if (filterValue === 'all' || folderTag === filterValue) {
             group.classList.remove('hidden');
           } else {
@@ -378,71 +404,6 @@
         });
       });
     });
-    
-    // --- PAGINASI ARTIKEL ---
-    const articleCards = document.querySelectorAll('.article-card');
-    const articleMoreBtn = document.getElementById('article-more-btn');
-    const articleLessBtn = document.getElementById('article-less-btn');
-    let articleLimit = 3;
-
-    function calculateArticles() {
-      articleCards.forEach((card, idx) => {
-        if (idx < articleLimit) card.classList.remove('hidden');
-        else card.classList.add('hidden');
-      });
-      
-      if (articleCards.length > articleLimit) articleMoreBtn.classList.remove('hidden');
-      else articleMoreBtn.classList.add('hidden');
-
-      if (articleLimit > 3) articleLessBtn.classList.remove('hidden');
-      else articleLessBtn.classList.add('hidden');
-    }
-
-    if(articleMoreBtn) {
-      articleMoreBtn.addEventListener('click', () => { articleLimit += 3; calculateArticles(); });
-    }
-    if(articleLessBtn) {
-      articleLessBtn.addEventListener('click', () => {
-        if (articleLimit > 3) {
-          articleLimit -= 3; calculateArticles();
-          document.getElementById('seksi-artikel').scrollIntoView({ behavior: 'smooth', block: 'end' });
-        }
-      });
-    }
-
-    // --- PAGINASI CERITA ---
-    const storyCards = document.querySelectorAll('.story-card');
-    const storyMoreBtn = document.getElementById('story-more-btn');
-    const storyLessBtn = document.getElementById('story-less-btn');
-    let storyLimit = 3;
-
-    function calculateStories() {
-      storyCards.forEach((card, idx) => {
-        if (idx < storyLimit) card.classList.remove('hidden');
-        else card.classList.add('hidden');
-      });
-
-      if (storyCards.length > storyLimit) storyMoreBtn.classList.remove('hidden');
-      else storyMoreBtn.classList.add('hidden');
-
-      if (storyLimit > 3) storyLessBtn.classList.remove('hidden');
-      else storyLessBtn.classList.add('hidden');
-    }
-
-    if(storyMoreBtn) {
-      storyMoreBtn.addEventListener('click', () => { storyLimit += 3; calculateStories(); });
-    }
-    if(storyLessBtn) {
-      storyLessBtn.addEventListener('click', () => {
-        if (storyLimit > 3) {
-          storyLimit -= 3; calculateStories();
-          document.getElementById('seksi-cerita').scrollIntoView({ behavior: 'smooth', block: 'end' });
-        }
-      });
-    }
-
-    calculateArticles();
-    calculateStories();
   });
 </script>
 {% endblock %}
