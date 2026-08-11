@@ -324,7 +324,7 @@
     const dropdownMenuContent = document.getElementById('dropdown-menu-content');
     const dropdownArrow = document.getElementById('dropdown-arrow');
 
-    function activateTab(targetTabId) {
+    function activateTab(targetTabId, shouldScroll = false) {
       tabButtons.forEach(b => {
         b.classList.remove('bg-primary', 'text-surface-white', 'shadow-sm');
         b.classList.add('bg-transparent', 'text-on-surface-variant', 'hover:bg-slate-50');
@@ -371,10 +371,13 @@
         dropdownToggleBtn.classList.remove('text-primary');
       }
 
-      const mainCol = document.querySelector('.lg\\:col-span-9');
-      if (mainCol) {
-        const offsetTarget = mainCol.offsetTop - 110;
-        window.scrollTo({ top: offsetTarget, behavior: 'smooth' });
+      // Hanya scroll jika diklik manual oleh user setelah halaman termuat
+      if (shouldScroll) {
+        const mainCol = document.querySelector('.lg\\:col-span-9');
+        if (mainCol) {
+          const offsetTarget = mainCol.offsetTop - 110;
+          window.scrollTo({ top: offsetTarget, behavior: 'smooth' });
+        }
       }
     }
 
@@ -392,7 +395,7 @@
     tabButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         const targetTabId = btn.getAttribute('data-tab');
-        activateTab(targetTabId);
+        activateTab(targetTabId, true); // true agar bisa scroll saat diklik manual
       });
     });
 
@@ -400,10 +403,10 @@
     if (urlHash) {
       const targetBlock = document.getElementById(urlHash);
       if (targetBlock) {
-        setTimeout(() => { activateTab(urlHash); }, 100);
+        setTimeout(() => { activateTab(urlHash, true); }, 100);
       }
     } else {
-      activateTab('seksi-berita');
+      activateTab('seksi-berita', false); // false agar saat halaman pertama dibuka tetap diam di hero banner atas
     }
 
     // Filter folder galeri foto

@@ -68,7 +68,7 @@
         </div>
         
         <a class="font-label-caps text-xs font-bold uppercase tracking-wider text-primary border border-primary px-7 py-3 rounded-full hover:bg-forest-deep hover:text-surface-white transition-all items-center inline-flex"
-            href="{% url 'gallery' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}#seksi-artikel">
+            href="{% url 'publications' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}#seksi-artikel">
           <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}View All{% else %}{% trans "Lihat Semua" %}{% endif %}</span>
         </a>
       </div>
@@ -136,7 +136,7 @@
             {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Action notes and real conservation narratives from the BPH team.{% else %}{% trans "Catatan aksi dan narasi konservasi riil tim BPH." %}{% endif %}
           </p>
         </div>
-        <a href="{% url 'gallery' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}#seksi-cerita" class="font-label-caps text-xs font-bold uppercase tracking-wider text-primary border border-primary px-7 py-3 rounded-full hover:bg-forest-deep hover:text-surface-white transition-all items-center inline-flex" style="text-decoration: none;">
+        <a href="{% url 'publications' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}#seksi-cerita" class="font-label-caps text-xs font-bold uppercase tracking-wider text-primary border border-primary px-7 py-3 rounded-full hover:bg-forest-deep hover:text-surface-white transition-all items-center inline-flex" style="text-decoration: none;">
           <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}View All Stories{% else %}{% trans "Lihat Semua Cerita" %}{% endif %}</span>
         </a>
       </div>
