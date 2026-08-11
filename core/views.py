@@ -14,7 +14,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.core.serializers import serialize
 from django.http import HttpResponse
-from .models import Article, Project, Client, Story, Service, Location, Category, Modul, ContactMessage, Gallery, Profile, Folder, TeamMember
+from .models import Article, Project, Client, Story, Service, Location, Category, Modul, ContactMessage, Gallery, Profile, Folder, TeamMember, Infografis, Video
 
 # ==========================================
 # JALUR FRONTEND WEBSITE (NAVBAR & MENU)
@@ -839,6 +839,89 @@ def team_delete_view(request, pk):
         member.delete()
         messages.success(request, 'Anggota tim berhasil dihapus!')
     return redirect('team_list')
+
+# ==========================================
+# 10d. MANAGEMENT INFOGRAFIS
+# ==========================================
+class InfografisListView(AdminRequiredMixin, ListView):
+    model = Infografis
+    template_name = 'core/custom_admin/infografis/infografis_list.html'
+    context_object_name = 'items'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Infografis.objects.all().order_by('-tanggal_unggah', '-id')
+
+class InfografisCreateView(AdminRequiredMixin, CreateView):
+    model = Infografis
+    template_name = 'core/custom_admin/infografis/infografis_form.html'
+    fields = ['judul', 'gambar']
+    success_url = reverse_lazy('infografis_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Infografis baru berhasil ditambahkan!')
+        return super().form_valid(form)
+
+class InfografisUpdateView(AdminRequiredMixin, UpdateView):
+    model = Infografis
+    template_name = 'core/custom_admin/infografis/infografis_form.html'
+    fields = ['judul', 'gambar']
+    success_url = reverse_lazy('infografis_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Data infografis berhasil diperbarui!')
+        return super().form_valid(form)
+
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def infografis_delete_view(request, pk):
+    item = get_object_or_404(Infografis, pk=pk)
+    if request.method == 'POST':
+        item.delete()
+        messages.success(request, 'Infografis berhasil dihapus!')
+    return redirect('infografis_list')
+
+
+# ==========================================
+# 10e. MANAGEMENT VIDEO KEGIATAN
+# ==========================================
+class VideoListView(AdminRequiredMixin, ListView):
+    model = Video
+    template_name = 'core/custom_admin/video/video_list.html'
+    context_object_name = 'items'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Video.objects.all().order_by('-tanggal_unggah', '-id')
+
+class VideoCreateView(AdminRequiredMixin, CreateView):
+    model = Video
+    template_name = 'core/custom_admin/video/video_form.html'
+    fields = ['judul', 'url_video']
+    success_url = reverse_lazy('video_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Video baru berhasil ditambahkan!')
+        return super().form_valid(form)
+
+class VideoUpdateView(AdminRequiredMixin, UpdateView):
+    model = Video
+    template_name = 'core/custom_admin/video/video_form.html'
+    fields = ['judul', 'url_video']
+    success_url = reverse_lazy('video_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Data video berhasil diperbarui!')
+        return super().form_valid(form)
+
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def video_delete_view(request, pk):
+    item = get_object_or_404(Video, pk=pk)
+    if request.method == 'POST':
+        item.delete()
+        messages.success(request, 'Video berhasil dihapus!')
+    return redirect('video_list')
 
 
 ## ==========================================

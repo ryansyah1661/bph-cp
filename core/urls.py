@@ -110,6 +110,18 @@ urlpatterns = [
     path('be/team/<int:pk>/edit/', views.TeamUpdateView.as_view(), name='team_update'),
     path('be/team/<int:pk>/delete/', views.team_delete_view, name='team_delete'),
 
+    # URL ROUTING CRUD INFOGRAFIS
+    path('be/infografis/', views.InfografisListView.as_view(), name='infografis_list'),
+    path('be/infografis/add/', views.InfografisCreateView.as_view(), name='infografis_create'),
+    path('be/infografis/<int:pk>/edit/', views.InfografisUpdateView.as_view(), name='infografis_update'),
+    path('be/infografis/<int:pk>/delete/', views.infografis_delete_view, name='infografis_delete'),
+
+    # URL ROUTING CRUD VIDEO KEGIATAN
+    path('be/video/', views.VideoListView.as_view(), name='video_list'),
+    path('be/video/add/', views.VideoCreateView.as_view(), name='video_create'),
+    path('be/video/<int:pk>/edit/', views.VideoUpdateView.as_view(), name='video_update'),
+    path('be/video/<int:pk>/delete/', views.video_delete_view, name='video_delete'),
+
     # URL ROUTING API PROVINCES GEOJSON UNTUK PETA
     path('api/provinces-geojson/', views.provinces_geojson_api, name='provinces_geojson'),
 

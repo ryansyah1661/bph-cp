@@ -106,17 +106,20 @@
         
         <!-- PUBLIKASI MENU GROUP -->
         <div class="space-y-1 bph-menu-group-container">
-          <input type="checkbox" id="drop-publikasi" class="bph-dropdown-check" {% if 'article' in request.resolver_match.url_name or 'story' in request.resolver_match.url_name or 'gallery' in request.resolver_match.url_name or 'folder' in request.resolver_match.url_name %}checked{% endif %}>
-          <label for="drop-publikasi" class="bph-menu-toggle flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-slate-800 transition-all {% if 'article' in request.resolver_match.url_name or 'story' in request.resolver_match.url_name or 'gallery' in request.resolver_match.url_name or 'folder' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/20{% else %}text-slate-500{% endif %}">
+          <input type="checkbox" id="drop-publikasi" class="bph-dropdown-check" {% if 'article' in request.resolver_match.url_name or 'story' in request.resolver_match.url_name or 'gallery' in request.resolver_match.url_name or 'folder' in request.resolver_match.url_name or 'document' in request.resolver_match.url_name or 'infografis' in request.resolver_match.url_name or 'video' in request.resolver_match.url_name %}checked{% endif %}>
+          <label for="drop-publikasi" class="bph-menu-toggle flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-slate-800 transition-all {% if 'article' in request.resolver_match.url_name or 'story' in request.resolver_match.url_name or 'gallery' in request.resolver_match.url_name or 'folder' in request.resolver_match.url_name or 'document' in request.resolver_match.url_name or 'infografis' in request.resolver_match.url_name or 'video' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/20{% else %}text-slate-500{% endif %}">
             <span class="flex items-center gap-2.5 truncate">📑 Publikasi</span>
             <span class="material-symbols-outlined arrow-icon text-base flex-shrink-0">expand_more</span>
           </label>
           
           <ul class="bph-dropdown-content space-y-1 pl-2">
-            <li><a href="{% url 'article_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'article' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">description</span> Artikel</a></li>
+            <li><a href="{% url 'article_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'article' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">description</span> Berita</a></li>
             <li><a href="{% url 'story_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'story' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">explore</span> Cerita Lapangan</a></li>
-            <li><a href="{% url 'gallery_admin_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'gallery' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">collections</span> Galeri Foto</a></li>
+            <li><a href="{% url 'infografis_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'infografis' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">bar_chart</span> Infografis</a></li>
+            <li><a href="{% url 'gallery_admin_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'gallery' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">collections</span> Foto & Album</a></li>
             <li><a href="{% url 'folder_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'folder' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">create_new_folder</span> Folder Album</a></li>
+            <li><a href="{% url 'video_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'video' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">play_circle</span> Video Kegiatan</a></li>
+            <li><a href="{% url 'document_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'document' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">menu_book</span> Modul & Buku</a></li>
           </ul>
         </div>
 
@@ -148,17 +151,7 @@
           </ul>
         </div>
 
-        <!-- UNDUHAN BERKAS MENU GROUP -->
-        <div class="space-y-1 mt-2 bph-menu-group-container">
-          <input type="checkbox" id="drop-unduhan" class="bph-dropdown-check" {% if 'document' in request.resolver_match.url_name %}checked{% endif %}>
-          <label for="drop-unduhan" class="bph-menu-toggle flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-slate-800 transition-all {% if 'document' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/20{% else %}text-slate-500{% endif %}">
-            <span class="flex items-center gap-2.5 truncate">📁 Unduhan Berkas</span>
-            <span class="material-symbols-outlined arrow-icon text-base flex-shrink-0">expand_more</span>
-          </label>
-          <ul class="bph-dropdown-content space-y-1 pl-2">
-            <li><a href="{% url 'document_list' %}" class="flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm {% if 'document' in request.resolver_match.url_name %}text-emerald-400 bg-slate-800/40 font-semibold{% else %}text-slate-400 hover:text-slate-200{% endif %}"><span class="material-symbols-outlined text-lg">folder_open</span> Modul Dokumentasi</a></li>
-          </ul>
-        </div>
+
       </nav>
 
       <!-- FOOTER SIDEBAR PROFILE -->

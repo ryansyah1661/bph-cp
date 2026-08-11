@@ -306,6 +306,32 @@ class TeamMember(models.Model):
     def __str__(self):
         return f"{self.nama} - {self.jabatan} ({self.get_kategori_display()})"
 
+# === 14. TABEL INFOGRAFIS ===
+class Infografis(models.Model):
+    judul = models.CharField(max_length=200, verbose_name="Judul Infografis")
+    gambar = models.ImageField(upload_to='infografis/', verbose_name="Berkas Gambar/Infografis")
+    tanggal_unggah = models.DateField(auto_now_add=True, verbose_name="Tanggal Unggah")
+
+    class Meta:
+        verbose_name_plural = "Infografis & Data Visual"
+        ordering = ['-tanggal_unggah', '-id']
+
+    def __str__(self):
+        return self.judul
+
+# === 15. TABEL VIDEO KEGIATAN ===
+class Video(models.Model):
+    judul = models.CharField(max_length=200, verbose_name="Judul Video Kegiatan")
+    url_video = models.URLField(verbose_name="Link Video (YouTube/Lainnya)")
+    tanggal_unggah = models.DateField(auto_now_add=True, verbose_name="Tanggal Unggah")
+
+    class Meta:
+        verbose_name_plural = "Video Dokumenter Kegiatan"
+        ordering = ['-tanggal_unggah', '-id']
+
+    def __str__(self):
+        return self.judul
+
 # --- LOGIKA AUTOMATIC SIGNALS DJANGO ---
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

@@ -1,0 +1,153 @@
+{% extends "core/custom_admin/base.html" %}
+
+{% block admin_content %}
+<style>
+  .bph-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.4); 
+    backdrop-filter: blur(4px); 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  .bph-modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .bph-modal-overlay.active > div {
+    transform: scale(1);
+  }
+</style>
+
+<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
+  
+  <div class="flex justify-between items-center border-b border-gray-100 pb-5">
+    <div>
+      <h2 class="text-xl font-bold text-emerald-900">Infografis & Data Visual</h2>
+      <p class="text-xs text-gray-500 mt-1">Daftar visualisasi data dan infografis ekologis.</p>
+    </div>
+    <a href="{% url 'infografis_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100" style="text-decoration: none;">
+      <span class="material-symbols-outlined text-sm">add</span> Tambah Infografis
+    </a>
+  </div>
+
+  <div class="overflow-x-auto w-full">
+    <table class="w-full text-left border-collapse text-sm table-auto">
+      <thead>
+        <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
+          <th class="p-4 font-semibold w-14 text-center">No.</th>
+          <th class="p-4 font-semibold">Gambar</th>
+          <th class="p-4 font-semibold">Judul Infografis</th>
+          <th class="p-4 font-semibold">Tanggal Unggah</th>
+          <th class="p-4 font-semibold text-center w-28">Aksi</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700 divide-y divide-gray-50">
+        {% for item in items %}
+        <tr class="hover:bg-slate-50/50 transition">
+          <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
+            {% if is_paginated %}{{ page_obj.start_index|add:forloop.counter0 }}{% else %}{{ forloop.counter }}{% endif %}
+          </td>
+          
+          <td class="p-4 align-middle">
+            {% if item.gambar %}
+              <img src="{{ item.gambar.url }}" alt="{{ item.judul }}" class="w-16 h-16 object-cover rounded-lg shadow-sm border border-slate-100">
+            {% else %}
+              <div class="w-16 h-16 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400"><span class="material-symbols-outlined">image</span></div>
+            {% endif %}
+          </td>
+
+          <td class="p-4 font-semibold text-slate-700 align-middle text-sm transition">
+            <div class="line-clamp-2 leading-snug">{{ item.judul }}</div>
+          </td>
+
+          <td class="p-4 align-middle font-semibold text-slate-600 text-xs tracking-wide">
+            {{ item.tanggal_unggah }}
+          </td>
+          
+          <td class="p-4 text-center align-middle whitespace-nowrap">
+            <div class="flex justify-center items-center gap-2">
+              <a href="{% url 'infografis_update' item.pk %}" title="Edit Infografis" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
+                <span class="material-symbols-outlined text-sm">edit</span>
+              </a>
+              
+              <button type="button" 
+                  class="trigger-delete-btn inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition cursor-pointer"
+                  data-url="{% url 'infografis_delete' item.pk %}" 
+                  data-name="{{ item.judul|escapejs }}" 
+                  title="Hapus Infografis">
+                <span class="material-symbols-outlined text-sm">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="p-8 text-center text-gray-400 font-medium">Belum ada infografis yang diunggah.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% include 'core/custom_admin/partials/pagination.html' %}
+
+  <div id="delete-modal" class="bph-modal-overlay">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-10 shadow-2xl border border-slate-100 text-center scale-95 transition-transform duration-200">
+      <span class="material-symbols-outlined text-rose-500 text-6xl mb-4">warning</span>
+      <h3 class="text-2xl font-extrabold mb-4 text-slate-900 tracking-wide">Hapus Infografis?</h3>
+      <p class="text-base text-slate-500 mb-8 leading-relaxed px-4">Apakah Anda yakin ingin menghapus infografis <span id="modal-item-name" class="font-bold text-slate-800"></span>? Berkas ini akan dihapus permanen dari sistem.</p>
+      
+      <form id="delete-form" method="post" action="">
+        {% csrf_token %}
+        <div class="flex gap-4 px-2">
+          <button type="button" id="btn-delete-cancel" class="flex-1 py-3 rounded-xl border border-slate-200 text-sm font-bold cursor-pointer text-slate-600 bg-white hover:bg-slate-50 transition tracking-wide">Batal</button>
+          <button type="submit" class="flex-1 py-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-sm font-extrabold cursor-pointer border-none shadow-sm transition tracking-wide">Ya, Hapus</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const deleteModal = document.getElementById('delete-modal');
+    const deleteForm = document.getElementById('delete-form');
+    const itemNameSpan = document.getElementById('modal-item-name');
+    const cancelBtn = document.getElementById('btn-delete-cancel');
+    const deleteTriggers = document.querySelectorAll('.trigger-delete-btn');
+
+    deleteTriggers.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const deleteUrl = this.getAttribute('data-url');
+        const itemName = this.getAttribute('data-name');
+
+        deleteForm.setAttribute('action', deleteUrl);
+        itemNameSpan.textContent = `"${itemName}"`;
+        deleteModal.classList.add('active');
+      });
+    });
+
+    if (cancelBtn) {
+      cancelBtn.onclick = () => deleteModal.classList.remove('active');
+    }
+
+    deleteModal.addEventListener('click', function(e) {
+      if (e.target === this) deleteModal.classList.remove('active');
+    });
+  });
+</script>
+{% endblock %}
