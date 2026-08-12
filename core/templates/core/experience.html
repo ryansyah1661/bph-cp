@@ -206,8 +206,7 @@
               <thead>
                 <tr class="bg-slate-50 border-b border-gray-100 text-xs uppercase font-extrabold text-slate-500 tracking-wider">
                   <th class="py-4 px-6 w-16 text-center">No</th>
-                  <th class="py-4 px-6">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Project Title{% else %}Judul Proyek{% endif %}</th>
-                  <th class="py-4 px-6">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Partner / Client{% else %}Mitra / Klien{% endif %}</th>
+                  <th class="py-4 px-6">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Project{% else %}Proyek{% endif %}</th>
                   <th class="py-4 px-6">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Location{% else %}Lokasi{% endif %}</th>
                   <th class="py-4 px-6 text-center w-28">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Year{% else %}Tahun{% endif %}</th>
                 </tr>
@@ -218,13 +217,6 @@
                   <td class="py-4 px-6 text-center font-bold text-slate-400">{{ forloop.counter }}</td>
                   <td class="py-4 px-6 font-bold text-[#308935]">
                     {{ proj.name }}
-                  </td>
-                  <td class="py-4 px-6 font-semibold text-slate-700">
-                    {% if proj.client %}
-                      {{ proj.client.nama }}
-                    {% else %}
-                      <span class="text-slate-400 font-normal italic">-</span>
-                    {% endif %}
                   </td>
                   <td class="py-4 px-6 text-slate-600">
                     <span class="inline-block bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-xs font-semibold">
@@ -237,7 +229,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                  <td colspan="5" class="text-center py-8 text-slate-400 italic">
+                  <td colspan="4" class="text-center py-8 text-slate-400 italic">
                     {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No project data available in this province.{% else %}Belum ada data proyek di provinsi ini.{% endif %}
                   </td>
                 </tr>
@@ -350,6 +342,20 @@
       const container = document.getElementById(containerId);
       if (!container) return;
 
+      const innerFlex = container.querySelector('.flex.gap-6');
+
+      function updateAlignment() {
+         if (innerFlex) {
+            innerFlex.classList.remove('mx-auto');
+            if (container.scrollWidth <= container.clientWidth) {
+               innerFlex.classList.add('mx-auto');
+            }
+         }
+      }
+
+      updateAlignment();
+      window.addEventListener('resize', updateAlignment);
+
       let direction = initialDirection;
       let isHovered = false;
       let isMouseDown = false;
@@ -413,8 +419,8 @@
       });
     }
 
-    enableInteractiveTicker('scroll-swasta', 1, 1.0);
-    enableInteractiveTicker('scroll-publik', -1, 1.0);
+    enableInteractiveTicker('scroll-swasta', -1, 1.0);
+    enableInteractiveTicker('scroll-publik', 1, 1.0);
 
 
     // --- PETA INDONESIA & PROYEK ---

@@ -189,6 +189,7 @@ class Story(models.Model):
     lokasi = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, related_name='stories', verbose_name="Lokasi Wilayah")
     short = models.TextField(help_text="Ringkasan pendek yang muncul di kartu depan")
     deskripsi = models.TextField(verbose_name="Isi Cerita Lengkap")
+    views_count = models.PositiveIntegerField(default=0, verbose_name="Jumlah Tayangan")
     gambar = models.ImageField(upload_to='stories/', verbose_name="Foto Cerita")
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, blank=True, related_name='stories')
 
@@ -214,6 +215,7 @@ class Article(models.Model):
     
     short = models.TextField(help_text="Ringkasan pendek artikel")
     deskripsi = models.TextField(verbose_name="Konten Artikel Lengkap")
+    views_count = models.PositiveIntegerField(default=0, verbose_name="Jumlah Tayangan")
     gambar = models.ImageField(upload_to='articles/', verbose_name="Foto Utama Artikel")
 
     class Meta:
@@ -326,11 +328,28 @@ class Video(models.Model):
     tanggal_unggah = models.DateField(auto_now_add=True, verbose_name="Tanggal Unggah")
 
     class Meta:
-        verbose_name_plural = "Video Dokumenter Kegiatan"
+        verbose_name_plural = "Galeri Video Kegiatan"
         ordering = ['-tanggal_unggah', '-id']
 
     def __str__(self):
         return self.judul
+
+    @property
+    def youtube_id(self):
+        import re
+        # Support watch?v=, youtu.be/, embed/, and shorts/
+        match = re.search(r'(?:v=|youtu\.be/|youtube\.com/embed/|youtube\.com/shorts/)([^&?/#]+)', self.url_video)
+        if match:
+            return match.group(1)
+        return None
+
+    @property
+    def youtube_thumbnail(self):
+        yt_id = self.youtube_id
+        if yt_id:
+            # Menggunakan hqdefault.jpg karena maxresdefault tidak selalu tersedia untuk semua video
+            return f"https://img.youtube.com/vi/{yt_id}/hqdefault.jpg"
+        return None
 
 # --- LOGIKA AUTOMATIC SIGNALS DJANGO ---
 @receiver(post_save, sender=User)

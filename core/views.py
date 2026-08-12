@@ -98,6 +98,8 @@ def gallery_view(request):
     categories = Category.objects.filter(folders__isnull=False).distinct().order_by('name')
     gallery_items = Gallery.objects.all().order_by('-tanggal_upload', '-id')
     folders = Folder.objects.select_related('kategori').prefetch_related('images').order_by('-tahun', '-id')
+    infografis = Infografis.objects.all().order_by('-tanggal_unggah', '-id')
+    videos = Video.objects.all().order_by('-tanggal_unggah', '-id')
 
     return render(request, 'core/gallery.html', {
         'articles': articles,
@@ -106,6 +108,8 @@ def gallery_view(request):
         'folders': folders,
         'documents': documents,
         'categories': categories,
+        'infografis_list': infografis,
+        'videos_list': videos,
     })
 
 def contact_view(request):
@@ -172,6 +176,9 @@ def story_view(request):
 def detail_articles_view(request, slug):
     article_data = get_object_or_404(Article, Q(slug_ind=slug) | Q(slug_en=slug) if hasattr(Article, 'slug_en') else Q(slug=slug))
     
+    article_data.views_count += 1
+    article_data.save(update_fields=['views_count'])
+    
     related_articles = Article.objects.filter(
         Q(author=article_data.author)
     ).exclude(pk=article_data.pk).order_by('-tanggal')[:3]
@@ -218,6 +225,9 @@ def detail_story_view(request, slug):
         Story.objects.select_related('lokasi', 'project'), 
         Q(slug_ind=slug) | Q(slug_en=slug) if hasattr(Story, 'slug_en') else Q(slug=slug)
     )
+    
+    story_data.views_count += 1
+    story_data.save(update_fields=['views_count'])
     
     related_stories = Story.objects.filter(
         Q(author=story_data.author) | Q(lokasi=story_data.lokasi)

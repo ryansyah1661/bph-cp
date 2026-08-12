@@ -32,6 +32,11 @@
                 <span>{{ story.tanggal|date:"d F Y" }}</span>
             </div>
 
+            <div class="flex items-center gap-1.5 bg-black/30 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10">
+                <span class="material-symbols-outlined text-base text-primary">visibility</span>
+                <span>{{ story.views_count }}</span>
+            </div>
+
             {% if story.lokasi %}
             <div class="flex items-center gap-1.5 bg-black/30 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10">
                 <span class="material-symbols-outlined text-base text-amber-400">location_on</span>
