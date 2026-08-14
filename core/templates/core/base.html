@@ -18,13 +18,11 @@
         theme: {
           extend: {
             colors: {
-              // ================= BRAND GUIDELINES BPH =================
               "primary": "#308935",
               "forest-deep": "#077944",
               "tertiary": "#FFC000",
               "gray-melange": "#CDCACA",
               "surface-white": "#FFFFFF",
-              
               "on-secondary-fixed-variant": "#474744",
               "on-secondary": "#ffffff",
               "tertiary-fixed": "#ffdea8",
@@ -89,15 +87,12 @@
               "stack-md": "16px",
               "section-gap": "120px",
             },
-            // ================= FONT FAMILY MAPS =================
             fontFamily: {
               "display-lg": ["Plus Jakarta Sans", "sans-serif"],
               "display-lg-mobile": ["Plus Jakarta Sans", "sans-serif"],
               "headline-xl": ["Plus Jakarta Sans", "sans-serif"],
               "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
-              
               "headline-md": ["Poppins", "sans-serif"],
-              
               "body-lg": ["Inter", "sans-serif"],
               "body-md": ["Inter", "sans-serif"],
               "body-sm": ["Inter", "sans-serif"],
@@ -120,91 +115,95 @@
     </script>
 
     <style>
-      .prose p {
-      margin-top: 0.75em;
-      margin-bottom: 0.75em;
-      }
+      .prose p { margin-top: 0.75em; margin-bottom: 0.75em; }
+      .prose ol, .prose ul { margin-top: 0.5em; margin-bottom: 0.5em; }
+      .prose ol > li, .prose ul > li { margin-top: 0.25em; margin-bottom: 0.25em; }
+      .prose p, .prose span, .prose li, .prose strong, .prose em { color: #191c1c !important; }
 
-      .prose ol, .prose ul {
-      margin-top: 0.5em;
-      margin-bottom: 0.5em;
-      }
+      body { font-family: 'Inter', sans-serif; }
 
-      .prose ol > li, .prose ul > li {
-      margin-top: 0.25em;
-      margin-bottom: 0.25em;
-      }
+      .material-symbols-outlined { font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24; }
+      .material-symbols-outlined.fill { font-variation-settings: "FILL" 1; }
 
-      .prose p, .prose span, .prose li, .prose strong, .prose em {
-      color: #191c1c !important;
-      }
+      @keyframes kenburns { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
+      .animate-kenburns { animation: kenburns 20s ease-out infinite alternate; }
 
-      body {
-      font-family: 'Inter', sans-serif;
-      }
-
-      .material-symbols-outlined {
-      font-variation-settings:
-      "FILL" 0,
-      "wght" 400,
-      "GRAD" 0,
-      "opsz" 24;
-      }
-
-      .material-symbols-outlined.fill {
-      font-variation-settings: "FILL" 1;
-      }
-
-      @keyframes kenburns {
-      0% { transform: scale(1); }
-      100% { transform: scale(1.05); }
-      }
-
-      .animate-kenburns {
-      animation: kenburns 20s ease-out infinite alternate;
-      }
-
-      .typewriter-cursor {
-      border-right: 2px solid theme("colors.primary");
-      animation: blink 0.75s step-end infinite;
-      }
-
-      @keyframes blink {
-      from, to { border-color: transparent; }
-      50% { border-color: theme("colors.primary"); }
-      }
+      .typewriter-cursor { border-right: 2px solid theme("colors.primary"); animation: blink 0.75s step-end infinite; }
+      @keyframes blink { from, to { border-color: transparent; } 50% { border-color: theme("colors.primary"); } }
 
       .no-scrollbar::-webkit-scrollbar { display: none; }
       .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+      /* ================================================= */
+      /* PENGATURAN KHUSUS SAAT CETAK / PRESS CTRL + P     */
+      /* ================================================= */
+      @media print {
+        @page {
+          margin: 1mm; /* Menggunakan 1mm alih-alih 0 untuk mencegah bug file corrupt di 'Microsoft Print to PDF' */
+        }
+
+        /* Menghilangkan efek blur/bayangan yang bisa jadi kotak aneh saat print PDF */
+        * {
+          -webkit-backdrop-filter: none !important;
+          backdrop-filter: none !important;
+          box-shadow: none !important;
+          text-shadow: none !important;
+        }
+
+        nav, footer, #back-to-top, aside, .no-print, .print-hidden {
+          display: none !important;
+        }
+
+        .print-only-logo {
+          display: block !important;
+          text-align: center;
+          margin-bottom: 20px;
+        }
+        .print-only-logo img {
+          height: 50px;
+          width: auto;
+          margin: 0 auto;
+        }
+
+        main, .content-area {
+          width: 100% !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+        
+        body {
+          background-color: #ffffff !important;
+          color: #000000 !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+          padding: 1.5cm !important; /* Memberikan jarak tepi agar tidak terlalu mepet karena margin page 0 */
+        }
+      }
+
+      .print-only-logo {
+        display: none;
+      }
     </style>
   </head>
   
-  <body class="bg-background text-on-background font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container relative">
+  <body class="bg-background text-on-background font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container relative print:bg-white print:text-black">
     
-    <div class="overflow-x-hidden flex flex-col min-h-screen">
+    <div class="overflow-x-hidden flex flex-col min-h-screen print:min-h-0 print:block print:overflow-visible">
       
       {% include 'core/partials/navbar.html' %}
 
-      <!-- GLOBAL FLOATING FLASH MESSAGES / TOAST POP-UP -->
       {% if messages %}
         <div id="flash-messages-toast" class="fixed top-24 right-6 z-[9999] flex flex-col gap-3 max-w-md w-[calc(100%-3rem)] transition-all duration-500">
           {% for message in messages %}
             <div class="flex items-start gap-3 p-4 rounded-2xl shadow-[0_12px_35px_rgba(0,0,0,0.15)] border backdrop-blur-md transition-all duration-300
-              {% if message.tags == 'error' or message.tags == 'danger' %}
-                bg-rose-50/95 border-rose-200 text-rose-800
-              {% elif message.tags == 'success' %}
-                bg-emerald-50/95 border-emerald-200 text-emerald-800
-              {% elif message.tags == 'warning' %}
-                bg-amber-50/95 border-amber-200 text-amber-800
-              {% else %}
-                bg-blue-50/95 border-blue-200 text-blue-800
-              {% endif %}">
+              {% if message.tags == 'error' or message.tags == 'danger' %} bg-rose-50/95 border-rose-200 text-rose-800
+              {% elif message.tags == 'success' %} bg-emerald-50/95 border-emerald-200 text-emerald-800
+              {% elif message.tags == 'warning' %} bg-amber-50/95 border-amber-200 text-amber-800
+              {% else %} bg-blue-50/95 border-blue-200 text-blue-800 {% endif %}">
               <span class="material-symbols-outlined text-xl shrink-0 mt-0.5">
                 {% if message.tags == 'error' or message.tags == 'danger' %}error{% elif message.tags == 'success' %}check_circle{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}
               </span>
-              <div class="flex-1 text-sm font-semibold leading-snug">
-                {{ message }}
-              </div>
+              <div class="flex-1 text-sm font-semibold leading-snug">{{ message }}</div>
               <button onclick="this.parentElement.remove()" class="text-xs opacity-60 hover:opacity-100 p-1 transition-opacity shrink-0" aria-label="Tutup notifikasi">
                 <span class="material-symbols-outlined text-base">close</span>
               </button>
@@ -212,7 +211,6 @@
           {% endfor %}
         </div>
         <script>
-          // Auto dismiss popup setelah 6 detik
           setTimeout(() => {
             const toast = document.getElementById('flash-messages-toast');
             if (toast) {
@@ -246,25 +244,21 @@
 
       window.addEventListener("scroll", () => {
         const currentScrollY = window.scrollY;
-
         if (currentScrollY > 50) {
           if(nav) nav.classList.add("shadow-[0px_4px_20px_rgba(0,0,0,0.05)]");
         } else {
           if(nav) nav.classList.remove("shadow-[0px_4px_20px_rgba(0,0,0,0.05)]");
         }
-
         if (currentScrollY > lastScrollY && currentScrollY > 150) {
           if(nav) nav.classList.add("-translate-y-full");
         } else {
           if(nav) nav.classList.remove("-translate-y-full");
         }
-
         if (currentScrollY > 400) {
           backToTopBtn.classList.remove("opacity-0", "translate-y-6", "pointer-events-none");
         } else {
           backToTopBtn.classList.add("opacity-0", "translate-y-6", "pointer-events-none");
         }
-
         lastScrollY = currentScrollY;
       });
 

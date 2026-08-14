@@ -12,8 +12,13 @@
 {% endblock %}
 
 {% block content %}
-<!-- HERO BANNER: GAMBAR DI BELAKANG JUDUL -->
-<section class="relative h-[65vh] min-h-[450px] w-full flex items-center justify-center overflow-hidden bg-on-background">
+<!-- LOGO KHUSUS PRINT (Tersembunyi di tampilan layar biasa, muncul otomatis saat cetak) -->
+<div class="print-only-logo hidden">
+    <img src="{% static 'images/logo-bph.png' %}" alt="Logo BPH">
+</div>
+
+<!-- HERO BANNER -->
+<section class="relative h-[65vh] min-h-[450px] print:h-[250px] print:min-h-0 w-full flex items-center justify-center overflow-hidden bg-on-background">
     <div class="absolute inset-0 z-0">
         <div class="absolute inset-0 bg-gradient-to-t from-on-background via-on-background/70 to-on-background/40 z-10"></div>
         {% if article.gambar %}
@@ -23,8 +28,8 @@
         {% endif %}
     </div>
 
-    <div class="relative z-20 w-full max-w-4xl mx-auto px-6 text-center text-surface-white pt-20">
-        <h1 class="font-display-lg-mobile md:text-4xl font-extrabold text-white leading-tight mb-6 drop-shadow-md">
+    <div class="relative z-20 w-full max-w-4xl mx-auto px-6 text-center text-surface-white pt-20 print:pt-4">
+        <h1 class="font-display-lg-mobile md:text-4xl font-extrabold text-white leading-tight mb-6 drop-shadow-md print:drop-shadow-none">
             {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
                 {{ article.judul_en|default:article.judul }}
             {% else %}
@@ -32,7 +37,7 @@
             {% endif %}
         </h1>
 
-        <!-- METADATA: PENULIS, TANGGAL, & KATEGORI -->
+        <!-- METADATA LENGKAP -->
         <div class="flex flex-wrap items-center justify-center gap-3 text-xs md:text-sm text-surface-white/90">
             <div class="flex items-center gap-1.5 bg-black/30 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10">
                 <span class="material-symbols-outlined text-base text-primary">person</span>
@@ -74,16 +79,15 @@
             {% endif %}
         </article>
 
-        <!-- OTHER POSTS / ARTIKEL TERKAIT -->
+        <!-- OTHER POSTS / ARTIKEL TERKAIT (DIBUNGKUS .print-hidden AGAR HILANG SAAT DICETAK) -->
         {% if related_articles %}
-        <div class="mt-20 pt-12 border-t border-border-subtle">
+        <div class="mt-20 pt-12 border-t border-border-subtle print-hidden">
             <h3 class="text-2xl font-bold text-on-surface mb-8">
                 {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Related Articles{% else %}{% trans "Artikel Terkait" %}{% endif %}
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {% for rel in related_articles %}
-                <!-- Perbaikan link slug: otomatis mendeteksi slug_en jika mode EN aktif -->
-                <a href="{% url 'detail-articles' slug=article.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}" class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300" style="text-decoration: none;">
+                <a href="{% url 'detail-articles' slug=rel.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}" class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300" style="text-decoration: none;">
                     <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
                         {% if rel.gambar %}
                         <img src="{{ rel.gambar.url }}" alt="{{ rel.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
@@ -96,9 +100,6 @@
                         <h4 class="font-headline-md text-base font-bold text-on-surface mb-2 line-clamp-2 group-hover:text-primary transition-colors">
                             {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}{{ rel.judul_en|default:rel.judul }}{% else %}{{ rel.judul }}{% endif %}
                         </h4>
-                        <p class="text-xs text-on-surface-variant line-clamp-2 mb-4">
-                            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}{{ rel.short_en|default:rel.short }}{% else %}{{ rel.short }}{% endif %}
-                        </p>
                         <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary">
                             {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Read{% else %}{% trans "Baca" %}{% endif %} <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
                         </span>
