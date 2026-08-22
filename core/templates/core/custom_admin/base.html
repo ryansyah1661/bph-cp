@@ -288,7 +288,30 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', updateGreeting);
+    document.addEventListener('DOMContentLoaded', () => {
+      updateGreeting();
+
+      // Set semua input tanggal secara otomatis berdasarkan waktu laptop lokal
+      const dateInputs = document.querySelectorAll('input[type="date"]');
+      if (dateInputs.length > 0) {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        const localDate = `${yyyy}-${mm}-${dd}`;
+
+        dateInputs.forEach(input => {
+          // Hanya isi otomatis dengan hari ini jika field masih kosong (saat form Tambah)
+          if (!input.value) {
+            input.value = localDate;
+          }
+          // Kunci input agar tidak bisa diubah manual lagi (otomatis)
+          input.setAttribute('readonly', true);
+          input.style.pointerEvents = 'none'; // Mencegah munculnya pop-up kalender
+          input.classList.add('bg-slate-100', 'text-slate-500', 'cursor-not-allowed');
+        });
+      }
+    });
   </script>
   {% block extra_js %}{% endblock %}
 </body>
