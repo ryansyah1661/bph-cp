@@ -343,13 +343,18 @@
       if (!container) return;
 
       const innerFlex = container.querySelector('.flex.gap-6');
+      if (!innerFlex) return;
+
+      const originalChildren = Array.from(innerFlex.children);
+      if (originalChildren.length === 0) return;
+
+      // Clone elemen 2 kali agar ada 3 set (Kiri, Tengah, Kanan) untuk membuat loop tanpa batas yang mulus
+      originalChildren.forEach(child => innerFlex.appendChild(child.cloneNode(true)));
+      originalChildren.forEach(child => innerFlex.appendChild(child.cloneNode(true)));
 
       function updateAlignment() {
          if (innerFlex) {
             innerFlex.classList.remove('mx-auto');
-            if (container.scrollWidth <= container.clientWidth) {
-               innerFlex.classList.add('mx-auto');
-            }
          }
       }
 
@@ -360,32 +365,27 @@
       let isHovered = false;
       let isMouseDown = false;
       let startX, scrollLeftVal;
-
       let currentPos = container.scrollLeft;
 
-      if (initialDirection === -1) {
-        currentPos = container.scrollWidth - container.clientWidth;
-        container.scrollLeft = currentPos;
-      }
-
       function step() {
-        if (!isHovered && !isMouseDown) {
-          const maxScroll = container.scrollWidth - container.clientWidth;
+        const singleSetWidth = container.scrollWidth / 3;
 
-          if (maxScroll > 0) {
-            currentPos += speed * direction;
+        if (!isHovered && !isMouseDown && singleSetWidth > 0) {
+          currentPos += speed * direction;
 
-            if (currentPos >= maxScroll) {
-              currentPos = maxScroll;
-              direction = -1;
-            } 
-            else if (currentPos <= 0) {
-              currentPos = 0;
-              direction = 1;
+          if (direction === 1) { 
+            // Jalan ke kiri (scrollLeft bertambah)
+            if (currentPos >= singleSetWidth * 2) {
+              currentPos -= singleSetWidth;
             }
-
-            container.scrollLeft = currentPos;
+          } else { 
+            // Jalan ke kanan (scrollLeft berkurang)
+            if (currentPos <= singleSetWidth) {
+              currentPos += singleSetWidth;
+            }
           }
+
+          container.scrollLeft = currentPos;
         } else {
           currentPos = container.scrollLeft;
         }
@@ -393,7 +393,20 @@
         requestAnimationFrame(step);
       }
 
-      requestAnimationFrame(step);
+      // Inisialisasi posisi di set bagian tengah agar bisa loop ke dua arah
+      setTimeout(() => {
+        const singleSetWidth = container.scrollWidth / 3;
+        if (initialDirection === -1) {
+          // Jika jalan ke kanan, mulai dari ujung kanan set tengah
+          currentPos = (singleSetWidth * 2) - container.clientWidth;
+          if (currentPos < singleSetWidth) currentPos = singleSetWidth;
+        } else {
+          // Jika jalan ke kiri, mulai dari ujung kiri set tengah
+          currentPos = singleSetWidth;
+        }
+        container.scrollLeft = currentPos;
+        requestAnimationFrame(step);
+      }, 100);
 
       container.addEventListener('mouseenter', () => isHovered = true);
       container.addEventListener('mouseleave', () => {
@@ -416,6 +429,20 @@
         const walk = (x - startX) * 2;
         container.scrollLeft = scrollLeftVal - walk;
         currentPos = container.scrollLeft;
+
+        // Cek batasan infinite loop saat sedang di-drag pakai mouse
+        const singleSetWidth = container.scrollWidth / 3;
+        if (singleSetWidth > 0) {
+          if (container.scrollLeft >= singleSetWidth * 2) {
+            container.scrollLeft -= singleSetWidth;
+            currentPos = container.scrollLeft;
+            scrollLeftVal -= singleSetWidth;
+          } else if (container.scrollLeft <= singleSetWidth) {
+            container.scrollLeft += singleSetWidth;
+            currentPos = container.scrollLeft;
+            scrollLeftVal += singleSetWidth;
+          }
+        }
       });
     }
 
