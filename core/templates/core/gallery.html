@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block content %}
-<main class="flex-grow pt-[80px] bg-background">
+<main class="flex-grow bg-background">
   
   {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
     {% with hero_title="Publications" hero_subtitle="Visual &amp; Knowledge Hub" hero_desc="Documenting environmental preservation efforts, scientific research releases, news releases, and real action stories from the BPH team directly from the field." %}
@@ -419,11 +419,7 @@
 
       // Hanya scroll jika diklik manual oleh user setelah halaman termuat
       if (shouldScroll) {
-        const mainCol = document.querySelector('.lg\\:col-span-9');
-        if (mainCol) {
-          const offsetTarget = mainCol.offsetTop - 110;
-          window.scrollTo({ top: offsetTarget, behavior: 'smooth' });
-        }
+        // Scroll otomatis dinonaktifkan sesuai permintaan pengguna
       }
     }
 

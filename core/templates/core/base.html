@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html class="light" lang="id">
   <head>
@@ -11,7 +12,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet" />
-
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -135,6 +136,17 @@
       .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
       /* ================================================= */
+      /* EFEK TRANSISI HALAMAN / PAGE TRANSITION           */
+      /* ================================================= */
+      @keyframes pageFadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      main {
+        animation: pageFadeIn 0.8s ease-out forwards;
+      }
+
+      /* ================================================= */
       /* PENGATURAN KHUSUS SAAT CETAK / PRESS CTRL + P     */
       /* ================================================= */
       @media print {
@@ -188,6 +200,11 @@
   
   <body class="bg-background text-on-background font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container relative print:bg-white print:text-black">
     
+    <!-- PRELOADER -->
+    <div id="page-preloader" class="fixed inset-0 z-[100000] bg-surface-white flex items-center justify-center transition-opacity duration-300">
+      <img src="{% static 'images/logo-bph.png' %}" alt="BPH Logo Loading" class="h-20 md:h-24 w-auto animate-pulse" />
+    </div>
+
     <div class="overflow-x-hidden flex flex-col min-h-screen print:min-h-0 print:block print:overflow-visible">
       
       {% include 'core/partials/navbar.html' %}
@@ -264,6 +281,68 @@
 
       backToTopBtn.addEventListener("click", () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    </script>
+
+    <!-- AOS ANIMATION SCRIPT -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- 1. PAGE TRANSITION (PINDAH MENU) ---
+        const links = document.querySelectorAll('a[href^="/"], a[href^="' + window.location.origin + '"]');
+        links.forEach(link => {
+          link.addEventListener("click", function(e) {
+            // Abaikan jika buka tab baru, download, ada atribut target="_blank", aksi keyboard (ctrl+click), atau link hash (anchor)
+            const href = this.getAttribute("href");
+            if (this.target === "_blank" || this.hasAttribute("download") || e.ctrlKey || e.metaKey || href.startsWith("#") || href.includes("mailto:") || href.includes("tel:")) {
+              return;
+            }
+            // Mencegah link ke halaman yang persis sama memicu animasi kelamaan
+            if (this.href === window.location.href) {
+              return;
+            }
+
+            e.preventDefault();
+            const destination = this.href;
+            
+            // Munculkan preloader sebelum pindah halaman
+            const preloader = document.getElementById('page-preloader');
+            if (preloader) {
+              preloader.classList.remove('opacity-0', 'pointer-events-none');
+              preloader.style.display = 'flex';
+            }
+
+            setTimeout(() => {
+              window.location.href = destination;
+            }, 300); // Waktu tunggu
+          });
+        });
+
+        // --- HILANGKAN PRELOADER SAAT HALAMAN SELESAI DIMUAT ---
+        window.addEventListener('load', () => {
+          const preloader = document.getElementById('page-preloader');
+          if (preloader) {
+            preloader.classList.add('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+              preloader.style.display = 'none';
+            }, 300);
+          }
+        });
+
+        // --- 2. EFEK SCROLL AOS ---
+        // Otomatis inject data-aos="fade-up" ke semua <section> dalam <main> agar tidak perlu ubah HTML 1-1
+        document.querySelectorAll("main section").forEach((sec) => {
+          if (!sec.hasAttribute("data-aos")) {
+             sec.setAttribute("data-aos", "fade-up");
+          }
+        });
+        
+        AOS.init({
+          once: true,      // Animasi hanya berjalan 1 kali
+          offset: 50,      // Jarak elemen dari bawah layar sebelum animasi mulai
+          duration: 800,   // Durasi animasi
+          easing: 'ease-out-cubic',
+        });
       });
     </script>
 

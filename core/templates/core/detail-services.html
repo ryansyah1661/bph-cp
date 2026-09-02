@@ -4,7 +4,7 @@
 {% block title %} {{ service.title }} - Bhumi Pasa Hijau {% endblock %}
 
 {% block content %}
-<main class="flex-grow pt-[80px]">
+<main class="flex-grow ">
   
   {% if service.portfolio == 'NRM' %}
     {% include 'core/partials/hero-banner.html' with title=service.title subtitle="Natural Resources Management" bg_image=service.bg_image|default:"images/forest-services.jpg" %}

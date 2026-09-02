@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block content %}
-<main class="flex-grow pt-[80px]">
+<main class="flex-grow ">
 
   <!-- HERO BANNER (RINGKAS & TIDAK PADAT) -->
   {% include 'core/partials/hero-banner.html' with title="Layanan Kami" title_en="Our Services" subtitle="Expertise & Solutions" subtitle_en="Expertise & Solutions" desc="Solusi strategis untuk sumber daya alam Indonesia. Kami menyediakan manajemen berbasis data, pemahaman ekologis yang mendalam, dan alokasi sumber daya yang mumpuni." desc_en="Strategic solutions for Indonesia's natural resources. We provide data-driven management, deep ecological understanding, and robust resource allocation." bg_image="images/forest-services.jpg" %}
@@ -172,7 +172,6 @@
         if (nrmLimit > 3) {
           nrmLimit -= 3; 
           calculateNrm();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       });
     }
@@ -207,7 +206,6 @@
         if (nruLimit > 3) {
           nruLimit -= 3; 
           calculateNru();
-          window.scrollTo({ top: 400, behavior: 'smooth' });
         }
       });
     }
