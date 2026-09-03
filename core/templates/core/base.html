@@ -346,6 +346,66 @@
       });
     </script>
 
+    <!-- MODAL PDF PREVIEW -->
+    <div id="pdf-preview-modal" class="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+      <div class="bg-white w-11/12 h-[90vh] md:w-4/5 md:h-[90vh] rounded-2xl overflow-hidden flex flex-col shadow-2xl transform scale-95 transition-transform duration-300" id="pdf-modal-content">
+        <div class="flex justify-between items-center px-4 py-3 bg-slate-50 border-b border-gray-200">
+          <h3 class="font-bold text-slate-700 text-sm flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-lg">menu_book</span>
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Document Preview{% else %}Pratinjau Dokumen{% endif %}
+          </h3>
+          <button onclick="closePdfModal()" class="text-slate-400 hover:text-red-500 transition-colors p-1" aria-label="Tutup Pratinjau">
+            <span class="material-symbols-outlined text-xl">close</span>
+          </button>
+        </div>
+        <div class="flex-grow w-full h-full bg-slate-100">
+          <iframe id="pdf-iframe" src="" class="w-full h-full border-none" title="PDF Preview"></iframe>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      const pdfModal = document.getElementById('pdf-preview-modal');
+      const pdfIframe = document.getElementById('pdf-iframe');
+      const pdfModalContent = document.getElementById('pdf-modal-content');
+
+      window.openPdfModal = function(e, url) {
+        if(e) e.preventDefault();
+        pdfIframe.src = url;
+        pdfModal.classList.remove('pointer-events-none');
+        pdfModal.classList.remove('opacity-0');
+        pdfModalContent.classList.remove('scale-95');
+        pdfModalContent.classList.add('scale-100');
+        document.body.style.overflow = 'hidden';
+      }
+
+      window.closePdfModal = function() {
+        pdfModal.classList.add('opacity-0');
+        pdfModalContent.classList.remove('scale-100');
+        pdfModalContent.classList.add('scale-95');
+        pdfModal.classList.add('pointer-events-none');
+        
+        setTimeout(() => {
+          pdfIframe.src = '';
+          document.body.style.overflow = '';
+        }, 300);
+      }
+
+      // Tutup modal saat klik area gelap (backdrop)
+      pdfModal.addEventListener('click', function(e) {
+        if (e.target === pdfModal) {
+          closePdfModal();
+        }
+      });
+
+      // Tutup modal saat tekan Escape
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !pdfModal.classList.contains('pointer-events-none')) {
+          closePdfModal();
+        }
+      });
+    </script>
+
     {% block extra_js %} {% endblock %}
   </body>
 </html>

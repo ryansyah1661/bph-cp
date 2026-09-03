@@ -331,7 +331,7 @@
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
             {% for doc in documents %}
-            <a href="{{ doc.file_dokumen.url }}" target="_blank" rel="noopener" class="group" style="text-decoration: none;">
+            <a href="#" onclick="openPdfModal(event, '{{ doc.file_dokumen.url }}')" class="group" style="text-decoration: none;">
               <div class="relative aspect-[3/4] bg-white border border-border-subtle rounded-xl overflow-hidden shadow-sm transition-all duration-300 group-hover:shadow-md group-hover:-translate-y-0.5 flex items-center justify-center bg-slate-50/50">
                 <span class="material-symbols-outlined text-5xl text-primary/20">description</span>
                 <div class="absolute top-3 right-3 bg-white/90 p-1.5 rounded-lg shadow-sm text-primary group-hover:bg-primary group-hover:text-white transition-colors">

@@ -111,6 +111,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Mengizinkan iframe dari domain yang sama (untuk modal preview PDF)
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
 # =============================================================
 # REDIRECTION ALUR LOGIN & LOGOUT CUSTOM ADMIN PANEL BPH
 # =============================================================
