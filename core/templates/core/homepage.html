@@ -60,7 +60,7 @@
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-4">
         <div>
           <h2 class="font-headline-lg text-3xl font-bold text-on-surface mb-2">
-            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Latest Articles{% else %}{% trans "Artikel Terbaru" %}{% endif %}
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Latest News{% else %}{% trans "Berita Terbaru" %}{% endif %}
           </h2>
           <p class="font-body-md text-sm text-on-surface-variant">
             {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Insights and real action for the environment.{% else %}{% trans "Wawasan dan tindakan nyata untuk lingkungan." %}{% endif %}
@@ -112,10 +112,10 @@
         <div class="bg-white border border-dashed border-slate-200 rounded-3xl p-12 text-center col-span-full">
           <span class="material-symbols-outlined text-5xl text-slate-300 mb-2">article</span>
           <h3 class="text-base font-bold text-slate-700">
-            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No articles published yet{% else %}{% trans "Belum ada artikel yang dipublikasikan" %}{% endif %}
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No news published yet{% else %}{% trans "Belum ada berita yang dipublikasikan" %}{% endif %}
           </h3>
           <p class="text-xs text-slate-400 mt-1">
-            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Add data to display latest insights and articles.{% else %}{% trans "Tambahkan data untuk menampilkan wawasan dan artikel terbaru." %}{% endif %}
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Add data to display latest insights and news.{% else %}{% trans "Tambahkan data untuk menampilkan wawasan dan berita terbaru." %}{% endif %}
           </p>
         </div>
         {% endfor %}

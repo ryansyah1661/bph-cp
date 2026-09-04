@@ -329,6 +329,17 @@
           }
         });
 
+        // --- FIX UNTUK TOMBOL BACK BROWSER (Bfcache) ---
+        window.addEventListener('pageshow', (event) => {
+          if (event.persisted) {
+            const preloader = document.getElementById('page-preloader');
+            if (preloader) {
+              preloader.classList.add('opacity-0', 'pointer-events-none');
+              preloader.style.display = 'none';
+            }
+          }
+        });
+
         // --- 2. EFEK SCROLL AOS ---
         // Otomatis inject data-aos="fade-up" ke semua <section> dalam <main> agar tidak perlu ubah HTML 1-1
         document.querySelectorAll("main section").forEach((sec) => {

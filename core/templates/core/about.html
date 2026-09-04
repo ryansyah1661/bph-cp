@@ -139,112 +139,112 @@
     <div class="relative min-h-[400px]">
       
       <!-- TAB 1: ADVISORS -->
-      <div id="tab-advisor" class="tab-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter transition-all duration-500 transform opacity-100 translate-y-0">
+      <div id="tab-advisor" class="tab-content flex flex-wrap justify-center gap-6 transition-all duration-500 transform opacity-100 translate-y-0">
         {% for member in advisors %}
-        <div class="group flex flex-col items-center text-center h-full bg-white rounded-xl p-4 border border-border-subtle hover:shadow-lg transition-all duration-300">
-          <div class="aspect-[3/4] w-full mb-stack-md overflow-hidden bg-surface-container-highest rounded-lg">
+        <div class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(25%-1.125rem)] group flex flex-col items-center text-center bg-white rounded-xl p-4 border border-border-subtle hover:shadow-lg transition-all duration-300">
+          <div class="aspect-[3/4] w-full mb-4 overflow-hidden bg-slate-100 rounded-lg">
             {% if member.foto %}
               <img class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" 
                    alt="{{ member.nama }}" 
                    src="{{ member.foto.url }}"/>
             {% else %}
-              <div class="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">No Photo</div>
+              <div class="w-full h-full flex items-center justify-center text-slate-300 bg-slate-50"><span class="material-symbols-outlined text-4xl">person</span></div>
             {% endif %}
           </div>
-          <h4 class="font-headline-md text-headline-md text-on-surface mb-1 text-center">{{ member.nama }}</h4>
-          <p class="font-body-md text-body-md text-primary font-semibold text-center">{{ member.jabatan }}</p>
+          <h4 class="text-lg font-bold text-slate-800 mb-1 text-center leading-tight">{{ member.nama }}</h4>
+          <p class="text-sm font-semibold text-primary text-center">{{ member.jabatan }}</p>
           {% if member.bio %}
-          <div class="mt-3 p-3 bg-amber-50/60 border-l-2 border-amber-400 rounded-r-lg w-full text-center">
-            <p class="text-xs italic text-slate-600 leading-relaxed">"{{ member.bio }}"</p>
+          <div class="mt-3 pt-3 border-t border-slate-100 w-full flex-grow flex items-center justify-center">
+            <p class="text-xs italic text-slate-500 leading-relaxed">"{{ member.bio }}"</p>
           </div>
           {% endif %}
         </div>
         {% empty %}
-        <div class="col-span-full text-center py-12 text-slate-400">
+        <div class="w-full text-center py-12 text-slate-400">
           {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No Senior Advisors data available yet.{% else %}Belum ada data Senior Advisors.{% endif %}
         </div>
         {% endfor %}
       </div>
 
       <!-- TAB 2: EXECUTIVES -->
-      <div id="tab-executive" class="tab-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter transition-all duration-500 transform opacity-0 translate-y-4 hidden">
+      <div id="tab-executive" class="tab-content flex flex-wrap justify-center gap-6 transition-all duration-500 transform opacity-0 translate-y-4 hidden">
         {% for member in executives %}
-        <div class="group flex flex-col items-center text-center h-full bg-white rounded-xl p-4 border border-border-subtle hover:shadow-lg transition-all duration-300">
-          <div class="aspect-[3/4] w-full mb-stack-md overflow-hidden bg-surface-container-highest rounded-lg">
+        <div class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(25%-1.125rem)] group flex flex-col items-center text-center bg-white rounded-xl p-4 border border-border-subtle hover:shadow-lg transition-all duration-300">
+          <div class="aspect-[3/4] w-full mb-4 overflow-hidden bg-slate-100 rounded-lg">
             {% if member.foto %}
               <img class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" 
                    alt="{{ member.nama }}" 
                    src="{{ member.foto.url }}"/>
             {% else %}
-              <div class="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">No Photo</div>
+              <div class="w-full h-full flex items-center justify-center text-slate-300 bg-slate-50"><span class="material-symbols-outlined text-4xl">person</span></div>
             {% endif %}
           </div>
-          <h4 class="font-headline-md text-headline-md text-on-surface mb-1 text-center">{{ member.nama }}</h4>
-          <p class="font-body-md text-body-md text-primary font-semibold text-center">{{ member.jabatan }}</p>
+          <h4 class="text-lg font-bold text-slate-800 mb-1 text-center leading-tight">{{ member.nama }}</h4>
+          <p class="text-sm font-semibold text-primary text-center">{{ member.jabatan }}</p>
           {% if member.bio %}
-          <div class="mt-3 p-3 bg-amber-50/60 border-l-2 border-amber-400 rounded-r-lg w-full text-center">
-            <p class="text-xs italic text-slate-600 leading-relaxed">"{{ member.bio }}"</p>
+          <div class="mt-3 pt-3 border-t border-slate-100 w-full flex-grow flex items-center justify-center">
+            <p class="text-xs italic text-slate-500 leading-relaxed">"{{ member.bio }}"</p>
           </div>
           {% endif %}
         </div>
         {% empty %}
-        <div class="col-span-full text-center py-12 text-slate-400">
+        <div class="w-full text-center py-12 text-slate-400">
           {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No Executives data available yet.{% else %}Belum ada data Executives.{% endif %}
         </div>
         {% endfor %}
       </div>
 
       <!-- TAB 3: STAFF -->
-      <div id="tab-staff" class="tab-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter transition-all duration-500 transform opacity-0 translate-y-4 hidden">
+      <div id="tab-staff" class="tab-content flex flex-wrap justify-center gap-6 transition-all duration-500 transform opacity-0 translate-y-4 hidden">
         {% for member in staff %}
-        <div class="group flex flex-col items-center text-center h-full bg-white rounded-xl p-4 border border-border-subtle hover:shadow-lg transition-all duration-300">
-          <div class="aspect-[3/4] w-full mb-stack-md overflow-hidden bg-surface-container-highest rounded-lg">
+        <div class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(25%-1.125rem)] group flex flex-col items-center text-center bg-white rounded-xl p-4 border border-border-subtle hover:shadow-lg transition-all duration-300">
+          <div class="aspect-[3/4] w-full mb-4 overflow-hidden bg-slate-100 rounded-lg">
             {% if member.foto %}
               <img class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" 
                    alt="{{ member.nama }}" 
                    src="{{ member.foto.url }}"/>
             {% else %}
-              <div class="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">No Photo</div>
+              <div class="w-full h-full flex items-center justify-center text-slate-300 bg-slate-50"><span class="material-symbols-outlined text-4xl">person</span></div>
             {% endif %}
           </div>
-          <h4 class="font-headline-md text-headline-md text-on-surface mb-1 text-center">{{ member.nama }}</h4>
-          <p class="font-body-md text-body-md text-primary font-semibold text-center">{{ member.jabatan }}</p>
+          <h4 class="text-lg font-bold text-slate-800 mb-1 text-center leading-tight">{{ member.nama }}</h4>
+          <p class="text-sm font-semibold text-primary text-center">{{ member.jabatan }}</p>
           {% if member.bio %}
-          <div class="mt-3 p-3 bg-amber-50/60 border-l-2 border-amber-400 rounded-r-lg w-full text-center">
-            <p class="text-xs italic text-slate-600 leading-relaxed">"{{ member.bio }}"</p>
+          <div class="mt-3 pt-3 border-t border-slate-100 w-full flex-grow flex items-center justify-center">
+            <p class="text-xs italic text-slate-500 leading-relaxed">"{{ member.bio }}"</p>
           </div>
           {% endif %}
         </div>
         {% empty %}
-        <div class="col-span-full text-center py-12 text-slate-400">
+        <div class="w-full text-center py-12 text-slate-400">
           {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No Staff Consultants data available yet.{% else %}Belum ada data Staff Consultants.{% endif %}
         </div>
         {% endfor %}
       </div>
 
       <!-- TAB 4: ASSOCIATES -->
-      <div id="tab-associate" class="tab-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter transition-all duration-500 transform opacity-0 translate-y-4 hidden">
+      <div id="tab-associate" class="tab-content flex flex-wrap justify-center gap-6 transition-all duration-500 transform opacity-0 translate-y-4 hidden">
         {% for member in associates %}
-        <div class="group flex flex-col items-center text-center h-full bg-white rounded-xl p-4 border border-border-subtle hover:shadow-lg transition-all duration-300">
-          <div class="aspect-[3/4] w-full mb-stack-md overflow-hidden bg-surface-container-highest rounded-lg">
+        <div class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(25%-1.125rem)] group flex flex-col items-center text-center bg-white rounded-xl p-4 border border-border-subtle hover:shadow-lg transition-all duration-300">
+          <div class="aspect-[3/4] w-full mb-4 overflow-hidden bg-slate-100 rounded-lg">
             {% if member.foto %}
               <img class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" 
                    alt="{{ member.nama }}" 
                    src="{{ member.foto.url }}"/>
             {% else %}
-              <div class="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">No Photo</div>
+              <div class="w-full h-full flex items-center justify-center text-slate-300 bg-slate-50"><span class="material-symbols-outlined text-4xl">person</span></div>
             {% endif %}
           </div>
-          <h4 class="font-headline-md text-headline-md text-on-surface mb-1 text-center">{{ member.nama }}</h4>
-          <p class="font-body-md text-body-md text-primary font-semibold text-center">{{ member.jabatan }}</p>
+          <h4 class="text-lg font-bold text-slate-800 mb-1 text-center leading-tight">{{ member.nama }}</h4>
+          <p class="text-sm font-semibold text-primary text-center">{{ member.jabatan }}</p>
           {% if member.bio %}
-          <div class="mt-3 p-3 bg-amber-50/60 border-l-2 border-amber-400 rounded-r-lg w-full text-center">
-            <p class="text-xs italic text-slate-600 leading-relaxed">"{{ member.bio }}"</p>
+          <div class="mt-3 pt-3 border-t border-slate-100 w-full flex-grow flex items-center justify-center">
+            <p class="text-xs italic text-slate-500 leading-relaxed">"{{ member.bio }}"</p>
           </div>
           {% endif %}
         </div>
         {% empty %}
-        <div class="col-span-full text-center py-12 text-slate-400">
+        <div class="w-full text-center py-12 text-slate-400">
           {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No Associate Consultants data available yet.{% else %}Belum ada data Associate Consultants.{% endif %}
         </div>
         {% endfor %}
