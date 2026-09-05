@@ -278,6 +278,15 @@ class AdminRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
             return redirect('homepage')
         return super().handle_no_permission()
 
+class DateInputMixin:
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        date_fields = ['tanggal', 'tanggal_rilis', 'tanggal_upload', 'tanggal_unggah']
+        for field in date_fields:
+            if field in form.fields:
+                form.fields[field].widget = forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'})
+        return form
+
 
 # ==========================================
 # 1. MANAGEMENT ARTIKEL & WAWASAN TEKNIS
@@ -291,7 +300,7 @@ class ArticleListView(AdminRequiredMixin, ListView):
     def get_queryset(self):
         return Article.objects.all().order_by('-tanggal', '-id')
 
-class ArticleCreateView(AdminRequiredMixin, CreateView):
+class ArticleCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
     model = Article
     template_name = 'core/custom_admin/articles/articles_form.html'
     fields = ['judul_ind', 'judul_en', 'slug_ind', 'slug_en', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'tanggal', 'gambar']
@@ -318,7 +327,7 @@ class ArticleCreateView(AdminRequiredMixin, CreateView):
         messages.success(self.request, 'Artikel baru berhasil ditambahkan!')
         return super().form_valid(form)
 
-class ArticleUpdateView(AdminRequiredMixin, UpdateView):
+class ArticleUpdateView(AdminRequiredMixin, DateInputMixin, UpdateView):
     model = Article
     template_name = 'core/custom_admin/articles/articles_form.html'
     fields = ['judul_ind', 'judul_en', 'slug_ind', 'slug_en', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'tanggal', 'gambar']
@@ -412,7 +421,7 @@ class StoryListView(AdminRequiredMixin, ListView):
     def get_queryset(self):
         return Story.objects.all().order_by('-tanggal', '-id')
 
-class StoryCreateView(AdminRequiredMixin, CreateView):
+class StoryCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
     model = Story
     template_name = 'core/custom_admin/story/story_form.html'
     fields = ['judul_ind', 'judul_en', 'slug_ind', 'slug_en', 'tanggal', 'lokasi', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'gambar', 'project']
@@ -439,7 +448,7 @@ class StoryCreateView(AdminRequiredMixin, CreateView):
         messages.success(self.request, 'Cerita lapangan baru berhasil ditambahkan!')
         return super().form_valid(form)
 
-class StoryUpdateView(AdminRequiredMixin, UpdateView):
+class StoryUpdateView(AdminRequiredMixin, DateInputMixin, UpdateView):
     model = Story
     template_name = 'core/custom_admin/story/story_form.html'
     fields = ['judul_ind', 'judul_en', 'slug_ind', 'slug_en', 'tanggal', 'lokasi', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'gambar', 'project']
@@ -663,7 +672,7 @@ class DocumentListView(AdminRequiredMixin, ListView):
     def get_queryset(self):
         return Modul.objects.all().order_by('-tanggal_rilis', '-id')
 
-class DocumentCreateView(AdminRequiredMixin, CreateView):
+class DocumentCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
     model = Modul
     template_name = 'core/custom_admin/modul/modul_form.html'
     fields = '__all__'
@@ -673,7 +682,7 @@ class DocumentCreateView(AdminRequiredMixin, CreateView):
         messages.success(self.request, 'Modul baru berhasil ditambahkan!')
         return super().form_valid(form)
 
-class DocumentUpdateView(AdminRequiredMixin, UpdateView):
+class DocumentUpdateView(AdminRequiredMixin, DateInputMixin, UpdateView):
     model = Modul
     template_name = 'core/custom_admin/modul/modul_form.html'
     fields = '__all__'
@@ -737,7 +746,7 @@ class GalleryListView(AdminRequiredMixin, ListView):
     def get_queryset(self):
         return Gallery.objects.all().order_by('-tanggal_upload', '-id')
 
-class GalleryCreateView(AdminRequiredMixin, CreateView):
+class GalleryCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_form.html'
     fields = ['caption_ind', 'caption_en', 'gambar', 'folder', 'kategori', 'tanggal_upload']
@@ -747,7 +756,7 @@ class GalleryCreateView(AdminRequiredMixin, CreateView):
         messages.success(self.request, 'Gambar baru berhasil ditambahkan ke galeri!')
         return super().form_valid(form)
 
-class GalleryUpdateView(AdminRequiredMixin, UpdateView):
+class GalleryUpdateView(AdminRequiredMixin, DateInputMixin, UpdateView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_form.html'
     fields = ['caption_ind', 'caption_en', 'gambar', 'folder', 'kategori', 'tanggal_upload']
@@ -862,7 +871,7 @@ class InfografisListView(AdminRequiredMixin, ListView):
     def get_queryset(self):
         return Infografis.objects.all().order_by('-tanggal_unggah', '-id')
 
-class InfografisCreateView(AdminRequiredMixin, CreateView):
+class InfografisCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
     model = Infografis
     template_name = 'core/custom_admin/infografis/infografis_form.html'
     fields = ['deskripsi', 'gambar']
@@ -872,7 +881,7 @@ class InfografisCreateView(AdminRequiredMixin, CreateView):
         messages.success(self.request, 'Infografis baru berhasil ditambahkan!')
         return super().form_valid(form)
 
-class InfografisUpdateView(AdminRequiredMixin, UpdateView):
+class InfografisUpdateView(AdminRequiredMixin, DateInputMixin, UpdateView):
     model = Infografis
     template_name = 'core/custom_admin/infografis/infografis_form.html'
     fields = ['deskripsi', 'gambar']
@@ -904,7 +913,7 @@ class VideoListView(AdminRequiredMixin, ListView):
     def get_queryset(self):
         return Video.objects.all().order_by('-tanggal_unggah', '-id')
 
-class VideoCreateView(AdminRequiredMixin, CreateView):
+class VideoCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
     model = Video
     template_name = 'core/custom_admin/video/video_form.html'
     fields = ['judul', 'url_video']
@@ -914,7 +923,7 @@ class VideoCreateView(AdminRequiredMixin, CreateView):
         messages.success(self.request, 'Video baru berhasil ditambahkan!')
         return super().form_valid(form)
 
-class VideoUpdateView(AdminRequiredMixin, UpdateView):
+class VideoUpdateView(AdminRequiredMixin, DateInputMixin, UpdateView):
     model = Video
     template_name = 'core/custom_admin/video/video_form.html'
     fields = ['judul', 'url_video']
@@ -1071,9 +1080,17 @@ class ProfileProfileForm(forms.ModelForm):
 def user_edit_profile(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
     if request.method == 'POST':
+        old_name = profile.nama_lengkap or request.user.username
         form = ProfileProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
+
+            # Sync author name across all articles & stories
+            new_name = profile.nama_lengkap or request.user.username
+            if old_name != new_name:
+                Article.objects.filter(author=old_name).update(author=new_name)
+                Story.objects.filter(author=old_name).update(author=new_name)
+
             messages.success(request, 'Profil Anda berhasil diperbarui!')
             return redirect('custom_dashboard')
     else:

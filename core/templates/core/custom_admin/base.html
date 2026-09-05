@@ -305,10 +305,7 @@
           if (!input.value) {
             input.value = localDate;
           }
-          // Kunci input agar tidak bisa diubah manual lagi (otomatis)
-          input.setAttribute('readonly', true);
-          input.style.pointerEvents = 'none'; // Mencegah munculnya pop-up kalender
-          input.classList.add('bg-slate-100', 'text-slate-500', 'cursor-not-allowed');
+          // Input dibiarkan bisa diedit sesuai permintaan pengguna
         });
       }
     });

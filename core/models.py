@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.gis.db import models as gis_models
+from django.utils import timezone
 
 # === 1. TABEL MASTER KATEGORI ===
 class Category(models.Model):
@@ -182,7 +183,7 @@ class ProjectMetric(models.Model):
 class Story(models.Model):
     judul = models.CharField(max_length=250, verbose_name="Judul Cerita")
     slug = models.SlugField(max_length=200, unique=True, blank=True)
-    tanggal = models.DateField(verbose_name="Tanggal Rilis")
+    tanggal = models.DateField(default=timezone.now, verbose_name="Tanggal Rilis")
 
     author = models.CharField(max_length=100, blank=True, verbose_name="Penulis")
 
@@ -208,7 +209,7 @@ class Story(models.Model):
 class Article(models.Model):
     judul = models.CharField(max_length=250, verbose_name="Judul Artikel")
     slug = models.SlugField(max_length=200, unique=True, blank=True)
-    tanggal = models.DateField(verbose_name="Tanggal Terbit")
+    tanggal = models.DateField(default=timezone.now, verbose_name="Tanggal Terbit")
     
     # Author otomatis mengambil nama user login dan terkunci
     author = models.CharField(max_length=100, blank=True, verbose_name="Penulis")
@@ -233,7 +234,7 @@ class Article(models.Model):
 class Modul(models.Model):
     judul = models.CharField(max_length=200, verbose_name="Judul Dokumen Publikasi")
     file_dokumen = models.FileField(upload_to='documents/', verbose_name="Berkas File (PDF/Docs)")
-    tanggal_rilis = models.DateField(auto_now_add=True, verbose_name="Tanggal Unggah")
+    tanggal_rilis = models.DateField(default=timezone.now, verbose_name="Tanggal Unggah")
 
     class Meta:
         verbose_name_plural = "Modul Dokumentasi"
@@ -262,7 +263,7 @@ class Gallery(models.Model):
     gambar = models.ImageField(upload_to='gallery/', verbose_name="File Foto")
     folder = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name='images', null=True, blank=True, verbose_name="Dimasukkan ke Folder")
     kategori = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='galleries', verbose_name="Kategori Filter")
-    tanggal_upload = models.DateField(verbose_name="Tanggal Dokumentasi")
+    tanggal_upload = models.DateField(default=timezone.now, verbose_name="Tanggal Dokumentasi")
 
     class Meta:
         verbose_name_plural = "Galeri Dokumentasi"
@@ -312,7 +313,7 @@ class TeamMember(models.Model):
 class Infografis(models.Model):
     deskripsi = models.TextField(default='', verbose_name="Deskripsi Infografis")
     gambar = models.ImageField(upload_to='infografis/', verbose_name="Berkas Gambar/Infografis")
-    tanggal_unggah = models.DateField(auto_now_add=True, verbose_name="Tanggal Unggah")
+    tanggal_unggah = models.DateField(default=timezone.now, verbose_name="Tanggal Unggah")
 
     class Meta:
         verbose_name_plural = "Infografis & Data Visual"
@@ -327,7 +328,7 @@ class Infografis(models.Model):
 class Video(models.Model):
     judul = models.CharField(max_length=200, verbose_name="Judul Video Kegiatan")
     url_video = models.URLField(verbose_name="Link Video (YouTube/Lainnya)")
-    tanggal_unggah = models.DateField(auto_now_add=True, verbose_name="Tanggal Unggah")
+    tanggal_unggah = models.DateField(default=timezone.now, verbose_name="Tanggal Unggah")
 
     class Meta:
         verbose_name_plural = "Galeri Video Kegiatan"
