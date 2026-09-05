@@ -310,7 +310,7 @@ class TeamMember(models.Model):
 
 # === 14. TABEL INFOGRAFIS ===
 class Infografis(models.Model):
-    judul = models.CharField(max_length=200, verbose_name="Judul Infografis")
+    deskripsi = models.TextField(default='', verbose_name="Deskripsi Infografis")
     gambar = models.ImageField(upload_to='infografis/', verbose_name="Berkas Gambar/Infografis")
     tanggal_unggah = models.DateField(auto_now_add=True, verbose_name="Tanggal Unggah")
 
@@ -319,7 +319,9 @@ class Infografis(models.Model):
         ordering = ['-tanggal_unggah', '-id']
 
     def __str__(self):
-        return self.judul
+        if self.deskripsi:
+            return self.deskripsi[:50] + "..." if len(self.deskripsi) > 50 else self.deskripsi
+        return "Infografis"
 
 # === 15. TABEL VIDEO KEGIATAN ===
 class Video(models.Model):

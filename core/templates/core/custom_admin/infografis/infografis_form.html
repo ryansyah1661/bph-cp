@@ -1,9 +1,10 @@
 {% extends "core/custom_admin/base.html" %}
 
 {% block admin_content %}
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <div class="mb-6 pt-2">
   <h2 class="text-xl font-bold text-emerald-900">{% if object %}Edit{% else %}Tambah{% endif %} Infografis</h2>
-  <p class="text-xs text-gray-500 mt-1">Isi data gambar dan judul infografis di bawah ini.</p>
+  <p class="text-xs text-gray-500 mt-1">Isi data gambar dan deskripsi infografis di bawah ini.</p>
 </div>
 
 <form method="post" enctype="multipart/form-data" class="max-w-3xl space-y-5" id="infografis-form">
@@ -18,17 +19,26 @@
 
   <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-5">
     <div>
-      <label class="block text-sm font-semibold text-slate-700 mb-1">Judul Infografis <span class="text-red-500">*</span></label>
-      {{ form.judul }}
+      <label class="block text-sm font-semibold text-slate-700 mb-1">Deskripsi Infografis <span class="text-red-500">*</span></label>
+      <div class="hidden-textarea-wrapper">
+        {{ form.deskripsi }}
+      </div>
+      <div id="quill-editor-deskripsi" style="height: 250px;"></div>
     </div>
 
     <div>
-      <label class="block text-sm font-semibold text-slate-700 mb-1">Gambar Infografis {% if not object.gambar %}<span class="text-red-500">*</span>{% endif %}</label>
-      {{ form.gambar }}
-      {% if object.gambar %}
-        <p class="text-xs text-emerald-600 mt-1 font-medium">Gambar saat ini: <a href="{{ object.gambar.url }}" target="_blank" class="underline hover:text-emerald-700">{{ object.gambar.name }}</a></p>
-        <p class="text-[11px] text-gray-400 mt-1">Biarkan kosong jika tidak ingin mengganti gambar.</p>
-      {% endif %}
+      <label class="block text-sm font-semibold text-slate-700 mb-2">Gambar Infografis {% if not object.gambar %}<span class="text-red-500">*</span>{% endif %}</label>
+
+      <div id="preview-container" class="{% if not object.gambar %}hidden{% endif %} mb-3">
+        <img id="image-preview" src="{% if object.gambar %}{{ object.gambar.url }}{% endif %}" class="w-full h-40 object-cover rounded-xl border">
+      </div>
+
+      <label for="id_gambar" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition" id="drop-zone">
+        <span class="material-symbols-outlined text-gray-400 text-3xl mb-1">upload_file</span>
+        <span class="text-xs text-gray-400 text-center px-2">Seret & Jatuhkan atau <span class="text-emerald-600 font-semibold">Jelajahi</span></span>
+      </label>
+      <div id="file-name-display" class="text-xs text-gray-400 mt-2 text-center font-medium"></div>
+      <div class="bph-hidden-file-input">{{ form.gambar }}</div>
     </div>
 
     <div class="pt-4 border-t border-gray-100 flex items-center justify-end gap-3">
@@ -38,7 +48,111 @@
   </div>
 </form>
 
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<script>
+  var toolbarOptions = [
+    [{ 'header': [2, 3, false] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    ['link'],
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    ['clean']
+  ];
+
+  var editorElement = document.querySelector('#quill-editor-deskripsi');
+  var textareaElement = document.querySelector('textarea[name="deskripsi"]');
+
+  var quill = new Quill('#quill-editor-deskripsi', {
+    theme: 'snow',
+    modules: {
+      toolbar: toolbarOptions
+    }
+  });
+
+  if (textareaElement && textareaElement.value) {
+    quill.root.innerHTML = textareaElement.value;
+  }
+
+  function sync() {
+    if (textareaElement) {
+      textareaElement.value = quill.getText().trim().length > 0 ? quill.root.innerHTML : '';
+    }
+  }
+
+  quill.on('text-change', sync);
+  var form = document.getElementById('infografis-form');
+  if (form) form.addEventListener('submit', sync);
+
+  // Script for image upload preview and drag-and-drop
+  const fileInput = document.getElementById('id_gambar');
+  const fileNameDisplay = document.getElementById('file-name-display');
+  const dropZone = document.getElementById('drop-zone');
+  const imagePreview = document.getElementById('image-preview');
+  const previewContainer = document.getElementById('preview-container');
+
+  function handleImageFile(file) {
+    if (file) {
+      fileNameDisplay.textContent = file.name;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        if (imagePreview) imagePreview.src = e.target.result;
+        if (previewContainer) previewContainer.classList.remove('hidden');
+      }
+      reader.readAsDataURL(file);
+    }
+  }
+
+  if (fileInput) {
+    fileInput.addEventListener('change', function() {
+      if (this.files[0]) handleImageFile(this.files[0]);
+    });
+  }
+
+  if (dropZone) {
+    dropZone.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      this.classList.add('border-emerald-400', 'bg-emerald-50');
+    });
+
+    dropZone.addEventListener('dragleave', function() {
+      this.classList.remove('border-emerald-400', 'bg-emerald-50');
+    });
+
+    dropZone.addEventListener('drop', function(e) {
+      e.preventDefault();
+      this.classList.remove('border-emerald-400', 'bg-emerald-50');
+      const files = e.dataTransfer.files;
+      if (files[0] && fileInput) {
+        fileInput.files = files;
+        handleImageFile(files[0]);
+      }
+    });
+  }
+</script>
+
 <style>
+  .hidden-textarea-wrapper textarea,
+  textarea[name="deskripsi"] {
+    display: none !important;
+    position: absolute !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .bph-hidden-file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   form input[type="text"], 
   form input[type="file"] { 
     width: 100%; 
@@ -55,5 +169,9 @@
     border-color: #059669; 
     box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1); 
   }
+  
+  .ql-toolbar { border-radius: 8px 8px 0 0; border-color: #e2e8f0 !important; }
+  .ql-container { border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important; font-size: 14px; }
+  .ql-editor p { margin-bottom: 1em; }
 </style>
 {% endblock %}

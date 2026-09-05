@@ -865,7 +865,7 @@ class InfografisListView(AdminRequiredMixin, ListView):
 class InfografisCreateView(AdminRequiredMixin, CreateView):
     model = Infografis
     template_name = 'core/custom_admin/infografis/infografis_form.html'
-    fields = ['judul', 'gambar']
+    fields = ['deskripsi', 'gambar']
     success_url = reverse_lazy('infografis_list')
 
     def form_valid(self, form):
@@ -875,7 +875,7 @@ class InfografisCreateView(AdminRequiredMixin, CreateView):
 class InfografisUpdateView(AdminRequiredMixin, UpdateView):
     model = Infografis
     template_name = 'core/custom_admin/infografis/infografis_form.html'
-    fields = ['judul', 'gambar']
+    fields = ['deskripsi', 'gambar']
     success_url = reverse_lazy('infografis_list')
 
     def form_valid(self, form):
