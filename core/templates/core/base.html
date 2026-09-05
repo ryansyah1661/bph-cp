@@ -365,11 +365,18 @@
             <span class="material-symbols-outlined text-primary text-lg">menu_book</span>
             {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Document Preview{% else %}Pratinjau Dokumen{% endif %}
           </h3>
-          <button onclick="closePdfModal()" class="text-slate-400 hover:text-red-500 transition-colors p-1" aria-label="Tutup Pratinjau">
-            <span class="material-symbols-outlined text-xl">close</span>
-          </button>
+          <div class="flex items-center gap-3">
+            <a id="pdf-download-btn" href="#" download class="hidden items-center gap-1 text-slate-500 hover:text-primary transition-colors text-sm font-semibold" aria-label="Unduh Dokumen">
+              <span class="material-symbols-outlined text-xl">download</span>
+              <span class="hidden sm:inline">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Download{% else %}Unduh{% endif %}</span>
+            </a>
+            <button onclick="closePdfModal()" class="text-slate-400 hover:text-red-500 transition-colors p-1" aria-label="Tutup Pratinjau">
+              <span class="material-symbols-outlined text-xl">close</span>
+            </button>
+          </div>
         </div>
-        <div class="flex-grow w-full h-full bg-slate-100">
+        <div class="flex-grow w-full h-full bg-slate-100 relative">
+          <div class="absolute inset-0 z-10 hidden" id="pdf-overlay" oncontextmenu="return false;"></div>
           <iframe id="pdf-iframe" src="" class="w-full h-full border-none" title="PDF Preview"></iframe>
         </div>
       </div>
@@ -379,10 +386,22 @@
       const pdfModal = document.getElementById('pdf-preview-modal');
       const pdfIframe = document.getElementById('pdf-iframe');
       const pdfModalContent = document.getElementById('pdf-modal-content');
+      const pdfDownloadBtn = document.getElementById('pdf-download-btn');
 
-      window.openPdfModal = function(e, url) {
+      window.openPdfModal = function(e, url, allowDownload) {
         if(e) e.preventDefault();
-        pdfIframe.src = url;
+        if (allowDownload) {
+          // Tampilkan tombol unduh custom, tapi tetap sembunyikan toolbar bawaan browser
+          pdfDownloadBtn.href = url;
+          pdfDownloadBtn.classList.remove('hidden');
+          pdfDownloadBtn.classList.add('flex');
+          pdfIframe.src = url + '#toolbar=0&navpanes=0&scrollbar=0';
+        } else {
+          // Sembunyikan tombol unduh & sembunyikan toolbar browser
+          pdfDownloadBtn.classList.add('hidden');
+          pdfDownloadBtn.classList.remove('flex');
+          pdfIframe.src = url + '#toolbar=0&navpanes=0&scrollbar=0';
+        }
         pdfModal.classList.remove('pointer-events-none');
         pdfModal.classList.remove('opacity-0');
         pdfModalContent.classList.remove('scale-95');
