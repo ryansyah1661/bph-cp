@@ -328,6 +328,7 @@ class Infografis(models.Model):
 class Video(models.Model):
     judul = models.CharField(max_length=200, verbose_name="Judul Video Kegiatan")
     url_video = models.URLField(verbose_name="Link Video (YouTube/Lainnya)")
+    thumbnail = models.ImageField(upload_to='video_thumbnails/', null=True, blank=True, verbose_name="Thumbnail Khusus (Opsional, untuk selain YT)")
     tanggal_unggah = models.DateField(default=timezone.now, verbose_name="Tanggal Unggah")
 
     class Meta:
@@ -353,6 +354,12 @@ class Video(models.Model):
             # Menggunakan hqdefault.jpg karena maxresdefault tidak selalu tersedia untuk semua video
             return f"https://img.youtube.com/vi/{yt_id}/hqdefault.jpg"
         return None
+
+    @property
+    def display_thumbnail_url(self):
+        if self.thumbnail:
+            return self.thumbnail.url
+        return self.youtube_thumbnail
 
 # --- LOGIKA AUTOMATIC SIGNALS DJANGO ---
 @receiver(post_save, sender=User)

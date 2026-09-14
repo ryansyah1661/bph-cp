@@ -20,84 +20,122 @@
             {{ story.judul }}
         </h1>
 
-        <!-- METADATA: PENULIS, TANGGAL, & KATEGORI / LOKASI -->
-        <div class="flex flex-wrap items-center justify-center gap-3 text-xs md:text-sm text-surface-white/90">
-            <div class="flex items-center gap-1.5 bg-black/30 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10">
-                <span class="material-symbols-outlined text-base text-primary">person</span>
-                <span>{% trans "Oleh" %} <strong class="text-white font-semibold">{{ story.author|default:"Tim Admin" }}</strong></span>
-            </div>
-            
-            <div class="flex items-center gap-1.5 bg-black/30 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10">
-                <span class="material-symbols-outlined text-base text-primary">calendar_today</span>
-                <span>{{ story.tanggal|date:"d F Y" }}</span>
-            </div>
-
-            <div class="flex items-center gap-1.5 bg-black/30 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10">
-                <span class="material-symbols-outlined text-base text-primary">visibility</span>
-                <span>{{ story.views_count }}</span>
-            </div>
-
-            {% if story.lokasi %}
-            <div class="flex items-center gap-1.5 bg-black/30 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10">
-                <span class="material-symbols-outlined text-base text-amber-400">location_on</span>
-                <span>{{ story.lokasi.nama_provinsi }}</span>
-            </div>
-            {% endif %}
-
-            <span class="bg-emerald-800/80 backdrop-blur-md text-white text-xs font-semibold px-3.5 py-1.5 rounded-full border border-emerald-600/30 flex items-center gap-1">
-                <span class="material-symbols-outlined text-xs">explore</span>
-                {% trans "Cerita Lapangan" %}
-            </span>
-
-            {% if story.kategori %}
-            <span class="bg-amber-500/80 backdrop-blur-md text-white text-xs font-semibold px-3.5 py-1.5 rounded-full border border-amber-400/30">
-                {{ story.kategori.name }}
-            </span>
-            {% endif %}
-        </div>
+        <!-- METADATA DIPINDAH KE SIDEBAR KANAN -->
     </div>
 </section>
 
 <!-- ISI KONTEN CERITA LAPANGAN -->
 <main class="w-full bg-white py-16">
-    <div class="max-w-3xl mx-auto px-margin-mobile md:px-0">
-        <article>
-            <div class="prose max-w-none text-on-surface-variant font-body-md text-base leading-relaxed space-y-6 text-justify md:text-left rich-text-content">
-                {{ story.deskripsi|safe }}
-            </div>
-        </article>
+    <div class="max-w-6xl mx-auto px-margin-mobile md:px-6 flex flex-col md:flex-row gap-12">
+        
+        <!-- BAGIAN KIRI: KONTEN CERITA -->
+        <div class="md:w-3/4">
+            <article>
+                <div class="prose max-w-none text-on-surface-variant font-body-md text-base leading-relaxed space-y-6 text-justify md:text-left rich-text-content">
+                    {{ story.deskripsi|safe }}
+                </div>
+            </article>
 
-        <!-- OTHER STORIES / CERITA LAPANGAN TERKAIT -->
-        {% if related_stories %}
-        <div class="mt-20 pt-12 border-t border-border-subtle">
-            <h3 class="text-2xl font-bold text-on-surface mb-8">{% trans "Cerita Lapangan Lainnya" %}</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {% for rel_story in related_stories %}
-                <a href="{% url 'detail-story' slug=rel_story.slug %}" class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300" style="text-decoration: none;">
-                    <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-                        {% if rel_story.gambar %}
-                        <img src="{{ rel_story.gambar.url }}" alt="{{ rel_story.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                        {% else %}
-                        <img src="{% static 'images/cerita.jpg' %}" alt="{{ rel_story.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                        {% endif %}
+
+        </div>
+
+        <!-- BAGIAN KANAN: METADATA -->
+        <aside class="md:w-1/4 print:hidden">
+            <div class="sticky top-28 bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm">
+                <h4 class="font-bold text-slate-800 mb-6 border-b border-slate-200 pb-3">Informasi Cerita</h4>
+                
+                <div class="flex flex-col gap-5 text-sm text-slate-600">
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                            <span class="material-symbols-outlined text-emerald-600 text-[18px]">person</span>
+                        </div>
+                        <div>
+                            <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">{% trans "Penulis" %}</span>
+                            <strong class="text-slate-800">{{ story.author|default:"Tim Admin" }}</strong>
+                        </div>
                     </div>
-                    <div class="p-5 flex-1 flex flex-col">
-                        <p class="text-[11px] text-text-muted font-medium mb-1.5">{{ rel_story.tanggal|date:"d F Y" }}</p>
-                        <h4 class="font-headline-md text-base font-bold text-on-surface mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                            {{ rel_story.judul }}
-                        </h4>
-                        <p class="text-xs text-on-surface-variant line-clamp-2 mb-4">
-                            {{ rel_story.short }}
-                        </p>
-                        <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary">
-                            {% trans "Baca" %} <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
+                    
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                            <span class="material-symbols-outlined text-blue-600 text-[18px]">calendar_today</span>
+                        </div>
+                        <div>
+                            <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">{% trans "Tanggal" %}</span>
+                            <span class="text-slate-800">{{ story.tanggal|date:"d F Y" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+                            <span class="material-symbols-outlined text-purple-600 text-[18px]">visibility</span>
+                        </div>
+                        <div>
+                            <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">{% trans "Dilihat" %}</span>
+                            <span class="text-slate-800">{{ story.views_count }} kali</span>
+                        </div>
+                    </div>
+
+                    {% if story.lokasi %}
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center flex-shrink-0">
+                            <span class="material-symbols-outlined text-rose-600 text-[18px]">location_on</span>
+                        </div>
+                        <div>
+                            <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">{% trans "Lokasi" %}</span>
+                            <span class="text-slate-800 font-medium">{{ story.lokasi.nama_provinsi }}</span>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if story.kategori %}
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                            <span class="material-symbols-outlined text-amber-600 text-[18px]">category</span>
+                        </div>
+                        <div>
+                            <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">Kategori</span>
+                            <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2 py-1 rounded inline-block mt-0.5">
+                                {{ story.kategori.name }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mt-4 pt-5 border-t border-slate-200">
+                        <span class="bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-lg flex items-center justify-center gap-2 w-full shadow-sm">
+                            <span class="material-symbols-outlined text-[16px]">explore</span>
+                            {% trans "Cerita Lapangan" %}
                         </span>
                     </div>
-                </a>
-                {% endfor %}
+                </div>
             </div>
-        </div>
-        {% endif %}
+
+            <!-- OTHER STORIES / CERITA LAPANGAN TERKAIT -->
+            {% if related_stories %}
+            <div class="mt-8 print-hidden">
+                <h3 class="text-lg font-bold text-on-surface mb-4 border-b border-slate-200 pb-2">{% trans "Cerita Lapangan Lainnya" %}</h3>
+                <div class="flex flex-col gap-4">
+                    {% for rel_story in related_stories %}
+                    <a href="{% url 'detail-story' slug=rel_story.slug %}" class="group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300" style="text-decoration: none;">
+                        <div class="relative w-full aspect-video overflow-hidden bg-surface-container">
+                            {% if rel_story.gambar %}
+                            <img src="{{ rel_story.gambar.url }}" alt="{{ rel_story.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                            {% else %}
+                            <img src="{% static 'images/cerita.jpg' %}" alt="{{ rel_story.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                            {% endif %}
+                        </div>
+                        <div class="p-3 flex-1 flex flex-col">
+                            <p class="text-[10px] text-text-muted font-medium mb-1">{{ rel_story.tanggal|date:"d F Y" }}</p>
+                            <h4 class="font-headline-md text-sm font-bold text-on-surface mb-1 line-clamp-2 group-hover:text-primary transition-colors">
+                                {{ rel_story.judul }}
+                            </h4>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </aside>
     </div>
 </main>
 

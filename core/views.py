@@ -916,7 +916,7 @@ class VideoListView(AdminRequiredMixin, ListView):
 class VideoCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
     model = Video
     template_name = 'core/custom_admin/video/video_form.html'
-    fields = ['judul', 'url_video']
+    fields = ['judul', 'url_video', 'thumbnail']
     success_url = reverse_lazy('video_list')
 
     def form_valid(self, form):
@@ -926,7 +926,7 @@ class VideoCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
 class VideoUpdateView(AdminRequiredMixin, DateInputMixin, UpdateView):
     model = Video
     template_name = 'core/custom_admin/video/video_form.html'
-    fields = ['judul', 'url_video']
+    fields = ['judul', 'url_video', 'thumbnail']
     success_url = reverse_lazy('video_list')
 
     def form_valid(self, form):

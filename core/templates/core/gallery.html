@@ -296,8 +296,8 @@
             {% for item in videos_list %}
             <a href="{{ item.url_video }}" target="_blank" rel="noopener" class="group flex flex-col bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.04)] transition-all duration-300" style="text-decoration: none;">
               <div class="relative w-full aspect-video overflow-hidden bg-slate-900 flex items-center justify-center">
-                {% if item.youtube_thumbnail %}
-                <img src="{{ item.youtube_thumbnail }}" alt="{{ item.judul }}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                {% if item.display_thumbnail_url %}
+                <img src="{{ item.display_thumbnail_url }}" alt="{{ item.judul }}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300">
                 <div class="absolute inset-0 flex items-center justify-center">
                   <span class="material-symbols-outlined text-6xl text-white drop-shadow-lg group-hover:scale-110 transition-transform duration-300">play_circle</span>
                 </div>
