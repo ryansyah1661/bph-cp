@@ -45,59 +45,34 @@
                 <h4 class="font-bold text-slate-800 mb-6 border-b border-slate-200 pb-3">Informasi Cerita</h4>
                 
                 <div class="flex flex-col gap-5 text-sm text-slate-600">
-                    <div class="flex items-start gap-3">
-                        <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-emerald-600 text-[18px]">person</span>
-                        </div>
-                        <div>
-                            <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">{% trans "Penulis" %}</span>
-                            <strong class="text-slate-800">{{ story.author|default:"Tim Admin" }}</strong>
-                        </div>
+                    <div>
+                        <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">{% trans "Penulis" %}</span>
+                        <strong class="text-slate-800">{{ story.author|default:"Tim Admin" }}</strong>
                     </div>
                     
-                    <div class="flex items-start gap-3">
-                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-blue-600 text-[18px]">calendar_today</span>
-                        </div>
-                        <div>
-                            <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">{% trans "Tanggal" %}</span>
-                            <span class="text-slate-800">{{ story.tanggal|date:"d F Y" }}</span>
-                        </div>
+                    <div>
+                        <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">{% trans "Tanggal" %}</span>
+                        <span class="text-slate-800">{{ story.tanggal|date:"d F Y" }}</span>
                     </div>
 
-                    <div class="flex items-start gap-3">
-                        <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-purple-600 text-[18px]">visibility</span>
-                        </div>
-                        <div>
-                            <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">{% trans "Dilihat" %}</span>
-                            <span class="text-slate-800">{{ story.views_count }} kali</span>
-                        </div>
+                    <div>
+                        <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">{% trans "Dilihat" %}</span>
+                        <span class="text-slate-800">{{ story.views_count }} kali</span>
                     </div>
 
                     {% if story.lokasi %}
-                    <div class="flex items-start gap-3">
-                        <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-rose-600 text-[18px]">location_on</span>
-                        </div>
-                        <div>
-                            <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">{% trans "Lokasi" %}</span>
-                            <span class="text-slate-800 font-medium">{{ story.lokasi.nama_provinsi }}</span>
-                        </div>
+                    <div>
+                        <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">{% trans "Lokasi" %}</span>
+                        <span class="text-slate-800 font-medium">{{ story.lokasi.nama_provinsi }}</span>
                     </div>
                     {% endif %}
 
                     {% if story.kategori %}
-                    <div class="flex items-start gap-3">
-                        <div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-amber-600 text-[18px]">category</span>
-                        </div>
-                        <div>
-                            <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">Kategori</span>
-                            <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2 py-1 rounded inline-block mt-0.5">
-                                {{ story.kategori.name }}
-                            </span>
-                        </div>
+                    <div>
+                        <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">Kategori</span>
+                        <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2 py-1 rounded inline-block mt-0.5">
+                            {{ story.kategori.name }}
+                        </span>
                     </div>
                     {% endif %}
                     
