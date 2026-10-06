@@ -14,7 +14,25 @@
   {% if form.errors %}
   <div style="background:#fee2e2; border:1px solid #ef4444; padding:12px; border-radius:8px; margin-bottom:16px; color:#991b1b; font-size:13px;">
     <strong>Terjadi kesalahan saat menyimpan data:</strong>
-    {{ form.errors }}
+    <ul style="margin-top: 8px; margin-left: 16px; list-style-type: disc;">
+      {% for field, errors in form.errors.items %}
+        {% for error in errors %}
+          <li>
+            {% if field == 'slug_ind' %}
+              Tautan URL (Bahasa Indonesia) sudah digunakan. Silakan gunakan judul yang berbeda.
+            {% elif field == 'slug_en' %}
+              Tautan URL (English) sudah digunakan. Silakan gunakan judul (English) yang berbeda.
+            {% elif field == 'slug' %}
+              Tautan URL sudah digunakan. Silakan gunakan judul yang berbeda.
+            {% elif field == '__all__' %}
+              {{ error }}
+            {% else %}
+              {{ field|title }}: {{ error }}
+            {% endif %}
+          </li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
   </div>
   {% endif %}
 
@@ -39,12 +57,12 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-1">Slug <span class="text-red-500">*</span></label>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Tautan URL <span class="text-red-500">*</span></label>
             {{ form.slug_ind }}
-            <p class="text-xs text-gray-400 mt-1">Slug otomatis terisi dari judul Indonesia</p>
+            <p class="text-xs text-gray-400 mt-1">Tautan otomatis terisi dari judul Indonesia</p>
           </div>
           <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-1">Slug (English) <span class="text-red-500">*</span></label>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Tautan URL (English) <span class="text-red-500">*</span></label>
             {{ form.slug_en }}
           </div>
         </div>

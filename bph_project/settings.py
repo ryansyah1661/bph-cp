@@ -124,8 +124,8 @@ LOGOUT_REDIRECT_URL = '/be/login/'
 # =============================================================
 # KONFIGURASI KEAMANAN SESSION LOGIN
 # =============================================================
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_AGE = 3600
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 86400  # 1 Hari (agar form tidak hilang karena session expired)
 
 # =============================================================
 # Konfigurasi SMTP Brevo untuk Notifikasi & Reset Password
