@@ -14,6 +14,7 @@ urlpatterns = [
 
     # ROUTING FRONTEND HALAMAN DETAIL (Versi Pengunjung)
     path('articles/detail/<slug:slug>/', views.detail_articles_view, name='detail-articles'),
+    path('programs/detail/<slug:slug>/', views.detail_program_view, name='detail-program'),
     path('experience/detail/<slug:slug>/', views.detail_experience_view, name='detail-experience'),
     path('services/detail/<slug:slug>/', views.detail_services_view, name='detail-services'),
     path('story/detail/<slug:slug>/', views.detail_story_view, name='detail-story'),
@@ -146,4 +147,10 @@ urlpatterns = [
     path('password-reset-complete/', 
          auth_views.PasswordResetCompleteView.as_view(template_name='core/registration/password_reset_complete.html'), 
          name='password_reset_complete'),
+
+    # Programs Admin
+    path('be/programs/', views.ProgramListView.as_view(), name='program_list'),
+    path('be/programs/add/', views.ProgramCreateView.as_view(), name='program_create'),
+    path('be/programs/<int:pk>/edit/', views.ProgramUpdateView.as_view(), name='program_update'),
+    path('be/programs/<int:pk>/delete/', views.program_delete_view, name='program_delete'),
 ]

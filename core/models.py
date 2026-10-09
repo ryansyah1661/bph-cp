@@ -371,3 +371,26 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     if hasattr(instance, 'profile'):
         instance.profile.save()
+class Program(models.Model):
+    judul = models.CharField(max_length=250, verbose_name="Judul Program")
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
+    tanggal = models.DateField(default=timezone.now, verbose_name="Tanggal Dibuat")
+    
+    # Author otomatis mengambil nama user login dan terkunci
+    author = models.CharField(max_length=100, blank=True, verbose_name="Penulis")
+    
+    short = models.TextField(help_text="Ringkasan pendek program")
+    deskripsi = models.TextField(verbose_name="Konten Program Lengkap")
+    views_count = models.PositiveIntegerField(default=0, verbose_name="Jumlah Tayangan")
+    gambar = models.ImageField(upload_to='programs/', verbose_name="Foto Utama Program")
+
+    class Meta:
+        verbose_name_plural = "Program"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.judul)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.judul

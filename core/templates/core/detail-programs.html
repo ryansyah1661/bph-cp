@@ -1,0 +1,130 @@
+{% extends 'core/base.html' %}
+{% load static i18n %}
+
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block title %}
+    {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+        {{ program.judul_en|default:program.judul }} - Bhumi Pasa Hijau
+    {% else %}
+        {{ program.judul|default:"Detail program" }} - Bhumi Pasa Hijau
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<!-- LOGO KHUSUS PRINT (Tersembunyi di tampilan layar biasa, muncul otomatis saat cetak) -->
+<div class="print-only-logo hidden">
+    <img src="{% static 'images/logo-bph.png' %}" alt="Logo BPH">
+</div>
+
+<!-- HERO BANNER -->
+<section class="relative h-[65vh] min-h-[450px] print:h-[250px] print:min-h-0 w-full flex items-center justify-center overflow-hidden bg-on-background">
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-gradient-to-t from-on-background via-on-background/70 to-on-background/40 z-10"></div>
+        {% if program.gambar %}
+        <img src="{{ program.gambar.url }}" alt="{{ program.judul }}" class="w-full h-full object-cover animate-kenburns origin-center">
+        {% else %}
+        <img src="{% static 'images/program1.jpg' %}" alt="{{ program.judul }}" class="w-full h-full object-cover animate-kenburns origin-center">
+        {% endif %}
+    </div>
+
+    <div class="relative z-20 w-full max-w-4xl mx-auto px-6 text-center text-surface-white pt-20 print:pt-4">
+        <h1 class="font-display-lg-mobile md:text-4xl font-extrabold text-white leading-tight mb-6 drop-shadow-md print:drop-shadow-none">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+                {{ program.judul_en|default:program.judul }}
+            {% else %}
+                {{ program.judul }}
+            {% endif %}
+        </h1>
+
+        <!-- METADATA DIPINDAH KE SIDEBAR KANAN -->
+    </div>
+</section>
+
+<!-- ISI KONTEN program -->
+<main class="w-full bg-white py-16">
+    <div class="max-w-6xl mx-auto px-margin-mobile md:px-6 flex flex-col md:flex-row gap-12">
+        
+        <!-- BAGIAN KIRI: KONTEN BERITA -->
+        <div class="md:w-3/4">
+            <program class="prose prose-sm md:prose-base max-w-none text-on-surface-variant font-body-md text-base leading-relaxed text-left">
+                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+                    {{ program.deskripsi_en|default:program.deskripsi|safe }}
+                {% else %}
+                    {{ program.deskripsi|safe }}
+                {% endif %}
+            </program>
+
+
+        </div>
+
+        <!-- BAGIAN KANAN: METADATA -->
+        <aside class="md:w-1/4 print:hidden">
+            <div class="sticky top-28 bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm">
+                <h4 class="font-bold text-slate-800 mb-6 border-b border-slate-200 pb-3">Informasi Berita</h4>
+                
+                <div class="flex flex-col gap-5 text-sm text-slate-600">
+                    <div>
+                        <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Author{% else %}{% trans "Penulis" %}{% endif %}</span>
+                        <strong class="text-slate-800">{{ program.author }}</strong>
+                    </div>
+                    
+                    <div>
+                        <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Published Date{% else %}{% trans "Tanggal Terbit" %}{% endif %}</span>
+                        <span class="text-slate-800">{{ program.tanggal|date:"d F Y" }}</span>
+                    </div>
+
+                    <div>
+                        <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Views{% else %}{% trans "Dilihat" %}{% endif %}</span>
+                        <span class="text-slate-800">{{ program.views_count }} {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}times{% else %}kali{% endif %}</span>
+                    </div>
+
+                    {% if program.kategori %}
+                    <div>
+                        <span class="block text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">Kategori</span>
+                        <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2 py-1 rounded inline-block mt-0.5">
+                            {{ program.kategori.name }}
+                        </span>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mt-4 pt-5 border-t border-slate-200">
+                        <span class="bg-blue-600 text-white text-xs font-bold px-4 py-2 rounded-lg flex items-center justify-center gap-2 w-full shadow-sm">
+                            <span class="material-symbols-outlined text-[16px]">newspaper</span>
+                            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}News{% else %}{% trans "Berita" %}{% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OTHER POSTS / program TERKAIT -->
+            {% if related_programs %}
+            <div class="mt-8 print-hidden">
+                <h3 class="text-lg font-bold text-on-surface mb-4 border-b border-slate-200 pb-2">
+                    {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Related News{% else %}{% trans "Berita Terkait" %}{% endif %}
+                </h3>
+                <div class="flex flex-col gap-4">
+                    {% for rel in related_programs %}
+                    <a href="{% url 'detail-programs' slug=rel.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}" class="group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300" style="text-decoration: none;">
+                        <div class="relative w-full aspect-video overflow-hidden bg-surface-container">
+                            {% if rel.gambar %}
+                            <img src="{{ rel.gambar.url }}" alt="{{ rel.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                            {% else %}
+                            <img src="{% static 'images/program1.jpg' %}" alt="{{ rel.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                            {% endif %}
+                        </div>
+                        <div class="p-3 flex-1 flex flex-col">
+                            <p class="text-[10px] text-text-muted font-medium mb-1">{{ rel.tanggal|date:"d F Y" }}</p>
+                            <h4 class="font-headline-md text-sm font-bold text-on-surface mb-1 line-clamp-2 group-hover:text-primary transition-colors">
+                                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}{{ rel.judul_en|default:rel.judul }}{% else %}{{ rel.judul }}{% endif %}
+                            </h4>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </aside>
+    </div>
+</main>
+{% endblock %}

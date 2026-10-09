@@ -48,3 +48,8 @@ class FolderTranslationOptions(TranslationOptions):
 @register(TeamMember)
 class TeamMemberTranslationOptions(TranslationOptions):
     fields = ('jabatan', 'bio', 'kategori')
+
+from .models import Program
+@register(Program)
+class ProgramTranslationOptions(TranslationOptions):
+    fields = ('judul', 'slug', 'short', 'deskripsi')

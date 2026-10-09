@@ -1,0 +1,129 @@
+{% extends "core/custom_admin/base.html" %}
+
+{% block admin_content %}
+<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
+  
+  <div class="flex justify-between items-center border-b border-gray-100 pb-5">
+    <div>
+      <h2 class="text-xl font-bold text-emerald-900">Manajemen program & Wawasan Teknis</h2>
+      <p class="text-xs text-gray-500 mt-1">Kelola seluruh publikasi program informasi Bhumi Pasa Hijau.</p>
+    </div>
+    <a href="{% url 'program_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100">
+      <span class="material-symbols-outlined text-sm">add</span> Tambah program
+    </a>
+  </div>
+
+  <div class="overflow-x-auto w-full">
+    <table class="w-full text-left border-collapse text-sm table-auto">
+      <thead>
+        <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
+          <th class="p-4 font-semibold w-14 text-center">No.</th>
+          <th class="p-4 font-semibold w-24 text-center">Gambar</th>
+          <th class="p-4 font-semibold">Judul program</th>
+          <th class="p-4 font-semibold">Penulis</th>
+          <th class="p-4 font-semibold text-center">Tanggal Terbit</th>
+          <th class="p-4 font-semibold text-center w-28">Aksi</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700 divide-y divide-gray-50">
+        {% for program in programs %}
+        <tr class="hover:bg-slate-50/50 transition">
+          <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
+            {% if is_paginated %}{{ page_obj.start_index|add:forloop.counter0 }}{% else %}{{ forloop.counter }}{% endif %}
+          </td>
+
+          <td class="p-4 align-middle text-center">
+            {% if program.gambar %}
+              <img src="{{ program.gambar.url }}" class="w-12 h-12 object-cover rounded-xl border border-gray-100 shadow-sm mx-auto">
+            {% else %}
+              <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded-md">No Image</span>
+            {% endif %}
+          </td>
+          
+          <td class="p-4 font-semibold text-slate-800 align-middle text-base hover:text-emerald-700 transition">
+            <div class="line-clamp-2 leading-snug">{{ program.judul_ind }}</div>
+          </td>
+
+          <td class="p-4 align-middle font-medium text-slate-600 truncate">
+            <span>{{ program.author|default:"Admin BPH" }}</span>
+          </td>
+
+          <td class="p-4 align-middle text-center font-semibold text-slate-600 text-xs tracking-wide">
+            {{ program.tanggal|date:"d M Y" }}
+          </td>
+          
+          <td class="p-4 text-center align-middle whitespace-nowrap">
+            <div class="flex justify-center items-center gap-2">
+              <a href="{% url 'program_update' program.pk %}" title="Edit program" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
+                <span class="material-symbols-outlined text-sm">edit</span>
+              </a>
+              <!-- Tombol Hapus dengan trigger Modal Pop-up -->
+              <button type="button" onclick="openDeleteModal('{% url 'program_delete' program.pk %}', '{{ program.judul|escapejs }}')" title="Hapus program" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
+                <span class="material-symbols-outlined text-sm">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="p-8 text-center text-gray-400 font-medium">Belum ada data program.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% include 'core/custom_admin/partials/pagination.html' %}
+
+</div>
+
+<!-- MODAL POPUP KONFIRMASI HAPUS -->
+<div id="deleteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl border border-gray-100 text-center transform transition-all scale-95 opacity-0 duration-300" id="modalContent">
+        <div class="w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-4">
+            <span class="material-symbols-outlined text-2xl">delete</span>
+        </div>
+        <h3 class="text-lg font-bold text-neutral-900 mb-2">Hapus program?</h3>
+        <p class="text-sm text-gray-500 mb-6">Apakah Anda yakin ingin menghapus program <strong id="programTitle" class="text-neutral-800"></strong> secara permanen? Tindakan ini tidak bisa dibatalkan.</p>
+        
+        <form id="deleteForm" method="POST" class="flex items-center justify-center gap-3">
+            {% csrf_token %}
+            <button type="button" onclick="closeDeleteModal()" class="w-full py-2.5 rounded-xl bg-gray-100 text-gray-700 text-sm font-semibold hover:bg-gray-200 transition-colors">
+                Batal
+            </button>
+            <button type="submit" class="w-full py-2.5 rounded-xl bg-rose-600 text-white text-sm font-semibold hover:bg-rose-700 transition-colors shadow-md shadow-rose-500/20">
+                Ya, Hapus
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openDeleteModal(deleteUrl, programName) {
+        const modal = document.getElementById('deleteModal');
+        const modalContent = document.getElementById('modalContent');
+        const deleteForm = document.getElementById('deleteForm');
+        const titleSpan = document.getElementById('programTitle');
+
+        deleteForm.action = deleteUrl;
+        titleSpan.innerText = `"${programName}"`;
+
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modalContent.classList.remove('scale-95', 'opacity-0');
+            modalContent.classList.add('scale-100', 'opacity-100');
+        }, 10);
+    }
+
+    function closeDeleteModal() {
+        const modal = document.getElementById('deleteModal');
+        const modalContent = document.getElementById('modalContent');
+
+        modalContent.classList.remove('scale-100', 'opacity-100');
+        modalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+</script>
+{% endblock %}

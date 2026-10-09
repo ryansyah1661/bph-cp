@@ -1,0 +1,388 @@
+{% extends "core/custom_admin/base.html" %}
+
+{% block admin_content %}
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<div class="mb-6 pt-2 border-b border-gray-100 pb-4">
+  <h2 class="text-xl font-bold text-emerald-900">{% if object %}Edit{% else %}Tambah{% endif %} program</h2>
+  <p class="text-xs text-gray-500 mt-1">Isi formulir di bawah ini dengan lengkap.</p>
+</div>
+
+<form method="post" enctype="multipart/form-data" id="program-form" class="space-y-6">
+  {% csrf_token %}
+
+  {% if form.errors %}
+  <div style="background:#fee2e2; border:1px solid #ef4444; padding:12px; border-radius:8px; margin-bottom:16px; color:#991b1b; font-size:13px;">
+    <strong>Terjadi kesalahan saat menyimpan data:</strong>
+    <ul style="margin-top: 8px; margin-left: 16px; list-style-type: disc;">
+      {% for field, errors in form.errors.items %}
+        {% for error in errors %}
+          <li>
+            {% if field == 'slug_ind' %}
+              Tautan URL (Bahasa Indonesia) sudah digunakan. Silakan gunakan judul yang berbeda.
+            {% elif field == 'slug_en' %}
+              Tautan URL (English) sudah digunakan. Silakan gunakan judul (English) yang berbeda.
+            {% elif field == 'slug' %}
+              Tautan URL sudah digunakan. Silakan gunakan judul yang berbeda.
+            {% elif field == '__all__' %}
+              {{ error }}
+            {% else %}
+              {{ field|title }}: {{ error }}
+            {% endif %}
+          </li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <!-- LAYOUT 2 KOLOM (KIRI & KANAN) -->
+  <div class="flex flex-col lg:flex-row gap-6 items-start">
+
+    <!-- KOLOM KIRI (FORM UTAMA & ISI program) -->
+    <div class="flex-1 w-full space-y-6">
+
+      <!-- CARD 1: INFORMASI UTAMA -->
+      <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Judul (Bahasa Indonesia) <span class="text-red-500">*</span></label>
+            {{ form.judul_ind }}
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Judul (English)</label>
+            {{ form.judul_en }}
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Tautan URL <span class="text-red-500">*</span></label>
+            {{ form.slug_ind }}
+            <p class="text-xs text-gray-400 mt-1">Tautan otomatis terisi dari judul Indonesia</p>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Tautan URL (English) <span class="text-red-500">*</span></label>
+            {{ form.slug_en }}
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Penulis <span class="text-red-500">*</span></label>
+            <input type="text" disabled value="{% if request.user.profile.nama_lengkap %}{{ request.user.profile.nama_lengkap }}{% else %}{{ request.user.username }}{% endif %}" class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed text-sm">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Tanggal Terbit <span class="text-red-500">*</span></label>
+            {{ form.tanggal }}
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Ringkasan (Bahasa Indonesia)</label>
+            <div class="short-textarea-wrapper">
+              {{ form.short_ind }}
+            </div>
+            <p class="text-xs text-gray-400 mt-1">Ringkasan singkat untuk tampilan card (ID)</p>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Ringkasan (English)</label>
+            <div class="short-textarea-wrapper">
+              {{ form.short_en }}
+            </div>
+            <p class="text-xs text-gray-400 mt-1">Ringkasan singkat untuk tampilan card (EN)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2: ISI program INDONESIA (QUILL EDITOR) -->
+      <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+        <label class="block text-sm font-semibold text-slate-700 mb-3">Isi program (Bahasa Indonesia) <span class="text-red-500">*</span></label>
+        <div class="hidden-textarea-wrapper">
+          {{ form.deskripsi_ind }}
+        </div>
+        <div id="quill-editor-ind" style="height: 350px;"></div>
+      </div>
+
+      <!-- CARD 3: ISI program ENGLISH (QUILL EDITOR) -->
+      <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+        <label class="block text-sm font-semibold text-slate-700 mb-3">Isi program (English)</label>
+        <div class="hidden-textarea-wrapper">
+          {{ form.deskripsi_en }}
+        </div>
+        <div id="quill-editor-en" style="height: 350px;"></div>
+      </div>
+
+    </div>
+
+    <!-- KOLOM KANAN (SIDEBAR UPLOAD GAMBAR & TOMBOL MENYATU DALAM SATU CARD) -->
+    <div class="w-full lg:w-80 space-y-5 flex-shrink-0">
+      <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-5">
+        <h3 class="text-sm font-bold text-slate-700 border-b border-gray-100 pb-3">Gambar program</h3>
+        <div>
+          <label class="block text-sm font-semibold text-slate-600 mb-2">Foto Utama program</label>
+
+          <div id="preview-container" class="{% if not object.gambar %}hidden{% endif %} mb-3">
+            <img id="image-preview" src="{% if object.gambar %}{{ object.gambar.url }}{% endif %}" class="w-full h-40 object-cover rounded-xl border">
+          </div>
+
+          <label for="id_gambar" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition" id="drop-zone">
+            <span class="material-symbols-outlined text-gray-400 text-3xl mb-1">upload_file</span>
+            <span class="text-xs text-gray-400 text-center px-2">Seret & Jatuhkan atau <span class="text-emerald-600 font-semibold">Jelajahi</span></span>
+          </label>
+          <div id="file-name-display" class="text-xs text-gray-400 mt-2 text-center font-medium"></div>
+          <div class="bph-hidden-file-input">{{ form.gambar }}</div>
+        </div>
+
+        <!-- Tombol Batal & Simpan Data Menyatu di Bawah Card Kanan -->
+        <div class="pt-4 border-t border-gray-100 flex items-center justify-end gap-2.5">
+          <a href="{% url 'program_list' %}" class="px-4 py-2 border border-gray-200 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-50 transition" style="text-decoration: none;">Batal</a>
+          <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 transition cursor-pointer border-none shadow-sm shadow-emerald-100">Simpan Data</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</form>
+
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<script>
+  var toolbarOptions = [
+    [{ 'header': [2, 3, false] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    ['link'],
+    ['blockquote', 'code-block'],
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    ['image'],
+    ['clean']
+  ];
+
+  function setupQuillEditor(selector, textareaName) {
+    var editorElement = document.querySelector(selector);
+    var textareaElement = document.querySelector('textarea[name="' + textareaName + '"]');
+    if (!editorElement) return null;
+
+    var quill = new Quill(selector, {
+      theme: 'snow',
+      modules: {
+        toolbar: {
+          container: toolbarOptions,
+          handlers: {
+            'image': function() {
+              var input = document.createElement('input');
+              input.setAttribute('type', 'file');
+              input.setAttribute('accept', 'image/png, image/jpeg, image/gif, image/webp');
+              input.click();
+              input.onchange = function() {
+                var file = input.files[0];
+                if (!file) return;
+                if (file.size > 5 * 1024 * 1024) {
+                  alert('Ukuran file terlalu besar. Maksimal 5MB.');
+                  return;
+                }
+                var formData = new FormData();
+                formData.append('image', file);
+                fetch('{% url "quill_image_upload" %}', {
+                  method: 'POST',
+                  headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+                  body: formData
+                })
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                  if (data.url) {
+                    var range = quill.getSelection(true);
+                    quill.insertEmbed(range.index, 'image', data.url);
+                    quill.setSelection(range.index + 1);
+                  } else {
+                    alert(data.error || 'Gagal mengunggah gambar.');
+                  }
+                })
+                .catch(function(err) {
+                  console.error('Upload error:', err);
+                  alert('Terjadi kesalahan saat mengunggah gambar.');
+                });
+              };
+            }
+          }
+        }
+      }
+    });
+
+    if (textareaElement && textareaElement.value) {
+      quill.root.innerHTML = textareaElement.value;
+    }
+
+    function sync() {
+      if (textareaElement) {
+        textareaElement.value = quill.getText().trim().length > 0 ? quill.root.innerHTML : '';
+      }
+    }
+    quill.on('text-change', sync);
+    var form = document.getElementById('program-form');
+    if (form) form.addEventListener('submit', sync);
+    return quill;
+  }
+
+  setupQuillEditor('#quill-editor-ind', 'deskripsi_ind');
+  setupQuillEditor('#quill-editor-en', 'deskripsi_en');
+
+  var tanggalInput = document.querySelector('input[name="tanggal"]');
+  if (tanggalInput) {
+    tanggalInput.setAttribute('type', 'date');
+  }
+
+  
+  // Auto-slug script
+  const titleFields = [
+    { source: 'judul_ind', target: 'slug_ind' },
+    { source: 'judul_en', target: 'slug_en' },
+    { source: 'title_ind', target: 'slug_ind' },
+    { source: 'title_en', target: 'slug_en' },
+    { source: 'name_ind', target: 'slug_ind' },
+    { source: 'name_en', target: 'slug_en' },
+    { source: 'nama_ind', target: 'slug_ind' },
+    { source: 'nama_en', target: 'slug_en' },
+    { source: 'judul', target: 'slug' },
+    { source: 'title', target: 'slug' },
+    { source: 'name', target: 'slug' },
+    { source: 'nama', target: 'slug' }
+  ];
+
+  titleFields.forEach(function(field) {
+    var sourceInput = document.querySelector('input[name="' + field.source + '"]');
+    var targetInput = document.querySelector('input[name="' + field.target + '"]');
+    
+    if (sourceInput && targetInput) {
+      sourceInput.addEventListener('input', function() {
+        var slugify = sourceInput.value
+          .toLowerCase()
+          .trim()
+          .replace(/[^\w\s-]/g, '')
+          .replace(/[\s_]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        targetInput.value = slugify;
+      });
+    }
+  });
+
+
+  const fileInput = document.getElementById('id_gambar');
+  const fileNameDisplay = document.getElementById('file-name-display');
+  const dropZone = document.getElementById('drop-zone');
+  const imagePreview = document.getElementById('image-preview');
+  const previewContainer = document.getElementById('preview-container');
+
+  function handleImageFile(file) {
+    if (file) {
+      fileNameDisplay.textContent = file.name;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        if (imagePreview) imagePreview.src = e.target.result;
+        if (previewContainer) previewContainer.classList.remove('hidden');
+      }
+      reader.readAsDataURL(file);
+    }
+  }
+
+  if (fileInput) {
+    fileInput.addEventListener('change', function() {
+      if (this.files[0]) handleImageFile(this.files[0]);
+    });
+  }
+
+  if (dropZone) {
+    dropZone.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      this.classList.add('border-emerald-400', 'bg-emerald-50');
+    });
+
+    dropZone.addEventListener('dragleave', function() {
+      this.classList.remove('border-emerald-400', 'bg-emerald-50');
+    });
+
+    dropZone.addEventListener('drop', function(e) {
+      e.preventDefault();
+      this.classList.remove('border-emerald-400', 'bg-emerald-50');
+      const files = e.dataTransfer.files;
+      if (files[0] && fileInput) {
+        fileInput.files = files;
+        handleImageFile(files[0]);
+      }
+    });
+  }
+</script>
+
+<style>
+  .hidden-textarea-wrapper textarea,
+  textarea[name="deskripsi"],
+  textarea[name="deskripsi_ind"],
+  textarea[name="deskripsi_en"] {
+    display: none !important;
+    position: absolute !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .short-textarea-wrapper textarea,
+  textarea[name="short"],
+  textarea[name="short_ind"],
+  textarea[name="short_en"] {
+    width: 100% !important;
+    height: 90px !important;
+    padding: 8px 12px !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    color: #1e293b !important;
+    background-color: #ffffff !important;
+    box-sizing: border-box !important;
+    resize: vertical !important;
+  }
+  .short-textarea-wrapper textarea:focus,
+  textarea[name="short"]:focus,
+  textarea[name="short_ind"]:focus,
+  textarea[name="short_en"]:focus {
+    outline: none !important;
+    border-color: #059669 !important;
+    box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1) !important;
+  }
+
+  .bph-hidden-file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  form input[type="text"],
+  form input[type="date"],
+  form select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1e293b;
+    box-sizing: border-box;
+  }
+  form input:focus,
+  form select:focus {
+    outline: none;
+    border-color: #059669;
+    box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1);
+  }
+  .ql-toolbar { border-radius: 8px 8px 0 0; border-color: #e2e8f0 !important; }
+  .ql-container { border-radius: 0 0 8px 8px; border-color: #e2e8f0 !important; font-size: 14px; }
+  .ql-editor p { margin-bottom: 1em;
+}
+</style>
+{% endblock %}

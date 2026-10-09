@@ -20,9 +20,11 @@ from .models import Article, Project, Client, Story, Service, Location, Category
 # JALUR FRONTEND WEBSITE (NAVBAR & MENU)
 # ==========================================
 def homepage(request):
+    programs = Program.objects.order_by('-tanggal')
     articles = Article.objects.order_by('-tanggal')[:3]
     stories = Story.objects.order_by('-tanggal')[:1]
     return render(request, 'core/homepage.html', {
+        'programs': programs,
         'articles': articles,
         'stories': stories,
     })
@@ -92,6 +94,7 @@ def provinces_geojson_api(request):
     return HttpResponse(geojson_data, content_type='application/json')
 
 def gallery_view(request):
+    programs = Program.objects.order_by('-tanggal')
     articles = Article.objects.order_by('-tanggal')
     stories = Story.objects.order_by('-tanggal')
     documents = Modul.objects.order_by('-tanggal_rilis')
@@ -102,6 +105,7 @@ def gallery_view(request):
     videos = Video.objects.all().order_by('-tanggal_unggah', '-id')
 
     return render(request, 'core/gallery.html', {
+        'programs': programs,
         'articles': articles,
         'stories': stories,
         'gallery_items': gallery_items,
@@ -1131,3 +1135,99 @@ def quill_image_upload(request):
         return JsonResponse({'url': image_url})
 
     return JsonResponse({'error': 'Tidak ada file yang dikirim.'}, status=400)
+from .models import Program
+
+class ProgramListView(AdminRequiredMixin, ListView):
+    model = Program
+    template_name = 'core/custom_admin/programs/programs_list.html'
+    context_object_name = 'programs'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Program.objects.all().order_by('-tanggal', '-id')
+
+class ProgramCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
+    model = Program
+    template_name = 'core/custom_admin/programs/programs_form.html'
+    fields = ['judul_ind', 'judul_en', 'slug_ind', 'slug_en', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'tanggal', 'gambar']
+    success_url = reverse_lazy('program_list')
+
+    def form_valid(self, form):
+        from django.utils.text import slugify
+        
+        user = self.request.user
+        form.instance.author = user.profile.nama_lengkap if hasattr(user, 'profile') and user.profile.nama_lengkap else user.username
+
+        base_slug = form.cleaned_data.get('slug_ind') or slugify(form.cleaned_data.get('judul_ind') or form.cleaned_data.get('judul'))
+        slug = base_slug[:200]
+        
+        queryset = Program.objects.filter(slug_ind=slug)
+        if queryset.exists():
+            original_slug = slug
+            counter = 1
+            while Program.objects.filter(slug_ind=slug).exists():
+                slug = f"{original_slug}-{counter}"
+                counter += 1
+                
+        form.instance.slug_ind = slug
+        if not form.instance.slug_en:
+            form.instance.slug_en = slug
+        
+        messages.success(self.request, 'Program baru berhasil ditambahkan!')
+        return super().form_valid(form)
+
+class ProgramUpdateView(AdminRequiredMixin, DateInputMixin, UpdateView):
+    model = Program
+    template_name = 'core/custom_admin/programs/programs_form.html'
+    fields = ['judul_ind', 'judul_en', 'slug_ind', 'slug_en', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'tanggal', 'gambar']
+    success_url = reverse_lazy('program_list')
+
+    def form_valid(self, form):
+        from django.utils.text import slugify
+        
+        user = self.request.user
+        form.instance.author = user.profile.nama_lengkap if hasattr(user, 'profile') and user.profile.nama_lengkap else user.username
+
+        base_slug = form.cleaned_data.get('slug_ind') or slugify(form.cleaned_data.get('judul_ind') or form.cleaned_data.get('judul'))
+        slug = base_slug[:200]
+        
+        queryset = Program.objects.filter(slug_ind=slug).exclude(pk=self.object.pk)
+        if queryset.exists():
+            original_slug = slug
+            counter = 1
+            while Program.objects.filter(slug_ind=slug).exclude(pk=self.object.pk).exists():
+                slug = f"{original_slug}-{counter}"
+                counter += 1
+                
+        form.instance.slug_ind = slug
+        if not form.instance.slug_en:
+            form.instance.slug_en = slug
+            
+        messages.success(self.request, 'Data program berhasil diperbarui!')
+        return super().form_valid(form)
+
+def program_delete_view(request, pk):
+    program = get_object_or_404(Program, pk=pk)
+    if request.method == 'POST':
+        program.delete()
+        messages.success(request, 'Program berhasil dihapus!')
+    return redirect('program_list')
+
+def detail_program_view(request, slug):
+    program_data = get_object_or_404(Program, Q(slug_ind=slug) | Q(slug_en=slug) if hasattr(Program, 'slug_en') else Q(slug=slug))
+    
+    program_data.views_count += 1
+    program_data.save(update_fields=['views_count'])
+    
+    related_programs = Program.objects.filter(
+        Q(author=program_data.author)
+    ).exclude(pk=program_data.pk).order_by('-tanggal')[:3]
+    
+    if related_programs.count() < 3:
+        extra_programs = Program.objects.exclude(pk=program_data.pk).exclude(pk__in=related_programs.values_list('pk', flat=True)).order_by('-tanggal')[:3 - related_programs.count()]
+        related_programs = list(related_programs) + list(extra_programs)
+
+    return render(request, 'core/detail-programs.html', {
+        'program': program_data,
+        'related_programs': related_programs
+    })
