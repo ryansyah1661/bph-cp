@@ -47,13 +47,13 @@
         
         <!-- BAGIAN KIRI: KONTEN BERITA -->
         <div class="md:w-3/4">
-            <program class="prose prose-sm md:prose-base max-w-none text-on-surface-variant font-body-md text-base leading-relaxed text-left">
+            <article class="prose prose-sm md:prose-base max-w-none text-on-surface-variant font-body-md text-base leading-relaxed text-left">
                 {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
                     {{ program.deskripsi_en|default:program.deskripsi|safe }}
                 {% else %}
                     {{ program.deskripsi|safe }}
                 {% endif %}
-            </program>
+            </article>
 
 
         </div>
@@ -61,7 +61,7 @@
         <!-- BAGIAN KANAN: METADATA -->
         <aside class="md:w-1/4 print:hidden">
             <div class="sticky top-28 bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm">
-                <h4 class="font-bold text-slate-800 mb-6 border-b border-slate-200 pb-3">Informasi Berita</h4>
+                <h4 class="font-bold text-slate-800 mb-6 border-b border-slate-200 pb-3">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Program Info{% else %}Informasi Program{% endif %}</h4>
                 
                 <div class="flex flex-col gap-5 text-sm text-slate-600">
                     <div>
@@ -89,9 +89,9 @@
                     {% endif %}
                     
                     <div class="mt-4 pt-5 border-t border-slate-200">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-4 py-2 rounded-lg flex items-center justify-center gap-2 w-full shadow-sm">
-                            <span class="material-symbols-outlined text-[16px]">newspaper</span>
-                            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}News{% else %}{% trans "Berita" %}{% endif %}
+                        <span class="bg-emerald-600 text-white text-xs font-bold px-4 py-2 rounded-lg flex items-center justify-center gap-2 w-full shadow-sm">
+                            <span class="material-symbols-outlined text-[16px]">event</span>
+                            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Program{% else %}Program{% endif %}
                         </span>
                     </div>
                 </div>
@@ -101,11 +101,11 @@
             {% if related_programs %}
             <div class="mt-8 print-hidden">
                 <h3 class="text-lg font-bold text-on-surface mb-4 border-b border-slate-200 pb-2">
-                    {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Related News{% else %}{% trans "Berita Terkait" %}{% endif %}
+                    {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Related Programs{% else %}{% trans "Program Terkait" %}{% endif %}
                 </h3>
                 <div class="flex flex-col gap-4">
                     {% for rel in related_programs %}
-                    <a href="{% url 'detail-programs' slug=rel.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}" class="group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300" style="text-decoration: none;">
+                    <a href="{% url 'detail-program' slug=rel.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}" class="group flex flex-col bg-surface-white border border-border-subtle rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300" style="text-decoration: none;">
                         <div class="relative w-full aspect-video overflow-hidden bg-surface-container">
                             {% if rel.gambar %}
                             <img src="{{ rel.gambar.url }}" alt="{{ rel.judul }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
