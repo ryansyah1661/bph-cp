@@ -202,13 +202,15 @@
         {% for loc in locations_with_projects %}
           {% if loc.kode_wilayah %}
           <div class="overflow-x-auto rounded-2xl border border-gray-100 shadow-sm hidden id-list-proyek" id="list-proyek-{{ loc.kode_wilayah }}">
-            <table class="w-full text-left border-collapse min-w-[650px]">
+            <table class="w-full text-left border-collapse min-w-[750px]">
               <thead>
                 <tr class="bg-slate-50 border-b border-gray-100 text-xs uppercase font-extrabold text-slate-500 tracking-wider">
                   <th class="py-4 px-6 w-16 text-center">No</th>
                   <th class="py-4 px-6">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Project{% else %}Proyek{% endif %}</th>
+                  <th class="py-4 px-6">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Client{% else %}Klien{% endif %}</th>
                   <th class="py-4 px-6">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Location{% else %}Lokasi{% endif %}</th>
                   <th class="py-4 px-6 text-center w-28">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Year{% else %}Tahun{% endif %}</th>
+                  <th class="py-4 px-6 text-center w-32">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Action{% else %}Aksi{% endif %}</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-100 text-sm font-medium text-slate-700">
@@ -219,12 +221,24 @@
                     {{ proj.name }}
                   </td>
                   <td class="py-4 px-6 text-slate-600">
+                    {% if proj.client %}
+                      <span class="font-semibold">{{ proj.client.nama }}</span>
+                    {% else %}
+                      <span class="text-slate-400 italic">-</span>
+                    {% endif %}
+                  </td>
+                  <td class="py-4 px-6 text-slate-600">
                     <span class="inline-block bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-xs font-semibold">
                       {{ loc.nama_provinsi }}
                     </span>
                   </td>
                   <td class="py-4 px-6 text-center font-semibold text-slate-600">
                     {{ proj.tahun }}
+                  </td>
+                  <td class="py-4 px-6 text-center">
+                    <button type="button" onclick="event.stopPropagation(); openProjectModal('{{ proj.id }}');" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-slate-100 hover:bg-primary text-slate-600 hover:text-white text-xs font-bold rounded-lg transition-all shadow-sm">
+                      {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Detail{% else %}Detail{% endif %} <span class="material-symbols-outlined text-[16px]">visibility</span>
+                    </button>
                   </td>
                 </tr>
                 {% empty %}
@@ -329,6 +343,63 @@
 {% endblock %}
 
 {% block extra_js %}
+<!-- Modals Container moved outside main to prevent transform issues -->
+<div>
+  {% for loc in locations_with_projects %}
+    {% for project in loc.projects.all %}
+      {% include 'core/partials/project_modal.html' %}
+    {% endfor %}
+  {% endfor %}
+</div>
+
+<script>
+  function openProjectModal(projectId) {
+    const modal = document.getElementById('project-modal-' + projectId);
+    const content = document.getElementById('project-modal-content-' + projectId);
+    if (modal && content) {
+      modal.classList.remove('pointer-events-none', 'opacity-0');
+      content.classList.remove('scale-95');
+      content.classList.add('scale-100');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeProjectModal(projectId) {
+    const modal = document.getElementById('project-modal-' + projectId);
+    const content = document.getElementById('project-modal-content-' + projectId);
+    if (modal && content) {
+      modal.classList.add('opacity-0');
+      content.classList.remove('scale-100');
+      content.classList.add('scale-95');
+      modal.classList.add('pointer-events-none');
+      setTimeout(() => {
+        document.body.style.overflow = '';
+      }, 300);
+    }
+  }
+
+  // Close modal when clicking outside content
+  document.addEventListener('click', function(e) {
+    if (e.target.id && e.target.id.startsWith('project-modal-') && !e.target.id.includes('content')) {
+      const projectId = e.target.id.replace('project-modal-', '');
+      closeProjectModal(projectId);
+    }
+  });
+
+  // Close modal on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      const activeModals = document.querySelectorAll('[id^="project-modal-"]:not(.pointer-events-none)');
+      activeModals.forEach(modal => {
+        if (!modal.id.includes('content')) {
+          const projectId = modal.id.replace('project-modal-', '');
+          closeProjectModal(projectId);
+        }
+      });
+    }
+  });
+</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 
 <script>

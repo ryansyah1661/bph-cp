@@ -1,0 +1,38 @@
+{% load static i18n %}
+
+<div id="project-modal-{{ project.id }}" class="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+  <div class="bg-white w-11/12 h-[90vh] md:w-4/5 md:h-[90vh] rounded-2xl overflow-hidden flex flex-col shadow-2xl transform scale-95 transition-transform duration-300" id="project-modal-content-{{ project.id }}">
+    
+    <!-- Modal Header -->
+    <div class="flex justify-between items-center px-4 py-3 bg-slate-50 border-b border-gray-200">
+      <h3 class="font-bold text-slate-700 text-sm flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-lg">description</span>
+        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Project Details{% else %}Detail Proyek{% endif %}
+      </h3>
+      <div class="flex items-center gap-3">
+        <button type="button" onclick="closeProjectModal('{{ project.id }}')" class="text-slate-400 hover:text-red-500 transition-colors p-1" aria-label="Tutup">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Modal Body -->
+    <div class="flex-grow w-full h-full bg-white relative overflow-y-auto">
+      <div class="px-6 py-8 md:px-12 md:py-10 text-on-surface-variant font-body-md text-body-md leading-relaxed prose max-w-none custom-project-content max-w-4xl mx-auto">
+        
+        <h1 class="text-2xl md:text-3xl font-black text-emerald-950 mb-2 leading-tight">{{ project.name }}</h1>
+        <p class="text-sm text-primary font-bold mb-8 border-b border-gray-100 pb-4">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Project Year:{% else %}Tahun Pelaksanaan:{% endif %} {{ project.tahun }}
+        </p>
+
+        {% if project.description %}
+          {{ project.description|safe }}
+        {% else %}
+          <p class="text-gray-400 italic">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No description available for this project.{% else %}Belum ada deskripsi untuk proyek ini.{% endif %}</p>
+        {% endif %}
+        
+      </div>
+    </div>
+
+  </div>
+</div>

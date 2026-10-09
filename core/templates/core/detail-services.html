@@ -9,7 +9,7 @@
   {% if service.portfolio == 'NRM' %}
     {% include 'core/partials/hero-banner.html' with title=service.title subtitle="Natural Resources Management" bg_image=service.bg_image|default:"images/forest-services.jpg" %}
   {% else %}
-    {% include 'core/partials/hero-banner.html' with title=service.title subtitle="Natural Resources Understanding" bg_image=service.bg_image|default:"images/forest-services.jpg" %}
+    {% include 'core/partials/hero-banner.html' with title=service.title subtitle="Natural Resources Assessment" bg_image=service.bg_image|default:"images/forest-services.jpg" %}
   {% endif %}
 
   <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-section-gap grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
@@ -19,6 +19,44 @@
       <div class="prose max-w-none text-on-background font-body-lg text-body-lg leading-relaxed text-justify md:text-left space-y-4 custom-service-content">
         {{ service.approach|safe }}
       </div>
+
+      {% if service.projects.all %}
+      <div class="mt-12 pt-8 border-t border-border-subtle">
+        <div class="flex items-center mb-8">
+          <h2 class="text-2xl md:text-3xl font-black text-emerald-950 uppercase tracking-tight pr-6">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}OUR <span class="text-primary font-light">EXPERIENCE</span>{% else %}PENGALAMAN <span class="text-primary font-light">BPH</span>{% endif %}
+          </h2>
+          <div class="h-px bg-border-subtle flex-1"></div>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-gray-100 shadow-sm">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 border-b border-gray-100 text-xs uppercase font-extrabold text-slate-500 tracking-wider">
+                <th class="py-3 px-5 w-14 text-center">No</th>
+                <th class="py-3 px-5">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Project{% else %}Proyek{% endif %}</th>
+                <th class="py-3 px-5 text-center w-24">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Year{% else %}Tahun{% endif %}</th>
+                <th class="py-3 px-5 text-center w-28">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Action{% else %}Aksi{% endif %}</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 text-sm font-medium text-slate-700">
+              {% for project in service.projects.all %}
+              <tr class="hover:bg-slate-50/80 transition-colors">
+                <td class="py-3.5 px-5 text-center font-bold text-slate-400">{{ forloop.counter }}</td>
+                <td class="py-3.5 px-5 font-bold text-[#308935]">{{ project.name }}</td>
+                <td class="py-3.5 px-5 text-center font-semibold text-slate-600">{{ project.tahun }}</td>
+                <td class="py-3.5 px-5 text-center">
+                  <a href="{% url 'detail-experience' project.slug %}" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-slate-100 hover:bg-primary text-slate-600 hover:text-white text-xs font-bold rounded-lg transition-all shadow-sm">
+                    Detail <span class="material-symbols-outlined text-[16px]">visibility</span>
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% endif %}
     </div>
 
     <!-- KOLOM KANAN (SIDEBAR NAVIGASI LAYANAN) -->
@@ -43,11 +81,11 @@
           </nav>
         </div>
 
-        <!-- KELOMPOK NRU -->
+        <!-- KELOMPOK NRA -->
         <div class="space-y-3 pt-4">
           <h3 class="font-headline-lg text-[11px] font-bold text-on-surface-variant uppercase tracking-widest flex items-center gap-1.5 opacity-70 select-none leading-none">
             <span class="material-symbols-outlined text-base font-bold">analytics</span>
-            Natural Resources Understanding (NRU)
+            Natural Resources Assessment (NRA)
           </h3>
           <nav class="space-y-1 pl-2 border-l border-border-subtle/80">
             {% for item in nru_services %}

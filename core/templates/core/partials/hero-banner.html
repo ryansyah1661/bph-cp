@@ -12,12 +12,6 @@
   </div>
 
   <div class="relative z-10 text-center max-w-4xl px-margin-mobile md:px-0 text-surface-white">
-    
-    {% if subtitle %}
-    <span class="font-label-caps text-label-caps text-tertiary tracking-widest uppercase mb-4 block drop-shadow-md">
-      {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}{{ subtitle_en|default:subtitle }}{% else %}{{ subtitle }}{% endif %}
-    </span>
-    {% endif %}
 
     <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-surface-white drop-shadow-lg leading-tight {% if desc %}mb-6{% endif %}">
       {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}{{ title_en|default:title }}{% else %}{{ title }}{% endif %}
