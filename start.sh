@@ -11,5 +11,8 @@ if [ "$LOAD_INITIAL_DATA" = "true" ]; then
 fi
 
 echo "=== Menjalankan Web Server Gunicorn ==="
-APP_PORT="${PORT:-8000}"
-exec gunicorn bph_project.wsgi:application --bind 0.0.0.0:${APP_PORT} --workers 2 --timeout 120
+BIND_ARGS="--bind 0.0.0.0:8080 --bind 0.0.0.0:8000"
+if [ -n "$PORT" ] && [ "$PORT" != "8080" ] && [ "$PORT" != "8000" ]; then
+    BIND_ARGS="$BIND_ARGS --bind 0.0.0.0:${PORT}"
+fi
+exec gunicorn bph_project.wsgi:application ${BIND_ARGS} --workers 2 --timeout 120

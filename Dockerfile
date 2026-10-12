@@ -35,6 +35,7 @@ RUN chmod +x /app/start.sh
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
+EXPOSE 8080
 EXPOSE 8000
 
 CMD ["/app/start.sh"]
