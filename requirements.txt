@@ -1,4 +1,4 @@
-﻿asgiref==3.11.1
+asgiref==3.11.1
 click==8.4.1
 colorama==0.4.6
 cssbeautifier==1.15.4
@@ -26,3 +26,6 @@ tomli==2.4.1
 tqdm==4.67.3
 typing_extensions==4.15.0
 tzdata==2026.2
+dj-database-url==3.1.2
+gunicorn==26.2.0
+whitenoise==6.12.0

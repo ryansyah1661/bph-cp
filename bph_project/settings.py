@@ -2,6 +2,7 @@ import os
 import ctypes
 from pathlib import Path
 from dotenv import load_dotenv
+import dj_database_url
 
 # Konfigurasi GDAL/GEOS untuk Windows (OSGeo4W)
 if os.name == 'nt':
@@ -17,9 +18,15 @@ load_dotenv(BASE_DIR / '.env')
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fallback-key')
 
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 't')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.onrender.com',
+    'http://127.0.0.1',
+    'http://localhost',
+]
 
 INSTALLED_APPS = [
     'modeltranslation',  # Ditambahkan untuk multi-bahasa data database
@@ -36,6 +43,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',  # Ditambahkan untuk sistem terjemahan Django i18n
     'core.middleware.LanguageSwitchMiddleware',   # Ditambahkan untuk switcher bahasa instan ?lang=id/en
@@ -66,16 +74,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'bph_project.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',  # Diubah ke database spasial PostGIS
-        'NAME': 'db_bph',
-        'USER': 'postgres',
-        'PASSWORD': 'ryan1602',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+DATABASE_URL = os.getenv('DATABASE_URL')
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            engine='django.contrib.gis.db.backends.postgis',
+            ssl_require=True
+        )
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',  # Diubah ke database spasial PostGIS
+            'NAME': 'db_bph',
+            'USER': 'postgres',
+            'PASSWORD': 'ryan1602',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -102,9 +121,11 @@ LOCALE_PATHS = [
 ]
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
