@@ -65,11 +65,14 @@
         
         <!-- KELOMPOK NRM -->
         <div class="space-y-3">
-          <h3 class="font-headline-lg text-[11px] font-bold text-primary uppercase tracking-widest flex items-center gap-1.5 opacity-90 select-none leading-none">
-            <span class="material-symbols-outlined text-base font-bold">forest</span>
-            Natural Resources Management (NRM)
-          </h3>
-          <nav class="space-y-1 pl-2 border-l border-border-subtle/80">
+          <button id="btn-nrm" onclick="toggleAccordion('nrm')" class="w-full font-headline-lg text-[11px] font-bold {% if service.portfolio == 'NRM' %}text-primary opacity-100{% else %}text-on-surface-variant opacity-70{% endif %} uppercase tracking-widest flex items-center justify-between gap-1.5 select-none leading-none cursor-pointer bg-transparent border-none p-0 hover:opacity-100 transition-all">
+            <span class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-base font-bold">forest</span>
+              Natural Resources Management (NRM)
+            </span>
+            <span id="arrow-nrm" class="material-symbols-outlined text-sm transition-transform duration-300 {% if service.portfolio == 'NRM' %}rotate-180{% endif %}">expand_more</span>
+          </button>
+          <nav id="accordion-nrm" class="space-y-1 pl-2 border-l border-border-subtle/80 overflow-hidden transition-all duration-300 {% if service.portfolio == 'NRM' %}max-h-[600px] opacity-100 pointer-events-auto{% else %}max-h-0 opacity-0 pointer-events-none{% endif %}">
             {% for item in nrm_services %}
             <a href="{% url 'detail-services' slug=item.slug %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if item.slug == service.slug %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
               <span>{{ item.title }}</span>
@@ -82,19 +85,22 @@
         </div>
 
         <!-- KELOMPOK NRA -->
-        <div class="space-y-3 pt-4">
-          <h3 class="font-headline-lg text-[11px] font-bold text-on-surface-variant uppercase tracking-widest flex items-center gap-1.5 opacity-70 select-none leading-none">
-            <span class="material-symbols-outlined text-base font-bold">analytics</span>
-            Natural Resources Assessment (NRA)
-          </h3>
-          <nav class="space-y-1 pl-2 border-l border-border-subtle/80">
+        <div class="space-y-3 pt-4 border-t border-border-subtle/60">
+          <button id="btn-nra" onclick="toggleAccordion('nra')" class="w-full font-headline-lg text-[11px] font-bold {% if service.portfolio != 'NRM' %}text-primary opacity-100{% else %}text-on-surface-variant opacity-70{% endif %} uppercase tracking-widest flex items-center justify-between gap-1.5 select-none leading-none cursor-pointer bg-transparent border-none p-0 hover:opacity-100 transition-all">
+            <span class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-base font-bold">analytics</span>
+              Natural Resources Assessment (NRA)
+            </span>
+            <span id="arrow-nra" class="material-symbols-outlined text-sm transition-transform duration-300 {% if service.portfolio != 'NRM' %}rotate-180{% endif %}">expand_more</span>
+          </button>
+          <nav id="accordion-nra" class="space-y-1 pl-2 border-l border-border-subtle/80 overflow-hidden transition-all duration-300 {% if service.portfolio != 'NRM' %}max-h-[600px] opacity-100 pointer-events-auto{% else %}max-h-0 opacity-0 pointer-events-none{% endif %}">
             {% for item in nru_services %}
             <a href="{% url 'detail-services' slug=item.slug %}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] md:text-sm font-semibold transition-all leading-snug {% if item.slug == service.slug %} bg-primary text-surface-white shadow-sm {% else %} text-on-surface-variant hover:bg-surface hover:text-primary {% endif %}">
               <span>{{ item.title }}</span>
               <span class="material-symbols-outlined text-[10px] shrink-0 ml-2 font-bold transform {% if item.slug == service.slug %} translate-x-0.5 {% endif %}">arrow_forward_ios</span>
             </a>
             {% empty %}
-            <p class="text-xs text-on-surface-variant px-3 py-2">{% trans "Belum ada layanan NRU." %}</p>
+            <p class="text-xs text-on-surface-variant px-3 py-2">{% trans "Belum ada layanan NRA." %}</p>
             {% endfor %}
           </nav>
         </div>
@@ -123,4 +129,54 @@
     margin-bottom: 0.5rem;
   }
 </style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function toggleAccordion(target) {
+    const isNRM = (target === 'nrm');
+    const targetNav = document.getElementById(isNRM ? 'accordion-nrm' : 'accordion-nra');
+    const targetArrow = document.getElementById(isNRM ? 'arrow-nrm' : 'arrow-nra');
+    const targetBtn = document.getElementById(isNRM ? 'btn-nrm' : 'btn-nra');
+    
+    const otherNav = document.getElementById(isNRM ? 'accordion-nra' : 'accordion-nrm');
+    const otherArrow = document.getElementById(isNRM ? 'arrow-nra' : 'arrow-nrm');
+    const otherBtn = document.getElementById(isNRM ? 'btn-nra' : 'btn-nrm');
+
+    if (!targetNav) return;
+
+    const isOpen = targetNav.classList.contains('max-h-[600px]');
+
+    if (isOpen) {
+      // Tutup target
+      targetNav.classList.remove('max-h-[600px]', 'opacity-100', 'pointer-events-auto');
+      targetNav.classList.add('max-h-0', 'opacity-0', 'pointer-events-none');
+      if (targetArrow) targetArrow.classList.remove('rotate-180');
+      if (targetBtn) {
+        targetBtn.classList.remove('text-primary', 'opacity-100');
+        targetBtn.classList.add('text-on-surface-variant', 'opacity-70');
+      }
+    } else {
+      // Buka target
+      targetNav.classList.remove('max-h-0', 'opacity-0', 'pointer-events-none');
+      targetNav.classList.add('max-h-[600px]', 'opacity-100', 'pointer-events-auto');
+      if (targetArrow) targetArrow.classList.add('rotate-180');
+      if (targetBtn) {
+        targetBtn.classList.add('text-primary', 'opacity-100');
+        targetBtn.classList.remove('text-on-surface-variant', 'opacity-70');
+      }
+
+      // Tutup kategori yang lain (eksklusif)
+      if (otherNav) {
+        otherNav.classList.remove('max-h-[600px]', 'opacity-100', 'pointer-events-auto');
+        otherNav.classList.add('max-h-0', 'opacity-0', 'pointer-events-none');
+      }
+      if (otherArrow) otherArrow.classList.remove('rotate-180');
+      if (otherBtn) {
+        otherBtn.classList.remove('text-primary', 'opacity-100');
+        otherBtn.classList.add('text-on-surface-variant', 'opacity-70');
+      }
+    }
+  }
+</script>
 {% endblock %}

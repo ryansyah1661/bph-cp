@@ -3,9 +3,25 @@
 
 <section class="relative w-full h-[614px] min-h-[500px] flex items-center justify-center overflow-hidden bg-on-background">
   <div class="absolute inset-0 z-0">
-    <img class="w-full h-full object-cover" 
-         alt="{{ title }}" 
-         src="{% static '' %}{{ bg_image }}"/>
+    {% if bg_image.url %}
+      <img class="w-full h-full object-cover" 
+           alt="{{ title }}" 
+           src="{{ bg_image.url }}"/>
+    {% elif bg_image %}
+      {% if '/media/' in bg_image or 'http' in bg_image %}
+        <img class="w-full h-full object-cover" 
+             alt="{{ title }}" 
+             src="{{ bg_image }}"/>
+      {% else %}
+        <img class="w-full h-full object-cover" 
+             alt="{{ title }}" 
+             src="{% static '' %}{{ bg_image }}"/>
+      {% endif %}
+    {% else %}
+      <img class="w-full h-full object-cover" 
+           alt="{{ title }}" 
+           src="{% static 'images/about-hero.jpg' %}"/>
+    {% endif %}
     
     <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-transparent"></div>
     <div class="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background via-background/60 to-transparent"></div>

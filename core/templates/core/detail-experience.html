@@ -99,15 +99,45 @@
             </div>
             <div>
               <span class="text-text-muted block text-xs uppercase tracking-wider font-bold">{% trans "Lokasi Wilayah" %}</span>
-              <span class="text-on-surface font-semibold mt-0.5 block flex items-center gap-1">
-                <span class="material-symbols-outlined text-sm text-primary">location_on</span>
-                {{ project.location.nama_provinsi|default:"Kawasan Kerja Lapangan Indonesia" }}
-              </span>
+              {% if project.locations.all %}
+                <div class="mt-1 flex flex-wrap gap-1.5">
+                  {% for loc in project.locations.all %}
+                    <span class="inline-flex items-center gap-1 bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg text-xs font-semibold">
+                      <span class="material-symbols-outlined text-[13px] text-primary">location_on</span>
+                      {{ loc.nama_provinsi }}
+                    </span>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <span class="text-on-surface font-semibold mt-0.5 block flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm text-primary">location_on</span>
+                  Kawasan Kerja Lapangan Indonesia
+                </span>
+              {% endif %}
             </div>
+
             <div>
               <span class="text-text-muted block text-xs uppercase tracking-wider font-bold">{% trans "Tahun Pelaksanaan" %}</span>
               <span class="text-on-surface font-semibold mt-0.5 block">{{ project.tahun|default:"2026" }}</span>
             </div>
+
+            {% if project.service_portfolio %}
+            <div>
+              <span class="text-text-muted block text-xs uppercase tracking-wider font-bold">{% trans "Portofolio Layanan" %}</span>
+              <span class="text-on-surface font-semibold mt-0.5 block">{{ project.service_portfolio.title }}</span>
+            </div>
+            {% endif %}
+
+            {% if project.categories.all %}
+            <div>
+              <span class="text-text-muted block text-xs uppercase tracking-wider font-bold">{% trans "Kategori Proyek" %}</span>
+              <div class="mt-1 flex flex-wrap gap-1.5">
+                {% for cat in project.categories.all %}
+                  <span class="inline-block bg-primary/10 text-primary px-2.5 py-1 rounded-lg text-xs font-bold">{{ cat.name }}</span>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
           </div>
         </div>
         <a href="{% url 'experience' %}" class="w-full inline-flex items-center justify-center gap-2 border-2 border-border-subtle text-on-surface-variant font-label-caps text-xs font-bold uppercase tracking-wider py-3.5 rounded-xl hover:border-primary hover:text-primary transition-all duration-300" style="text-decoration: none;">
