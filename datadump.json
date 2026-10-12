@@ -1,936 +1,936 @@
-[
-{
-  "model": "core.category",
-  "pk": 4,
-  "fields": {
-    "name": "Sosial",
-    "name_ind": "Sosial",
-    "name_en": "Social",
-    "slug": "sosial",
-    "slug_ind": "sosial",
-    "slug_en": "social"
-  }
-},
-{
-  "model": "core.folder",
-  "pk": 7,
-  "fields": {
-    "nama": "Album Dokumentansi 2018",
-    "nama_ind": "Album Dokumentansi 2018",
-    "nama_en": "2018 Documentation Album",
-    "tahun": 2018,
-    "kategori": null,
-    "created_at": "2026-08-04T05:32:32.066Z"
-  }
-},
-{
-  "model": "core.folder",
-  "pk": 8,
-  "fields": {
-    "nama": "hahaha",
-    "nama_ind": "hahaha",
-    "nama_en": "hihiihihi",
-    "tahun": 2026,
-    "kategori": null,
-    "created_at": "2026-08-07T10:07:14.798Z"
-  }
-},
-{
-  "model": "core.service",
-  "pk": 1,
-  "fields": {
-    "title": "Rehabilitasi Hutan dan Lahan",
-    "title_ind": "Rehabilitasi Hutan dan Lahan",
-    "title_en": "Forest and Land Rehabilitation",
-    "slug": "rehabilitasi-hutan-dan-lahan",
-    "slug_ind": "rehabilitasi-hutan-dan-lahan",
-    "slug_en": "forest-and-land-rehabilitation",
-    "portfolio": "NRM",
-    "icon": "",
-    "thumbnail": "services/thumbs/artikel2.jpg",
-    "bg_image": "",
-    "approach": "<p>deskripsinya </p>",
-    "approach_ind": "<p>deskripsinya </p>",
-    "approach_en": "<p>description</p>",
-    "categories": []
-  }
-},
-{
-  "model": "core.service",
-  "pk": 3,
-  "fields": {
-    "title": "Inventarisasi Sumberdaya Lahan",
-    "title_ind": "Inventarisasi Sumberdaya Lahan",
-    "title_en": "Land Resource Inventory",
-    "slug": "inventarisasi-sumberdaya-lahan",
-    "slug_ind": "inventarisasi-sumberdaya-lahan",
-    "slug_en": "land-resource-inventory",
-    "portfolio": "NRM",
-    "icon": "",
-    "thumbnail": "services/thumbs/experience-1.jpg",
-    "bg_image": "",
-    "approach": "<p>deskripsi</p>",
-    "approach_ind": "<p>deskripsi</p>",
-    "approach_en": "<p>description</p>",
-    "categories": []
-  }
-},
-{
-  "model": "core.service",
-  "pk": 4,
-  "fields": {
-    "title": "Penguatan Kelembagaan",
-    "title_ind": "Penguatan Kelembagaan",
-    "title_en": "Institutional Strengthening",
-    "slug": "penguatan-kelembagaan",
-    "slug_ind": "penguatan-kelembagaan",
-    "slug_en": "institutional-strengthening",
-    "portfolio": "NRM",
-    "icon": "",
-    "thumbnail": "services/thumbs/services8.jpg",
-    "bg_image": "",
-    "approach": "<p>deskripsi</p>",
-    "approach_ind": "<p>deskripsi</p>",
-    "approach_en": "<p>description</p>",
-    "categories": []
-  }
-},
-{
-  "model": "core.service",
-  "pk": 5,
-  "fields": {
-    "title": "Pengelolaan Kesehatan Tanaman",
-    "title_ind": "Pengelolaan Kesehatan Tanaman",
-    "title_en": "Plant Health Management",
-    "slug": "pengelolaan-kesehatan-tanaman",
-    "slug_ind": "pengelolaan-kesehatan-tanaman",
-    "slug_en": "plant-health-management",
-    "portfolio": "NRM",
-    "icon": "",
-    "thumbnail": "services/thumbs/services6.jpg",
-    "bg_image": "",
-    "approach": "<p>deskripsi</p>",
-    "approach_ind": "<p>deskripsi</p>",
-    "approach_en": "<p>description</p>",
-    "categories": []
-  }
-},
-{
-  "model": "core.service",
-  "pk": 6,
-  "fields": {
-    "title": "Penilaian Keanekaragaman Hayati",
-    "title_ind": "Penilaian Keanekaragaman Hayati",
-    "title_en": "Biodiversity Assessment",
-    "slug": "penilaian-keanekaragaman-hayati",
-    "slug_ind": "penilaian-keanekaragaman-hayati",
-    "slug_en": "biodiversity-assessment",
-    "portfolio": "NRU",
-    "icon": "",
-    "thumbnail": "services/thumbs/services7.jpg",
-    "bg_image": "",
-    "approach": "<p>deskripsi</p>",
-    "approach_ind": "<p>deskripsi</p>",
-    "approach_en": "<p>description</p>",
-    "categories": []
-  }
-},
-{
-  "model": "core.service",
-  "pk": 7,
-  "fields": {
-    "title": "Penilaian Sosial",
-    "title_ind": "Penilaian Sosial",
-    "title_en": "Social Assessment",
-    "slug": "penilaian-sosial",
-    "slug_ind": "penilaian-sosial",
-    "slug_en": "social-assessment",
-    "portfolio": "NRU",
-    "icon": "",
-    "thumbnail": "services/thumbs/services3.jpg",
-    "bg_image": "",
-    "approach": "<p>deskripsi</p>",
-    "approach_ind": "<p>deskripsi</p>",
-    "approach_en": "<p>description</p>",
-    "categories": []
-  }
-},
-{
-  "model": "core.service",
-  "pk": 8,
-  "fields": {
-    "title": "Kajian Tanah dan Hidrologi",
-    "title_ind": "Kajian Tanah dan Hidrologi",
-    "title_en": "Soil and Hydrology Study",
-    "slug": "kajian-tanah-dan-hidrologi",
-    "slug_ind": "kajian-tanah-dan-hidrologi",
-    "slug_en": "soil-and-hydrology-study",
-    "portfolio": "NRU",
-    "icon": "",
-    "thumbnail": "services/thumbs/services9.jpg",
-    "bg_image": "",
-    "approach": "<p>deskripsi</p>",
-    "approach_ind": "<p>deskripsi</p>",
-    "approach_en": "<p>description</p>",
-    "categories": []
-  }
-},
-{
-  "model": "core.service",
-  "pk": 9,
-  "fields": {
-    "title": "Kajian Iklim",
-    "title_ind": "Kajian Iklim",
-    "title_en": "Climate Study",
-    "slug": "kajian-iklim",
-    "slug_ind": "kajian-iklim",
-    "slug_en": "climate-study",
-    "portfolio": "NRU",
-    "icon": "",
-    "thumbnail": "services/thumbs/services10.jpg",
-    "bg_image": "",
-    "approach": "<p>deskripsi</p>",
-    "approach_ind": "<p>deskripsi</p>",
-    "approach_en": "<p>description</p>",
-    "categories": []
-  }
-},
-{
-  "model": "core.location",
-  "pk": 1,
-  "fields": {
-    "nama_provinsi": "Aceh",
-    "nama_provinsi_ind": "Aceh",
-    "nama_provinsi_en": "Aceh",
-    "slug": "aceh",
-    "slug_ind": "aceh",
-    "slug_en": "aceh",
-    "kode_wilayah": "11",
-    "geom": null
-  }
-},
-{
-  "model": "core.location",
-  "pk": 2,
-  "fields": {
-    "nama_provinsi": "Sumatra Utara",
-    "nama_provinsi_ind": "Sumatra Utara",
-    "nama_provinsi_en": "North Sumatra",
-    "slug": "sumatra-utara",
-    "slug_ind": "sumatra-utara",
-    "slug_en": "north-sumatra",
-    "kode_wilayah": "12",
-    "geom": null
-  }
-},
-{
-  "model": "core.location",
-  "pk": 3,
-  "fields": {
-    "nama_provinsi": "Sumatra Barat",
-    "nama_provinsi_ind": "Sumatra Barat",
-    "nama_provinsi_en": "West Sumatra",
-    "slug": "sumatra-barat",
-    "slug_ind": "sumatra-barat",
-    "slug_en": "west-sumatra",
-    "kode_wilayah": "13",
-    "geom": null
-  }
-},
-{
-  "model": "core.location",
-  "pk": 4,
-  "fields": {
-    "nama_provinsi": "Riau",
-    "nama_provinsi_ind": "Riau",
-    "nama_provinsi_en": "Riau",
-    "slug": "riau",
-    "slug_ind": "riau",
-    "slug_en": "riau",
-    "kode_wilayah": "14",
-    "geom": null
-  }
-},
-{
-  "model": "core.location",
-  "pk": 5,
-  "fields": {
-    "nama_provinsi": "Jambi",
-    "nama_provinsi_ind": "Jambi",
-    "nama_provinsi_en": "Jambi",
-    "slug": "jambi",
-    "slug_ind": "jambi",
-    "slug_en": "jambi",
-    "kode_wilayah": "15",
-    "geom": null
-  }
-},
-{
-  "model": "core.location",
-  "pk": 6,
-  "fields": {
-    "nama_provinsi": "Sumatra Selatan",
-    "nama_provinsi_ind": "Sumatra Selatan",
-    "nama_provinsi_en": "South Sumatra",
-    "slug": "sumatra-selatan",
-    "slug_ind": "sumatra-selatan",
-    "slug_en": "south-sumatra",
-    "kode_wilayah": "16",
-    "geom": null
-  }
-},
-{
-  "model": "core.location",
-  "pk": 7,
-  "fields": {
-    "nama_provinsi": "Bengkulu",
-    "nama_provinsi_ind": "Bengkulu",
-    "nama_provinsi_en": "Bengkulu",
-    "slug": "bengkulu",
-    "slug_ind": "bengkulu",
-    "slug_en": "bengkulu",
-    "kode_wilayah": "17",
-    "geom": null
-  }
-},
-{
-  "model": "core.location",
-  "pk": 8,
-  "fields": {
-    "nama_provinsi": "Lampung",
-    "nama_provinsi_ind": "Lampung",
-    "nama_provinsi_en": "Lampung",
-    "slug": "lampung",
-    "slug_ind": "lampung",
-    "slug_en": "lampung",
-    "kode_wilayah": "18",
-    "geom": null
-  }
-},
-{
-  "model": "core.location",
-  "pk": 9,
-  "fields": {
-    "nama_provinsi": "Kepulauan Bangka Belitung",
-    "nama_provinsi_ind": "Kepulauan Bangka Belitung",
-    "nama_provinsi_en": "Bangka Belitung Islands",
-    "slug": "kepulauan-bangka-belitung",
-    "slug_ind": "kepulauan-bangka-belitung",
-    "slug_en": "bangka-belitung-islands",
-    "kode_wilayah": "19",
-    "geom": null
-  }
-},
-{
-  "model": "core.location",
-  "pk": 11,
-  "fields": {
-    "nama_provinsi": "Kepulauan Riau",
-    "nama_provinsi_ind": "Kepulauan Riau",
-    "nama_provinsi_en": "Riau Islands",
-    "slug": "kepulauan-riau",
-    "slug_ind": "kepulauan-riau",
-    "slug_en": "riau-islands",
-    "kode_wilayah": "21",
-    "geom": null
-  }
-},
-{
-  "model": "core.location",
-  "pk": 40,
-  "fields": {
-    "nama_provinsi": "DKI Jakarta",
-    "nama_provinsi_ind": "DKI Jakarta",
-    "nama_provinsi_en": "DKI Jakarta",
-    "slug": "dki-jakarta",
-    "slug_ind": "dki-jakarta",
-    "slug_en": "dki-jakarta",
-    "kode_wilayah": "31",
-    "geom": null
-  }
-},
-{
-  "model": "core.location",
-  "pk": 41,
-  "fields": {
-    "nama_provinsi": "Jawa Barat",
-    "nama_provinsi_ind": "Jawa Barat",
-    "nama_provinsi_en": "West Java",
-    "slug": "jawa-barat",
-    "slug_ind": "jawa-barat",
-    "slug_en": "west-java",
-    "kode_wilayah": "32",
-    "geom": null
-  }
-},
-{
-  "model": "core.location",
-  "pk": 42,
-  "fields": {
-    "nama_provinsi": "Sulawesi Tenggara",
-    "nama_provinsi_ind": "Sulawesi Tenggara",
-    "nama_provinsi_en": "Southeast Sulawesi",
-    "slug": "sulawesi-tenggara",
-    "slug_ind": "sulawesi-tenggara",
-    "slug_en": "southeast-sulawesi",
-    "kode_wilayah": "74",
-    "geom": null
-  }
-},
-{
-  "model": "core.location",
-  "pk": 43,
-  "fields": {
-    "nama_provinsi": "Maluku Utara",
-    "nama_provinsi_ind": "Maluku Utara",
-    "nama_provinsi_en": "North Maluku",
-    "slug": "maluku-utara",
-    "slug_ind": "maluku-utara",
-    "slug_en": "north-maluku",
-    "kode_wilayah": "82",
-    "geom": null
-  }
-},
-{
-  "model": "core.location",
-  "pk": 44,
-  "fields": {
-    "nama_provinsi": "Papua",
-    "nama_provinsi_ind": "Papua",
-    "nama_provinsi_en": "Papua",
-    "slug": "papua",
-    "slug_ind": "papua",
-    "slug_en": "papua",
-    "kode_wilayah": "91",
-    "geom": null
-  }
-},
-{
-  "model": "core.client",
-  "pk": 1,
-  "fields": {
-    "nama": "PT Adaro Energy Indonesia, Tbk",
-    "nama_ind": "PT Adaro Energy Indonesia, Tbk",
-    "nama_en": "PT Adaro Energy Indonesia, Tbk",
-    "sektor": "swasta",
-    "logo": "clients/logos/adaro.jpg"
-  }
-},
-{
-  "model": "core.client",
-  "pk": 3,
-  "fields": {
-    "nama": "Balai Pengelolaan Hutan Produksi",
-    "nama_ind": "Balai Pengelolaan Hutan Produksi",
-    "nama_en": "Production Forest Management Agency",
-    "sektor": "publik",
-    "logo": "clients/logos/bphp.png"
-  }
-},
-{
-  "model": "core.client",
-  "pk": 7,
-  "fields": {
-    "nama": "Lestari Capital",
-    "nama_ind": "Lestari Capital",
-    "nama_en": "Lestari Capital",
-    "sektor": "swasta",
-    "logo": "clients/logos/lestari.jpg"
-  }
-},
-{
-  "model": "core.client",
-  "pk": 8,
-  "fields": {
-    "nama": "dsudhsu",
-    "nama_ind": "dsudhsu",
-    "nama_en": "nksksdjksd",
-    "sektor": "publik",
-    "logo": "clients/logos/kawung_GhDkm7S.png"
-  }
-},
-{
-  "model": "core.client",
-  "pk": 9,
-  "fields": {
-    "nama": "test1",
-    "nama_ind": "test1",
-    "nama_en": "test1",
-    "sektor": "swasta",
-    "logo": "clients/logos/adaro_cLPx947.jpg"
-  }
-},
-{
-  "model": "core.client",
-  "pk": 10,
-  "fields": {
-    "nama": "test2",
-    "nama_ind": "test2",
-    "nama_en": "test2",
-    "sektor": "swasta",
-    "logo": "clients/logos/adaro_LfBrai5.jpg"
-  }
-},
-{
-  "model": "core.client",
-  "pk": 11,
-  "fields": {
-    "nama": "test3",
-    "nama_ind": "test3",
-    "nama_en": "test3",
-    "sektor": "swasta",
-    "logo": "clients/logos/adaro_6cqShDf.jpg"
-  }
-},
-{
-  "model": "core.client",
-  "pk": 12,
-  "fields": {
-    "nama": "test4",
-    "nama_ind": "test4",
-    "nama_en": "test4",
-    "sektor": "swasta",
-    "logo": "clients/logos/adaro_EuJY2MY.jpg"
-  }
-},
-{
-  "model": "core.client",
-  "pk": 13,
-  "fields": {
-    "nama": "test5",
-    "nama_ind": "test5",
-    "nama_en": "test5",
-    "sektor": "swasta",
-    "logo": "clients/logos/adaro_4mVxS20.jpg"
-  }
-},
-{
-  "model": "core.client",
-  "pk": 14,
-  "fields": {
-    "nama": "test6",
-    "nama_ind": "test6",
-    "nama_en": "test6",
-    "sektor": "publik",
-    "logo": "clients/logos/adaro_JDIS47W.jpg"
-  }
-},
-{
-  "model": "core.client",
-  "pk": 15,
-  "fields": {
-    "nama": "test7",
-    "nama_ind": "test7",
-    "nama_en": "test7",
-    "sektor": "publik",
-    "logo": "clients/logos/adaro_SdMB5t8.jpg"
-  }
-},
-{
-  "model": "core.client",
-  "pk": 16,
-  "fields": {
-    "nama": "test8",
-    "nama_ind": "test8",
-    "nama_en": "test8",
-    "sektor": "publik",
-    "logo": "clients/logos/adaro_BkTYlAP.jpg"
-  }
-},
-{
-  "model": "core.client",
-  "pk": 17,
-  "fields": {
-    "nama": "test9",
-    "nama_ind": "test9",
-    "nama_en": "test9",
-    "sektor": "publik",
-    "logo": "clients/logos/adaro_1aX76iw.jpg"
-  }
-},
-{
-  "model": "core.project",
-  "pk": 5,
-  "fields": {
-    "name": "Kajian Iklim untuk Pembangunan Berketahanan Iklim (PBI)",
-    "name_ind": "Kajian Iklim untuk Pembangunan Berketahanan Iklim (PBI)",
-    "name_en": "Climate Assessment for Climate-Resilient Development (CRD)",
-    "slug": "kajian-iklim-untuk-pembangunan-berketahanan-iklim-pbi",
-    "slug_ind": "kajian-iklim-untuk-pembangunan-berketahanan-iklim-pbi",
-    "slug_en": "climate-assessment-for-climate-resilient-development-crd",
-    "tahun": 2018,
-    "image": "projects/thumbs/services10.jpg",
-    "description": "<p>deskripsi proyek</p>",
-    "description_ind": "<p>deskripsi proyek</p>",
-    "description_en": "<p>project description</p>",
-    "intro": "",
-    "intro_ind": null,
-    "intro_en": null,
-    "challenge": "",
-    "challenge_ind": null,
-    "challenge_en": null,
-    "methodology": "",
-    "methodology_ind": null,
-    "methodology_en": null,
-    "result": "",
-    "result_ind": null,
-    "result_en": null,
-    "pdf_cover": "",
-    "pdf_file": "",
-    "client": 7,
-    "service_portfolio": 9,
-    "locations": [
-      1,
-      42,
-      43,
-      44
-    ],
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "core.project",
-  "pk": 6,
-  "fields": {
-    "name": "nama proyek",
-    "name_ind": "nama proyek",
-    "name_en": "name project",
-    "slug": "nama-proyek",
-    "slug_ind": "nama-proyek",
-    "slug_en": "name-project",
-    "tahun": 2021,
-    "image": "projects/thumbs/1.jpeg",
-    "description": "<p>deskripsi proyek</p>",
-    "description_ind": "<p>deskripsi proyek</p>",
-    "description_en": "<p>description project</p>",
-    "intro": "",
-    "intro_ind": null,
-    "intro_en": null,
-    "challenge": "",
-    "challenge_ind": null,
-    "challenge_en": null,
-    "methodology": "",
-    "methodology_ind": null,
-    "methodology_en": null,
-    "result": "",
-    "result_ind": null,
-    "result_en": null,
-    "pdf_cover": "",
-    "pdf_file": "",
-    "client": 9,
-    "service_portfolio": 1,
-    "locations": [
-      40,
-      41
-    ],
-    "categories": [
-      4
-    ]
-  }
-},
-{
-  "model": "core.story",
-  "pk": 4,
-  "fields": {
-    "judul": "BANJIR BERULANG DI SOFIFI: HULU TERBUKA, HILIR TERGENANG",
-    "judul_ind": "BANJIR BERULANG DI SOFIFI: HULU TERBUKA, HILIR TERGENANG",
-    "judul_en": "RECURRING FLOODS IN SOFIFI: OPEN UPSTREAM, SUBMERGED DOWNSTREAM",
-    "slug": "banjir-berulang-di-sofifi-hulu-terbuka-hilir-tergenang",
-    "slug_ind": "banjir-berulang-di-sofifi-hulu-terbuka-hilir-tergenang",
-    "slug_en": "recurring-floods-in-sofifi-open-upstream-submerged-downstream",
-    "tanggal": "2026-09-16",
-    "author": "Admin Tamvan",
-    "lokasi": 43,
-    "short": "Desember 2025, perjalanan kami dimulai di pagi buta, saat kami menuju timur ke Indonesia. Maluku Utara menjadi tujuan kami, sebuah provinsi dengan sejarah yang erat kaitannya dengan rempah-rempah dan jalur perdagangan dunia. Ternate, yang sering disebut sebagai \"Kota Rempah,\" menjadi gerbang kami sebelum melanjutkan perjalanan ke Sofifi, ibu kota Provinsi Maluku Utara.",
-    "short_ind": "Desember 2025, perjalanan kami dimulai di pagi buta, saat kami menuju timur ke Indonesia. Maluku Utara menjadi tujuan kami, sebuah provinsi dengan sejarah yang erat kaitannya dengan rempah-rempah dan jalur perdagangan dunia. Ternate, yang sering disebut sebagai \"Kota Rempah,\" menjadi gerbang kami sebelum melanjutkan perjalanan ke Sofifi, ibu kota Provinsi Maluku Utara.",
-    "short_en": "December 2025, our journey began in the early hours of the morning, as we headed east towards Indonesia. North Maluku was our destination, a province with a history closely linked to spices and global trade routes. Ternate, often referred to as the ìCity of Spices,î was our gateway before continuing our journey to Sofifi, the capital of North Maluku Province,",
-    "deskripsi": "<p>Desember 2025, perjalanan kami dimulai di pagi-pagi sekali, saat kami menuju ke timur ke Indonesia. Maluku Utara menjadi tujuan kami, sebuah provinsi dengan sejarah yang erat kaitannya dengan rempah-rempah dan jalur perdagangan global. Ternate, yang sering disebut sebagai ìKota Rempah,î menjadi gerbang kami sebelum melanjutkan perjalanan ke Sofifi, ibu kota Provinsi Maluku Utara yang terletak di Kepulauan Tidore. Kunjungan ini merupakan bagian dari serangkaian validasi lapangan untuk proyek Academic Study for Enhancing Climate Resilience and Action, yang meneliti pengembangan ketahanan iklim di empat sektor prioritas: Kelautan dan Pesisir, Air, Pertanian, dan Kesehatan.&nbsp;</p><p><br></p><p>Di lapangan, banjir menjadi isu strategis di sektor air dan menjadi benang merah yang menghubungkan cerita warga dengan temuan teknis. Banjir tidak lagi dipandang sebagai peristiwa musiman, tetapi telah menjadi bagian dari kehidupan sehari-hari bagi masyarakat di Ternate maupun Sofifi. Warga mengatakan bahwa hujan deras hampir selalu mengakibatkan banjir.</p>",
-    "deskripsi_ind": "<p>Desember 2025, perjalanan kami dimulai di pagi-pagi sekali, saat kami menuju ke timur ke Indonesia. Maluku Utara menjadi tujuan kami, sebuah provinsi dengan sejarah yang erat kaitannya dengan rempah-rempah dan jalur perdagangan global. Ternate, yang sering disebut sebagai ìKota Rempah,î menjadi gerbang kami sebelum melanjutkan perjalanan ke Sofifi, ibu kota Provinsi Maluku Utara yang terletak di Kepulauan Tidore. Kunjungan ini merupakan bagian dari serangkaian validasi lapangan untuk proyek Academic Study for Enhancing Climate Resilience and Action, yang meneliti pengembangan ketahanan iklim di empat sektor prioritas: Kelautan dan Pesisir, Air, Pertanian, dan Kesehatan.&nbsp;</p><p><br></p><p>Di lapangan, banjir menjadi isu strategis di sektor air dan menjadi benang merah yang menghubungkan cerita warga dengan temuan teknis. Banjir tidak lagi dipandang sebagai peristiwa musiman, tetapi telah menjadi bagian dari kehidupan sehari-hari bagi masyarakat di Ternate maupun Sofifi. Warga mengatakan bahwa hujan deras hampir selalu mengakibatkan banjir.</p>",
-    "deskripsi_en": "<p class=\"ql-align-justify\"><span style=\"color: black;\">December 2025, our journey began in the early hours of the morning, as we headed east towards Indonesia. North Maluku was our destination, a province with a history closely linked to spices and global trade routes. Ternate, often referred to as the ìCity of Spices,î was our gateway before continuing our journey to Sofifi, the capital of North Maluku Province, located in the Tidore Islands. This visit was part of a series of field validations for the Academic Study for Enhancing Climate Resilience and Action project, which examines climate resilience development in four priority sectors: Marine and Coastal, Water, Agriculture, and Health.</span></p><p class=\"ql-align-justify\"><br></p><p class=\"ql-align-justify\"><span style=\"color: black;\">In the field, flooding is a strategic issue in the water sector and is a common thread linking residentsí stories with technical findings. Flooding is no longer perceived as a seasonal event, but has become part of everyday life for communities in both Ternate and Sofifi. Residents say that heavy rains almost always result in flooding.</span></p><p><br></p>",
-    "views_count": 3,
-    "gambar": "stories/cerlap.png",
-    "project": null
-  }
-},
-{
-  "model": "core.article",
-  "pk": 7,
-  "fields": {
-    "judul": "Tantangan dan Implementasi RaCP di Indonesia",
-    "judul_ind": "Tantangan dan Implementasi RaCP di Indonesia",
-    "judul_en": "Challenges and Implementation of RaCP in Indonesia",
-    "slug": "tantangan-dan-implementasi-racp-di-indonesia",
-    "slug_ind": "tantangan-dan-implementasi-racp-di-indonesia",
-    "slug_en": "challenges-and-implementation-of-racp-in-indonesia",
-    "tanggal": "2026-09-04",
-    "author": "Admin Tamvan",
-    "short": "Pernahkah Anda mempertanyakan bagaimana pelanggaran pembukaan lahan di masa lalu dapat dipertanggungjawabkan secara adil dan transparan?",
-    "short_ind": "Pernahkah Anda mempertanyakan bagaimana pelanggaran pembukaan lahan di masa lalu dapat dipertanggungjawabkan secara adil dan transparan?",
-    "short_en": "Have you ever questioned how past land-clearing violations can be held accountable in a fair and transparent manner?",
-    "deskripsi": "<p><span style=\"color: rgb(0, 0, 0);\">Pernahkah Anda mempertanyakan bagaimana pelanggaran pembukaan lahan di masa lalu dapat dipertanggungjawabkan secara adil dan transparan? Dalam konteks industri kelapa sawit berkelanjutan, pertanyaan ini dijawab melalui </span><em style=\"color: rgb(0, 0, 0);\">Remediation and Compensation Procedure</em><span style=\"color: rgb(0, 0, 0);\"> (RaCP) yang dikembangkan oleh </span><em style=\"color: rgb(0, 0, 0);\">Roundtable on Sustainable Palm Oil</em><span style=\"color: rgb(0, 0, 0);\"> (RSPO). RaCP dirancang sebagai mekanisme korektif untuk memastikan bahwa pembukaan lahan yang belum patuh sejak 2005 tidak berhenti pada pengakuan administratif, tetapi ditindaklanjuti melalui proses remediasi dan kompensasi yang nyata.</span></p><p><span style=\"color: rgb(0, 0, 0);\">Sebagai salah satu produsen kelapa sawit terbesar di dunia, Indonesia memiliki peran strategis sekaligus tantangan besar dalam implementasi RaCP. Luasnya ekspansi perkebunan pada periode sebelum penerapan standar keberlanjutan yang ketat menyebabkan banyak perusahaan menghadapi kewajiban historis terkait pembukaan lahan tanpa kajian Nilai Konservasi Tinggi (NKT). Kondisi ini menempatkan RaCP bukan sekadar sebagai instrumen kepatuhan, tetapi sebagai ujian nyata komitmen industri sawit nasional terhadap prinsip keberlanjutan, akuntabilitas, dan tata kelola lingkungan yang bertanggung jawab.</span></p><h3><strong style=\"color: rgb(0, 0, 0);\">Racp Sebagai Mekanisme Korektif</strong></h3><p><span style=\"color: rgb(0, 0, 0);\">RaCP diberlakukan sejak 2015 untuk menangani pembukaan lahan sejak November 2005 yang dilakukan tanpa kajian Nilai Konservasi Tinggi (NKT)/</span><em style=\"color: rgb(0, 0, 0);\">High Conservation Value</em><span style=\"color: rgb(0, 0, 0);\"> (HCV). Mekanisme ini berlaku secara global bagi seluruh anggota RSPO dan calon anggota RSPO, mencakup perusahaan induk, anak perusahaan, lahan milik, sewa, atau kelola, serta smallholder skema atau terikat.</span></p><p><span style=\"color: rgb(0, 0, 0);\">Tujuan utama RaCP yaitu:</span></p><ol><li class=\"ql-align-justify\">Memulihkan (<em>remediate</em>) dan/atau mengompensasi (<em>compensate</em>) kehilangan HCV,</li><li class=\"ql-align-justify\">Menjaga integritas standar RSPO, dan</li><li class=\"ql-align-justify\">Memberi jalan bagi perusahaan untuk tetap menuju sertifikasi tanpa menghapus tanggung jawab masa lalu.</li></ol><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Melalui prosedur RaCP, perusahaan diwajibkan mengungkapkan pembukaan lahan yang tidak patuh, menyusun </span><em style=\"color: rgb(0, 0, 0);\">Land Use Change Analysis</em><span style=\"color: rgb(0, 0, 0);\"> (LUCA), serta melaksanakan kewajiban remediasi lingkungan dan kompensasi konservasi maupun sosial. Tahun 2020 tercatat sebanyak 673 kasus RaCP secara global, dengan mayoritas berasal dari Asia dan Oseania. Mengingat besarnya kontribusi Indonesia terhadap produksi sawit global, sebagian signifikan kasus tersebut berkaitan dengan operasi di Indonesia, baik secara langsung maupun melalui grup perusahaan.</span></p><h3 class=\"ql-align-justify\"><strong>Tantangan Implementasi di Lapangan</strong></h3><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Meskipun tingkat pengungkapan kasus relatif tinggi, penyelesaian kewajiban RaCP belum berjalan optimal. Hanya sekitar 45% kasus yang memiliki LUCA yang disetujui dan hanya 18% yang menyelesaikan seluruh proses. Di Indonesia, tantangan ini dipengaruhi oleh kompleksitas perizinan, keterbatasan data historis, serta variasi kapasitas teknis perusahaan.</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Dalam aspek lingkungan, perbedaan tafsir mengenai remediasi dan kompensasi konservasi masih kerap terjadi. Kegiatan restorasi hutan sebagai bentuk kompensasi umumnya dilakukan di luar lokasi kebun, namun bukti implementasi jangka panjang di lapangan masih terbatas. Aspek lain yang tidak kalah penting adalah keterkaitan antara kewajiban RaCP dengan regulasi nasional. Dalam beberapa kasus, rencana remediasi atau kompensasi yang disyaratkan RSPO tidak sepenuhnya selaras dengan kerangka perizinan kehutanan, tata ruang, maupun mekanisme rehabilitasi lahan yang diatur pemerintah. Ketidaksinkronan ini berpotensi memperlambat implementasi, terutama ketika perusahaan harus menavigasi antara kepatuhan terhadap standar sukarela internasional dan kewajiban hukum nasional.</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Selain aspek lingkungan, RaCP juga memiliki dimensi sosial yang signifikan, khususnya ketika pembukaan lahan di masa lalu bersinggungan dengan hak dan kepentingan masyarakat lokal. Proses remediasi dalam konteks ini tidak hanya terbatas pada pemulihan fungsi ekologis, tetapi juga mencakup kompensasi sosial, penyelesaian konflik lahan, serta penguatan partisipasi masyarakat. Tantangan muncul ketika dokumentasi historis terkait persetujuan masyarakat tidak tersedia atau tidak memadai, sehingga memerlukan proses penilaian ulang dan dialog yang intensif. Apabila tidak dikelola secara inklusif dan transparan, kewajiban RaCP justru berpotensi memunculkan konflik baru atau memperpanjang ketidakpercayaan antara perusahaan dan masyarakat.</span></p><h3 class=\"ql-align-justify\"><strong style=\"color: rgb(0, 0, 0);\">Implikasi bagi Indonesia</strong></h3><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Implementasi RaCP memiliki implikasi penting bagi tata kelola perkebunan kelapa sawit di Indonesia. Di satu sisi, RaCP mendorong peningkatan transparansi, pelaporan, dan akuntabilitas perusahaan terhadap dampak lingkungan dan sosial masa lalu. Di sisi lain, mekanisme ini menuntut peningkatan kapasitas teknis, ketersediaan data spasial dan historis yang andal, serta koordinasi lintas pemangku kepentingan. Bagi Indonesia, RaCP dapat menjadi instrumen pembelajaran untuk memperkuat kebijakan pencegahan deforestasi, restorasi ekosistem, dan perlindungan hak masyarakat, sekaligus memperbaiki citra sawit nasional di pasar global.</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Pengalaman implementasi RaCP menunjukkan bahwa mekanisme ini secara konseptual merupakan instrumen penting untuk menjembatani kesenjangan antara praktik masa lalu dan tuntutan keberlanjutan saat ini. Namun, efektivitasnya sangat bergantung pada komitmen perusahaan, kejelasan panduan teknis, serta dukungan kebijakan yang kondusif di tingkat nasional. Bagi Indonesia, penguatan sinergi antara standar RSPO dan regulasi domestik, disertai peningkatan kapasitas pelaku usaha dan pemangku kepentingan lokal, menjadi kunci agar RaCP tidak berhenti sebagai kewajiban administratif, melainkan benar-benar berkontribusi pada pemulihan lingkungan dan keadilan sosial dalam pembangunan kelapa sawit berkelanjutan.</span></p><p class=\"ql-align-justify\"><br></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Referensi:</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Newing, H. 2020. An Independent Review of the RSPO Remediation and Compensation Procedure (RaCP) 2015. </span><em style=\"color: rgb(0, 0, 0);\">Roundtable on Sustainable Palm Oil</em><span style=\"color: rgb(0, 0, 0);\">.</span></p><p class=\"ql-align-justify\"><br></p>",
-    "deskripsi_ind": "<p><span style=\"color: rgb(0, 0, 0);\">Pernahkah Anda mempertanyakan bagaimana pelanggaran pembukaan lahan di masa lalu dapat dipertanggungjawabkan secara adil dan transparan? Dalam konteks industri kelapa sawit berkelanjutan, pertanyaan ini dijawab melalui </span><em style=\"color: rgb(0, 0, 0);\">Remediation and Compensation Procedure</em><span style=\"color: rgb(0, 0, 0);\"> (RaCP) yang dikembangkan oleh </span><em style=\"color: rgb(0, 0, 0);\">Roundtable on Sustainable Palm Oil</em><span style=\"color: rgb(0, 0, 0);\"> (RSPO). RaCP dirancang sebagai mekanisme korektif untuk memastikan bahwa pembukaan lahan yang belum patuh sejak 2005 tidak berhenti pada pengakuan administratif, tetapi ditindaklanjuti melalui proses remediasi dan kompensasi yang nyata.</span></p><p><span style=\"color: rgb(0, 0, 0);\">Sebagai salah satu produsen kelapa sawit terbesar di dunia, Indonesia memiliki peran strategis sekaligus tantangan besar dalam implementasi RaCP. Luasnya ekspansi perkebunan pada periode sebelum penerapan standar keberlanjutan yang ketat menyebabkan banyak perusahaan menghadapi kewajiban historis terkait pembukaan lahan tanpa kajian Nilai Konservasi Tinggi (NKT). Kondisi ini menempatkan RaCP bukan sekadar sebagai instrumen kepatuhan, tetapi sebagai ujian nyata komitmen industri sawit nasional terhadap prinsip keberlanjutan, akuntabilitas, dan tata kelola lingkungan yang bertanggung jawab.</span></p><h3><strong style=\"color: rgb(0, 0, 0);\">Racp Sebagai Mekanisme Korektif</strong></h3><p><span style=\"color: rgb(0, 0, 0);\">RaCP diberlakukan sejak 2015 untuk menangani pembukaan lahan sejak November 2005 yang dilakukan tanpa kajian Nilai Konservasi Tinggi (NKT)/</span><em style=\"color: rgb(0, 0, 0);\">High Conservation Value</em><span style=\"color: rgb(0, 0, 0);\"> (HCV). Mekanisme ini berlaku secara global bagi seluruh anggota RSPO dan calon anggota RSPO, mencakup perusahaan induk, anak perusahaan, lahan milik, sewa, atau kelola, serta smallholder skema atau terikat.</span></p><p><span style=\"color: rgb(0, 0, 0);\">Tujuan utama RaCP yaitu:</span></p><ol><li class=\"ql-align-justify\">Memulihkan (<em>remediate</em>) dan/atau mengompensasi (<em>compensate</em>) kehilangan HCV,</li><li class=\"ql-align-justify\">Menjaga integritas standar RSPO, dan</li><li class=\"ql-align-justify\">Memberi jalan bagi perusahaan untuk tetap menuju sertifikasi tanpa menghapus tanggung jawab masa lalu.</li></ol><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Melalui prosedur RaCP, perusahaan diwajibkan mengungkapkan pembukaan lahan yang tidak patuh, menyusun </span><em style=\"color: rgb(0, 0, 0);\">Land Use Change Analysis</em><span style=\"color: rgb(0, 0, 0);\"> (LUCA), serta melaksanakan kewajiban remediasi lingkungan dan kompensasi konservasi maupun sosial. Tahun 2020 tercatat sebanyak 673 kasus RaCP secara global, dengan mayoritas berasal dari Asia dan Oseania. Mengingat besarnya kontribusi Indonesia terhadap produksi sawit global, sebagian signifikan kasus tersebut berkaitan dengan operasi di Indonesia, baik secara langsung maupun melalui grup perusahaan.</span></p><h3 class=\"ql-align-justify\"><strong>Tantangan Implementasi di Lapangan</strong></h3><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Meskipun tingkat pengungkapan kasus relatif tinggi, penyelesaian kewajiban RaCP belum berjalan optimal. Hanya sekitar 45% kasus yang memiliki LUCA yang disetujui dan hanya 18% yang menyelesaikan seluruh proses. Di Indonesia, tantangan ini dipengaruhi oleh kompleksitas perizinan, keterbatasan data historis, serta variasi kapasitas teknis perusahaan.</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Dalam aspek lingkungan, perbedaan tafsir mengenai remediasi dan kompensasi konservasi masih kerap terjadi. Kegiatan restorasi hutan sebagai bentuk kompensasi umumnya dilakukan di luar lokasi kebun, namun bukti implementasi jangka panjang di lapangan masih terbatas. Aspek lain yang tidak kalah penting adalah keterkaitan antara kewajiban RaCP dengan regulasi nasional. Dalam beberapa kasus, rencana remediasi atau kompensasi yang disyaratkan RSPO tidak sepenuhnya selaras dengan kerangka perizinan kehutanan, tata ruang, maupun mekanisme rehabilitasi lahan yang diatur pemerintah. Ketidaksinkronan ini berpotensi memperlambat implementasi, terutama ketika perusahaan harus menavigasi antara kepatuhan terhadap standar sukarela internasional dan kewajiban hukum nasional.</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Selain aspek lingkungan, RaCP juga memiliki dimensi sosial yang signifikan, khususnya ketika pembukaan lahan di masa lalu bersinggungan dengan hak dan kepentingan masyarakat lokal. Proses remediasi dalam konteks ini tidak hanya terbatas pada pemulihan fungsi ekologis, tetapi juga mencakup kompensasi sosial, penyelesaian konflik lahan, serta penguatan partisipasi masyarakat. Tantangan muncul ketika dokumentasi historis terkait persetujuan masyarakat tidak tersedia atau tidak memadai, sehingga memerlukan proses penilaian ulang dan dialog yang intensif. Apabila tidak dikelola secara inklusif dan transparan, kewajiban RaCP justru berpotensi memunculkan konflik baru atau memperpanjang ketidakpercayaan antara perusahaan dan masyarakat.</span></p><h3 class=\"ql-align-justify\"><strong style=\"color: rgb(0, 0, 0);\">Implikasi bagi Indonesia</strong></h3><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Implementasi RaCP memiliki implikasi penting bagi tata kelola perkebunan kelapa sawit di Indonesia. Di satu sisi, RaCP mendorong peningkatan transparansi, pelaporan, dan akuntabilitas perusahaan terhadap dampak lingkungan dan sosial masa lalu. Di sisi lain, mekanisme ini menuntut peningkatan kapasitas teknis, ketersediaan data spasial dan historis yang andal, serta koordinasi lintas pemangku kepentingan. Bagi Indonesia, RaCP dapat menjadi instrumen pembelajaran untuk memperkuat kebijakan pencegahan deforestasi, restorasi ekosistem, dan perlindungan hak masyarakat, sekaligus memperbaiki citra sawit nasional di pasar global.</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Pengalaman implementasi RaCP menunjukkan bahwa mekanisme ini secara konseptual merupakan instrumen penting untuk menjembatani kesenjangan antara praktik masa lalu dan tuntutan keberlanjutan saat ini. Namun, efektivitasnya sangat bergantung pada komitmen perusahaan, kejelasan panduan teknis, serta dukungan kebijakan yang kondusif di tingkat nasional. Bagi Indonesia, penguatan sinergi antara standar RSPO dan regulasi domestik, disertai peningkatan kapasitas pelaku usaha dan pemangku kepentingan lokal, menjadi kunci agar RaCP tidak berhenti sebagai kewajiban administratif, melainkan benar-benar berkontribusi pada pemulihan lingkungan dan keadilan sosial dalam pembangunan kelapa sawit berkelanjutan.</span></p><p class=\"ql-align-justify\"><br></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Referensi:</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Newing, H. 2020. An Independent Review of the RSPO Remediation and Compensation Procedure (RaCP) 2015. </span><em style=\"color: rgb(0, 0, 0);\">Roundtable on Sustainable Palm Oil</em><span style=\"color: rgb(0, 0, 0);\">.</span></p><p class=\"ql-align-justify\"><br></p>",
-    "deskripsi_en": "<p>Have you ever wondered how past instances of non-compliant land clearing can be addressed in a fair and transparent manner? In the context of the sustainable palm oil industry, this question is answered through the Remediation and Compensation Procedure (RaCP) developed by the Roundtable on Sustainable Palm Oil (RSPO). The RaCP is designed as a corrective mechanism to ensure that instances of non-compliant land clearing dating back to 2005 do not merely result in administrative acknowledgment, but are instead followed by tangible remediation and compensation processes.</p><p>As one of the world's largest palm oil producers, Indonesia faces both a strategic role and significant challenges regarding the implementation of the RaCP. Extensive plantation expansion prior to the adoption of rigorous sustainability standards has left many companies with historical obligations concerning land clearing conducted without High Conservation Value (HCV) assessments. Consequently, the RaCP serves not merely as a compliance tool, but as a genuine test of the national palm oil industry's commitment to the principles of sustainability, accountability, and responsible environmental governance.</p><h3><strong>RaCP as a Corrective Mechanism</strong></h3><p>The RaCP was implemented in 2015 to address land clearing activities undertaken since November 2005 without a High Conservation Value (HCV) assessment. This mechanism applies globally to all RSPO members and prospective members, covering parent companies, subsidiaries, and land that is owned, leased, or managed, as well as scheme or associated smallholders.</p><p>The primary objectives of the RaCP are to:</p><ol><li>Remediate and/or compensate for the loss of HCVs,</li><li>Uphold the integrity of RSPO standards, and</li><li>Provide a pathway for companies to continue towards certification without absolving them of past responsibilities.</li></ol><p>Under the RaCP procedure, companies are required to disclose instances of non-compliant land clearing, conduct a Land Use Change Analysis (LUCA), and fulfill obligations regarding environmental remediation as well as conservation and social compensation. As of 2020, there were 673 recorded RaCP cases globally, with the majority originating from Asia and Oceania. Given Indonesia's significant contribution to global palm oil production, a substantial portion of these cases relates to operations in Indonesia, whether directly or through corporate groups.</p><h3><strong>Field Implementation Challenges</strong></h3><p>Despite a relatively high case disclosure rate, the fulfillment of RaCP obligations has not proceeded optimally. Only about 45% of cases have an approved LUCA (Land Use Change Analysis), and merely 18% have completed the entire process. In Indonesia, these challenges are driven by complex permitting processes, limited historical data, and varying levels of technical capacity among companies.</p><p>Regarding environmental aspects, differing interpretations of remediation and conservation compensation frequently arise. Forest restoration activities intended as compensation are generally carried out outside the plantation site, yet evidence of long-term implementation on the ground remains limited. Another equally important aspect is the interplay between RaCP obligations and national regulations. In some instances, the remediation or compensation plans required by the RSPO do not fully align with government-mandated frameworks for forestry permits, spatial planning, or land rehabilitation mechanisms. This lack of synchronization can slow down implementation, particularly when companies must navigate the tension between complying with voluntary international standards and meeting national legal obligations.</p><p>Beyond environmental considerations, the RaCP also entails significant social dimensions, especially when past land clearing has impinged upon the rights and interests of local communities. In this context, the remediation process extends beyond restoring ecological functions to encompass social compensation, the resolution of land conflicts, and the strengthening of community participation. Challenges arise when historical documentation regarding community consent is unavailable or inadequate, necessitating reassessment processes and intensive dialogue. If not managed inclusively and transparently, RaCP obligations risk sparking new conflicts or perpetuating mistrust between companies and local communities.</p><h3><strong>Implications for Indonesia</strong></h3><p>The implementation of the RaCP has significant implications for the governance of the palm oil sector in Indonesia. On one hand, the RaCP fosters greater corporate transparency, reporting, and accountability regarding past environmental and social impacts. On the other hand, the mechanism demands enhanced technical capacity, the availability of reliable spatial and historical data, and coordination across stakeholders. For Indonesia, the RaCP can serve as a learning tool to strengthen policies on deforestation prevention, ecosystem restoration, and the protection of community rights, while simultaneously improving the image of national palm oil in the global market.</p><p>Experience with RaCP implementation demonstrates that, conceptually, the mechanism is a vital instrument for bridging the gap between past practices and current sustainability demands. However, its effectiveness hinges heavily on corporate commitment, clear technical guidelines, and supportive policy frameworks at the national level. For Indonesia, strengthening synergy between RSPO standards and domestic regulationsóalongside capacity building for business operators and local stakeholdersóis key to ensuring the RaCP does not remain merely an administrative obligation, but instead genuinely contributes to environmental restoration and social equity within sustainable palm oil development.</p><p><br></p><p>Reference:</p><p>Newing, H. 2020. An Independent Review of the RSPO Remediation and Compensation Procedure (RaCP) 2015. Roundtable on Sustainable Palm Oil.</p>",
-    "views_count": 17,
-    "gambar": "articles/about-hero.jpg"
-  }
-},
-{
-  "model": "core.article",
-  "pk": 13,
-  "fields": {
-    "judul": "Aksi Kecil, Dampak Besar: Praktik Sederhana yang Mendukung Pelestarian Keanekaragaman Hayati",
-    "judul_ind": "Aksi Kecil, Dampak Besar: Praktik Sederhana yang Mendukung Pelestarian Keanekaragaman Hayati",
-    "judul_en": "Small Actions, Big Impact: Simple Practices That Support Biodiversity Conservation",
-    "slug": "aksi-kecil-dampak-besar-praktik-sederhana-yang-mendukung-pelestarian-keanekaragaman-hayati",
-    "slug_ind": "aksi-kecil-dampak-besar-praktik-sederhana-yang-mendukung-pelestarian-keanekaragaman-hayati",
-    "slug_en": "small-actions-big-impact-simple-practices-that-support-biodiversity-conservation",
-    "tanggal": "2026-09-05",
-    "author": "Admin Tamvan",
-    "short": "Tahukah Anda bahwa tindakan sederhana sehari-hari ternyata dapat membantu menyelamatkan bumi? Mulai dari memilih membawa tumbler, menanam tanaman lokal, hingga mengurangi sampah plastik, kebiasaan kecil tersebut",
-    "short_ind": "Tahukah Anda bahwa tindakan sederhana sehari-hari ternyata dapat membantu menyelamatkan bumi? Mulai dari memilih membawa tumbler, menanam tanaman lokal, hingga mengurangi sampah plastik, kebiasaan kecil tersebut",
-    "short_en": "Did you know that simple everyday actions can actually help save the planet? From choosing to bring a tumbler, planting local plants, to reducing plastic waste, those small habits",
-    "deskripsi": "<p class=\"ql-align-justify\">Tahukah Anda bahwa tindakan sederhana sehari-hari ternyata dapat membantu menyelamatkan bumi? Mulai dari memilih membawa tumbler, menanam tanaman lokal, hingga mengurangi sampah plastik, kebiasaan kecil tersebut dapat memberikan dampak besar bagi keberlangsungan keanekaragaman hayati.</p><p class=\"ql-align-justify\">International Day for Biological Diversity (IDB) 2026 mengangkat tema ì<em>Acting Locally for Global Impact</em>î <a href=\"https://bhumipasahijau.com/aksi-kecil-dampak-besar-praktik-sederhana-yang-mendukung-pelestarian-keanekaragaman-hayati/#_ftn1\" target=\"_blank\">[1]</a>. Tema ini menjadi pengingat bahwa pelestarian keanekaragaman hayati tidak selalu harus dimulai dari langkah besar. Justru, aksi sederhana yang dilakukan secara konsisten oleh banyak orang dapat menciptakan perubahan nyata bagi lingkungan.</p><p><br></p>",
-    "deskripsi_ind": "<p class=\"ql-align-justify\">Tahukah Anda bahwa tindakan sederhana sehari-hari ternyata dapat membantu menyelamatkan bumi? Mulai dari memilih membawa tumbler, menanam tanaman lokal, hingga mengurangi sampah plastik, kebiasaan kecil tersebut dapat memberikan dampak besar bagi keberlangsungan keanekaragaman hayati.</p><p class=\"ql-align-justify\">International Day for Biological Diversity (IDB) 2026 mengangkat tema ì<em>Acting Locally for Global Impact</em>î <a href=\"https://bhumipasahijau.com/aksi-kecil-dampak-besar-praktik-sederhana-yang-mendukung-pelestarian-keanekaragaman-hayati/#_ftn1\" target=\"_blank\">[1]</a>. Tema ini menjadi pengingat bahwa pelestarian keanekaragaman hayati tidak selalu harus dimulai dari langkah besar. Justru, aksi sederhana yang dilakukan secara konsisten oleh banyak orang dapat menciptakan perubahan nyata bagi lingkungan.</p><p><br></p>",
-    "deskripsi_en": "<p>Did you know that simple everyday actions can actually help save the planet? From choosing to bring a reusable tumbler, planting local plants, to reducing plastic waste, these small habits can have a big impact on the sustainability of biodiversity.&nbsp;</p><p>International Day for Biological Diversity (IDB) 2026 carries the theme \"Acting Locally for Global Impact\". This theme serves as a reminder that conserving biodiversity doesn't always have to start with big steps. In fact, simple actions consistently carried out by many people can create real change for the environment.</p>",
-    "views_count": 16,
-    "gambar": "articles/carbion-1024x379.jpg"
-  }
-},
-{
-  "model": "core.modul",
-  "pk": 2,
-  "fields": {
-    "judul": "test modul",
-    "judul_ind": "test modul",
-    "judul_en": null,
-    "file_dokumen": "documents/Company-Profile-BPH-2024-rev-02.pdf",
-    "tanggal_rilis": "2026-07-27"
-  }
-},
-{
-  "model": "core.contactmessage",
-  "pk": 4,
-  "fields": {
-    "nama_lengkap": "test mas joe",
-    "email": "test@gmail.com",
-    "subjek": "test instansi",
-    "pesan": "test detail",
-    "tanggal_kirim": "2026-07-29T07:18:28.793Z",
-    "is_read": true
-  }
-},
-{
-  "model": "core.contactmessage",
-  "pk": 5,
-  "fields": {
-    "nama_lengkap": "test",
-    "email": "test@gmail.com",
-    "subjek": "test",
-    "pesan": "testtt",
-    "tanggal_kirim": "2026-07-29T07:19:37.091Z",
-    "is_read": true
-  }
-},
-{
-  "model": "core.contactmessage",
-  "pk": 6,
-  "fields": {
-    "nama_lengkap": "1",
-    "email": "test@gmail.com",
-    "subjek": "1",
-    "pesan": "1",
-    "tanggal_kirim": "2026-08-07T09:48:21.841Z",
-    "is_read": true
-  }
-},
-{
-  "model": "core.gallery",
-  "pk": 3,
-  "fields": {
-    "caption": "Judul Kegiatan",
-    "caption_ind": "Judul Kegiatan",
-    "caption_en": "Activity Title",
-    "gambar": "gallery/artikel2_1rEh7iy.jpg",
-    "folder": 7,
-    "kategori": 4,
-    "tanggal_upload": "2018-10-16"
-  }
-},
-{
-  "model": "core.gallery",
-  "pk": 4,
-  "fields": {
-    "caption": "Judul Kegiatanhhhh",
-    "caption_ind": "Judul Kegiatanhhhh",
-    "caption_en": "jjjjjj",
-    "gambar": "gallery/about-section.jpg",
-    "folder": 8,
-    "kategori": 4,
-    "tanggal_upload": "2026-08-07"
-  }
-},
-{
-  "model": "core.profile",
-  "pk": 1,
-  "fields": {
-    "user": [
-      "admin"
-    ],
-    "nama_lengkap": "Admin Tamvan",
-    "foto_profil": "",
-    "role": "admin"
-  }
-},
-{
-  "model": "core.profile",
-  "pk": 2,
-  "fields": {
-    "user": [
-      "admin2"
-    ],
-    "nama_lengkap": "Ryan",
-    "foto_profil": "",
-    "role": "contributor"
-  }
-},
-{
-  "model": "core.teammember",
-  "pk": 1,
-  "fields": {
-    "nama": "Ir. Fuad Say Benny",
-    "jabatan": "Senior Penasihat Proyek",
-    "jabatan_ind": "Senior Penasihat Proyek",
-    "jabatan_en": "Senior Project Advisor",
-    "bio": "Lebih dari 30 tahun aktif dalam jasa konsultasi pengelolaan lingkungan dan sumber daya alam",
-    "bio_ind": "Lebih dari 30 tahun aktif dalam jasa konsultasi pengelolaan lingkungan dan sumber daya alam",
-    "bio_en": "Active for over 30 years in environmental and natural resource management consultancy services.",
-    "kategori": "advisors",
-    "kategori_ind": "advisors",
-    "kategori_en": "advisors",
-    "foto": "team/PakBenny-1422x2048.jpg",
-    "urutan": 0,
-    "created_at": "2026-07-22T08:06:16.729Z"
-  }
-},
-{
-  "model": "core.teammember",
-  "pk": 3,
-  "fields": {
-    "nama": "Dr. Idung Risdiyanto, S.Si, M.Sc",
-    "jabatan": "Tenaga Ahli Senior Perubahan Iklim",
-    "jabatan_ind": "Tenaga Ahli Senior Perubahan Iklim",
-    "jabatan_en": "Senior Climate Change Expert",
-    "bio": "Dosen yang memiliki pengalaman lebih dari 20 tahun di berbagai bidang klimatologi, hidrologi, dan konservasi serta bersertifikat ALS dari HCV-RN International",
-    "bio_ind": "Dosen yang memiliki pengalaman lebih dari 20 tahun di berbagai bidang klimatologi, hidrologi, dan konservasi serta bersertifikat ALS dari HCV-RN International",
-    "bio_en": "A lecturer with over 20 years of experience across the fields of climatology, hydrology, and conservation, and an ALS-certified professional from HCV-RN International.",
-    "kategori": "advisors",
-    "kategori_ind": "advisors",
-    "kategori_en": "advisors",
-    "foto": "team/PakIdungedited.png",
-    "urutan": 1,
-    "created_at": "2026-09-04T03:45:15.975Z"
-  }
-},
-{
-  "model": "core.teammember",
-  "pk": 4,
-  "fields": {
-    "nama": "Aswin Rahadian, S.Hut, M.Si, Ph.D (Cand)",
-    "jabatan": "Tenaga Ahli Senior Karbon Terestrial",
-    "jabatan_ind": "Tenaga Ahli Senior Karbon Terestrial",
-    "jabatan_en": "Senior Terrestrial Carbon Expert",
-    "bio": "Peneliti di bidang kehutanan, penginderaan jauh, dan pemodelan spasial yang memiliki pengalaman lebih dari 14 tahun. Pemimpin Proyek dalam Pemutakhiran PD (Tahap 2) Proyek Katingan-Mentaya",
-    "bio_ind": "Peneliti di bidang kehutanan, penginderaan jauh, dan pemodelan spasial yang memiliki pengalaman lebih dari 14 tahun. Pemimpin Proyek dalam Pemutakhiran PD (Tahap 2) Proyek Katingan-Mentaya",
-    "bio_en": "Researcher specializing in forestry, remote sensing, and spatial modeling with over 14 years of experience. Project Lead for the Katingan-Mentaya Project PD Update (Phase 2)",
-    "kategori": "advisors",
-    "kategori_ind": "advisors",
-    "kategori_en": "advisors",
-    "foto": "team/aswin.jpeg",
-    "urutan": 2,
-    "created_at": "2026-09-04T03:56:03.557Z"
-  }
-},
-{
-  "model": "core.infografis",
-  "pk": 1,
-  "fields": {
-    "deskripsi": "<p>dkhfdkfkdfknkdnfkdnfkdnfkdnfkdnfkdnfkdnfknddkdkn</p>",
-    "gambar": "infografis/d142f6b7-a65d-4438-b3c1-9b3af4e0f3a8-768x576.jpg",
-    "tanggal_unggah": "2026-08-12"
-  }
-},
-{
-  "model": "core.video",
-  "pk": 2,
-  "fields": {
-    "judul": "111",
-    "url_video": "https://www.instagram.com/reel/DXNLPf3k4Gt/",
-    "thumbnail": "video_thumbnails/artikel3.jpg",
-    "tanggal_unggah": "2026-08-12"
-  }
-},
-{
-  "model": "core.video",
-  "pk": 3,
-  "fields": {
-    "judul": "kang mus",
-    "url_video": "https://youtu.be/a1R3gIoxrlo?si=CxY7HEv_92tTc_yO",
-    "thumbnail": "",
-    "tanggal_unggah": "2026-09-04"
-  }
-},
-{
-  "model": "core.video",
-  "pk": 4,
-  "fields": {
-    "judul": "thumb",
-    "url_video": "https://www.instagram.com/reel/DYsAwo7JzeF/",
-    "thumbnail": "video_thumbnails/artikel2_n3uUTjT.jpg",
-    "tanggal_unggah": "2026-09-04"
-  }
-},
-{
-  "model": "core.video",
-  "pk": 5,
-  "fields": {
-    "judul": "x",
-    "url_video": "https://x.com/hope_emak/status/2095359339624349982?s=20",
-    "thumbnail": "video_thumbnails/cerita.jpg",
-    "tanggal_unggah": "2026-09-04"
-  }
-},
-{
-  "model": "core.video",
-  "pk": 6,
-  "fields": {
-    "judul": "fb",
-    "url_video": "https://www.facebook.com/reel/1374064804914015",
-    "thumbnail": "video_thumbnails/scenario_1.jpg",
-    "tanggal_unggah": "2026-09-04"
-  }
-},
-{
-  "model": "core.program",
-  "pk": 1,
-  "fields": {
-    "judul": "Lido Bageur",
-    "judul_ind": "Lido Bageur",
-    "judul_en": "Lido Bageur",
-    "slug": "lido-bageur",
-    "slug_ind": "lido-bageur",
-    "slug_en": "lido-bageur",
-    "tanggal": "2026-10-09",
-    "author": "Admin Tamvan",
-    "short": "ringkasan",
-    "short_ind": "ringkasan",
-    "short_en": "ringkasan",
-    "deskripsi": "<p>isi program</p>",
-    "deskripsi_ind": "<p>isi program</p>",
-    "deskripsi_en": "<p>isi program</p>",
-    "views_count": 3,
-    "gambar": "programs/hero5.jpeg"
-  }
-}
-]
+[
+{
+  "model": "core.category",
+  "pk": 4,
+  "fields": {
+    "name": "Sosial",
+    "name_ind": "Sosial",
+    "name_en": "Social",
+    "slug": "sosial",
+    "slug_ind": "sosial",
+    "slug_en": "social"
+  }
+},
+{
+  "model": "core.folder",
+  "pk": 7,
+  "fields": {
+    "nama": "Album Dokumentansi 2018",
+    "nama_ind": "Album Dokumentansi 2018",
+    "nama_en": "2018 Documentation Album",
+    "tahun": 2018,
+    "kategori": null,
+    "created_at": "2026-08-04T05:32:32.066Z"
+  }
+},
+{
+  "model": "core.folder",
+  "pk": 8,
+  "fields": {
+    "nama": "hahaha",
+    "nama_ind": "hahaha",
+    "nama_en": "hihiihihi",
+    "tahun": 2026,
+    "kategori": null,
+    "created_at": "2026-08-07T10:07:14.798Z"
+  }
+},
+{
+  "model": "core.service",
+  "pk": 1,
+  "fields": {
+    "title": "Rehabilitasi Hutan dan Lahan",
+    "title_ind": "Rehabilitasi Hutan dan Lahan",
+    "title_en": "Forest and Land Rehabilitation",
+    "slug": "rehabilitasi-hutan-dan-lahan",
+    "slug_ind": "rehabilitasi-hutan-dan-lahan",
+    "slug_en": "forest-and-land-rehabilitation",
+    "portfolio": "NRM",
+    "icon": "",
+    "thumbnail": "services/thumbs/artikel2.jpg",
+    "bg_image": "",
+    "approach": "<p>deskripsinya </p>",
+    "approach_ind": "<p>deskripsinya </p>",
+    "approach_en": "<p>description</p>",
+    "categories": []
+  }
+},
+{
+  "model": "core.service",
+  "pk": 3,
+  "fields": {
+    "title": "Inventarisasi Sumberdaya Lahan",
+    "title_ind": "Inventarisasi Sumberdaya Lahan",
+    "title_en": "Land Resource Inventory",
+    "slug": "inventarisasi-sumberdaya-lahan",
+    "slug_ind": "inventarisasi-sumberdaya-lahan",
+    "slug_en": "land-resource-inventory",
+    "portfolio": "NRM",
+    "icon": "",
+    "thumbnail": "services/thumbs/experience-1.jpg",
+    "bg_image": "",
+    "approach": "<p>deskripsi</p>",
+    "approach_ind": "<p>deskripsi</p>",
+    "approach_en": "<p>description</p>",
+    "categories": []
+  }
+},
+{
+  "model": "core.service",
+  "pk": 4,
+  "fields": {
+    "title": "Penguatan Kelembagaan",
+    "title_ind": "Penguatan Kelembagaan",
+    "title_en": "Institutional Strengthening",
+    "slug": "penguatan-kelembagaan",
+    "slug_ind": "penguatan-kelembagaan",
+    "slug_en": "institutional-strengthening",
+    "portfolio": "NRM",
+    "icon": "",
+    "thumbnail": "services/thumbs/services8.jpg",
+    "bg_image": "",
+    "approach": "<p>deskripsi</p>",
+    "approach_ind": "<p>deskripsi</p>",
+    "approach_en": "<p>description</p>",
+    "categories": []
+  }
+},
+{
+  "model": "core.service",
+  "pk": 5,
+  "fields": {
+    "title": "Pengelolaan Kesehatan Tanaman",
+    "title_ind": "Pengelolaan Kesehatan Tanaman",
+    "title_en": "Plant Health Management",
+    "slug": "pengelolaan-kesehatan-tanaman",
+    "slug_ind": "pengelolaan-kesehatan-tanaman",
+    "slug_en": "plant-health-management",
+    "portfolio": "NRM",
+    "icon": "",
+    "thumbnail": "services/thumbs/services6.jpg",
+    "bg_image": "",
+    "approach": "<p>deskripsi</p>",
+    "approach_ind": "<p>deskripsi</p>",
+    "approach_en": "<p>description</p>",
+    "categories": []
+  }
+},
+{
+  "model": "core.service",
+  "pk": 6,
+  "fields": {
+    "title": "Penilaian Keanekaragaman Hayati",
+    "title_ind": "Penilaian Keanekaragaman Hayati",
+    "title_en": "Biodiversity Assessment",
+    "slug": "penilaian-keanekaragaman-hayati",
+    "slug_ind": "penilaian-keanekaragaman-hayati",
+    "slug_en": "biodiversity-assessment",
+    "portfolio": "NRU",
+    "icon": "",
+    "thumbnail": "services/thumbs/services7.jpg",
+    "bg_image": "",
+    "approach": "<p>deskripsi</p>",
+    "approach_ind": "<p>deskripsi</p>",
+    "approach_en": "<p>description</p>",
+    "categories": []
+  }
+},
+{
+  "model": "core.service",
+  "pk": 7,
+  "fields": {
+    "title": "Penilaian Sosial",
+    "title_ind": "Penilaian Sosial",
+    "title_en": "Social Assessment",
+    "slug": "penilaian-sosial",
+    "slug_ind": "penilaian-sosial",
+    "slug_en": "social-assessment",
+    "portfolio": "NRU",
+    "icon": "",
+    "thumbnail": "services/thumbs/services3.jpg",
+    "bg_image": "",
+    "approach": "<p>deskripsi</p>",
+    "approach_ind": "<p>deskripsi</p>",
+    "approach_en": "<p>description</p>",
+    "categories": []
+  }
+},
+{
+  "model": "core.service",
+  "pk": 8,
+  "fields": {
+    "title": "Kajian Tanah dan Hidrologi",
+    "title_ind": "Kajian Tanah dan Hidrologi",
+    "title_en": "Soil and Hydrology Study",
+    "slug": "kajian-tanah-dan-hidrologi",
+    "slug_ind": "kajian-tanah-dan-hidrologi",
+    "slug_en": "soil-and-hydrology-study",
+    "portfolio": "NRU",
+    "icon": "",
+    "thumbnail": "services/thumbs/services9.jpg",
+    "bg_image": "",
+    "approach": "<p>deskripsi</p>",
+    "approach_ind": "<p>deskripsi</p>",
+    "approach_en": "<p>description</p>",
+    "categories": []
+  }
+},
+{
+  "model": "core.service",
+  "pk": 9,
+  "fields": {
+    "title": "Kajian Iklim",
+    "title_ind": "Kajian Iklim",
+    "title_en": "Climate Study",
+    "slug": "kajian-iklim",
+    "slug_ind": "kajian-iklim",
+    "slug_en": "climate-study",
+    "portfolio": "NRU",
+    "icon": "",
+    "thumbnail": "services/thumbs/services10.jpg",
+    "bg_image": "",
+    "approach": "<p>deskripsi</p>",
+    "approach_ind": "<p>deskripsi</p>",
+    "approach_en": "<p>description</p>",
+    "categories": []
+  }
+},
+{
+  "model": "core.location",
+  "pk": 1,
+  "fields": {
+    "nama_provinsi": "Aceh",
+    "nama_provinsi_ind": "Aceh",
+    "nama_provinsi_en": "Aceh",
+    "slug": "aceh",
+    "slug_ind": "aceh",
+    "slug_en": "aceh",
+    "kode_wilayah": "11",
+    "geom": null
+  }
+},
+{
+  "model": "core.location",
+  "pk": 2,
+  "fields": {
+    "nama_provinsi": "Sumatra Utara",
+    "nama_provinsi_ind": "Sumatra Utara",
+    "nama_provinsi_en": "North Sumatra",
+    "slug": "sumatra-utara",
+    "slug_ind": "sumatra-utara",
+    "slug_en": "north-sumatra",
+    "kode_wilayah": "12",
+    "geom": null
+  }
+},
+{
+  "model": "core.location",
+  "pk": 3,
+  "fields": {
+    "nama_provinsi": "Sumatra Barat",
+    "nama_provinsi_ind": "Sumatra Barat",
+    "nama_provinsi_en": "West Sumatra",
+    "slug": "sumatra-barat",
+    "slug_ind": "sumatra-barat",
+    "slug_en": "west-sumatra",
+    "kode_wilayah": "13",
+    "geom": null
+  }
+},
+{
+  "model": "core.location",
+  "pk": 4,
+  "fields": {
+    "nama_provinsi": "Riau",
+    "nama_provinsi_ind": "Riau",
+    "nama_provinsi_en": "Riau",
+    "slug": "riau",
+    "slug_ind": "riau",
+    "slug_en": "riau",
+    "kode_wilayah": "14",
+    "geom": null
+  }
+},
+{
+  "model": "core.location",
+  "pk": 5,
+  "fields": {
+    "nama_provinsi": "Jambi",
+    "nama_provinsi_ind": "Jambi",
+    "nama_provinsi_en": "Jambi",
+    "slug": "jambi",
+    "slug_ind": "jambi",
+    "slug_en": "jambi",
+    "kode_wilayah": "15",
+    "geom": null
+  }
+},
+{
+  "model": "core.location",
+  "pk": 6,
+  "fields": {
+    "nama_provinsi": "Sumatra Selatan",
+    "nama_provinsi_ind": "Sumatra Selatan",
+    "nama_provinsi_en": "South Sumatra",
+    "slug": "sumatra-selatan",
+    "slug_ind": "sumatra-selatan",
+    "slug_en": "south-sumatra",
+    "kode_wilayah": "16",
+    "geom": null
+  }
+},
+{
+  "model": "core.location",
+  "pk": 7,
+  "fields": {
+    "nama_provinsi": "Bengkulu",
+    "nama_provinsi_ind": "Bengkulu",
+    "nama_provinsi_en": "Bengkulu",
+    "slug": "bengkulu",
+    "slug_ind": "bengkulu",
+    "slug_en": "bengkulu",
+    "kode_wilayah": "17",
+    "geom": null
+  }
+},
+{
+  "model": "core.location",
+  "pk": 8,
+  "fields": {
+    "nama_provinsi": "Lampung",
+    "nama_provinsi_ind": "Lampung",
+    "nama_provinsi_en": "Lampung",
+    "slug": "lampung",
+    "slug_ind": "lampung",
+    "slug_en": "lampung",
+    "kode_wilayah": "18",
+    "geom": null
+  }
+},
+{
+  "model": "core.location",
+  "pk": 9,
+  "fields": {
+    "nama_provinsi": "Kepulauan Bangka Belitung",
+    "nama_provinsi_ind": "Kepulauan Bangka Belitung",
+    "nama_provinsi_en": "Bangka Belitung Islands",
+    "slug": "kepulauan-bangka-belitung",
+    "slug_ind": "kepulauan-bangka-belitung",
+    "slug_en": "bangka-belitung-islands",
+    "kode_wilayah": "19",
+    "geom": null
+  }
+},
+{
+  "model": "core.location",
+  "pk": 11,
+  "fields": {
+    "nama_provinsi": "Kepulauan Riau",
+    "nama_provinsi_ind": "Kepulauan Riau",
+    "nama_provinsi_en": "Riau Islands",
+    "slug": "kepulauan-riau",
+    "slug_ind": "kepulauan-riau",
+    "slug_en": "riau-islands",
+    "kode_wilayah": "21",
+    "geom": null
+  }
+},
+{
+  "model": "core.location",
+  "pk": 40,
+  "fields": {
+    "nama_provinsi": "DKI Jakarta",
+    "nama_provinsi_ind": "DKI Jakarta",
+    "nama_provinsi_en": "DKI Jakarta",
+    "slug": "dki-jakarta",
+    "slug_ind": "dki-jakarta",
+    "slug_en": "dki-jakarta",
+    "kode_wilayah": "31",
+    "geom": null
+  }
+},
+{
+  "model": "core.location",
+  "pk": 41,
+  "fields": {
+    "nama_provinsi": "Jawa Barat",
+    "nama_provinsi_ind": "Jawa Barat",
+    "nama_provinsi_en": "West Java",
+    "slug": "jawa-barat",
+    "slug_ind": "jawa-barat",
+    "slug_en": "west-java",
+    "kode_wilayah": "32",
+    "geom": null
+  }
+},
+{
+  "model": "core.location",
+  "pk": 42,
+  "fields": {
+    "nama_provinsi": "Sulawesi Tenggara",
+    "nama_provinsi_ind": "Sulawesi Tenggara",
+    "nama_provinsi_en": "Southeast Sulawesi",
+    "slug": "sulawesi-tenggara",
+    "slug_ind": "sulawesi-tenggara",
+    "slug_en": "southeast-sulawesi",
+    "kode_wilayah": "74",
+    "geom": null
+  }
+},
+{
+  "model": "core.location",
+  "pk": 43,
+  "fields": {
+    "nama_provinsi": "Maluku Utara",
+    "nama_provinsi_ind": "Maluku Utara",
+    "nama_provinsi_en": "North Maluku",
+    "slug": "maluku-utara",
+    "slug_ind": "maluku-utara",
+    "slug_en": "north-maluku",
+    "kode_wilayah": "82",
+    "geom": null
+  }
+},
+{
+  "model": "core.location",
+  "pk": 44,
+  "fields": {
+    "nama_provinsi": "Papua",
+    "nama_provinsi_ind": "Papua",
+    "nama_provinsi_en": "Papua",
+    "slug": "papua",
+    "slug_ind": "papua",
+    "slug_en": "papua",
+    "kode_wilayah": "91",
+    "geom": null
+  }
+},
+{
+  "model": "core.client",
+  "pk": 1,
+  "fields": {
+    "nama": "PT Adaro Energy Indonesia, Tbk",
+    "nama_ind": "PT Adaro Energy Indonesia, Tbk",
+    "nama_en": "PT Adaro Energy Indonesia, Tbk",
+    "sektor": "swasta",
+    "logo": "clients/logos/adaro.jpg"
+  }
+},
+{
+  "model": "core.client",
+  "pk": 3,
+  "fields": {
+    "nama": "Balai Pengelolaan Hutan Produksi",
+    "nama_ind": "Balai Pengelolaan Hutan Produksi",
+    "nama_en": "Production Forest Management Agency",
+    "sektor": "publik",
+    "logo": "clients/logos/bphp.png"
+  }
+},
+{
+  "model": "core.client",
+  "pk": 7,
+  "fields": {
+    "nama": "Lestari Capital",
+    "nama_ind": "Lestari Capital",
+    "nama_en": "Lestari Capital",
+    "sektor": "swasta",
+    "logo": "clients/logos/lestari.jpg"
+  }
+},
+{
+  "model": "core.client",
+  "pk": 8,
+  "fields": {
+    "nama": "dsudhsu",
+    "nama_ind": "dsudhsu",
+    "nama_en": "nksksdjksd",
+    "sektor": "publik",
+    "logo": "clients/logos/kawung_GhDkm7S.png"
+  }
+},
+{
+  "model": "core.client",
+  "pk": 9,
+  "fields": {
+    "nama": "test1",
+    "nama_ind": "test1",
+    "nama_en": "test1",
+    "sektor": "swasta",
+    "logo": "clients/logos/adaro_cLPx947.jpg"
+  }
+},
+{
+  "model": "core.client",
+  "pk": 10,
+  "fields": {
+    "nama": "test2",
+    "nama_ind": "test2",
+    "nama_en": "test2",
+    "sektor": "swasta",
+    "logo": "clients/logos/adaro_LfBrai5.jpg"
+  }
+},
+{
+  "model": "core.client",
+  "pk": 11,
+  "fields": {
+    "nama": "test3",
+    "nama_ind": "test3",
+    "nama_en": "test3",
+    "sektor": "swasta",
+    "logo": "clients/logos/adaro_6cqShDf.jpg"
+  }
+},
+{
+  "model": "core.client",
+  "pk": 12,
+  "fields": {
+    "nama": "test4",
+    "nama_ind": "test4",
+    "nama_en": "test4",
+    "sektor": "swasta",
+    "logo": "clients/logos/adaro_EuJY2MY.jpg"
+  }
+},
+{
+  "model": "core.client",
+  "pk": 13,
+  "fields": {
+    "nama": "test5",
+    "nama_ind": "test5",
+    "nama_en": "test5",
+    "sektor": "swasta",
+    "logo": "clients/logos/adaro_4mVxS20.jpg"
+  }
+},
+{
+  "model": "core.client",
+  "pk": 14,
+  "fields": {
+    "nama": "test6",
+    "nama_ind": "test6",
+    "nama_en": "test6",
+    "sektor": "publik",
+    "logo": "clients/logos/adaro_JDIS47W.jpg"
+  }
+},
+{
+  "model": "core.client",
+  "pk": 15,
+  "fields": {
+    "nama": "test7",
+    "nama_ind": "test7",
+    "nama_en": "test7",
+    "sektor": "publik",
+    "logo": "clients/logos/adaro_SdMB5t8.jpg"
+  }
+},
+{
+  "model": "core.client",
+  "pk": 16,
+  "fields": {
+    "nama": "test8",
+    "nama_ind": "test8",
+    "nama_en": "test8",
+    "sektor": "publik",
+    "logo": "clients/logos/adaro_BkTYlAP.jpg"
+  }
+},
+{
+  "model": "core.client",
+  "pk": 17,
+  "fields": {
+    "nama": "test9",
+    "nama_ind": "test9",
+    "nama_en": "test9",
+    "sektor": "publik",
+    "logo": "clients/logos/adaro_1aX76iw.jpg"
+  }
+},
+{
+  "model": "core.project",
+  "pk": 5,
+  "fields": {
+    "name": "Kajian Iklim untuk Pembangunan Berketahanan Iklim (PBI)",
+    "name_ind": "Kajian Iklim untuk Pembangunan Berketahanan Iklim (PBI)",
+    "name_en": "Climate Assessment for Climate-Resilient Development (CRD)",
+    "slug": "kajian-iklim-untuk-pembangunan-berketahanan-iklim-pbi",
+    "slug_ind": "kajian-iklim-untuk-pembangunan-berketahanan-iklim-pbi",
+    "slug_en": "climate-assessment-for-climate-resilient-development-crd",
+    "tahun": 2018,
+    "image": "projects/thumbs/services10.jpg",
+    "description": "<p>deskripsi proyek</p>",
+    "description_ind": "<p>deskripsi proyek</p>",
+    "description_en": "<p>project description</p>",
+    "intro": "",
+    "intro_ind": null,
+    "intro_en": null,
+    "challenge": "",
+    "challenge_ind": null,
+    "challenge_en": null,
+    "methodology": "",
+    "methodology_ind": null,
+    "methodology_en": null,
+    "result": "",
+    "result_ind": null,
+    "result_en": null,
+    "pdf_cover": "",
+    "pdf_file": "",
+    "client": 7,
+    "service_portfolio": 9,
+    "locations": [
+      1,
+      42,
+      43,
+      44
+    ],
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "core.project",
+  "pk": 6,
+  "fields": {
+    "name": "nama proyek",
+    "name_ind": "nama proyek",
+    "name_en": "name project",
+    "slug": "nama-proyek",
+    "slug_ind": "nama-proyek",
+    "slug_en": "name-project",
+    "tahun": 2021,
+    "image": "projects/thumbs/1.jpeg",
+    "description": "<p>deskripsi proyek</p>",
+    "description_ind": "<p>deskripsi proyek</p>",
+    "description_en": "<p>description project</p>",
+    "intro": "",
+    "intro_ind": null,
+    "intro_en": null,
+    "challenge": "",
+    "challenge_ind": null,
+    "challenge_en": null,
+    "methodology": "",
+    "methodology_ind": null,
+    "methodology_en": null,
+    "result": "",
+    "result_ind": null,
+    "result_en": null,
+    "pdf_cover": "",
+    "pdf_file": "",
+    "client": 9,
+    "service_portfolio": 1,
+    "locations": [
+      40,
+      41
+    ],
+    "categories": [
+      4
+    ]
+  }
+},
+{
+  "model": "core.story",
+  "pk": 4,
+  "fields": {
+    "judul": "BANJIR BERULANG DI SOFIFI: HULU TERBUKA, HILIR TERGENANG",
+    "judul_ind": "BANJIR BERULANG DI SOFIFI: HULU TERBUKA, HILIR TERGENANG",
+    "judul_en": "RECURRING FLOODS IN SOFIFI: OPEN UPSTREAM, SUBMERGED DOWNSTREAM",
+    "slug": "banjir-berulang-di-sofifi-hulu-terbuka-hilir-tergenang",
+    "slug_ind": "banjir-berulang-di-sofifi-hulu-terbuka-hilir-tergenang",
+    "slug_en": "recurring-floods-in-sofifi-open-upstream-submerged-downstream",
+    "tanggal": "2026-09-16",
+    "author": "Admin Tamvan",
+    "lokasi": 43,
+    "short": "Desember 2025, perjalanan kami dimulai di pagi buta, saat kami menuju timur ke Indonesia. Maluku Utara menjadi tujuan kami, sebuah provinsi dengan sejarah yang erat kaitannya dengan rempah-rempah dan jalur perdagangan dunia. Ternate, yang sering disebut sebagai \"Kota Rempah,\" menjadi gerbang kami sebelum melanjutkan perjalanan ke Sofifi, ibu kota Provinsi Maluku Utara.",
+    "short_ind": "Desember 2025, perjalanan kami dimulai di pagi buta, saat kami menuju timur ke Indonesia. Maluku Utara menjadi tujuan kami, sebuah provinsi dengan sejarah yang erat kaitannya dengan rempah-rempah dan jalur perdagangan dunia. Ternate, yang sering disebut sebagai \"Kota Rempah,\" menjadi gerbang kami sebelum melanjutkan perjalanan ke Sofifi, ibu kota Provinsi Maluku Utara.",
+    "short_en": "December 2025, our journey began in the early hours of the morning, as we headed east towards Indonesia. North Maluku was our destination, a province with a history closely linked to spices and global trade routes. Ternate, often referred to as the ‚ÄúCity of Spices,‚Äù was our gateway before continuing our journey to Sofifi, the capital of North Maluku Province,",
+    "deskripsi": "<p>Desember 2025, perjalanan kami dimulai di pagi-pagi sekali, saat kami menuju ke timur ke Indonesia. Maluku Utara menjadi tujuan kami, sebuah provinsi dengan sejarah yang erat kaitannya dengan rempah-rempah dan jalur perdagangan global. Ternate, yang sering disebut sebagai ‚ÄúKota Rempah,‚Äù menjadi gerbang kami sebelum melanjutkan perjalanan ke Sofifi, ibu kota Provinsi Maluku Utara yang terletak di Kepulauan Tidore. Kunjungan ini merupakan bagian dari serangkaian validasi lapangan untuk proyek Academic Study for Enhancing Climate Resilience and Action, yang meneliti pengembangan ketahanan iklim di empat sektor prioritas: Kelautan dan Pesisir, Air, Pertanian, dan Kesehatan.&nbsp;</p><p><br></p><p>Di lapangan, banjir menjadi isu strategis di sektor air dan menjadi benang merah yang menghubungkan cerita warga dengan temuan teknis. Banjir tidak lagi dipandang sebagai peristiwa musiman, tetapi telah menjadi bagian dari kehidupan sehari-hari bagi masyarakat di Ternate maupun Sofifi. Warga mengatakan bahwa hujan deras hampir selalu mengakibatkan banjir.</p>",
+    "deskripsi_ind": "<p>Desember 2025, perjalanan kami dimulai di pagi-pagi sekali, saat kami menuju ke timur ke Indonesia. Maluku Utara menjadi tujuan kami, sebuah provinsi dengan sejarah yang erat kaitannya dengan rempah-rempah dan jalur perdagangan global. Ternate, yang sering disebut sebagai ‚ÄúKota Rempah,‚Äù menjadi gerbang kami sebelum melanjutkan perjalanan ke Sofifi, ibu kota Provinsi Maluku Utara yang terletak di Kepulauan Tidore. Kunjungan ini merupakan bagian dari serangkaian validasi lapangan untuk proyek Academic Study for Enhancing Climate Resilience and Action, yang meneliti pengembangan ketahanan iklim di empat sektor prioritas: Kelautan dan Pesisir, Air, Pertanian, dan Kesehatan.&nbsp;</p><p><br></p><p>Di lapangan, banjir menjadi isu strategis di sektor air dan menjadi benang merah yang menghubungkan cerita warga dengan temuan teknis. Banjir tidak lagi dipandang sebagai peristiwa musiman, tetapi telah menjadi bagian dari kehidupan sehari-hari bagi masyarakat di Ternate maupun Sofifi. Warga mengatakan bahwa hujan deras hampir selalu mengakibatkan banjir.</p>",
+    "deskripsi_en": "<p class=\"ql-align-justify\"><span style=\"color: black;\">December 2025, our journey began in the early hours of the morning, as we headed east towards Indonesia. North Maluku was our destination, a province with a history closely linked to spices and global trade routes. Ternate, often referred to as the ‚ÄúCity of Spices,‚Äù was our gateway before continuing our journey to Sofifi, the capital of North Maluku Province, located in the Tidore Islands. This visit was part of a series of field validations for the Academic Study for Enhancing Climate Resilience and Action project, which examines climate resilience development in four priority sectors: Marine and Coastal, Water, Agriculture, and Health.</span></p><p class=\"ql-align-justify\"><br></p><p class=\"ql-align-justify\"><span style=\"color: black;\">In the field, flooding is a strategic issue in the water sector and is a common thread linking residents‚Äô stories with technical findings. Flooding is no longer perceived as a seasonal event, but has become part of everyday life for communities in both Ternate and Sofifi. Residents say that heavy rains almost always result in flooding.</span></p><p><br></p>",
+    "views_count": 3,
+    "gambar": "stories/cerlap.png",
+    "project": null
+  }
+},
+{
+  "model": "core.article",
+  "pk": 7,
+  "fields": {
+    "judul": "Tantangan dan Implementasi RaCP di Indonesia",
+    "judul_ind": "Tantangan dan Implementasi RaCP di Indonesia",
+    "judul_en": "Challenges and Implementation of RaCP in Indonesia",
+    "slug": "tantangan-dan-implementasi-racp-di-indonesia",
+    "slug_ind": "tantangan-dan-implementasi-racp-di-indonesia",
+    "slug_en": "challenges-and-implementation-of-racp-in-indonesia",
+    "tanggal": "2026-09-04",
+    "author": "Admin Tamvan",
+    "short": "Pernahkah Anda mempertanyakan bagaimana pelanggaran pembukaan lahan di masa lalu dapat dipertanggungjawabkan secara adil dan transparan?",
+    "short_ind": "Pernahkah Anda mempertanyakan bagaimana pelanggaran pembukaan lahan di masa lalu dapat dipertanggungjawabkan secara adil dan transparan?",
+    "short_en": "Have you ever questioned how past land-clearing violations can be held accountable in a fair and transparent manner?",
+    "deskripsi": "<p><span style=\"color: rgb(0, 0, 0);\">Pernahkah Anda mempertanyakan bagaimana pelanggaran pembukaan lahan di masa lalu dapat dipertanggungjawabkan secara adil dan transparan? Dalam konteks industri kelapa sawit berkelanjutan, pertanyaan ini dijawab melalui </span><em style=\"color: rgb(0, 0, 0);\">Remediation and Compensation Procedure</em><span style=\"color: rgb(0, 0, 0);\"> (RaCP) yang dikembangkan oleh </span><em style=\"color: rgb(0, 0, 0);\">Roundtable on Sustainable Palm Oil</em><span style=\"color: rgb(0, 0, 0);\"> (RSPO). RaCP dirancang sebagai mekanisme korektif untuk memastikan bahwa pembukaan lahan yang belum patuh sejak 2005 tidak berhenti pada pengakuan administratif, tetapi ditindaklanjuti melalui proses remediasi dan kompensasi yang nyata.</span></p><p><span style=\"color: rgb(0, 0, 0);\">Sebagai salah satu produsen kelapa sawit terbesar di dunia, Indonesia memiliki peran strategis sekaligus tantangan besar dalam implementasi RaCP. Luasnya ekspansi perkebunan pada periode sebelum penerapan standar keberlanjutan yang ketat menyebabkan banyak perusahaan menghadapi kewajiban historis terkait pembukaan lahan tanpa kajian Nilai Konservasi Tinggi (NKT). Kondisi ini menempatkan RaCP bukan sekadar sebagai instrumen kepatuhan, tetapi sebagai ujian nyata komitmen industri sawit nasional terhadap prinsip keberlanjutan, akuntabilitas, dan tata kelola lingkungan yang bertanggung jawab.</span></p><h3><strong style=\"color: rgb(0, 0, 0);\">Racp Sebagai Mekanisme Korektif</strong></h3><p><span style=\"color: rgb(0, 0, 0);\">RaCP diberlakukan sejak 2015 untuk menangani pembukaan lahan sejak November 2005 yang dilakukan tanpa kajian Nilai Konservasi Tinggi (NKT)/</span><em style=\"color: rgb(0, 0, 0);\">High Conservation Value</em><span style=\"color: rgb(0, 0, 0);\"> (HCV). Mekanisme ini berlaku secara global bagi seluruh anggota RSPO dan calon anggota RSPO, mencakup perusahaan induk, anak perusahaan, lahan milik, sewa, atau kelola, serta smallholder skema atau terikat.</span></p><p><span style=\"color: rgb(0, 0, 0);\">Tujuan utama RaCP yaitu:</span></p><ol><li class=\"ql-align-justify\">Memulihkan (<em>remediate</em>) dan/atau mengompensasi (<em>compensate</em>) kehilangan HCV,</li><li class=\"ql-align-justify\">Menjaga integritas standar RSPO, dan</li><li class=\"ql-align-justify\">Memberi jalan bagi perusahaan untuk tetap menuju sertifikasi tanpa menghapus tanggung jawab masa lalu.</li></ol><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Melalui prosedur RaCP, perusahaan diwajibkan mengungkapkan pembukaan lahan yang tidak patuh, menyusun </span><em style=\"color: rgb(0, 0, 0);\">Land Use Change Analysis</em><span style=\"color: rgb(0, 0, 0);\"> (LUCA), serta melaksanakan kewajiban remediasi lingkungan dan kompensasi konservasi maupun sosial. Tahun 2020 tercatat sebanyak 673 kasus RaCP secara global, dengan mayoritas berasal dari Asia dan Oseania. Mengingat besarnya kontribusi Indonesia terhadap produksi sawit global, sebagian signifikan kasus tersebut berkaitan dengan operasi di Indonesia, baik secara langsung maupun melalui grup perusahaan.</span></p><h3 class=\"ql-align-justify\"><strong>Tantangan Implementasi di Lapangan</strong></h3><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Meskipun tingkat pengungkapan kasus relatif tinggi, penyelesaian kewajiban RaCP belum berjalan optimal. Hanya sekitar 45% kasus yang memiliki LUCA yang disetujui dan hanya 18% yang menyelesaikan seluruh proses. Di Indonesia, tantangan ini dipengaruhi oleh kompleksitas perizinan, keterbatasan data historis, serta variasi kapasitas teknis perusahaan.</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Dalam aspek lingkungan, perbedaan tafsir mengenai remediasi dan kompensasi konservasi masih kerap terjadi. Kegiatan restorasi hutan sebagai bentuk kompensasi umumnya dilakukan di luar lokasi kebun, namun bukti implementasi jangka panjang di lapangan masih terbatas. Aspek lain yang tidak kalah penting adalah keterkaitan antara kewajiban RaCP dengan regulasi nasional. Dalam beberapa kasus, rencana remediasi atau kompensasi yang disyaratkan RSPO tidak sepenuhnya selaras dengan kerangka perizinan kehutanan, tata ruang, maupun mekanisme rehabilitasi lahan yang diatur pemerintah. Ketidaksinkronan ini berpotensi memperlambat implementasi, terutama ketika perusahaan harus menavigasi antara kepatuhan terhadap standar sukarela internasional dan kewajiban hukum nasional.</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Selain aspek lingkungan, RaCP juga memiliki dimensi sosial yang signifikan, khususnya ketika pembukaan lahan di masa lalu bersinggungan dengan hak dan kepentingan masyarakat lokal. Proses remediasi dalam konteks ini tidak hanya terbatas pada pemulihan fungsi ekologis, tetapi juga mencakup kompensasi sosial, penyelesaian konflik lahan, serta penguatan partisipasi masyarakat. Tantangan muncul ketika dokumentasi historis terkait persetujuan masyarakat tidak tersedia atau tidak memadai, sehingga memerlukan proses penilaian ulang dan dialog yang intensif. Apabila tidak dikelola secara inklusif dan transparan, kewajiban RaCP justru berpotensi memunculkan konflik baru atau memperpanjang ketidakpercayaan antara perusahaan dan masyarakat.</span></p><h3 class=\"ql-align-justify\"><strong style=\"color: rgb(0, 0, 0);\">Implikasi bagi Indonesia</strong></h3><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Implementasi RaCP memiliki implikasi penting bagi tata kelola perkebunan kelapa sawit di Indonesia. Di satu sisi, RaCP mendorong peningkatan transparansi, pelaporan, dan akuntabilitas perusahaan terhadap dampak lingkungan dan sosial masa lalu. Di sisi lain, mekanisme ini menuntut peningkatan kapasitas teknis, ketersediaan data spasial dan historis yang andal, serta koordinasi lintas pemangku kepentingan. Bagi Indonesia, RaCP dapat menjadi instrumen pembelajaran untuk memperkuat kebijakan pencegahan deforestasi, restorasi ekosistem, dan perlindungan hak masyarakat, sekaligus memperbaiki citra sawit nasional di pasar global.</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Pengalaman implementasi RaCP menunjukkan bahwa mekanisme ini secara konseptual merupakan instrumen penting untuk menjembatani kesenjangan antara praktik masa lalu dan tuntutan keberlanjutan saat ini. Namun, efektivitasnya sangat bergantung pada komitmen perusahaan, kejelasan panduan teknis, serta dukungan kebijakan yang kondusif di tingkat nasional. Bagi Indonesia, penguatan sinergi antara standar RSPO dan regulasi domestik, disertai peningkatan kapasitas pelaku usaha dan pemangku kepentingan lokal, menjadi kunci agar RaCP tidak berhenti sebagai kewajiban administratif, melainkan benar-benar berkontribusi pada pemulihan lingkungan dan keadilan sosial dalam pembangunan kelapa sawit berkelanjutan.</span></p><p class=\"ql-align-justify\"><br></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Referensi:</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Newing, H. 2020. An Independent Review of the RSPO Remediation and Compensation Procedure (RaCP) 2015. </span><em style=\"color: rgb(0, 0, 0);\">Roundtable on Sustainable Palm Oil</em><span style=\"color: rgb(0, 0, 0);\">.</span></p><p class=\"ql-align-justify\"><br></p>",
+    "deskripsi_ind": "<p><span style=\"color: rgb(0, 0, 0);\">Pernahkah Anda mempertanyakan bagaimana pelanggaran pembukaan lahan di masa lalu dapat dipertanggungjawabkan secara adil dan transparan? Dalam konteks industri kelapa sawit berkelanjutan, pertanyaan ini dijawab melalui </span><em style=\"color: rgb(0, 0, 0);\">Remediation and Compensation Procedure</em><span style=\"color: rgb(0, 0, 0);\"> (RaCP) yang dikembangkan oleh </span><em style=\"color: rgb(0, 0, 0);\">Roundtable on Sustainable Palm Oil</em><span style=\"color: rgb(0, 0, 0);\"> (RSPO). RaCP dirancang sebagai mekanisme korektif untuk memastikan bahwa pembukaan lahan yang belum patuh sejak 2005 tidak berhenti pada pengakuan administratif, tetapi ditindaklanjuti melalui proses remediasi dan kompensasi yang nyata.</span></p><p><span style=\"color: rgb(0, 0, 0);\">Sebagai salah satu produsen kelapa sawit terbesar di dunia, Indonesia memiliki peran strategis sekaligus tantangan besar dalam implementasi RaCP. Luasnya ekspansi perkebunan pada periode sebelum penerapan standar keberlanjutan yang ketat menyebabkan banyak perusahaan menghadapi kewajiban historis terkait pembukaan lahan tanpa kajian Nilai Konservasi Tinggi (NKT). Kondisi ini menempatkan RaCP bukan sekadar sebagai instrumen kepatuhan, tetapi sebagai ujian nyata komitmen industri sawit nasional terhadap prinsip keberlanjutan, akuntabilitas, dan tata kelola lingkungan yang bertanggung jawab.</span></p><h3><strong style=\"color: rgb(0, 0, 0);\">Racp Sebagai Mekanisme Korektif</strong></h3><p><span style=\"color: rgb(0, 0, 0);\">RaCP diberlakukan sejak 2015 untuk menangani pembukaan lahan sejak November 2005 yang dilakukan tanpa kajian Nilai Konservasi Tinggi (NKT)/</span><em style=\"color: rgb(0, 0, 0);\">High Conservation Value</em><span style=\"color: rgb(0, 0, 0);\"> (HCV). Mekanisme ini berlaku secara global bagi seluruh anggota RSPO dan calon anggota RSPO, mencakup perusahaan induk, anak perusahaan, lahan milik, sewa, atau kelola, serta smallholder skema atau terikat.</span></p><p><span style=\"color: rgb(0, 0, 0);\">Tujuan utama RaCP yaitu:</span></p><ol><li class=\"ql-align-justify\">Memulihkan (<em>remediate</em>) dan/atau mengompensasi (<em>compensate</em>) kehilangan HCV,</li><li class=\"ql-align-justify\">Menjaga integritas standar RSPO, dan</li><li class=\"ql-align-justify\">Memberi jalan bagi perusahaan untuk tetap menuju sertifikasi tanpa menghapus tanggung jawab masa lalu.</li></ol><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Melalui prosedur RaCP, perusahaan diwajibkan mengungkapkan pembukaan lahan yang tidak patuh, menyusun </span><em style=\"color: rgb(0, 0, 0);\">Land Use Change Analysis</em><span style=\"color: rgb(0, 0, 0);\"> (LUCA), serta melaksanakan kewajiban remediasi lingkungan dan kompensasi konservasi maupun sosial. Tahun 2020 tercatat sebanyak 673 kasus RaCP secara global, dengan mayoritas berasal dari Asia dan Oseania. Mengingat besarnya kontribusi Indonesia terhadap produksi sawit global, sebagian signifikan kasus tersebut berkaitan dengan operasi di Indonesia, baik secara langsung maupun melalui grup perusahaan.</span></p><h3 class=\"ql-align-justify\"><strong>Tantangan Implementasi di Lapangan</strong></h3><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Meskipun tingkat pengungkapan kasus relatif tinggi, penyelesaian kewajiban RaCP belum berjalan optimal. Hanya sekitar 45% kasus yang memiliki LUCA yang disetujui dan hanya 18% yang menyelesaikan seluruh proses. Di Indonesia, tantangan ini dipengaruhi oleh kompleksitas perizinan, keterbatasan data historis, serta variasi kapasitas teknis perusahaan.</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Dalam aspek lingkungan, perbedaan tafsir mengenai remediasi dan kompensasi konservasi masih kerap terjadi. Kegiatan restorasi hutan sebagai bentuk kompensasi umumnya dilakukan di luar lokasi kebun, namun bukti implementasi jangka panjang di lapangan masih terbatas. Aspek lain yang tidak kalah penting adalah keterkaitan antara kewajiban RaCP dengan regulasi nasional. Dalam beberapa kasus, rencana remediasi atau kompensasi yang disyaratkan RSPO tidak sepenuhnya selaras dengan kerangka perizinan kehutanan, tata ruang, maupun mekanisme rehabilitasi lahan yang diatur pemerintah. Ketidaksinkronan ini berpotensi memperlambat implementasi, terutama ketika perusahaan harus menavigasi antara kepatuhan terhadap standar sukarela internasional dan kewajiban hukum nasional.</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Selain aspek lingkungan, RaCP juga memiliki dimensi sosial yang signifikan, khususnya ketika pembukaan lahan di masa lalu bersinggungan dengan hak dan kepentingan masyarakat lokal. Proses remediasi dalam konteks ini tidak hanya terbatas pada pemulihan fungsi ekologis, tetapi juga mencakup kompensasi sosial, penyelesaian konflik lahan, serta penguatan partisipasi masyarakat. Tantangan muncul ketika dokumentasi historis terkait persetujuan masyarakat tidak tersedia atau tidak memadai, sehingga memerlukan proses penilaian ulang dan dialog yang intensif. Apabila tidak dikelola secara inklusif dan transparan, kewajiban RaCP justru berpotensi memunculkan konflik baru atau memperpanjang ketidakpercayaan antara perusahaan dan masyarakat.</span></p><h3 class=\"ql-align-justify\"><strong style=\"color: rgb(0, 0, 0);\">Implikasi bagi Indonesia</strong></h3><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Implementasi RaCP memiliki implikasi penting bagi tata kelola perkebunan kelapa sawit di Indonesia. Di satu sisi, RaCP mendorong peningkatan transparansi, pelaporan, dan akuntabilitas perusahaan terhadap dampak lingkungan dan sosial masa lalu. Di sisi lain, mekanisme ini menuntut peningkatan kapasitas teknis, ketersediaan data spasial dan historis yang andal, serta koordinasi lintas pemangku kepentingan. Bagi Indonesia, RaCP dapat menjadi instrumen pembelajaran untuk memperkuat kebijakan pencegahan deforestasi, restorasi ekosistem, dan perlindungan hak masyarakat, sekaligus memperbaiki citra sawit nasional di pasar global.</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Pengalaman implementasi RaCP menunjukkan bahwa mekanisme ini secara konseptual merupakan instrumen penting untuk menjembatani kesenjangan antara praktik masa lalu dan tuntutan keberlanjutan saat ini. Namun, efektivitasnya sangat bergantung pada komitmen perusahaan, kejelasan panduan teknis, serta dukungan kebijakan yang kondusif di tingkat nasional. Bagi Indonesia, penguatan sinergi antara standar RSPO dan regulasi domestik, disertai peningkatan kapasitas pelaku usaha dan pemangku kepentingan lokal, menjadi kunci agar RaCP tidak berhenti sebagai kewajiban administratif, melainkan benar-benar berkontribusi pada pemulihan lingkungan dan keadilan sosial dalam pembangunan kelapa sawit berkelanjutan.</span></p><p class=\"ql-align-justify\"><br></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Referensi:</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(0, 0, 0);\">Newing, H. 2020. An Independent Review of the RSPO Remediation and Compensation Procedure (RaCP) 2015. </span><em style=\"color: rgb(0, 0, 0);\">Roundtable on Sustainable Palm Oil</em><span style=\"color: rgb(0, 0, 0);\">.</span></p><p class=\"ql-align-justify\"><br></p>",
+    "deskripsi_en": "<p>Have you ever wondered how past instances of non-compliant land clearing can be addressed in a fair and transparent manner? In the context of the sustainable palm oil industry, this question is answered through the Remediation and Compensation Procedure (RaCP) developed by the Roundtable on Sustainable Palm Oil (RSPO). The RaCP is designed as a corrective mechanism to ensure that instances of non-compliant land clearing dating back to 2005 do not merely result in administrative acknowledgment, but are instead followed by tangible remediation and compensation processes.</p><p>As one of the world's largest palm oil producers, Indonesia faces both a strategic role and significant challenges regarding the implementation of the RaCP. Extensive plantation expansion prior to the adoption of rigorous sustainability standards has left many companies with historical obligations concerning land clearing conducted without High Conservation Value (HCV) assessments. Consequently, the RaCP serves not merely as a compliance tool, but as a genuine test of the national palm oil industry's commitment to the principles of sustainability, accountability, and responsible environmental governance.</p><h3><strong>RaCP as a Corrective Mechanism</strong></h3><p>The RaCP was implemented in 2015 to address land clearing activities undertaken since November 2005 without a High Conservation Value (HCV) assessment. This mechanism applies globally to all RSPO members and prospective members, covering parent companies, subsidiaries, and land that is owned, leased, or managed, as well as scheme or associated smallholders.</p><p>The primary objectives of the RaCP are to:</p><ol><li>Remediate and/or compensate for the loss of HCVs,</li><li>Uphold the integrity of RSPO standards, and</li><li>Provide a pathway for companies to continue towards certification without absolving them of past responsibilities.</li></ol><p>Under the RaCP procedure, companies are required to disclose instances of non-compliant land clearing, conduct a Land Use Change Analysis (LUCA), and fulfill obligations regarding environmental remediation as well as conservation and social compensation. As of 2020, there were 673 recorded RaCP cases globally, with the majority originating from Asia and Oceania. Given Indonesia's significant contribution to global palm oil production, a substantial portion of these cases relates to operations in Indonesia, whether directly or through corporate groups.</p><h3><strong>Field Implementation Challenges</strong></h3><p>Despite a relatively high case disclosure rate, the fulfillment of RaCP obligations has not proceeded optimally. Only about 45% of cases have an approved LUCA (Land Use Change Analysis), and merely 18% have completed the entire process. In Indonesia, these challenges are driven by complex permitting processes, limited historical data, and varying levels of technical capacity among companies.</p><p>Regarding environmental aspects, differing interpretations of remediation and conservation compensation frequently arise. Forest restoration activities intended as compensation are generally carried out outside the plantation site, yet evidence of long-term implementation on the ground remains limited. Another equally important aspect is the interplay between RaCP obligations and national regulations. In some instances, the remediation or compensation plans required by the RSPO do not fully align with government-mandated frameworks for forestry permits, spatial planning, or land rehabilitation mechanisms. This lack of synchronization can slow down implementation, particularly when companies must navigate the tension between complying with voluntary international standards and meeting national legal obligations.</p><p>Beyond environmental considerations, the RaCP also entails significant social dimensions, especially when past land clearing has impinged upon the rights and interests of local communities. In this context, the remediation process extends beyond restoring ecological functions to encompass social compensation, the resolution of land conflicts, and the strengthening of community participation. Challenges arise when historical documentation regarding community consent is unavailable or inadequate, necessitating reassessment processes and intensive dialogue. If not managed inclusively and transparently, RaCP obligations risk sparking new conflicts or perpetuating mistrust between companies and local communities.</p><h3><strong>Implications for Indonesia</strong></h3><p>The implementation of the RaCP has significant implications for the governance of the palm oil sector in Indonesia. On one hand, the RaCP fosters greater corporate transparency, reporting, and accountability regarding past environmental and social impacts. On the other hand, the mechanism demands enhanced technical capacity, the availability of reliable spatial and historical data, and coordination across stakeholders. For Indonesia, the RaCP can serve as a learning tool to strengthen policies on deforestation prevention, ecosystem restoration, and the protection of community rights, while simultaneously improving the image of national palm oil in the global market.</p><p>Experience with RaCP implementation demonstrates that, conceptually, the mechanism is a vital instrument for bridging the gap between past practices and current sustainability demands. However, its effectiveness hinges heavily on corporate commitment, clear technical guidelines, and supportive policy frameworks at the national level. For Indonesia, strengthening synergy between RSPO standards and domestic regulations‚Äîalongside capacity building for business operators and local stakeholders‚Äîis key to ensuring the RaCP does not remain merely an administrative obligation, but instead genuinely contributes to environmental restoration and social equity within sustainable palm oil development.</p><p><br></p><p>Reference:</p><p>Newing, H. 2020. An Independent Review of the RSPO Remediation and Compensation Procedure (RaCP) 2015. Roundtable on Sustainable Palm Oil.</p>",
+    "views_count": 17,
+    "gambar": "articles/about-hero.jpg"
+  }
+},
+{
+  "model": "core.article",
+  "pk": 13,
+  "fields": {
+    "judul": "Aksi Kecil, Dampak Besar: Praktik Sederhana yang Mendukung Pelestarian Keanekaragaman Hayati",
+    "judul_ind": "Aksi Kecil, Dampak Besar: Praktik Sederhana yang Mendukung Pelestarian Keanekaragaman Hayati",
+    "judul_en": "Small Actions, Big Impact: Simple Practices That Support Biodiversity Conservation",
+    "slug": "aksi-kecil-dampak-besar-praktik-sederhana-yang-mendukung-pelestarian-keanekaragaman-hayati",
+    "slug_ind": "aksi-kecil-dampak-besar-praktik-sederhana-yang-mendukung-pelestarian-keanekaragaman-hayati",
+    "slug_en": "small-actions-big-impact-simple-practices-that-support-biodiversity-conservation",
+    "tanggal": "2026-09-05",
+    "author": "Admin Tamvan",
+    "short": "Tahukah Anda bahwa tindakan sederhana sehari-hari ternyata dapat membantu menyelamatkan bumi? Mulai dari memilih membawa tumbler, menanam tanaman lokal, hingga mengurangi sampah plastik, kebiasaan kecil tersebut",
+    "short_ind": "Tahukah Anda bahwa tindakan sederhana sehari-hari ternyata dapat membantu menyelamatkan bumi? Mulai dari memilih membawa tumbler, menanam tanaman lokal, hingga mengurangi sampah plastik, kebiasaan kecil tersebut",
+    "short_en": "Did you know that simple everyday actions can actually help save the planet? From choosing to bring a tumbler, planting local plants, to reducing plastic waste, those small habits",
+    "deskripsi": "<p class=\"ql-align-justify\">Tahukah Anda bahwa tindakan sederhana sehari-hari ternyata dapat membantu menyelamatkan bumi? Mulai dari memilih membawa tumbler, menanam tanaman lokal, hingga mengurangi sampah plastik, kebiasaan kecil tersebut dapat memberikan dampak besar bagi keberlangsungan keanekaragaman hayati.</p><p class=\"ql-align-justify\">International Day for Biological Diversity (IDB) 2026 mengangkat tema ‚Äú<em>Acting Locally for Global Impact</em>‚Äù <a href=\"https://bhumipasahijau.com/aksi-kecil-dampak-besar-praktik-sederhana-yang-mendukung-pelestarian-keanekaragaman-hayati/#_ftn1\" target=\"_blank\">[1]</a>. Tema ini menjadi pengingat bahwa pelestarian keanekaragaman hayati tidak selalu harus dimulai dari langkah besar. Justru, aksi sederhana yang dilakukan secara konsisten oleh banyak orang dapat menciptakan perubahan nyata bagi lingkungan.</p><p><br></p>",
+    "deskripsi_ind": "<p class=\"ql-align-justify\">Tahukah Anda bahwa tindakan sederhana sehari-hari ternyata dapat membantu menyelamatkan bumi? Mulai dari memilih membawa tumbler, menanam tanaman lokal, hingga mengurangi sampah plastik, kebiasaan kecil tersebut dapat memberikan dampak besar bagi keberlangsungan keanekaragaman hayati.</p><p class=\"ql-align-justify\">International Day for Biological Diversity (IDB) 2026 mengangkat tema ‚Äú<em>Acting Locally for Global Impact</em>‚Äù <a href=\"https://bhumipasahijau.com/aksi-kecil-dampak-besar-praktik-sederhana-yang-mendukung-pelestarian-keanekaragaman-hayati/#_ftn1\" target=\"_blank\">[1]</a>. Tema ini menjadi pengingat bahwa pelestarian keanekaragaman hayati tidak selalu harus dimulai dari langkah besar. Justru, aksi sederhana yang dilakukan secara konsisten oleh banyak orang dapat menciptakan perubahan nyata bagi lingkungan.</p><p><br></p>",
+    "deskripsi_en": "<p>Did you know that simple everyday actions can actually help save the planet? From choosing to bring a reusable tumbler, planting local plants, to reducing plastic waste, these small habits can have a big impact on the sustainability of biodiversity.&nbsp;</p><p>International Day for Biological Diversity (IDB) 2026 carries the theme \"Acting Locally for Global Impact\". This theme serves as a reminder that conserving biodiversity doesn't always have to start with big steps. In fact, simple actions consistently carried out by many people can create real change for the environment.</p>",
+    "views_count": 16,
+    "gambar": "articles/carbion-1024x379.jpg"
+  }
+},
+{
+  "model": "core.modul",
+  "pk": 2,
+  "fields": {
+    "judul": "test modul",
+    "judul_ind": "test modul",
+    "judul_en": null,
+    "file_dokumen": "documents/Company-Profile-BPH-2024-rev-02.pdf",
+    "tanggal_rilis": "2026-07-27"
+  }
+},
+{
+  "model": "core.contactmessage",
+  "pk": 4,
+  "fields": {
+    "nama_lengkap": "test mas joe",
+    "email": "test@gmail.com",
+    "subjek": "test instansi",
+    "pesan": "test detail",
+    "tanggal_kirim": "2026-07-29T07:18:28.793Z",
+    "is_read": true
+  }
+},
+{
+  "model": "core.contactmessage",
+  "pk": 5,
+  "fields": {
+    "nama_lengkap": "test",
+    "email": "test@gmail.com",
+    "subjek": "test",
+    "pesan": "testtt",
+    "tanggal_kirim": "2026-07-29T07:19:37.091Z",
+    "is_read": true
+  }
+},
+{
+  "model": "core.contactmessage",
+  "pk": 6,
+  "fields": {
+    "nama_lengkap": "1",
+    "email": "test@gmail.com",
+    "subjek": "1",
+    "pesan": "1",
+    "tanggal_kirim": "2026-08-07T09:48:21.841Z",
+    "is_read": true
+  }
+},
+{
+  "model": "core.gallery",
+  "pk": 3,
+  "fields": {
+    "caption": "Judul Kegiatan",
+    "caption_ind": "Judul Kegiatan",
+    "caption_en": "Activity Title",
+    "gambar": "gallery/artikel2_1rEh7iy.jpg",
+    "folder": 7,
+    "kategori": 4,
+    "tanggal_upload": "2018-10-16"
+  }
+},
+{
+  "model": "core.gallery",
+  "pk": 4,
+  "fields": {
+    "caption": "Judul Kegiatanhhhh",
+    "caption_ind": "Judul Kegiatanhhhh",
+    "caption_en": "jjjjjj",
+    "gambar": "gallery/about-section.jpg",
+    "folder": 8,
+    "kategori": 4,
+    "tanggal_upload": "2026-08-07"
+  }
+},
+{
+  "model": "core.profile",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "nama_lengkap": "Admin Tamvan",
+    "foto_profil": "",
+    "role": "admin"
+  }
+},
+{
+  "model": "core.profile",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "admin2"
+    ],
+    "nama_lengkap": "Ryan",
+    "foto_profil": "",
+    "role": "contributor"
+  }
+},
+{
+  "model": "core.teammember",
+  "pk": 1,
+  "fields": {
+    "nama": "Ir. Fuad Say Benny",
+    "jabatan": "Senior Penasihat Proyek",
+    "jabatan_ind": "Senior Penasihat Proyek",
+    "jabatan_en": "Senior Project Advisor",
+    "bio": "Lebih dari 30 tahun aktif dalam jasa konsultasi pengelolaan lingkungan dan sumber daya alam",
+    "bio_ind": "Lebih dari 30 tahun aktif dalam jasa konsultasi pengelolaan lingkungan dan sumber daya alam",
+    "bio_en": "Active for over 30 years in environmental and natural resource management consultancy services.",
+    "kategori": "advisors",
+    "kategori_ind": "advisors",
+    "kategori_en": "advisors",
+    "foto": "team/PakBenny-1422x2048.jpg",
+    "urutan": 0,
+    "created_at": "2026-07-22T08:06:16.729Z"
+  }
+},
+{
+  "model": "core.teammember",
+  "pk": 3,
+  "fields": {
+    "nama": "Dr. Idung Risdiyanto, S.Si, M.Sc",
+    "jabatan": "Tenaga Ahli Senior Perubahan Iklim",
+    "jabatan_ind": "Tenaga Ahli Senior Perubahan Iklim",
+    "jabatan_en": "Senior Climate Change Expert",
+    "bio": "Dosen yang memiliki pengalaman lebih dari 20 tahun di berbagai bidang klimatologi, hidrologi, dan konservasi serta bersertifikat ALS dari HCV-RN International",
+    "bio_ind": "Dosen yang memiliki pengalaman lebih dari 20 tahun di berbagai bidang klimatologi, hidrologi, dan konservasi serta bersertifikat ALS dari HCV-RN International",
+    "bio_en": "A lecturer with over 20 years of experience across the fields of climatology, hydrology, and conservation, and an ALS-certified professional from HCV-RN International.",
+    "kategori": "advisors",
+    "kategori_ind": "advisors",
+    "kategori_en": "advisors",
+    "foto": "team/PakIdungedited.png",
+    "urutan": 1,
+    "created_at": "2026-09-04T03:45:15.975Z"
+  }
+},
+{
+  "model": "core.teammember",
+  "pk": 4,
+  "fields": {
+    "nama": "Aswin Rahadian, S.Hut, M.Si, Ph.D (Cand)",
+    "jabatan": "Tenaga Ahli Senior Karbon Terestrial",
+    "jabatan_ind": "Tenaga Ahli Senior Karbon Terestrial",
+    "jabatan_en": "Senior Terrestrial Carbon Expert",
+    "bio": "Peneliti di bidang kehutanan, penginderaan jauh, dan pemodelan spasial yang memiliki pengalaman lebih dari 14 tahun. Pemimpin Proyek dalam Pemutakhiran PD (Tahap 2) Proyek Katingan-Mentaya",
+    "bio_ind": "Peneliti di bidang kehutanan, penginderaan jauh, dan pemodelan spasial yang memiliki pengalaman lebih dari 14 tahun. Pemimpin Proyek dalam Pemutakhiran PD (Tahap 2) Proyek Katingan-Mentaya",
+    "bio_en": "Researcher specializing in forestry, remote sensing, and spatial modeling with over 14 years of experience. Project Lead for the Katingan-Mentaya Project PD Update (Phase 2)",
+    "kategori": "advisors",
+    "kategori_ind": "advisors",
+    "kategori_en": "advisors",
+    "foto": "team/aswin.jpeg",
+    "urutan": 2,
+    "created_at": "2026-09-04T03:56:03.557Z"
+  }
+},
+{
+  "model": "core.infografis",
+  "pk": 1,
+  "fields": {
+    "deskripsi": "<p>dkhfdkfkdfknkdnfkdnfkdnfkdnfkdnfkdnfkdnfknddkdkn</p>",
+    "gambar": "infografis/d142f6b7-a65d-4438-b3c1-9b3af4e0f3a8-768x576.jpg",
+    "tanggal_unggah": "2026-08-12"
+  }
+},
+{
+  "model": "core.video",
+  "pk": 2,
+  "fields": {
+    "judul": "111",
+    "url_video": "https://www.instagram.com/reel/DXNLPf3k4Gt/",
+    "thumbnail": "video_thumbnails/artikel3.jpg",
+    "tanggal_unggah": "2026-08-12"
+  }
+},
+{
+  "model": "core.video",
+  "pk": 3,
+  "fields": {
+    "judul": "kang mus",
+    "url_video": "https://youtu.be/a1R3gIoxrlo?si=CxY7HEv_92tTc_yO",
+    "thumbnail": "",
+    "tanggal_unggah": "2026-09-04"
+  }
+},
+{
+  "model": "core.video",
+  "pk": 4,
+  "fields": {
+    "judul": "thumb",
+    "url_video": "https://www.instagram.com/reel/DYsAwo7JzeF/",
+    "thumbnail": "video_thumbnails/artikel2_n3uUTjT.jpg",
+    "tanggal_unggah": "2026-09-04"
+  }
+},
+{
+  "model": "core.video",
+  "pk": 5,
+  "fields": {
+    "judul": "x",
+    "url_video": "https://x.com/hope_emak/status/2095359339624349982?s=20",
+    "thumbnail": "video_thumbnails/cerita.jpg",
+    "tanggal_unggah": "2026-09-04"
+  }
+},
+{
+  "model": "core.video",
+  "pk": 6,
+  "fields": {
+    "judul": "fb",
+    "url_video": "https://www.facebook.com/reel/1374064804914015",
+    "thumbnail": "video_thumbnails/scenario_1.jpg",
+    "tanggal_unggah": "2026-09-04"
+  }
+},
+{
+  "model": "core.program",
+  "pk": 1,
+  "fields": {
+    "judul": "Lido Bageur",
+    "judul_ind": "Lido Bageur",
+    "judul_en": "Lido Bageur",
+    "slug": "lido-bageur",
+    "slug_ind": "lido-bageur",
+    "slug_en": "lido-bageur",
+    "tanggal": "2026-10-09",
+    "author": "Admin Tamvan",
+    "short": "ringkasan",
+    "short_ind": "ringkasan",
+    "short_en": "ringkasan",
+    "deskripsi": "<p>isi program</p>",
+    "deskripsi_ind": "<p>isi program</p>",
+    "deskripsi_en": "<p>isi program</p>",
+    "views_count": 3,
+    "gambar": "programs/hero5.jpeg"
+  }
+}
+]
