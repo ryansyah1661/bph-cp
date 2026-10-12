@@ -23,6 +23,9 @@ DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 't')
 ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
+    'https://*.up.railway.app',
+    'https://*.railway.app',
+    'https://*.trycloudflare.com',
     'https://*.onrender.com',
     'http://127.0.0.1',
     'http://localhost',
