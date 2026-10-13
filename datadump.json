@@ -1,5 +1,39 @@
 [
 {
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$4oNIggINzh86bvlGjFcp1a$3EV9lFcuiBM1EPHAHzVs4HyKgukf2NW+BDeynUF46p4=",
+    "last_login": "2026-10-12T05:06:39.685Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "muhammadrian1602@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-07-22T02:57:07.122Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$rgbQNy5JGXZyR021NfJDiZ$9MwF8U1umkacigG/doBkcujUQ0/nHR0ihBd2onwshyQ=",
+    "last_login": "2026-07-31T03:48:47.602Z",
+    "is_superuser": false,
+    "username": "admin2",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-07-27T09:33:47.949Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
   "model": "core.category",
   "pk": 4,
   "fields": {
