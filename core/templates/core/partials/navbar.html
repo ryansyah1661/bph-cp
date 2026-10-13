@@ -1,6 +1,6 @@
 {% load static i18n %}
 <nav
-  class="fixed top-0 left-0 w-full z-50 py-2.5 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl border-b border-border-subtle dark:border-outline-variant transition-all duration-300"
+  class="fixed top-0 left-0 w-full z-50 py-2.5 bg-surface/90 dark:bg-surface-dim/90 backdrop-blur-xl border-b border-border-subtle dark:border-outline-variant transition-all duration-300"
   id="main-nav">
   <div class="w-full max-w-container-max mx-auto flex justify-between items-center px-margin-mobile md:px-margin-desktop">
     
@@ -9,7 +9,7 @@
         <img 
           src="{% static 'images/logo-bph.png' %}" 
           alt="Logo BPH" 
-          class="h-14 md:h-20 w-auto object-contain block transform-gpu transition-transform duration-300 hover:scale-105" />
+          class="h-12 sm:h-14 md:h-20 w-auto object-contain block transform-gpu transition-transform duration-300 hover:scale-105" />
       </a>
     </div>
 
@@ -68,8 +68,10 @@
 
     </div>
 
-    <div class="flex items-center gap-5">
+    <!-- SISI KANAN NAVBAR -->
+    <div class="flex items-center gap-2 sm:gap-4">
       
+      <!-- Language Switcher Desktop -->
       <div class="hidden sm:flex items-center gap-2 border border-black/10 dark:border-white/15 rounded-full px-3 py-1.5 font-label-caps text-xs tracking-widest select-none text-on-surface-variant/60 dark:text-surface-variant/60">
         <span class="material-symbols-outlined text-[16px] shrink-0 opacity-70">language</span>
         
@@ -86,15 +88,136 @@
         </a>
       </div>
 
+      <!-- Tombol Kontak Desktop / Tablet -->
       <a href="{% url 'contact' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}"
-         class="inline-flex items-center justify-center bg-primary text-surface-white font-bold text-[11px] tracking-widest uppercase px-7 py-3 rounded-full shadow-[0_6px_20px_rgba(0,107,41,0.3)] hover:bg-forest-deep hover:shadow-[0_4px_10px_rgba(0,107,41,0.2)] hover:translate-y-[1px] transition-all duration-300">
+         class="hidden sm:inline-flex items-center justify-center bg-primary text-surface-white font-bold text-[11px] tracking-widest uppercase px-6 md:px-7 py-2.5 md:py-3 rounded-full shadow-[0_6px_20px_rgba(0,107,41,0.3)] hover:bg-forest-deep hover:shadow-[0_4px_10px_rgba(0,107,41,0.2)] hover:translate-y-[1px] transition-all duration-300">
         {% trans "Kontak" %}
       </a>
 
-      <button aria-label="Menu" class="md:hidden text-primary">
-        <span class="material-symbols-outlined">menu</span>
+      <!-- Tombol Hamburger Menu Mobile -->
+      <button 
+        id="mobile-menu-toggle" 
+        aria-label="Buka Menu Navigasi" 
+        class="md:hidden flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 active:scale-95 transition-all">
+        <span id="mobile-menu-icon" class="material-symbols-outlined text-2xl font-bold">menu</span>
       </button>
     </div>
 
   </div>
+
+  <!-- DROPDOWN MENU MOBILE -->
+  <div 
+    id="mobile-menu-drawer" 
+    class="hidden md:hidden w-full bg-surface-white dark:bg-surface-dim border-b border-border-subtle shadow-xl px-4 py-5 mt-2 transition-all duration-300">
+    <div class="flex flex-col space-y-1.5 max-w-container-max mx-auto">
+      
+      <a href="{% url 'homepage' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}"
+         class="font-label-caps text-sm font-semibold transition-all duration-200 px-4 py-3 rounded-xl flex items-center justify-between
+         {% if request.path == '/' or 'beranda' in request.path %}
+           bg-primary/10 text-primary dark:bg-inverse-primary/15 dark:text-inverse-primary font-bold
+         {% else %}
+           text-on-surface hover:bg-black/5 dark:hover:bg-white/5
+         {% endif %}">
+         <span>{% trans "Beranda" %}</span>
+         <span class="material-symbols-outlined text-base opacity-40">chevron_right</span>
+      </a>
+      
+      <a href="{% url 'about' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}"
+         class="font-label-caps text-sm font-semibold transition-all duration-200 px-4 py-3 rounded-xl flex items-center justify-between
+         {% if 'about' in request.path or 'tentang' in request.path %}
+           bg-primary/10 text-primary dark:bg-inverse-primary/15 dark:text-inverse-primary font-bold
+         {% else %}
+           text-on-surface hover:bg-black/5 dark:hover:bg-white/5
+         {% endif %}">
+         <span>{% trans "Tentang BPH" %}</span>
+         <span class="material-symbols-outlined text-base opacity-40">chevron_right</span>
+      </a>
+      
+      <a href="{% url 'services' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}"
+         class="font-label-caps text-sm font-semibold transition-all duration-200 px-4 py-3 rounded-xl flex items-center justify-between
+         {% if 'services' in request.path or 'layanan' in request.path %}
+           bg-primary/10 text-primary dark:bg-inverse-primary/15 dark:text-inverse-primary font-bold
+         {% else %}
+           text-on-surface hover:bg-black/5 dark:hover:bg-white/5
+         {% endif %}">
+         <span>{% trans "Layanan" %}</span>
+         <span class="material-symbols-outlined text-base opacity-40">chevron_right</span>
+      </a>
+      
+      <a href="{% url 'experience' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}"
+         class="font-label-caps text-sm font-semibold transition-all duration-200 px-4 py-3 rounded-xl flex items-center justify-between
+         {% if 'experience' in request.path or 'pengalaman' in request.path %}
+           bg-primary/10 text-primary dark:bg-inverse-primary/15 dark:text-inverse-primary font-bold
+         {% else %}
+           text-on-surface hover:bg-black/5 dark:hover:bg-white/5
+         {% endif %}">
+         <span>{% trans "Pengalaman" %}</span>
+         <span class="material-symbols-outlined text-base opacity-40">chevron_right</span>
+      </a>
+      
+      <a href="{% url 'publications' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}"
+         class="font-label-caps text-sm font-semibold transition-all duration-200 px-4 py-3 rounded-xl flex items-center justify-between
+         {% if 'publications' in request.path or 'galeri' in request.path or 'story' in request.path or 'article' in request.path or 'program' in request.path %}
+           bg-primary/10 text-primary dark:bg-inverse-primary/15 dark:text-inverse-primary font-bold
+         {% else %}
+           text-on-surface hover:bg-black/5 dark:hover:bg-white/5
+         {% endif %}">
+         <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Publications{% else %}Publikasi{% endif %}</span>
+         <span class="material-symbols-outlined text-base opacity-40">chevron_right</span>
+      </a>
+
+      <!-- Garis Pemisah Menu Mobile -->
+      <div class="h-px bg-border-subtle dark:bg-outline-variant my-2"></div>
+
+      <!-- Bahasa & Tombol Kontak Mobile -->
+      <div class="pt-1 flex flex-col gap-3">
+        <div class="flex items-center justify-between px-4 py-2.5 bg-surface-container-low dark:bg-white/5 rounded-xl">
+          <span class="text-xs font-semibold text-on-surface-variant flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[18px]">language</span> Bahasa
+          </span>
+          <div class="flex items-center gap-1.5 font-label-caps text-xs tracking-wider">
+            <a href="?lang=id" class="px-2.5 py-1 rounded-md {% if request.LANGUAGE_CODE == 'id' or request.GET.lang == 'id' or not request.GET.lang and request.LANGUAGE_CODE != 'en' %}bg-primary text-white font-bold{% else %}text-on-surface hover:text-primary{% endif %}">ID</a>
+            <span class="opacity-30">|</span>
+            <a href="?lang=en" class="px-2.5 py-1 rounded-md {% if request.LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}bg-primary text-white font-bold{% else %}text-on-surface hover:text-primary{% endif %}">EN</a>
+          </div>
+        </div>
+
+        <a href="{% url 'contact' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}"
+           class="w-full text-center bg-primary text-surface-white font-bold text-xs tracking-widest uppercase py-3.5 rounded-xl shadow-[0_6px_20px_rgba(0,107,41,0.25)] hover:bg-forest-deep active:scale-[0.99] transition-all duration-300">
+          {% trans "Kontak Kami" %}
+        </a>
+      </div>
+
+    </div>
+  </div>
 </nav>
+
+<script>
+  (function() {
+    const toggleBtn = document.getElementById('mobile-menu-toggle');
+    const drawer = document.getElementById('mobile-menu-drawer');
+    const icon = document.getElementById('mobile-menu-icon');
+
+    if (toggleBtn && drawer && icon) {
+      toggleBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const isHidden = drawer.classList.contains('hidden');
+        if (isHidden) {
+          drawer.classList.remove('hidden');
+          icon.textContent = 'close';
+        } else {
+          drawer.classList.add('hidden');
+          icon.textContent = 'menu';
+        }
+      });
+
+      // Menutup menu jika klik di luar navbar
+      document.addEventListener('click', function(e) {
+        if (!drawer.contains(e.target) && !toggleBtn.contains(e.target) && !drawer.classList.contains('hidden')) {
+          drawer.classList.add('hidden');
+          icon.textContent = 'menu';
+        }
+      });
+    }
+  })();
+</script>
