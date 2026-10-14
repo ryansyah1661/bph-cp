@@ -4,6 +4,53 @@
 {% block title %}{{ project.name|default:"Detail Studi Kasus Proyek" }} - Bhumi Pasa Hijau{% endblock %}
 
 {% block content %}
+<style>
+  /* ======================================================= */
+  /* PETA MINI LOKASI PROYEK (D3.js + GeoJSON Indonesia)      */
+  /* ======================================================= */
+  #detail-map-svg-container {
+      width: 100%;
+      aspect-ratio: 960 / 430;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f4 100%);
+      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      position: relative;
+      overflow: hidden;
+  }
+  #detail-map-svg-container svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+  }
+  .detail-province-path {
+      fill: #e2e8f0;
+      stroke: #ffffff;
+      stroke-width: 0.75px;
+      transition: fill 0.2s ease, fill-opacity 0.2s ease;
+  }
+  .detail-province-path.active-location {
+      fill: #308935 !important;
+      fill-opacity: 0.95;
+      stroke: #ffffff;
+      stroke-width: 1.5px;
+      cursor: pointer;
+  }
+  .detail-province-path.active-location:hover {
+      fill: #077944 !important;
+      fill-opacity: 1;
+  }
+  .detail-province-pin {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      cursor: pointer;
+      z-index: 20;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .detail-province-pin:hover {
+      transform: translate(-50%, -100%) scale(1.3);
+  }
+</style>
+
 <main class="flex-grow bg-background">
   
   {% trans "Analisis &amp; Restorasi Ekosistem Strategis" as hero_title %}
@@ -27,7 +74,6 @@
             <span class="material-symbols-outlined text-2xl font-bold">warning</span>
             <h2 class="font-headline-lg text-xl md:text-2xl font-bold text-on-surface">{% trans "Tantangan &amp; Kondisi Awal" %}</h2>
           </div>
-          <!-- FIX 2: Ditambahkan |safe untuk merender format html tantangan dari Quill -->
           <div class="font-body-md text-sm md:text-base text-on-surface-variant leading-relaxed text-justify md:text-left">
             {{ project.challenge|safe }}
           </div>
@@ -40,7 +86,6 @@
             <span class="material-symbols-outlined text-2xl font-bold">biotech</span>
             <h2 class="font-headline-lg text-xl md:text-2xl font-bold text-on-surface">{% trans "Pendekatan &amp; Metodologi Kerja" %}</h2>
           </div>
-          <!-- FIX 3: Ditambahkan |safe untuk merender format html metodologi dari Quill -->
           <div class="font-body-md text-sm md:text-base text-on-surface-variant leading-relaxed text-justify md:text-left">
             {{ project.methodology|safe }}
           </div>
@@ -53,7 +98,6 @@
             <span class="material-symbols-outlined text-2xl font-bold">task_alt</span>
             <h2 class="font-headline-lg text-xl md:text-2xl font-bold text-on-surface">{% trans "Hasil &amp; Dampak Ekologis Terukur" %}</h2>
           </div>
-          <!-- FIX 4: Ditambahkan |safe untuk merender format html hasil evaluasi dari Quill -->
           <div class="font-body-md text-sm md:text-base text-on-surface-variant leading-relaxed text-justify md:text-left">
             {{ project.result|safe }}
           </div>
@@ -74,7 +118,7 @@
                   <th class="p-4 pr-6">{% trans "Realisasi Akhir Lapangan" %}</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-border-subtle font-body-md text-sm text-on-surface-variant">
+              <tbody class="divide-y border-border-subtle font-body-md text-sm text-on-surface-variant">
                 {% for metric in project.metrics.all %}
                 <tr class="hover:bg-surface/50 transition-colors">
                   <td class="p-4 pl-6 font-medium text-on-surface">{{ metric.parameter }}</td>
@@ -90,6 +134,7 @@
       </div>
 
       <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-[100px]">
+        <!-- CARD 1: Ringkasan Proyek -->
         <div class="bg-surface-white border border-border-subtle rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.01)] space-y-5">
           <h3 class="font-headline-lg text-base font-bold text-on-surface border-b border-border-subtle pb-3">{% trans "Ringkasan Proyek" %}</h3>
           <div class="space-y-4 font-body-sm text-sm">
@@ -140,6 +185,56 @@
             {% endif %}
           </div>
         </div>
+
+        <!-- CARD 2: Peta Lokasi Wilayah Proyek -->
+        <div class="bg-surface-white border border-border-subtle rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.01)] space-y-4">
+          <div class="flex items-center justify-between border-b border-border-subtle pb-3">
+            <h3 class="font-headline-lg text-base font-bold text-on-surface flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-xl">map</span>
+              <span>{% trans "Peta Lokasi Proyek" %}</span>
+            </h3>
+            {% if project.locations.all %}
+              <span class="text-[11px] font-bold text-primary bg-primary/10 px-2.5 py-0.5 rounded-full">
+                {{ project.locations.count }} {% trans "Provinsi" %}
+              </span>
+            {% endif %}
+          </div>
+
+          <!-- Mini Map SVG Container -->
+          <div id="detail-map-svg-container" class="shadow-inner">
+            <div id="detail-map-loading" class="absolute inset-0 flex items-center justify-center text-slate-400 text-xs gap-2 font-medium">
+              <span class="material-symbols-outlined text-base animate-spin text-primary">progress_activity</span>
+              <span>{% trans "Memuat peta..." %}</span>
+            </div>
+          </div>
+
+          <!-- Keterangan & Badge Lokasi -->
+          <div class="space-y-3 pt-1">
+            <div class="flex flex-wrap gap-1.5">
+              {% for loc in project.locations.all %}
+                <span class="inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-800 dark:text-emerald-300 border border-emerald-200/70 px-2.5 py-1 rounded-lg text-xs font-semibold">
+                  <span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+                  {{ loc.nama_provinsi }}
+                </span>
+              {% empty %}
+                <span class="text-xs text-text-muted italic">{% trans "Lokasi wilayah belum ditentukan." %}</span>
+              {% endfor %}
+            </div>
+
+            <p class="text-[11px] text-text-muted flex items-center gap-1">
+              <span class="material-symbols-outlined text-amber-500 text-sm">location_on</span>
+              <span>{% trans "Wilayah proyek disorot warna hijau & ditandai pin." %}</span>
+            </p>
+
+            <div class="pt-2 border-t border-border-subtle">
+              <a href="{% url 'experience' %}" class="text-xs font-bold text-primary hover:text-forest-deep flex items-center justify-between group pt-0.5" style="text-decoration: none;">
+                <span>{% trans "Buka di Peta Pengalaman Utama" %}</span>
+                <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
         <a href="{% url 'experience' %}" class="w-full inline-flex items-center justify-center gap-2 border-2 border-border-subtle text-on-surface-variant font-label-caps text-xs font-bold uppercase tracking-wider py-3.5 rounded-xl hover:border-primary hover:text-primary transition-all duration-300" style="text-decoration: none;">
           <span class="material-symbols-outlined text-sm">arrow_back</span>
           <span>{% trans "Kembali ke Pengalaman" %}</span>
@@ -219,4 +314,120 @@
   {% endif %}
 
 </main>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const mapContainer = document.getElementById('detail-map-svg-container');
+    const loadingEl = document.getElementById('detail-map-loading');
+    if (!mapContainer) return;
+
+    // Lokasi proyek ini dari context Django
+    const projectLocationCodes = [
+      {% for loc in project.locations.all %}
+        {% if loc.kode_wilayah %}"{{ loc.kode_wilayah }}",{% endif %}
+      {% endfor %}
+    ];
+
+    const projectLocationNames = {
+      {% for loc in project.locations.all %}
+        {% if loc.kode_wilayah %}"{{ loc.kode_wilayah }}": "{{ loc.nama_provinsi|escapejs }}",{% endif %}
+      {% endfor %}
+    };
+
+    // Titik koordinat pusat tiap provinsi (lon, lat)
+    const PROVINCE_COORDS = {
+      "11": [96.928, 4.3118], "12": [99.1385, 2.3192], "13": [100.6215, -0.6597],
+      "14": [101.7467, 0.4556], "15": [102.7515, -1.692], "16": [104.1861, -3.2307],
+      "17": [102.3768, -3.5399], "18": [105.0302, -4.918], "19": [105.9932, -2.2446],
+      "21": [108.2101, 3.9345], "31": [106.849, -6.2088], "32": [107.6114, -6.9222],
+      "33": [110.2158, -7.2684], "34": [110.4582, -7.9096], "35": [112.6339, -7.8222],
+      "36": [106.1261, -6.4525], "51": [115.1292, -8.3526], "52": [117.8559, -8.631],
+      "53": [121.161, -8.5956], "61": [111.1674, -0.086], "62": [113.4285, -1.5966],
+      "63": [115.3837, -2.9329], "64": [116.479, 0.4749], "65": [116.1914, 2.8892],
+      "71": [124.2525, 0.8705], "72": [121.1094, -0.9752], "73": [120.1672, -3.5972],
+      "74": [121.8337, -3.8132], "75": [122.3614, 0.6872], "76": [119.3446, -2.4609],
+      "81": [129.4663, -3.2008], "82": [128.0172, 0.8705], "91": [133.15, -2.1005],
+      "92": [133.0, -1.5], "93": [136.5, -6.5], "94": [138.7124, -4.5614],
+      "95": [138.5, -4.0], "96": [132.0, -1.0]
+    };
+
+    const GEOJSON_URL = "{% url 'provinces_geojson' %}";
+    const mapWidth = 960;
+    const mapHeight = 430;
+
+    d3.json(GEOJSON_URL).then(function(geojson) {
+      if (loadingEl) loadingEl.remove();
+
+      const svg = d3.select(mapContainer)
+        .append('svg')
+        .attr('viewBox', `0 0 ${mapWidth} ${mapHeight}`)
+        .attr('preserveAspectRatio', 'xMidYMid meet')
+        .attr('class', 'w-full h-full block select-none');
+
+      const projection = d3.geoMercator().fitSize([mapWidth, mapHeight], geojson);
+      const pathGenerator = d3.geoPath().projection(projection);
+
+      // Render Poligon Seluruh Provinsi Indonesia
+      svg.selectAll('path.detail-province-path')
+        .data(geojson.features)
+        .enter()
+        .append('path')
+        .attr('class', function(d) {
+          const kode = d.properties.kode_wilayah;
+          const isProjectLoc = projectLocationCodes.includes(kode);
+          return 'detail-province-path' + (isProjectLoc ? ' active-location' : '');
+        })
+        .attr('d', pathGenerator)
+        .style('fill', function(d) {
+          const kode = d.properties.kode_wilayah;
+          return projectLocationCodes.includes(kode) ? '#308935' : '#e2e8f0';
+        })
+        .style('stroke', '#ffffff')
+        .style('stroke-width', function(d) {
+          const kode = d.properties.kode_wilayah;
+          return projectLocationCodes.includes(kode) ? '1.5px' : '0.6px';
+        })
+        .style('cursor', function(d) {
+          const kode = d.properties.kode_wilayah;
+          return projectLocationCodes.includes(kode) ? 'pointer' : 'default';
+        });
+
+      // Render Pin Marker untuk Lokasi Proyek Ini
+      projectLocationCodes.forEach(function(kode) {
+        const coords = PROVINCE_COORDS[kode];
+        if (!coords) return;
+
+        const projected = projection(coords);
+        if (!projected || isNaN(projected[0]) || isNaN(projected[1])) return;
+
+        const leftPct = (projected[0] / mapWidth) * 100;
+        const topPct = (projected[1] / mapHeight) * 100;
+        const provName = projectLocationNames[kode] || 'Lokasi Proyek';
+
+        const pinEl = document.createElement('div');
+        pinEl.className = 'detail-province-pin group';
+        pinEl.style.left = leftPct + '%';
+        pinEl.style.top = topPct + '%';
+        pinEl.innerHTML = `
+          <div class="relative flex flex-col items-center">
+            <span class="material-symbols-outlined text-amber-500 text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] select-none group-hover:scale-125 transition-transform">location_on</span>
+            <div class="hidden group-hover:block absolute bottom-full mb-1 bg-slate-900/90 backdrop-blur-sm text-white text-[10px] font-bold py-1 px-2.5 rounded-md whitespace-nowrap shadow-xl z-30 pointer-events-none">
+              ${provName}
+            </div>
+          </div>
+        `;
+        mapContainer.appendChild(pinEl);
+      });
+
+    }).catch(function(err) {
+      console.error('Gagal memuat peta detail:', err);
+      if (loadingEl) {
+        loadingEl.innerHTML = '<span class="text-xs text-rose-500">Gagal memuat peta lokasi</span>';
+      }
+    });
+  });
+</script>
 {% endblock %}
