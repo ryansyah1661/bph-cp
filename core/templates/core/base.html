@@ -122,6 +122,29 @@
       .prose ol > li, .prose ul > li { margin-top: 0.25em; margin-bottom: 0.25em; }
       .prose p, .prose span, .prose li, .prose strong, .prose em { color: #191c1c !important; }
 
+      /* Styling gambar artikel dan baris sumber/keterangan di publik */
+      .prose img {
+        border-radius: 12px;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 100%;
+        height: auto;
+        margin-top: 1.5rem !important;
+        margin-bottom: 0.35rem !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      }
+      .prose p.ql-align-center em,
+      .prose [style*="text-align: center"] em,
+      .prose [style*="text-align:center"] em {
+        display: block;
+        font-size: 0.85rem !important;
+        color: #64748b !important;
+        font-style: italic !important;
+        margin-top: 0.25rem !important;
+        margin-bottom: 1.25rem !important;
+        text-align: center;
+      }
+
       body { font-family: 'Inter', sans-serif; }
 
       .material-symbols-outlined { font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24; }
