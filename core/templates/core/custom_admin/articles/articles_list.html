@@ -5,11 +5,11 @@
   
   <div class="flex justify-between items-center border-b border-gray-100 pb-5">
     <div>
-      <h2 class="text-xl font-bold text-emerald-900">Manajemen Artikel & Wawasan Teknis</h2>
-      <p class="text-xs text-gray-500 mt-1">Kelola seluruh publikasi artikel informasi Bhumi Pasa Hijau.</p>
+      <h2 class="text-xl font-bold text-emerald-900">Manajemen Berita</h2>
+      <p class="text-xs text-gray-500 mt-1">Kelola seluruh publikasi berita informasi Bhumi Pasa Hijau.</p>
     </div>
     <a href="{% url 'article_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100">
-      <span class="material-symbols-outlined text-sm">add</span> Tambah Artikel
+      <span class="material-symbols-outlined text-sm">add</span> Tambah Berita
     </a>
   </div>
 
@@ -19,7 +19,7 @@
         <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
           <th class="p-4 font-semibold w-14 text-center">No.</th>
           <th class="p-4 font-semibold w-24 text-center">Gambar</th>
-          <th class="p-4 font-semibold">Judul Artikel</th>
+          <th class="p-4 font-semibold">Judul Berita</th>
           <th class="p-4 font-semibold">Penulis</th>
           <th class="p-4 font-semibold text-center">Tanggal Terbit</th>
           <th class="p-4 font-semibold text-center w-28">Aksi</th>
@@ -57,8 +57,7 @@
               <a href="{% url 'article_update' article.pk %}" title="Edit Artikel" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
                 <span class="material-symbols-outlined text-sm">edit</span>
               </a>
-              <!-- Tombol Hapus dengan trigger Modal Pop-up -->
-              <button type="button" onclick="openDeleteModal('{% url 'article_delete' article.pk %}', '{{ article.judul|escapejs }}')" title="Hapus Artikel" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
+              <button type="button" data-url="{% url 'article_delete' article.pk %}" data-title="{{ article.judul }}" onclick="openDeleteModal(this.dataset.url, this.dataset.title)" title="Hapus Berita" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
                 <span class="material-symbols-outlined text-sm">delete</span>
               </button>
             </div>
@@ -83,8 +82,8 @@
         <div class="w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-4">
             <span class="material-symbols-outlined text-2xl">delete</span>
         </div>
-        <h3 class="text-lg font-bold text-neutral-900 mb-2">Hapus Artikel?</h3>
-        <p class="text-sm text-gray-500 mb-6">Apakah Anda yakin ingin menghapus artikel <strong id="articleTitle" class="text-neutral-800"></strong> secara permanen? Tindakan ini tidak bisa dibatalkan.</p>
+        <h3 class="text-lg font-bold text-neutral-900 mb-2">Hapus Berita?</h3>
+        <p class="text-sm text-gray-500 mb-6">Apakah Anda yakin ingin menghapus berita <strong id="articleTitle" class="text-neutral-800"></strong> secara permanen? Tindakan ini tidak bisa dibatalkan.</p>
         
         <form id="deleteForm" method="POST" class="flex items-center justify-center gap-3">
             {% csrf_token %}

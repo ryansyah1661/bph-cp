@@ -56,8 +56,7 @@
               <a href="{% url 'client_update' client.pk %}" title="Edit Klien" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
                 <span class="material-symbols-outlined text-sm">edit</span>
               </a>
-              <!-- Tombol Hapus dengan trigger Modal Pop-up -->
-              <button type="button" onclick="openDeleteModal('{% url 'client_delete' client.pk %}', '{{ client.nama|escapejs }}')" title="Hapus Klien" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition cursor-pointer">
+              <button type="button" data-url="{% url 'client_delete' client.pk %}" data-title="{{ client.nama }}" onclick="openDeleteModal(this.dataset.url, this.dataset.title)" title="Hapus Klien" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition cursor-pointer">
                 <span class="material-symbols-outlined text-sm">delete</span>
               </button>
             </div>
