@@ -230,6 +230,27 @@ class Article(models.Model):
     def __str__(self):
         return self.judul
 
+    @property
+    def author_profile(self):
+        from django.apps import apps
+        Profile = apps.get_model('core', 'Profile')
+        TeamMember = apps.get_model('core', 'TeamMember')
+        if not self.author:
+            return None
+        author_name = self.author.strip()
+        p = Profile.objects.filter(nama_lengkap__iexact=author_name).first()
+        if not p:
+            p = Profile.objects.filter(user__username__iexact=author_name).first()
+        if p and p.foto_profil:
+            return p
+        tm = TeamMember.objects.filter(nama__icontains=author_name).first()
+        if tm and tm.foto:
+            class TeamShim:
+                foto_profil = tm.foto
+                nama_lengkap = tm.nama
+            return TeamShim()
+        return p
+
 # === 9. TABEL MODUL DOKUMENTASI STRATEGIS (Modul) ===
 class Modul(models.Model):
     judul = models.CharField(max_length=200, verbose_name="Judul Dokumen Publikasi")
@@ -394,3 +415,24 @@ class Program(models.Model):
 
     def __str__(self):
         return self.judul
+
+    @property
+    def author_profile(self):
+        from django.apps import apps
+        Profile = apps.get_model('core', 'Profile')
+        TeamMember = apps.get_model('core', 'TeamMember')
+        if not self.author:
+            return None
+        author_name = self.author.strip()
+        p = Profile.objects.filter(nama_lengkap__iexact=author_name).first()
+        if not p:
+            p = Profile.objects.filter(user__username__iexact=author_name).first()
+        if p and p.foto_profil:
+            return p
+        tm = TeamMember.objects.filter(nama__icontains=author_name).first()
+        if tm and tm.foto:
+            class TeamShim:
+                foto_profil = tm.foto
+                nama_lengkap = tm.nama
+            return TeamShim()
+        return p
