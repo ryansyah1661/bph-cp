@@ -54,7 +54,7 @@
           
           <td class="p-4 text-center align-middle whitespace-nowrap">
             <div class="flex justify-center items-center gap-2">
-              <a href="{% url 'article_update' article.pk %}" title="Edit Artikel" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
+              <a href="{% url 'article_update' article.pk %}" title="Edit Berita" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
                 <span class="material-symbols-outlined text-sm">edit</span>
               </a>
               <button type="button" data-url="{% url 'article_delete' article.pk %}" data-title="{{ article.judul }}" onclick="openDeleteModal(this.dataset.url, this.dataset.title)" title="Hapus Berita" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition">
@@ -65,7 +65,7 @@
         </tr>
         {% empty %}
         <tr>
-          <td colspan="6" class="p-8 text-center text-gray-400 font-medium">Belum ada data artikel.</td>
+          <td colspan="6" class="p-8 text-center text-gray-400 font-medium">Belum ada data berita.</td>
         </tr>
         {% endfor %}
       </tbody>
