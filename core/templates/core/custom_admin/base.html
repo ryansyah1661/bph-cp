@@ -67,7 +67,260 @@
       transition: opacity 0.3s ease; 
     }
     .bph-modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+    /* ======================================================== */
+    /* WORD-STYLE TOOLTIP & TOOLBAR ENHANCEMENTS FOR QUILL      */
+    /* ======================================================== */
+    .ql-toolbar.ql-snow {
+      border-top-left-radius: 14px !important;
+      border-top-right-radius: 14px !important;
+      border-color: #e2e8f0 !important;
+      background-color: #f8fafc !important;
+      padding: 8px 12px !important;
+    }
+    .ql-container.ql-snow {
+      border-bottom-left-radius: 14px !important;
+      border-bottom-right-radius: 14px !important;
+      border-color: #e2e8f0 !important;
+      font-family: 'Inter', -apple-system, sans-serif !important;
+      font-size: 14px !important;
+    }
+    .ql-editor {
+      line-height: 1.6 !important;
+    }
+    /* Tooltip positioning */
+    .ql-toolbar button[data-tooltip],
+    .ql-toolbar .ql-picker[data-tooltip] {
+      position: relative;
+    }
+    .ql-toolbar button[data-tooltip]::after,
+    .ql-toolbar .ql-picker[data-tooltip]::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: calc(100% + 7px);
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+      z-index: 10000;
+      line-height: 1.3;
+    }
+    /* Panah kecil tooltip */
+    .ql-toolbar button[data-tooltip]::before,
+    .ql-toolbar .ql-picker[data-tooltip]::before {
+      content: '';
+      position: absolute;
+      bottom: calc(100% - 1px);
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      border-width: 4px;
+      border-style: solid;
+      border-color: #0f172a transparent transparent transparent;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      z-index: 10000;
+    }
+    .ql-toolbar button[data-tooltip]:hover::after,
+    .ql-toolbar .ql-picker[data-tooltip]:hover::after {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .ql-toolbar button[data-tooltip]:hover::before,
+    .ql-toolbar .ql-picker[data-tooltip]:hover::before {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    /* Sembunyikan tooltip saat dropdown picker terbuka */
+    .ql-toolbar .ql-picker.ql-expanded::after,
+    .ql-toolbar .ql-picker.ql-expanded::before {
+      display: none !important;
+    }
+    /* Styling tombol ala Word/Emerald */
+    .ql-snow.ql-toolbar button {
+      border-radius: 6px !important;
+      margin: 1px 2px !important;
+      padding: 3px 5px !important;
+      width: 28px !important;
+      height: 28px !important;
+      transition: all 0.15s ease !important;
+    }
+    .ql-snow.ql-toolbar button:hover {
+      background-color: #ecfdf5 !important;
+    }
+    .ql-snow.ql-toolbar button:hover svg .ql-stroke {
+      stroke: #059669 !important;
+    }
+    .ql-snow.ql-toolbar button:hover svg .ql-fill {
+      fill: #059669 !important;
+    }
+    .ql-snow.ql-toolbar button.ql-active {
+      background-color: #d1fae5 !important;
+    }
+    .ql-snow.ql-toolbar button.ql-active svg .ql-stroke {
+      stroke: #047857 !important;
+    }
+    .ql-snow.ql-toolbar button.ql-active svg .ql-fill {
+      fill: #047857 !important;
+    }
   </style>
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+  <script>
+    // ========================================================
+    // HELPER GLOBAL QUILL EDITOR DENGAN FORMATTING ALA WORD
+    // ========================================================
+    window.setupBphQuill = function(selector, textareaName, options) {
+      options = options || {};
+      var editorElement = document.querySelector(selector);
+      var textareaElement = document.querySelector('textarea[name="' + textareaName + '"]');
+      if (!editorElement) return null;
+
+      // Register style align attributor agar menghasilkan style="text-align: ..."
+      if (typeof Quill !== 'undefined' && Quill.import) {
+        try {
+          var AlignStyle = Quill.import('attributors/style/align');
+          Quill.register(AlignStyle, true);
+        } catch(e) {}
+      }
+
+      // Buat toolbar kustom dengan 4 tombol alignment terpisah (Rata Kiri, Tengah, Kanan, Justify)
+      var tb = document.createElement('div');
+      tb.className = 'bph-quill-toolbar';
+      
+      var imageBtn = (options.hasImage !== false) 
+        ? '<span class="ql-formats"><button class="ql-image" type="button" data-tooltip="Sisipkan Gambar (Upload)"></button></span>' 
+        : '';
+
+      tb.innerHTML = `
+        <span class="ql-formats">
+          <select class="ql-header">
+            <option value="2">Heading 2</option>
+            <option value="3">Heading 3</option>
+            <option selected>Normal</option>
+          </select>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-bold" type="button" data-tooltip="Tebal (Bold / Ctrl+B)"></button>
+          <button class="ql-italic" type="button" data-tooltip="Miring (Italic / Ctrl+I)"></button>
+          <button class="ql-underline" type="button" data-tooltip="Garis Bawah (Underline / Ctrl+U)"></button>
+          <button class="ql-strike" type="button" data-tooltip="Coretan (Strikethrough)"></button>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-align" type="button" value="" data-tooltip="Rata Kiri (Align Left)"></button>
+          <button class="ql-align" type="button" value="center" data-tooltip="Rata Tengah (Align Center)"></button>
+          <button class="ql-align" type="button" value="right" data-tooltip="Rata Kanan (Align Right)"></button>
+          <button class="ql-align" type="button" value="justify" data-tooltip="Rata Kanan-Kiri (Justify)"></button>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-link" type="button" data-tooltip="Sisipkan Tautan (Link / Ctrl+K)"></button>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-blockquote" type="button" data-tooltip="Kutipan (Blockquote)"></button>
+          <button class="ql-code-block" type="button" data-tooltip="Blok Kode (Code Block)"></button>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-list" type="button" value="ordered" data-tooltip="Daftar Bernomor (Numbered List)"></button>
+          <button class="ql-list" type="button" value="bullet" data-tooltip="Daftar Poin (Bullet List)"></button>
+        </span>
+        ${imageBtn}
+        <span class="ql-formats">
+          <button class="ql-clean" type="button" data-tooltip="Hapus Pemformatan"></button>
+        </span>
+      `;
+
+      editorElement.parentNode.insertBefore(tb, editorElement);
+
+      var handlers = {};
+      if (options.uploadUrl && options.csrfToken) {
+        handlers['image'] = function() {
+          var input = document.createElement('input');
+          input.setAttribute('type', 'file');
+          input.setAttribute('accept', 'image/png, image/jpeg, image/gif, image/webp');
+          input.click();
+          input.onchange = function() {
+            var file = input.files[0];
+            if (!file) return;
+            if (file.size > 5 * 1024 * 1024) {
+              alert('Ukuran file terlalu besar. Maksimal 5MB.');
+              return;
+            }
+            var formData = new FormData();
+            formData.append('image', file);
+            fetch(options.uploadUrl, {
+              method: 'POST',
+              headers: { 'X-CSRFToken': options.csrfToken },
+              body: formData
+            })
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+              if (data.url) {
+                var range = quill.getSelection(true);
+                quill.insertEmbed(range.index, 'image', data.url);
+                quill.setSelection(range.index + 1);
+              } else {
+                alert(data.error || 'Gagal mengunggah gambar.');
+              }
+            })
+            .catch(function(err) {
+              console.error('Upload error:', err);
+              alert('Terjadi kesalahan saat mengunggah gambar.');
+            });
+          };
+        };
+      }
+
+      var quill = new Quill(selector, {
+        theme: 'snow',
+        modules: {
+          toolbar: {
+            container: tb,
+            handlers: handlers
+          }
+        }
+      });
+
+      // Pasang tooltip pada heading picker
+      var headerPicker = tb.querySelector('.ql-picker.ql-header');
+      if (headerPicker) {
+        headerPicker.setAttribute('data-tooltip', 'Gaya Teks (Heading / Normal)');
+      }
+
+      if (textareaElement && textareaElement.value) {
+        quill.root.innerHTML = textareaElement.value;
+      }
+
+      function sync() {
+        if (textareaElement) {
+          textareaElement.value = quill.getText().trim().length > 0 ? quill.root.innerHTML : '';
+        }
+      }
+      quill.on('text-change', sync);
+
+      if (options.formId) {
+        var form = document.getElementById(options.formId);
+        if (form) form.addEventListener('submit', sync);
+      } else {
+        var closestForm = editorElement.closest('form');
+        if (closestForm) closestForm.addEventListener('submit', sync);
+      }
+
+      return quill;
+    };
+  </script>
   {% block extra_css %}{% endblock %}
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
@@ -315,7 +568,6 @@
           // Input dibiarkan bisa diedit sesuai permintaan pengguna
         });
       }
-    });
   </script>
   {% block extra_js %}{% endblock %}
 </body>
