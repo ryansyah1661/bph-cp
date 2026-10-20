@@ -346,24 +346,34 @@
           </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for item in videos_list %}
-            <a href="{{ item.url_video }}" target="_blank" rel="noopener" class="group flex flex-col bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.04)] transition-all duration-300" style="text-decoration: none;">
+            <button type="button" 
+                    onclick="openVideoModal('{{ item.url_video|escapejs }}', '{{ item.judul|escapejs }}', '{{ item.tanggal_unggah|date:"d F Y"|escapejs }}', '{{ item.display_thumbnail_url|default:''|escapejs }}')" 
+                    class="group flex flex-col w-full text-left bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.01)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer p-0">
               <div class="relative w-full aspect-video overflow-hidden bg-slate-900 flex items-center justify-center">
                 {% if item.display_thumbnail_url %}
-                <img src="{{ item.display_thumbnail_url }}" alt="{{ item.judul }}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300">
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <span class="material-symbols-outlined text-6xl text-white drop-shadow-lg group-hover:scale-110 transition-transform duration-300">play_circle</span>
+                <img src="{{ item.display_thumbnail_url }}" alt="{{ item.judul }}" class="w-full h-full object-cover opacity-85 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-5xl md:text-6xl text-white drop-shadow-lg group-hover:scale-110 transition-transform duration-300">play_circle</span>
                 </div>
                 {% else %}
-                <span class="material-symbols-outlined text-6xl text-white/50 group-hover:text-primary transition-colors">play_circle</span>
+                <div class="absolute inset-0 flex items-center justify-center bg-slate-900">
+                  <span class="material-symbols-outlined text-5xl md:text-6xl text-white/50 group-hover:text-primary transition-colors group-hover:scale-110 duration-300">play_circle</span>
+                </div>
                 {% endif %}
               </div>
-              <div class="p-5 flex-1 flex flex-col justify-center text-left">
+              <div class="p-5 flex-1 flex flex-col justify-between text-left w-full">
                 <h3 class="font-headline-md text-sm font-bold text-on-surface group-hover:text-primary transition-colors line-clamp-2 leading-snug">
                   {{ item.judul }}
                 </h3>
-                <p class="text-[10px] text-on-surface-variant mt-1">{{ item.tanggal_unggah|date:"d F Y" }}</p>
+                <div class="text-[10px] text-on-surface-variant mt-2.5 flex items-center justify-between pt-2 border-t border-slate-100">
+                  <span>{{ item.tanggal_unggah|date:"d F Y" }}</span>
+                  <span class="text-primary font-bold inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                    {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Play Video{% else %}Tonton Video{% endif %}
+                    <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                  </span>
+                </div>
               </div>
-            </a>
+            </button>
             {% empty %}
             <div class="col-span-full py-16 px-4 flex flex-col items-center justify-center text-center bg-white rounded-2xl border border-dashed border-slate-200 shadow-sm">
               <span class="material-symbols-outlined text-5xl text-slate-300 mb-3">play_circle</span>
@@ -532,6 +542,237 @@
     });
   });
 </script>
+  <!-- VIDEO PREVIEW MODAL -->
+  <div id="video-preview-modal" class="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
+    <div id="modal-video-container" class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col transform scale-95 transition-transform duration-300 max-h-[92vh]">
+      
+      <!-- Header Modal -->
+      <div class="flex justify-between items-center px-4 py-3 bg-slate-50 border-b border-gray-200 shrink-0">
+        <h3 id="modal-video-title" class="font-bold text-slate-700 text-sm flex items-center gap-2 truncate pr-2">
+          <span class="material-symbols-outlined text-primary text-lg">smart_display</span>
+          <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Video Preview{% else %}Pratinjau Video Kegiatan{% endif %}</span>
+        </h3>
+        <button onclick="closeVideoModal()" class="text-slate-400 hover:text-red-500 transition-colors p-1 shrink-0 cursor-pointer bg-transparent border-none" aria-label="Tutup">
+          <span class="material-symbols-outlined text-2xl block">close</span>
+        </button>
+      </div>
+      
+      <!-- Video Player Area -->
+      <div id="modal-video-player-wrapper" class="w-full bg-slate-950 flex flex-col items-center justify-center overflow-y-auto relative min-h-[260px] sm:min-h-[380px] max-h-[calc(92vh-130px)]">
+        <!-- Disini iframe / video / widget akan di-inject oleh JS -->
+      </div>
+      
+      <!-- Footer Info -->
+      <div class="p-4 bg-white border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
+        <div class="min-w-0 flex-1">
+          <h4 id="modal-video-heading" class="text-sm font-bold text-slate-800 line-clamp-1 leading-snug"></h4>
+          <p id="modal-video-date" class="text-xs text-slate-400 mt-0.5 flex items-center gap-1"></p>
+        </div>
+        <a id="modal-video-external-btn" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 text-xs font-bold transition-colors shrink-0 border border-slate-200 hover:border-emerald-200" style="text-decoration: none;">
+          <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Open Original Link{% else %}Buka Tautan Asli{% endif %}</span>
+          <span class="material-symbols-outlined text-sm">open_in_new</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const vidModal = document.getElementById('video-preview-modal');
+    const vidContainer = document.getElementById('modal-video-container');
+    const vidPlayerWrapper = document.getElementById('modal-video-player-wrapper');
+    const vidHeading = document.getElementById('modal-video-heading');
+    const vidDate = document.getElementById('modal-video-date');
+    const vidExternalBtn = document.getElementById('modal-video-external-btn');
+
+    window.openVideoModal = function(url, title, date, thumbnail) {
+      if (!url) return;
+      
+      vidHeading.textContent = title || '';
+      vidDate.textContent = date ? ('Diunggah: ' + date) : '';
+      vidExternalBtn.href = url;
+      vidPlayerWrapper.innerHTML = '';
+
+      const cleanUrl = url.trim();
+
+      // 1. YOUTUBE (watch, youtu.be, embed, shorts)
+      const ytMatch = cleanUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i);
+      const isYtShorts = cleanUrl.includes('/shorts/');
+
+      if (ytMatch && ytMatch[1]) {
+        const ytId = ytMatch[1];
+        const embedSrc = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1`;
+        if (isYtShorts) {
+          vidPlayerWrapper.innerHTML = `
+            <div class="w-full flex items-center justify-center p-3">
+              <div class="w-full max-w-[340px] aspect-[9/16] rounded-xl overflow-hidden shadow-2xl bg-black">
+                <iframe src="${embedSrc}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </div>
+            </div>
+          `;
+        } else {
+          vidPlayerWrapper.innerHTML = `
+            <div class="w-full aspect-video max-w-4xl max-h-[70vh] flex items-center justify-center bg-black">
+              <iframe src="${embedSrc}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+          `;
+        }
+      } 
+      // 2. INSTAGRAM (Reel / Post)
+      else if (cleanUrl.includes('instagram.com/reel/') || cleanUrl.includes('instagram.com/p/')) {
+        const igMatch = cleanUrl.match(/instagram\.com\/(?:reel|p)\/([a-zA-Z0-9_-]+)/i);
+        const igCode = igMatch ? igMatch[1] : '';
+        const igEmbed = igCode ? `https://www.instagram.com/reel/${igCode}/embed/` : `${cleanUrl.replace(/\/$/, '')}/embed/`;
+        vidPlayerWrapper.innerHTML = `
+          <div class="w-full flex items-center justify-center p-4">
+            <div class="w-full max-w-[420px] h-[560px] max-h-[70vh] rounded-xl overflow-hidden bg-white shadow-xl">
+              <iframe src="${igEmbed}" class="w-full h-full border-0" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+            </div>
+          </div>
+        `;
+      }
+      // 3. FACEBOOK VIDEO / REEL
+      else if (cleanUrl.includes('facebook.com') || cleanUrl.includes('fb.watch')) {
+        const fbEmbed = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(cleanUrl)}&show_text=0&autoplay=1`;
+        vidPlayerWrapper.innerHTML = `
+          <div class="w-full flex items-center justify-center p-4">
+            <div class="w-full max-w-[500px] h-[520px] max-h-[70vh] rounded-xl overflow-hidden bg-black shadow-xl">
+              <iframe src="${fbEmbed}" class="w-full h-full border-0" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+            </div>
+          </div>
+        `;
+      }
+      // 4. VIMEO
+      else if (cleanUrl.includes('vimeo.com')) {
+        const vimeoMatch = cleanUrl.match(/vimeo\.com\/(?:video\/)?(\d+)/i);
+        if (vimeoMatch && vimeoMatch[1]) {
+          vidPlayerWrapper.innerHTML = `
+            <div class="w-full aspect-video max-w-4xl max-h-[70vh] flex items-center justify-center bg-black">
+              <iframe src="https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1" class="w-full h-full border-0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          `;
+        } else {
+          renderFallbackIframe();
+        }
+      }
+      // 5. DIRECT VIDEO FILE (mp4, webm, ogg, etc.)
+      else if (/\.(mp4|webm|ogg|m4v)(\?.*)?$/i.test(cleanUrl)) {
+        vidPlayerWrapper.innerHTML = `
+          <div class="w-full aspect-video max-w-4xl max-h-[70vh] flex items-center justify-center bg-black">
+            <video src="${cleanUrl}" controls autoplay playsinline class="w-full h-full object-contain"></video>
+          </div>
+        `;
+      }
+      // 6. X (TWITTER)
+      else if (cleanUrl.includes('x.com') || cleanUrl.includes('twitter.com')) {
+        renderTwitterPost(cleanUrl);
+      }
+      // 7. FALLBACK IFRAME
+      else {
+        renderFallbackIframe();
+      }
+
+      function renderFallbackIframe() {
+        vidPlayerWrapper.innerHTML = `
+          <div class="w-full aspect-video max-w-4xl max-h-[70vh] flex items-center justify-center bg-black">
+            <iframe src="${cleanUrl}" class="w-full h-full border-0" allowfullscreen></iframe>
+          </div>
+        `;
+      }
+
+      function renderTwitterPost(tUrl) {
+        const tweetMatch = tUrl.match(/(?:twitter\.com|x\.com)\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)/i);
+        const tweetId = tweetMatch ? tweetMatch[2] : null;
+
+        vidPlayerWrapper.innerHTML = `
+          <div class="p-6 w-full flex flex-col items-center justify-center text-center max-w-md mx-auto my-auto">
+            <div id="twitter-embed-slot" class="w-full flex justify-center">
+              <div class="text-slate-400 text-xs py-8 flex items-center justify-center gap-2">
+                <span class="animate-spin material-symbols-outlined text-sm">sync</span>
+                <span>Memuat konten X...</span>
+              </div>
+            </div>
+          </div>
+        `;
+
+        const slot = document.getElementById('twitter-embed-slot');
+
+        const showTwitterCard = () => {
+          if (!slot) return;
+          slot.innerHTML = `
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center text-white flex flex-col items-center gap-3">
+              <span class="material-symbols-outlined text-4xl text-slate-400">play_circle</span>
+              <p class="text-sm font-semibold">${title || 'Konten Video X'}</p>
+              <p class="text-xs text-slate-400">Video tersedia di platform resmi X. Klik tombol di bawah untuk menonton.</p>
+              <a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" class="mt-2 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white text-black font-bold text-xs hover:bg-slate-200 transition-colors" style="text-decoration: none;">
+                Tonton di X (Twitter) <span class="material-symbols-outlined text-xs">open_in_new</span>
+              </a>
+            </div>
+          `;
+        };
+
+        const loadWidgets = () => {
+          if (window.twttr && window.twttr.widgets && tweetId) {
+            slot.innerHTML = '';
+            window.twttr.widgets.createTweet(tweetId, slot, {
+              theme: 'dark',
+              align: 'center'
+            }).then(el => {
+              if (!el) showTwitterCard();
+            }).catch(() => showTwitterCard());
+          } else {
+            showTwitterCard();
+          }
+        };
+
+        if (!window.twttr) {
+          const script = document.createElement('script');
+          script.src = 'https://platform.twitter.com/widgets.js';
+          script.charset = 'utf-8';
+          script.async = true;
+          script.onload = loadWidgets;
+          script.onerror = showTwitterCard;
+          document.head.appendChild(script);
+        } else {
+          loadWidgets();
+        }
+      }
+
+      // Tampilkan modal
+      vidModal.classList.remove('pointer-events-none', 'opacity-0');
+      setTimeout(() => {
+        vidContainer.classList.remove('scale-95');
+        vidContainer.classList.add('scale-100');
+      }, 10);
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closeVideoModal = function() {
+      vidModal.classList.add('opacity-0');
+      vidContainer.classList.remove('scale-100');
+      vidContainer.classList.add('scale-95');
+      vidModal.classList.add('pointer-events-none');
+      
+      // Hentikan pemutaran audio/video dengan menghapus iframe/player
+      setTimeout(() => {
+        vidPlayerWrapper.innerHTML = '';
+        document.body.style.overflow = '';
+      }, 300);
+    };
+
+    vidModal.addEventListener('click', function(e) {
+      if (e.target === vidModal || e.target.parentElement === vidModal) {
+        closeVideoModal();
+      }
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !vidModal.classList.contains('pointer-events-none')) {
+        closeVideoModal();
+      }
+    });
+  </script>
+
   <!-- IMAGE PREVIEW MODAL -->
   <div id="image-preview-modal" class="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
     <div id="modal-image-container" class="bg-white w-full max-w-5xl rounded-2xl shadow-2xl overflow-hidden flex flex-col transform scale-95 transition-transform duration-300">
