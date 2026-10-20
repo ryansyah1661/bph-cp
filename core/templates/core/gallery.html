@@ -601,19 +601,19 @@
 
       if (ytMatch && ytMatch[1]) {
         const ytId = ytMatch[1];
-        const embedSrc = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1`;
+        const embedSrc = `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
         if (isYtShorts) {
           vidPlayerWrapper.innerHTML = `
             <div class="w-full flex items-center justify-center p-3">
               <div class="w-full max-w-[340px] aspect-[9/16] rounded-xl overflow-hidden shadow-2xl bg-black">
-                <iframe src="${embedSrc}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <iframe src="${embedSrc}" class="w-full h-full border-0" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
               </div>
             </div>
           `;
         } else {
           vidPlayerWrapper.innerHTML = `
             <div class="w-full aspect-video max-w-4xl max-h-[70vh] flex items-center justify-center bg-black">
-              <iframe src="${embedSrc}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              <iframe src="${embedSrc}" class="w-full h-full border-0" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </div>
           `;
         }
@@ -633,11 +633,32 @@
       }
       // 3. FACEBOOK VIDEO / REEL
       else if (cleanUrl.includes('facebook.com') || cleanUrl.includes('fb.watch')) {
-        const fbEmbed = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(cleanUrl)}&show_text=0&autoplay=1`;
+        const fbThumb = thumbnail || '';
         vidPlayerWrapper.innerHTML = `
-          <div class="w-full flex items-center justify-center p-4">
-            <div class="w-full max-w-[500px] h-[520px] max-h-[70vh] rounded-xl overflow-hidden bg-black shadow-xl">
-              <iframe src="${fbEmbed}" class="w-full h-full border-0" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+          <div class="p-6 w-full flex flex-col items-center justify-center text-center max-w-lg mx-auto my-auto">
+            <div class="bg-slate-900 border border-slate-700/50 rounded-2xl p-6 text-white flex flex-col items-center gap-4 w-full shadow-xl">
+              ${fbThumb ? `
+              <div class="w-full max-w-[320px] aspect-[9/16] rounded-xl overflow-hidden bg-slate-800 shadow-lg relative group/fb cursor-pointer" onclick="window.open('${cleanUrl}', '_blank')">
+                <img src="${fbThumb}" alt="${title || 'Video Facebook'}" class="w-full h-full object-cover opacity-80 group-hover/fb:opacity-100 transition-opacity duration-300">
+                <div class="absolute inset-0 bg-black/30 group-hover/fb:bg-black/10 transition-colors flex items-center justify-center">
+                  <span class="material-symbols-outlined text-white text-6xl drop-shadow-lg group-hover/fb:scale-110 transition-transform">play_circle</span>
+                </div>
+              </div>
+              ` : `
+              <div class="w-24 h-24 rounded-full bg-blue-600/20 flex items-center justify-center">
+                <span class="material-symbols-outlined text-5xl text-blue-400">play_circle</span>
+              </div>
+              `}
+              <div class="space-y-1.5">
+                <p class="text-base font-bold">${title || 'Video Facebook'}</p>
+                <p class="text-xs text-slate-400 leading-relaxed max-w-xs">Video ini tersedia di platform resmi Facebook. Klik tombol di bawah untuk menonton langsung.</p>
+              </div>
+              <a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" 
+                 class="mt-1 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition-colors shadow-lg" style="text-decoration: none;">
+                <span class="material-symbols-outlined text-sm">smart_display</span>
+                Tonton di Facebook
+                <span class="material-symbols-outlined text-xs">open_in_new</span>
+              </a>
             </div>
           </div>
         `;
