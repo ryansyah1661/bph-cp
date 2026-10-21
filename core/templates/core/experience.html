@@ -186,7 +186,7 @@
   </section>
 
   <!-- DAFTAR PROYEK TERKAIT -->
-  <section class="w-full bg-white py-16 border-b border-gray-100 hidden" id="section-proyek-wilayah">
+  <section class="w-full bg-[#f8faf9] py-16 border-b border-gray-100 hidden" id="section-proyek-wilayah">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
       <div class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
         <div>
@@ -201,7 +201,7 @@
       <div class="w-full">
         {% for loc in locations_with_projects %}
           {% if loc.kode_wilayah %}
-          <div class="overflow-x-auto rounded-2xl border border-gray-100 shadow-sm hidden id-list-proyek" id="list-proyek-{{ loc.kode_wilayah }}">
+          <div class="overflow-x-auto rounded-2xl border border-gray-200/60 shadow-sm hidden id-list-proyek bg-white" id="list-proyek-{{ loc.kode_wilayah }}">
             <table class="w-full text-left border-collapse min-w-[750px]">
               <thead>
                 <tr class="bg-slate-50 border-b border-gray-100 text-xs uppercase font-extrabold text-slate-500 tracking-wider">
