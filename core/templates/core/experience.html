@@ -40,6 +40,7 @@
       border-radius: 24px;
       padding: 24px;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+      transition: padding 0.3s ease;
   }
   #map-svg-container {
       width: 100%;
@@ -48,6 +49,23 @@
       border-radius: 16px;
       border: 1px solid rgba(148, 163, 184, 0.15);
       position: relative;
+  }
+  /* Optimalisasi Tampilan Peta di Layar Mobile */
+  @media (max-width: 640px) {
+      .indonesia-map-wrapper {
+          padding: 6px;
+          border-radius: 16px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      }
+      #map-svg-container {
+          border-radius: 12px;
+      }
+      .map-project-popover {
+          min-width: 180px;
+          max-width: 240px;
+          padding: 10px 12px;
+          font-size: 11px;
+      }
   }
   #map-svg-container svg {
       width: 100%;
@@ -144,7 +162,7 @@
 
   <!-- LOKASI PROYEK SECTION -->
   <section class="w-full bg-[#f8faf9] py-16 border-b border-gray-100">
-    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center">
+    <div class="max-w-container-max mx-auto px-2 sm:px-margin-mobile md:px-margin-desktop text-center">
       <div class="mb-12">
         <h2 class="text-2xl md:text-3xl font-black text-emerald-950 uppercase tracking-tight">
           {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}LOCATION <span class="text-[#308935] font-light">PROJECTS</span>{% else %}LOKASI <span class="text-[#308935] font-light">PROYEK</span>{% endif %}
@@ -164,7 +182,7 @@
                  data-name="{{ loc.nama_provinsi }}"
                  data-count="{{ loc.projects.count }}"
                  style="top: 0%; left: 0%; display: none;">
-                 <span class="material-symbols-outlined text-amber-500 text-3xl drop-shadow-md select-none group-hover:text-amber-600">location_on</span>
+                 <span class="material-symbols-outlined text-amber-500 text-xl sm:text-2xl md:text-3xl drop-shadow-md select-none group-hover:text-amber-600">location_on</span>
             </div>
 
             <div class="map-project-popover text-left shadow-xl" id="popover-prov-{{ loc.kode_wilayah }}">
@@ -645,8 +663,14 @@
             if (popover) {
                 const leftPct = parseFloat(pin.dataset.leftPct || 0);
                 const topPct = parseFloat(pin.dataset.topPct || 0);
-                popover.style.top = `calc(${topPct}% - 12px)`;
-                popover.style.left = `calc(${leftPct}% + 15px)`;
+                popover.style.top = `calc(${topPct}% - 10px)`;
+                if (window.innerWidth < 640 && leftPct > 55) {
+                    popover.style.left = 'auto';
+                    popover.style.right = `calc(${100 - leftPct}% + 8px)`;
+                } else {
+                    popover.style.left = `calc(${leftPct}% + 12px)`;
+                    popover.style.right = 'auto';
+                }
                 popover.style.display = 'block';
             }
 
