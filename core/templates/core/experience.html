@@ -201,49 +201,52 @@
       <div class="w-full">
         {% for loc in locations_with_projects %}
           {% if loc.kode_wilayah %}
-          <div class="overflow-x-auto rounded-2xl border border-gray-200/60 shadow-sm hidden id-list-proyek bg-white" id="list-proyek-{{ loc.kode_wilayah }}">
+          <div class="overflow-x-auto rounded-2xl border border-slate-200/90 shadow-[0_10px_35px_rgba(0,0,0,0.05)] hidden id-list-proyek bg-white" id="list-proyek-{{ loc.kode_wilayah }}">
             <table class="w-full text-left border-collapse min-w-[750px]">
               <thead>
-                <tr class="bg-slate-50 border-b border-gray-100 text-xs uppercase font-extrabold text-slate-500 tracking-wider">
-                  <th class="py-4 px-6 w-16 text-center">No</th>
-                  <th class="py-4 px-6">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Project{% else %}Proyek{% endif %}</th>
-                  <th class="py-4 px-6">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Client{% else %}Klien{% endif %}</th>
-                  <th class="py-4 px-6">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Location{% else %}Lokasi{% endif %}</th>
-                  <th class="py-4 px-6 text-center w-28">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Year{% else %}Tahun{% endif %}</th>
-                  <th class="py-4 px-6 text-center w-32">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Action{% else %}Aksi{% endif %}</th>
+                <tr class="bg-emerald-900 text-white text-xs uppercase font-extrabold tracking-wider border-b border-emerald-950">
+                  <th class="py-4 px-6 w-16 text-center text-emerald-200">No</th>
+                  <th class="py-4 px-6 text-white">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Project{% else %}Proyek{% endif %}</th>
+                  <th class="py-4 px-6 text-emerald-100">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Client{% else %}Klien{% endif %}</th>
+                  <th class="py-4 px-6 text-emerald-100">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Location{% else %}Lokasi{% endif %}</th>
+                  <th class="py-4 px-6 text-center w-28 text-emerald-100">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Year{% else %}Tahun{% endif %}</th>
+                  <th class="py-4 px-6 text-center w-32 text-emerald-200">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Action{% else %}Aksi{% endif %}</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-gray-100 text-sm font-medium text-slate-700">
+              <tbody class="divide-y divide-slate-100 text-sm font-medium text-slate-700 bg-white">
                 {% for proj in loc.projects.all %}
-                <tr class="hover:bg-slate-50/80 transition-colors">
-                  <td class="py-4 px-6 text-center font-bold text-slate-400">{{ forloop.counter }}</td>
-                  <td class="py-4 px-6 font-bold text-[#308935]">
+                <tr class="hover:bg-emerald-50/50 transition-colors">
+                  <td class="py-4 px-6 text-center">
+                    <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 text-slate-700 font-bold text-xs">{{ forloop.counter }}</span>
+                  </td>
+                  <td class="py-4 px-6 font-bold text-emerald-950">
                     {{ proj.name }}
                   </td>
-                  <td class="py-4 px-6 text-slate-600">
+                  <td class="py-4 px-6 text-slate-700">
                     {% if proj.client %}
                       <span class="font-semibold">{{ proj.client.nama }}</span>
                     {% else %}
                       <span class="text-slate-400 italic">-</span>
                     {% endif %}
                   </td>
-                  <td class="py-4 px-6 text-slate-600">
-                    <span class="inline-block bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-xs font-semibold">
+                  <td class="py-4 px-6">
+                    <span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200/80 px-3 py-1 rounded-full text-xs font-bold shadow-xs">
+                      <span class="material-symbols-outlined text-[14px] text-emerald-600">location_on</span>
                       {{ loc.nama_provinsi }}
                     </span>
                   </td>
-                  <td class="py-4 px-6 text-center font-semibold text-slate-600">
-                    {{ proj.tahun }}
+                  <td class="py-4 px-6 text-center font-bold text-slate-700">
+                    <span class="inline-block bg-slate-100 px-3 py-1 rounded-md text-xs font-semibold">{{ proj.tahun }}</span>
                   </td>
                   <td class="py-4 px-6 text-center">
-                    <button type="button" onclick="event.stopPropagation(); openProjectModal('{{ proj.id }}');" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-slate-100 hover:bg-primary text-slate-600 hover:text-white text-xs font-bold rounded-lg transition-all shadow-sm">
-                      {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Detail{% else %}Detail{% endif %} <span class="material-symbols-outlined text-[16px]">visibility</span>
+                    <button type="button" onclick="event.stopPropagation(); openProjectModal('{{ proj.id }}');" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-all shadow-sm hover:shadow hover:scale-105 cursor-pointer border-none">
+                      {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Detail{% else %}Detail{% endif %} <span class="material-symbols-outlined text-[15px]">visibility</span>
                     </button>
                   </td>
                 </tr>
                 {% empty %}
                 <tr>
-                  <td colspan="4" class="text-center py-8 text-slate-400 italic">
+                  <td colspan="6" class="text-center py-10 text-slate-400 italic">
                     {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No project data available in this province.{% else %}Belum ada data proyek di provinsi ini.{% endif %}
                   </td>
                 </tr>
