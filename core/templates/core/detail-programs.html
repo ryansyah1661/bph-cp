@@ -59,26 +59,23 @@
         </div>
 
         <!-- BAGIAN KANAN: METADATA, AUTHOR & OTHER PROGRAMS -->
-        <aside class="md:w-1/4 print:hidden">
-            <div class="sticky top-28 space-y-8 max-h-[calc(100vh-8rem)] overflow-y-auto hide-scrollbar pb-6">
-                <!-- CARD 1: AUTHOR & METADATA -->
-                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
+        <aside class="md:w-1/4 print:hidden md:sticky md:top-24 space-y-6 self-start">
+            <!-- CARD 1: AUTHOR & METADATA -->
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
                 <!-- 1. AUTHOR SECTION -->
                 <div>
-                    <h4 class="text-base font-bold text-emerald-800 mb-3">Author:</h4>
-                    <div class="flex items-center gap-3">
+                    <h4 class="text-base font-bold text-emerald-800 mb-4 text-left">Author:</h4>
+                    <div class="flex flex-col items-center justify-center text-center">
                         {% if program.author_profile and program.author_profile.foto_profil %}
-                            <img src="{{ program.author_profile.foto_profil.url }}" alt="{{ program.author }}" class="w-13 h-13 rounded-full object-cover border-2 border-emerald-500 shadow-sm flex-shrink-0">
+                            <img src="{{ program.author_profile.foto_profil.url }}" alt="{{ program.author }}" class="w-20 h-20 rounded-full object-cover border-2 border-emerald-500 shadow-sm mb-2.5">
                         {% else %}
-                            <div class="w-13 h-13 rounded-full bg-emerald-700 text-white font-bold flex items-center justify-center text-sm shadow-sm flex-shrink-0">
+                            <div class="w-20 h-20 rounded-full bg-emerald-700 text-white font-bold flex items-center justify-center text-xl shadow-sm mb-2.5 border-2 border-emerald-500">
                                 {{ program.author|slice:":2"|upper }}
                             </div>
                         {% endif %}
-                        <div class="min-w-0">
-                            <span class="text-emerald-700 font-semibold text-base block leading-snug truncate">
-                                {{ program.author|default:"Admin BPH" }}
-                            </span>
-                        </div>
+                        <span class="text-emerald-700 font-semibold text-base block leading-snug">
+                            {{ program.author|default:"Admin BPH" }}
+                        </span>
                     </div>
                 </div>
 
