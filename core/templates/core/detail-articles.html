@@ -43,7 +43,7 @@
 
 <!-- ISI KONTEN ARTIKEL -->
 <main class="w-full bg-white py-16">
-    <div class="max-w-6xl mx-auto px-margin-mobile md:px-6 flex flex-col md:flex-row gap-12">
+    <div class="max-w-6xl mx-auto px-margin-mobile md:px-6 flex flex-col md:flex-row gap-12 items-start">
         
         <!-- BAGIAN KIRI: KONTEN BERITA -->
         <div class="md:w-3/4">
@@ -59,10 +59,9 @@
         </div>
 
         <!-- BAGIAN KANAN: METADATA, AUTHOR & OTHER POSTS -->
-        <aside class="md:w-1/4 print:hidden">
-            <div class="sticky top-28 space-y-8 max-h-[calc(100vh-8rem)] overflow-y-auto hide-scrollbar pb-6">
-                <!-- CARD 1: AUTHOR & METADATA -->
-                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
+        <aside class="md:w-1/4 print:hidden md:sticky md:top-24 space-y-6 self-start">
+            <!-- CARD 1: AUTHOR & METADATA -->
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
                 <!-- 1. AUTHOR SECTION -->
                 <div>
                     <h4 class="text-base font-bold text-emerald-800 mb-3">Author:</h4>
@@ -178,7 +177,6 @@
                     </div>
                 </div>
                 {% endif %}
-            </div>
         </aside>
     </div>
 </main>
