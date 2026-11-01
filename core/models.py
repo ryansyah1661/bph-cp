@@ -125,8 +125,14 @@ class Regency(models.Model):
         verbose_name_plural = "Kabupaten / Kota"
         ordering = ['kode_kab']
 
+    @property
+    def display_name(self):
+        if self.nama.startswith('Kota ') or self.nama.startswith('Kabupaten ') or self.nama.startswith('Kab. '):
+            return self.nama
+        return f"Kab. {self.nama}"
+
     def __str__(self):
-        return f"{self.nama} ({self.provinsi.nama_provinsi})"
+        return f"{self.display_name} ({self.provinsi.nama_provinsi})"
 
     
 # === 5. TABEL KLIEN (Clients) ===
