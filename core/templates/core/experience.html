@@ -97,7 +97,7 @@
   }
   .map-province-pin:hover, .map-province-pin.active-pin,
   .map-kabkot-pin:hover, .map-kabkot-pin.active-pin {
-      transform: translate(-50%, -50%) scale(1.6);
+      transform: translate(-50%, -50%) scale(1.4);
       z-index: 40;
   }
   
@@ -198,10 +198,10 @@
                  data-lat="{{ reg.latitude|unlocalize }}"
                  data-count="{{ reg.projects.count }}"
                  style="top: 0%; left: 0%; display: none;">
-                 <div class="relative flex items-center justify-center">
-                   <!-- Titik / Dot QGIS Style -->
-                   <span class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-amber-500 border-2 border-white shadow-[0_2px_5px_rgba(0,0,0,0.35)] group-hover:bg-amber-600 block transition-colors"></span>
-                   <span class="absolute -inset-1 rounded-full bg-amber-400/30 group-hover:bg-amber-400/50 transition-colors pointer-events-none"></span>
+                 <div class="relative flex items-center justify-center p-1">
+                   <!-- Titik / Dot Presisi QGIS Style (Kecil & Rapi) -->
+                   <span class="w-2.5 h-2.5 rounded-full bg-amber-500 border-[1.5px] border-white shadow-[0_1px_3px_rgba(0,0,0,0.4)] group-hover:bg-amber-600 block transition-all"></span>
+                   <!-- Tooltip Nama Daerah -->
                    <span class="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900/95 text-white text-[10px] font-bold px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md z-30">
                      {{ reg.nama }}
                    </span>
@@ -278,9 +278,8 @@
                  data-name="{{ loc.nama_provinsi }}"
                  data-count="{{ loc.projects.count }}"
                  style="top: 0%; left: 0%; display: none;">
-                 <div class="relative flex items-center justify-center">
-                   <span class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-amber-500 border-2 border-white shadow-[0_2px_5px_rgba(0,0,0,0.35)] group-hover:bg-amber-600 block transition-colors"></span>
-                   <span class="absolute -inset-1 rounded-full bg-amber-400/30 group-hover:bg-amber-400/50 transition-colors pointer-events-none"></span>
+                 <div class="relative flex items-center justify-center p-1">
+                   <span class="w-2.5 h-2.5 rounded-full bg-amber-500 border-[1.5px] border-white shadow-[0_1px_3px_rgba(0,0,0,0.4)] group-hover:bg-amber-600 block transition-all"></span>
                    <span class="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900/95 text-white text-[10px] font-bold px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md z-30">
                      {{ loc.nama_provinsi }}
                    </span>
