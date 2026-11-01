@@ -1,5 +1,5 @@
 {% extends 'core/base.html' %}
-{% load static i18n %}
+{% load static i18n l10n %}
 
 {% get_current_language as LANGUAGE_CODE %}
 
@@ -128,16 +128,7 @@
       }
   }
 
-  .map-kabkot-pin:not(.loaded),
-  .map-province-pin:not(.loaded), 
-  .material-symbols-outlined:not(.loaded) {
-      visibility: hidden;
-  }
-
-  .map-province-pin:not(.loaded), 
-  .material-symbols-outlined:not(.loaded) {
-      visibility: hidden;
-  }
+  
 </style>
 
 <main class="flex-grow bg-background">
@@ -197,17 +188,23 @@
         <div id="map-svg-container">
           <!-- KABUPATEN / KOTA PINS -->
           {% for reg in regencies_with_projects %}
-            <div class="map-kabkot-pin group"
+            <div class="map-kabkot-pin group cursor-pointer"
                  id="pin-kab-{{ reg.kode_kab|slugify }}"
                  data-kode="{{ reg.kode_kab }}"
                  data-prov-kode="{{ reg.provinsi.kode_wilayah }}"
                  data-name="{{ reg.nama }}"
                  data-prov-name="{{ reg.provinsi.nama_provinsi }}"
-                 data-lon="{{ reg.longitude }}"
-                 data-lat="{{ reg.latitude }}"
+                 data-lon="{{ reg.longitude|unlocalize }}"
+                 data-lat="{{ reg.latitude|unlocalize }}"
                  data-count="{{ reg.projects.count }}"
                  style="top: 0%; left: 0%; display: none;">
-                 <span class="material-symbols-outlined text-amber-500 text-xl sm:text-2xl md:text-3xl drop-shadow-md select-none group-hover:text-amber-600 transition-transform">location_on</span>
+                 <div class="relative flex flex-col items-center">
+                   <span class="material-symbols-outlined text-amber-500 text-2xl sm:text-3xl filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.35)] select-none group-hover:text-amber-600 transition-transform duration-200 group-hover:scale-125">location_on</span>
+                   <span class="absolute -bottom-0.5 w-2 h-1 bg-amber-500/40 rounded-full blur-[0.5px]"></span>
+                   <span class="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md z-30">
+                     {{ reg.nama }}
+                   </span>
+                 </div>
             </div>
 
             <!-- POPUP CARD MODAL UNTUK KABUPATEN / KOTA INI -->
@@ -274,13 +271,19 @@
           <!-- PROVINSI FALLBACK PINS (JIKA ADA PROYEK TANPA KAB/KOTA SPESIFIK) -->
           {% for loc in locations_with_projects %}
             {% if loc.kode_wilayah %}
-            <div class="map-province-pin group"
+            <div class="map-province-pin group cursor-pointer"
                  id="pin-prov-{{ loc.kode_wilayah }}"
                  data-kode="{{ loc.kode_wilayah }}"
                  data-name="{{ loc.nama_provinsi }}"
                  data-count="{{ loc.projects.count }}"
                  style="top: 0%; left: 0%; display: none;">
-                 <span class="material-symbols-outlined text-emerald-600 text-lg sm:text-xl drop-shadow-md select-none group-hover:text-emerald-700 transition-transform">place</span>
+                 <div class="relative flex flex-col items-center">
+                   <span class="material-symbols-outlined text-amber-500 text-2xl sm:text-3xl filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.35)] select-none group-hover:text-amber-600 transition-transform duration-200 group-hover:scale-125">location_on</span>
+                   <span class="absolute -bottom-0.5 w-2 h-1 bg-amber-500/40 rounded-full blur-[0.5px]"></span>
+                   <span class="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md z-30">
+                     {{ loc.nama_provinsi }}
+                   </span>
+                 </div>
             </div>
 
             <div class="map-project-popover text-left shadow-2xl" id="popover-prov-{{ loc.kode_wilayah }}">
@@ -667,8 +670,8 @@
     const GEOJSON_URL = "{% url 'provinces_geojson' %}";
 
     d3.json(GEOJSON_URL).then(function (geojson) {
-        const width = mapContainer.clientWidth;
-        const height = mapContainer.clientHeight;
+        const width = mapContainer.clientWidth || 960;
+        const height = mapContainer.clientHeight || (width * (430 / 960));
 
         const svg = d3.select(mapContainer)
             .append('svg')
@@ -712,10 +715,15 @@
     });
 
     function positionAllPins(width, height) {
+        if (!width || width === 0) width = mapContainer.clientWidth || 960;
+        if (!height || height === 0) height = mapContainer.clientHeight || (width * (430 / 960));
+
         // Position Kab/Kota pins using their actual lon/lat
         kabPins.forEach(pin => {
-            const lon = parseFloat(pin.getAttribute('data-lon'));
-            const lat = parseFloat(pin.getAttribute('data-lat'));
+            const lonStr = (pin.getAttribute('data-lon') || '').replace(',', '.');
+            const latStr = (pin.getAttribute('data-lat') || '').replace(',', '.');
+            const lon = parseFloat(lonStr);
+            const lat = parseFloat(latStr);
             if (isNaN(lon) || isNaN(lat)) return;
 
             const projected = projection([lon, lat]);
@@ -759,6 +767,14 @@
             pin.dataset.topPct = topPct;
         });
     }
+
+    window.addEventListener('resize', () => {
+        if (projection) {
+            const w = mapContainer.clientWidth || 960;
+            const h = mapContainer.clientHeight || (w * (430 / 960));
+            positionAllPins(w, h);
+        }
+    });
 
     function activateKabkotPin(pin) {
         const isAlreadyActive = pin.classList.contains('active-pin');
