@@ -200,7 +200,7 @@
                  style="top: 0%; left: 0%; display: none;">
                  <div class="relative flex items-center justify-center p-1">
                    <!-- Titik / Dot Presisi QGIS Style (Kecil & Rapi) -->
-                   <span class="w-2.5 h-2.5 rounded-full bg-amber-500 border-[1.5px] border-white shadow-[0_1px_3px_rgba(0,0,0,0.4)] group-hover:bg-amber-600 block transition-all"></span>
+                   <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white shadow-[0_2px_5px_rgba(0,0,0,0.35)] group-hover:bg-amber-600 block transition-all"></span>
                    <!-- Tooltip Nama Daerah -->
                    <span class="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900/95 text-white text-[10px] font-bold px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md z-30">
                      {{ reg.nama }}
@@ -279,7 +279,7 @@
                  data-count="{{ loc.projects.count }}"
                  style="top: 0%; left: 0%; display: none;">
                  <div class="relative flex items-center justify-center p-1">
-                   <span class="w-2.5 h-2.5 rounded-full bg-amber-500 border-[1.5px] border-white shadow-[0_1px_3px_rgba(0,0,0,0.4)] group-hover:bg-amber-600 block transition-all"></span>
+                   <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white shadow-[0_2px_5px_rgba(0,0,0,0.35)] group-hover:bg-amber-600 block transition-all"></span>
                    <span class="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900/95 text-white text-[10px] font-bold px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md z-30">
                      {{ loc.nama_provinsi }}
                    </span>
@@ -737,16 +737,16 @@
             let overlaps = 0;
             placedPoints.forEach(p => {
                 const dist = Math.hypot(p.x - x, p.y - y);
-                if (dist < 14) {
+                if (dist < 18) {
                     overlaps++;
                 }
             });
 
             if (overlaps > 0) {
-                // Geser sedikit secara radial (8px) agar kedua titik terpisah rapi dan jelas terlihat
+                // Geser secara radial (14px) agar titik berdampingan rapi dengan jarak pas
                 const angle = (overlaps * Math.PI * 0.75) + 0.5;
-                x += Math.cos(angle) * 10;
-                y += Math.sin(angle) * 10;
+                x += Math.cos(angle) * 14;
+                y += Math.sin(angle) * 14;
             }
 
             placedPoints.push({ x, y });
