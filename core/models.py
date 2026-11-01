@@ -45,7 +45,7 @@ class Service(models.Model):
 
     title = models.CharField(max_length=200, verbose_name="Nama Layanan")
     slug = models.SlugField(max_length=200, unique=True, blank=True)
-    portfolio = models.CharField(max_length=3, choices=PORTFOLIO_CHOICES, default='NRM')
+    portfolio = models.CharField(max_length=3, choices=PORTFOLIO_CHOICES, default='NRM', blank=True, null=True)
     icon = models.CharField(max_length=50, blank=True, help_text="Nama icon Material Symbols, misal: 'forest', 'travel_explore'", verbose_name="Nama Icon Kartu")
     thumbnail = models.ImageField(upload_to='services/thumbs/', blank=True, verbose_name="Foto Kartu Layanan")
     bg_image = models.ImageField(upload_to='services/banners/', blank=True, verbose_name="Foto Banner Atas")
@@ -112,6 +112,22 @@ class Location(models.Model):
 
     def __str__(self):
         return f"{self.nama_provinsi} ({self.kode_wilayah})"
+
+# === 4b. TABEL KABUPATEN / KOTA (Regencies) ===
+class Regency(models.Model):
+    provinsi = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='regencies', verbose_name="Provinsi")
+    kode_kab = models.CharField(max_length=10, unique=True, verbose_name="Kode Kab/Kota")
+    nama = models.CharField(max_length=200, verbose_name="Nama Kabupaten/Kota")
+    latitude = models.FloatField(default=0, verbose_name="Latitude")
+    longitude = models.FloatField(default=0, verbose_name="Longitude")
+
+    class Meta:
+        verbose_name_plural = "Kabupaten / Kota"
+        ordering = ['kode_kab']
+
+    def __str__(self):
+        return f"{self.nama} ({self.provinsi.nama_provinsi})"
+
     
 # === 5. TABEL KLIEN (Clients) ===
 class Client(models.Model):
@@ -152,7 +168,8 @@ class Project(models.Model):
 
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True, related_name='projects')
     service_portfolio = models.ForeignKey(Service, on_delete=models.SET_NULL, null=True, related_name='projects', verbose_name="Sesuai Portofolio Layanan")
-    locations = models.ManyToManyField(Location, related_name='projects', verbose_name="Lokasi Wilayah Provinsi")
+    locations = models.ManyToManyField(Location, blank=True, related_name='projects', verbose_name="Lokasi Wilayah Provinsi")
+    regencies = models.ManyToManyField(Regency, blank=True, related_name='projects', verbose_name="Lokasi Kabupaten/Kota")
     categories = models.ManyToManyField(Category, related_name='projects', verbose_name="Kategori Proyek")
 
     class Meta:
@@ -436,3 +453,11 @@ class Program(models.Model):
                 nama_lengkap = tm.nama
             return TeamShim()
         return p
+
+
+@receiver(models.signals.m2m_changed, sender=Project.regencies.through)
+def sync_project_provinces(sender, instance, action, **kwargs):
+    if action in ['post_add', 'post_remove', 'post_clear']:
+        provinces = Location.objects.filter(regencies__in=instance.regencies.all()).distinct()
+        if provinces.exists():
+            instance.locations.add(*provinces)

@@ -1,5 +1,5 @@
 from modeltranslation.translator import register, TranslationOptions
-from .models import Article, Project, Story, Service, ServiceStep, Modul, Category, Location, Client, Gallery, Folder, TeamMember
+from .models import Article, Project, Story, Service, ServiceStep, Modul, Category, Location, Client, Gallery, Folder, TeamMember, Regency
 
 @register(Article)
 class ArticleTranslationOptions(TranslationOptions):
@@ -53,3 +53,7 @@ from .models import Program
 @register(Program)
 class ProgramTranslationOptions(TranslationOptions):
     fields = ('judul', 'slug', 'short', 'deskripsi')
+
+@register(Regency)
+class RegencyTranslationOptions(TranslationOptions):
+    fields = ('nama',)

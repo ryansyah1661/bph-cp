@@ -1,6 +1,6 @@
 from django.contrib import admin
 from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
-from .models import Category, Service, ServiceStep, Location, Client, Project, Story, Article, Modul
+from .models import Category, Service, ServiceStep, Location, Client, Project, Story, Article, Modul, Regency
 
 base_index = admin.site.index
 
@@ -42,7 +42,7 @@ class ProjectAdmin(TranslationAdmin):
     list_filter = ('tahun', 'categories')
     search_fields = ('name', 'description')
     prepopulated_fields = {'slug': ('name',)}
-    filter_horizontal = ('locations', 'categories')
+    filter_horizontal = ('locations', 'regencies', 'categories')
     
 @admin.register(Story)
 class StoryAdmin(TranslationAdmin):
@@ -64,3 +64,8 @@ class ModulAdmin(TranslationAdmin):
 admin.site.register(Category)
 admin.site.register(Location)
 admin.site.register(Client)
+@admin.register(Regency)
+class RegencyAdmin(TranslationAdmin):
+    list_display = ('kode_kab', 'nama', 'provinsi')
+    search_fields = ('kode_kab', 'nama', 'provinsi__nama_provinsi')
+    list_filter = ('provinsi',)

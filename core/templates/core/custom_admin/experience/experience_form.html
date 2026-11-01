@@ -53,7 +53,7 @@
           <div class="django-input-wrapper" id="tahun-select-container">{{ form.tahun }}</div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="block-input-group">
             <label class="block text-sm font-semibold text-slate-700 mb-1">Klien / Mitra <span class="text-red-500">*</span></label>
             <div class="django-input-wrapper">{{ form.client }}</div>
@@ -62,10 +62,19 @@
             <label class="block text-sm font-semibold text-slate-700 mb-1">Portofolio Layanan <span class="text-red-500">*</span></label>
             <div class="django-input-wrapper">{{ form.service_portfolio }}</div>
           </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="block-input-group">
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Lokasi Kabupaten / Kota</label>
+            <div class="text-xs custom-multi-select w-full mt-1">{{ form.regencies }}</div>
+            <p class="text-xs text-gray-400 mt-1">Pilih Kabupaten / Kota proyek. Nama daerah sudah lengkap dengan provinsi.</p>
+          </div>
           
           <div class="block-input-group">
-            <label class="block text-sm font-semibold text-slate-700 mb-1">Lokasi Wilayah <span class="text-red-500">*</span></label>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Lokasi Provinsi</label>
             <div class="text-xs custom-multi-select w-full mt-1">{{ form.locations }}</div>
+            <p class="text-xs text-gray-400 mt-1">Provinsi otomatis terhubung jika memilih Kabupaten/Kota di samping.</p>
           </div>
         </div>
 
@@ -250,13 +259,25 @@
   });
 
 
+  const regenciesSelect = document.getElementById('id_regencies');
+  if (regenciesSelect) {
+    new TomSelect(regenciesSelect, {
+      plugins: ['remove_button'],
+      create: false,
+      placeholder: "Ketik atau pilih Kabupaten / Kota...",
+      allowEmptyOption: true,
+      maxOptions: 600,
+    });
+  }
+
   const locationsSelect = document.getElementById('id_locations');
   if (locationsSelect) {
     new TomSelect(locationsSelect, {
       plugins: ['remove_button'],
       create: false,
-      placeholder:"Pilih lokasi wilayah...",
+      placeholder: "Pilih lokasi provinsi...",
       allowEmptyOption: true,
+      maxOptions: 50,
     });
   }
 

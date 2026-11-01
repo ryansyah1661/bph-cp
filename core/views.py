@@ -14,7 +14,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.core.serializers import serialize
 from django.http import HttpResponse
-from .models import Article, Project, Client, Story, Service, Location, Category, Modul, ContactMessage, Gallery, Profile, Folder, TeamMember, Infografis, Video
+from .models import Article, Project, Client, Story, Service, Location, Category, Modul, ContactMessage, Gallery, Profile, Folder, TeamMember, Infografis, Video, Regency
 
 # ==========================================
 # JALUR FRONTEND WEBSITE (NAVBAR & MENU)
@@ -43,15 +43,13 @@ def about_view(request):
     })
 
 def services_view(request):
-    services_nrm = Service.objects.filter(portfolio='NRM').prefetch_related('categories')
-    services_nru = Service.objects.filter(portfolio='NRU').prefetch_related('categories')
+    services = Service.objects.all().prefetch_related('categories').order_by('id')
     return render(request, 'core/services.html', {
-        'services_nrm': services_nrm,
-        'services_nru': services_nru,
+        'services': services,
     })
 
 def experience_view(request):
-    projects = Project.objects.select_related('client').prefetch_related('locations', 'categories').order_by('-tahun', '-id')
+    projects = Project.objects.select_related('client').prefetch_related('locations', 'regencies', 'categories').order_by('-tahun', '-id')
     categories = Category.objects.filter(projects__isnull=False).distinct().order_by('name')
     years = Project.objects.order_by('-tahun').values_list('tahun', flat=True).distinct()
     
@@ -60,6 +58,7 @@ def experience_view(request):
 
     total_proyek = Project.objects.count()
     total_provinsi = Location.objects.filter(projects__isnull=False).distinct().count()
+    total_kabkot = Regency.objects.filter(projects__isnull=False).distinct().count()
     total_klien = Client.objects.filter(projects__isnull=False).distinct().count()
     
     tahun_bounds = Project.objects.all().aggregate(Min('tahun'), Max('tahun'))
@@ -69,6 +68,7 @@ def experience_view(request):
         total_tahun_bekerja = 5
 
     locations_with_projects = Location.objects.filter(projects__isnull=False).prefetch_related('projects').distinct()
+    regencies_with_projects = Regency.objects.filter(projects__isnull=False).select_related('provinsi').prefetch_related('projects__client', 'projects__service_portfolio').distinct()
     all_stories = Story.objects.select_related('lokasi', 'project').order_by('-tanggal')
     selected_year = request.GET.get('year', 'all')
 
@@ -82,13 +82,21 @@ def experience_view(request):
         'total_tahun_bekerja': total_tahun_bekerja,
         'total_proyek': total_proyek,
         'total_provinsi': total_provinsi,
+        'total_kabkot': total_kabkot,
         'total_klien': total_klien,
         'locations_with_projects': locations_with_projects,
+        'regencies_with_projects': regencies_with_projects,
         'all_stories': all_stories,
     })
 
 def provinces_geojson_api(request):
     geojson_path = settings.BASE_DIR / 'static' / 'data' / 'indonesia_provinces.json'
+    with open(geojson_path, 'r', encoding='utf-8') as f:
+        geojson_data = f.read()
+    return HttpResponse(geojson_data, content_type='application/json')
+
+def kabkot_geojson_api(request):
+    geojson_path = settings.BASE_DIR / 'static' / 'data' / 'indonesia_kabkot.json'
     with open(geojson_path, 'r', encoding='utf-8') as f:
         geojson_data = f.read()
     return HttpResponse(geojson_data, content_type='application/json')
@@ -215,13 +223,11 @@ def detail_services_view(request, slug):
     query_condition = Q(slug_ind=slug) | Q(slug_en=slug) if hasattr(Service, 'slug_en') else Q(slug=slug)
     service_data = get_object_or_404(Service, query_condition)
     
-    nrm_services = Service.objects.filter(portfolio='NRM')
-    nru_services = Service.objects.filter(portfolio='NRU')
+    all_services = Service.objects.all().order_by('id')
     
     return render(request, 'core/detail-services.html', {
         'service': service_data,
-        'nrm_services': nrm_services,
-        'nru_services': nru_services,
+        'all_services': all_services,
     })
 
 def detail_story_view(request, slug):
@@ -383,7 +389,7 @@ class ProjectListView(AdminRequiredMixin, ListView):
 class ProjectCreateView(AdminRequiredMixin, CreateView):
     model = Project
     template_name = 'core/custom_admin/experience/experience_form.html'
-    fields = ['name_ind', 'name_en', 'slug_ind', 'slug_en', 'description_ind', 'description_en', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'categories']
+    fields = ['name_ind', 'name_en', 'slug_ind', 'slug_en', 'description_ind', 'description_en', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'regencies', 'categories']
     success_url = reverse_lazy('project_list')
 
     def form_valid(self, form):
@@ -395,7 +401,7 @@ class ProjectCreateView(AdminRequiredMixin, CreateView):
 class ProjectUpdateView(AdminRequiredMixin, UpdateView):
     model = Project
     template_name = 'core/custom_admin/experience/experience_form.html'
-    fields = ['name_ind', 'name_en', 'slug_ind', 'slug_en', 'description_ind', 'description_en', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'categories']
+    fields = ['name_ind', 'name_en', 'slug_ind', 'slug_en', 'description_ind', 'description_en', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'regencies', 'categories']
     success_url = reverse_lazy('project_list')
 
     def form_valid(self, form):

@@ -125,6 +125,7 @@ urlpatterns = [
 
     # URL ROUTING API PROVINCES GEOJSON UNTUK PETA
     path('api/provinces-geojson/', views.provinces_geojson_api, name='provinces_geojson'),
+    path('api/kabkot-geojson/', views.kabkot_geojson_api, name='kabkot_geojson'),
 
     # =========================================================================
     # ALUR SISTEM LUPA PASSWORD (AUTHENTICATION FLOW)
