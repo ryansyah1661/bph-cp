@@ -718,7 +718,8 @@
         if (!width || width === 0) width = mapContainer.clientWidth || 960;
         if (!height || height === 0) height = mapContainer.clientHeight || (width * (430 / 960));
 
-        // Position Kab/Kota pins using their actual lon/lat
+        // Position Kab/Kota pins with smart anti-overlap offset
+        const placedPoints = [];
         kabPins.forEach(pin => {
             const lonStr = (pin.getAttribute('data-lon') || '').replace(',', '.');
             const latStr = (pin.getAttribute('data-lat') || '').replace(',', '.');
@@ -729,8 +730,29 @@
             const projected = projection([lon, lat]);
             if (!projected || isNaN(projected[0]) || isNaN(projected[1])) return;
 
-            const leftPct = (projected[0] / width) * 100;
-            const topPct = (projected[1] / height) * 100;
+            let x = projected[0];
+            let y = projected[1];
+
+            // Cek jika titik sangat berdekatan (seperti Kab. Bogor & Kota Bogor)
+            let overlaps = 0;
+            placedPoints.forEach(p => {
+                const dist = Math.hypot(p.x - x, p.y - y);
+                if (dist < 14) {
+                    overlaps++;
+                }
+            });
+
+            if (overlaps > 0) {
+                // Geser sedikit secara radial (8px) agar kedua titik terpisah rapi dan jelas terlihat
+                const angle = (overlaps * Math.PI * 0.75) + 0.5;
+                x += Math.cos(angle) * 10;
+                y += Math.sin(angle) * 10;
+            }
+
+            placedPoints.push({ x, y });
+
+            const leftPct = (x / width) * 100;
+            const topPct = (y / height) * 100;
 
             pin.style.left = leftPct + '%';
             pin.style.top = topPct + '%';
