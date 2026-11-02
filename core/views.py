@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django import forms
-from django.db.models import Min, Max, Q
+from django.db.models import Min, Max, Q, Prefetch
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -49,7 +49,7 @@ def services_view(request):
     })
 
 def experience_view(request):
-    projects = Project.objects.select_related('client').prefetch_related('locations', 'regencies', 'categories').order_by('-tahun', '-id')
+    projects = Project.objects.select_related('client', 'service_portfolio').prefetch_related('locations', 'regencies', 'categories').order_by('-tahun', '-id')
     categories = Category.objects.filter(projects__isnull=False).distinct().order_by('name')
     years = Project.objects.order_by('-tahun').values_list('tahun', flat=True).distinct()
     
@@ -67,8 +67,18 @@ def experience_view(request):
     else:
         total_tahun_bekerja = 5
 
-    locations_with_projects = Location.objects.filter(projects__isnull=False).prefetch_related('projects').distinct()
-    regencies_with_projects = Regency.objects.filter(projects__isnull=False).select_related('provinsi').prefetch_related('projects__client', 'projects__service_portfolio').distinct()
+    locations_with_projects = Location.objects.filter(projects__isnull=False).prefetch_related(
+        Prefetch(
+            'projects',
+            queryset=Project.objects.select_related('client', 'service_portfolio').prefetch_related('regencies', 'locations').order_by('-tahun', '-id')
+        ),
+        Prefetch(
+            'regencies',
+            queryset=Regency.objects.filter(projects__isnull=False).distinct().order_by('nama'),
+            to_attr='active_regencies'
+        )
+    ).distinct()
+
     all_stories = Story.objects.select_related('lokasi', 'project').order_by('-tanggal')
     selected_year = request.GET.get('year', 'all')
 
@@ -85,7 +95,6 @@ def experience_view(request):
         'total_kabkot': total_kabkot,
         'total_klien': total_klien,
         'locations_with_projects': locations_with_projects,
-        'regencies_with_projects': regencies_with_projects,
         'all_stories': all_stories,
     })
 

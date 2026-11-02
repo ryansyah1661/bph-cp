@@ -180,96 +180,13 @@
           {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}LOCATION <span class="text-[#308935] font-light">PROJECTS</span>{% else %}LOKASI <span class="text-[#308935] font-light">PROYEK</span>{% endif %}
         </h2>
         <p class="text-sm text-gray-500 mt-1">
-          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Click any Regency / City pin below to view project cards{% else %}Klik titik Kabupaten/Kota di bawah ini untuk melihat kartu proyek yang telah dikerjakan{% endif %}
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Click any province pin below to view projects completed{% else %}Klik titik provinsi di bawah ini untuk melihat proyek yang telah dikerjakan{% endif %}
         </p>
       </div>
 
       <div class="indonesia-map-wrapper">
         <div id="map-svg-container">
-          <!-- KABUPATEN / KOTA PINS -->
-          {% for reg in regencies_with_projects %}
-            <div class="map-kabkot-pin group cursor-pointer"
-                 id="pin-kab-{{ reg.kode_kab|slugify }}"
-                 data-kode="{{ reg.kode_kab }}"
-                 data-prov-kode="{{ reg.provinsi.kode_wilayah }}"
-                 data-name="{{ reg.display_name }}"
-                 data-prov-name="{{ reg.provinsi.nama_provinsi }}"
-                 data-lon="{{ reg.longitude|unlocalize }}"
-                 data-lat="{{ reg.latitude|unlocalize }}"
-                 data-count="{{ reg.projects.count }}"
-                 style="top: 0%; left: 0%; display: none;">
-                 <div class="relative flex items-center justify-center p-1">
-                   <!-- Titik / Dot Presisi QGIS Style (Kecil & Rapi) -->
-                   <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white shadow-[0_2px_5px_rgba(0,0,0,0.35)] group-hover:bg-amber-600 block transition-all"></span>
-                   <!-- Tooltip Nama Daerah -->
-                   <span class="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900/95 text-white text-[10px] font-bold px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md z-30">
-                     {{ reg.display_name }}
-                   </span>
-                 </div>
-            </div>
-
-            <!-- POPUP CARD MODAL UNTUK KABUPATEN / KOTA INI -->
-            <div class="map-project-popover text-left shadow-2xl" id="popover-kab-{{ reg.kode_kab|slugify }}">
-              <div class="flex items-center justify-between pb-3 mb-3 border-b border-gray-100">
-                <div class="flex items-center gap-2">
-                  <span class="material-symbols-outlined text-amber-500 text-lg">radio_button_checked</span>
-                  <div>
-                    <h4 class="text-sm font-black text-neutral-900 leading-tight">{{ reg.display_name }}</h4>
-                    <span class="text-[11px] font-semibold text-neutral-500">{{ reg.provinsi.nama_provinsi }}</span>
-                  </div>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="bg-emerald-50 text-[#308935] text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-100">
-                    {{ reg.projects.count }} {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Projects{% else %}Proyek{% endif %}
-                  </span>
-                  <button type="button" onclick="event.stopPropagation(); closeAllPopovers();" class="text-gray-400 hover:text-gray-600 p-0.5 rounded-full hover:bg-gray-100 cursor-pointer bg-transparent border-none flex items-center justify-center">
-                    <span class="material-symbols-outlined text-sm">close</span>
-                  </button>
-                </div>
-              </div>
-
-              <!-- DAFTAR KARTU PROYEK (BUKAN TABEL) -->
-              <div class="space-y-3 max-h-[300px] overflow-y-auto pr-1">
-                {% for proj in reg.projects.all %}
-                <div class="bg-neutral-50 hover:bg-emerald-50/40 p-3 rounded-xl border border-gray-100 transition-all flex flex-col gap-2">
-                  <div class="flex items-start gap-3">
-                    {% if proj.image %}
-                    <img src="{{ proj.image.url }}" alt="{{ proj.name }}" class="w-12 h-12 rounded-lg object-cover flex-shrink-0 border border-gray-200">
-                    {% else %}
-                    <div class="w-12 h-12 rounded-lg bg-emerald-100 text-[#308935] flex items-center justify-center flex-shrink-0">
-                      <span class="material-symbols-outlined text-xl">forest</span>
-                    </div>
-                    {% endif %}
-                    <div class="flex-1 min-w-0">
-                      <div class="flex items-center justify-between gap-1 mb-1">
-                        <span class="text-[10px] font-bold bg-white text-neutral-600 px-1.5 py-0.5 rounded border border-gray-200">{{ proj.tahun }}</span>
-                        {% if proj.client %}
-                        <span class="text-[10px] font-semibold text-neutral-500 truncate max-w-[120px]">{{ proj.client.nama }}</span>
-                        {% endif %}
-                      </div>
-                      <h5 class="text-xs font-bold text-neutral-900 line-clamp-2 leading-snug">{{ proj.name }}</h5>
-                    </div>
-                  </div>
-                  {% if proj.description %}
-                  <p class="text-[11px] text-neutral-600 line-clamp-2 leading-relaxed">
-                    {{ proj.description|striptags }}
-                  </p>
-                  {% endif %}
-                  <div class="flex items-center justify-end pt-1">
-                    <button type="button" onclick="event.stopPropagation(); openProjectModal('{{ proj.id }}');" class="inline-flex items-center gap-1 text-[11px] font-bold text-[#308935] hover:text-emerald-700 transition cursor-pointer bg-transparent border-none p-0">
-                      {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}View Details{% else %}Lihat Detail{% endif %}
-                      <span class="material-symbols-outlined text-[13px]">arrow_forward</span>
-                    </button>
-                  </div>
-                </div>
-                {% empty %}
-                <p class="text-xs text-neutral-400 py-3 text-center">Belum ada proyek di wilayah ini.</p>
-                {% endfor %}
-              </div>
-            </div>
-          {% endfor %}
-
-          <!-- PROVINSI FALLBACK PINS (JIKA ADA PROYEK TANPA KAB/KOTA SPESIFIK) -->
+          <!-- TITIK PROVINSI (HANYA PROVINSI YANG MEMILIKI PROYEK) -->
           {% for loc in locations_with_projects %}
             {% if loc.kode_wilayah %}
             <div class="map-province-pin group cursor-pointer"
@@ -279,33 +196,55 @@
                  data-count="{{ loc.projects.count }}"
                  style="top: 0%; left: 0%; display: none;">
                  <div class="relative flex items-center justify-center p-1">
+                   <!-- Titik Bulat Presisi QGIS Style -->
                    <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white shadow-[0_2px_5px_rgba(0,0,0,0.35)] group-hover:bg-amber-600 block transition-all"></span>
+                   <!-- Tooltip Nama Provinsi -->
                    <span class="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900/95 text-white text-[10px] font-bold px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md z-30">
                      {{ loc.nama_provinsi }}
                    </span>
                  </div>
             </div>
 
+            <!-- CARD POPOVER UNTUK PROVINSI INI -->
             <div class="map-project-popover text-left shadow-2xl" id="popover-prov-{{ loc.kode_wilayah }}">
                 <div class="flex items-center justify-between pb-3 mb-3 border-b border-gray-100">
                   <div class="flex items-center gap-2">
                     <span class="material-symbols-outlined text-amber-500 text-lg">radio_button_checked</span>
                     <div>
                       <h4 class="text-sm font-black text-neutral-900 leading-tight">{{ loc.nama_provinsi }}</h4>
-                      <span class="text-[11px] font-semibold text-neutral-500">Provinsi</span>
+                      <span class="text-[11px] font-semibold text-neutral-500">{% trans "Provinsi" %}</span>
                     </div>
                   </div>
                   <div class="flex items-center gap-1.5">
                     <span class="bg-emerald-50 text-[#308935] text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-100">
                       {{ loc.projects.count }} {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Projects{% else %}Proyek{% endif %}
                     </span>
-                    <button type="button" onclick="event.stopPropagation(); closeAllPopovers();" class="text-gray-400 hover:text-gray-600 p-0.5 rounded-full hover:bg-gray-100 cursor-pointer bg-transparent border-none flex items-center justify-center">
+                    <button type="button" onclick="event.stopPropagation(); closeAllPopovers();" class="text-gray-400 hover:text-gray-600 p-0.5 rounded-full hover:bg-gray-100 cursor-pointer bg-transparent border-none flex items-center justify-center" aria-label="Tutup">
                       <span class="material-symbols-outlined text-sm">close</span>
                     </button>
                   </div>
                 </div>
 
-                <div class="space-y-3 max-h-[300px] overflow-y-auto pr-1">
+                <!-- DAFTAR KABUPATEN / KOTA TERKAIT DI PROVINSI INI -->
+                {% if loc.active_regencies %}
+                <div class="mb-3 pb-2.5 border-b border-gray-100">
+                  <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1.5 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-amber-500 text-[13px]">pin_drop</span>
+                    {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Regencies / Cities in this Province:{% else %}Kabupaten / Kota Terkait:{% endif %}
+                  </span>
+                  <div class="flex flex-wrap gap-1 max-h-24 overflow-y-auto">
+                    {% for reg in loc.active_regencies %}
+                      <span class="inline-flex items-center gap-1 bg-amber-50 text-amber-900 border border-amber-200/80 px-2 py-0.5 rounded-md text-[10px] font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block"></span>
+                        {{ reg.display_name }}
+                      </span>
+                    {% endfor %}
+                  </div>
+                </div>
+                {% endif %}
+
+                <!-- DAFTAR KARTU PROYEK DI PROVINSI INI -->
+                <div class="space-y-3 max-h-[280px] overflow-y-auto pr-1">
                   {% for proj in loc.projects.all %}
                   <div class="bg-neutral-50 hover:bg-emerald-50/40 p-3 rounded-xl border border-gray-100 transition-all flex flex-col gap-2">
                     <div class="flex items-start gap-3">
@@ -324,6 +263,15 @@
                           {% endif %}
                         </div>
                         <h5 class="text-xs font-bold text-neutral-900 line-clamp-2 leading-snug">{{ proj.name }}</h5>
+                        {% if proj.regencies.all %}
+                        <div class="flex flex-wrap gap-1 mt-1">
+                          {% for preg in proj.regencies.all %}
+                            <span class="text-[9px] bg-amber-100/80 text-amber-900 px-1.5 py-0.2 rounded font-medium">
+                              {{ preg.display_name }}
+                            </span>
+                          {% endfor %}
+                        </div>
+                        {% endif %}
                       </div>
                     </div>
                     {% if proj.description %}
@@ -331,13 +279,19 @@
                       {{ proj.description|striptags }}
                     </p>
                     {% endif %}
-                    <div class="flex items-center justify-end pt-1">
+                    <div class="flex items-center justify-between pt-1 border-t border-gray-100/60 mt-0.5">
+                      <a href="{% url 'detail-experience' slug=proj.slug %}" class="text-[11px] text-gray-500 hover:text-[#308935] font-medium flex items-center gap-0.5" style="text-decoration:none;">
+                        <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Full Case Study{% else %}Studi Kasus{% endif %}</span>
+                        <span class="material-symbols-outlined text-[12px]">open_in_new</span>
+                      </a>
                       <button type="button" onclick="event.stopPropagation(); openProjectModal('{{ proj.id }}');" class="inline-flex items-center gap-1 text-[11px] font-bold text-[#308935] hover:text-emerald-700 transition cursor-pointer bg-transparent border-none p-0">
-                        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}View Details{% else %}Lihat Detail{% endif %}
+                        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Quick View{% else %}Lihat Detail{% endif %}
                         <span class="material-symbols-outlined text-[13px]">arrow_forward</span>
                       </button>
                     </div>
                   </div>
+                  {% empty %}
+                  <p class="text-xs text-neutral-400 py-3 text-center">{% trans "Belum ada proyek di wilayah ini." %}</p>
                   {% endfor %}
                 </div>
             </div>
@@ -436,10 +390,8 @@
 {% block extra_js %}
 <!-- Modals Container moved outside main to prevent transform issues -->
 <div>
-  {% for loc in locations_with_projects %}
-    {% for project in loc.projects.all %}
-      {% include 'core/partials/project_modal.html' %}
-    {% endfor %}
+  {% for project in projects %}
+    {% include 'core/partials/project_modal.html' %}
   {% endfor %}
 </div>
 
@@ -612,15 +564,13 @@
     enableInteractiveTicker('scroll-publik', 1, 1.0);
 
 
-    // --- PETA INDONESIA & PROYEK (KABUPATEN / KOTA & PROVINSI) ---
-    const kabPins = document.querySelectorAll('.map-kabkot-pin');
+    // --- PETA INDONESIA & PROYEK (LEVEL PROVINSI) ---
     const provPins = document.querySelectorAll('.map-province-pin');
     const popovers = document.querySelectorAll('.map-project-popover');
     const mapContainer = document.getElementById('map-svg-container');
 
     window.closeAllPopovers = function() {
         popovers.forEach(pop => pop.style.display = 'none');
-        kabPins.forEach(p => p.classList.remove('active-pin'));
         provPins.forEach(p => p.classList.remove('active-pin'));
     };
 
@@ -629,15 +579,6 @@
         const kode = pin.getAttribute('data-kode');
         const count = parseInt(pin.getAttribute('data-count') || 0);
         provCounts[kode] = count;
-    });
-
-    // Also count from kabkot pins
-    kabPins.forEach(pin => {
-        const provKode = pin.getAttribute('data-prov-kode');
-        const count = parseInt(pin.getAttribute('data-count') || 0);
-        if (provKode) {
-            provCounts[provKode] = (provCounts[provKode] || 0) + count;
-        }
     });
 
     function getColorByCount(count) {
@@ -699,13 +640,7 @@
                 const kode = d.properties.kode_wilayah;
                 if (provCounts[kode]) {
                     event.stopPropagation();
-                    // If there are kabkot pins for this province, activate first one, otherwise activate province
-                    const matchingKabPin = document.querySelector(`.map-kabkot-pin[data-prov-kode="${kode}"]`);
-                    if (matchingKabPin) {
-                        activateKabkotPin(matchingKabPin);
-                    } else {
-                        activateProvincePin(kode);
-                    }
+                    activateProvincePin(kode);
                 }
             });
 
@@ -718,60 +653,9 @@
         if (!width || width === 0) width = mapContainer.clientWidth || 960;
         if (!height || height === 0) height = mapContainer.clientHeight || (width * (430 / 960));
 
-        // Position Kab/Kota pins with smart anti-overlap offset
-        const placedPoints = [];
-        kabPins.forEach(pin => {
-            const lonStr = (pin.getAttribute('data-lon') || '').replace(',', '.');
-            const latStr = (pin.getAttribute('data-lat') || '').replace(',', '.');
-            const lon = parseFloat(lonStr);
-            const lat = parseFloat(latStr);
-            if (isNaN(lon) || isNaN(lat)) return;
-
-            const projected = projection([lon, lat]);
-            if (!projected || isNaN(projected[0]) || isNaN(projected[1])) return;
-
-            let x = projected[0];
-            let y = projected[1];
-
-            // Cek jika titik sangat berdekatan (seperti Kab. Bogor & Kota Bogor)
-            let overlaps = 0;
-            placedPoints.forEach(p => {
-                const dist = Math.hypot(p.x - x, p.y - y);
-                if (dist < 18) {
-                    overlaps++;
-                }
-            });
-
-            if (overlaps > 0) {
-                // Geser secara radial (14px) agar titik berdampingan rapi dengan jarak pas
-                const angle = (overlaps * Math.PI * 0.75) + 0.5;
-                x += Math.cos(angle) * 14;
-                y += Math.sin(angle) * 14;
-            }
-
-            placedPoints.push({ x, y });
-
-            const leftPct = (x / width) * 100;
-            const topPct = (y / height) * 100;
-
-            pin.style.left = leftPct + '%';
-            pin.style.top = topPct + '%';
-            pin.style.display = 'block';
-
-            pin.dataset.leftPct = leftPct;
-            pin.dataset.topPct = topPct;
-        });
-
-        // Position province fallback pins
+        // Position province pins
         provPins.forEach(pin => {
             const kode = pin.getAttribute('data-kode');
-            // If province already has kabkot pins, hide the redundant province pin
-            const hasKabPin = document.querySelector(`.map-kabkot-pin[data-prov-kode="${kode}"]`);
-            if (hasKabPin) {
-                pin.style.display = 'none';
-                return;
-            }
-
             const lonLat = PROVINCE_COORDS[kode];
             if (!lonLat) return;
 
@@ -797,21 +681,6 @@
             positionAllPins(w, h);
         }
     });
-
-    function activateKabkotPin(pin) {
-        const isAlreadyActive = pin.classList.contains('active-pin');
-        closeAllPopovers();
-
-        if (!isAlreadyActive) {
-            pin.classList.add('active-pin');
-            const popId = pin.id.replace('pin-', 'popover-');
-            const popover = document.getElementById(popId);
-            if (popover) {
-                positionPopover(popover, pin);
-                popover.style.display = 'block';
-            }
-        }
-    }
 
     function activateProvincePin(kode) {
         const pin = document.getElementById(`pin-prov-${kode}`);
@@ -857,13 +726,6 @@
         }
     }
 
-    kabPins.forEach(pin => {
-        pin.addEventListener('click', (e) => {
-            e.stopPropagation();
-            activateKabkotPin(pin);
-        });
-    });
-
     provPins.forEach(pin => {
         pin.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -878,7 +740,7 @@
     });
 
     document.addEventListener('click', (e) => {
-        if (!e.target.closest('.map-kabkot-pin') && !e.target.closest('.map-province-pin') && !e.target.closest('.map-project-popover') && !e.target.closest('.province-path')) {
+        if (!e.target.closest('.map-province-pin') && !e.target.closest('.map-project-popover') && !e.target.closest('.province-path')) {
             closeAllPopovers();
         }
     });});

@@ -1,5 +1,5 @@
 {% extends 'core/base.html' %}
-{% load static i18n %}
+{% load static i18n l10n %}
 
 {% block title %}{{ project.name|default:"Detail Studi Kasus Proyek" }} - Bhumi Pasa Hijau{% endblock %}
 
@@ -203,6 +203,23 @@
               {% endfor %}
             </div>
 
+            {% if project.regencies.all %}
+            <div class="pt-2 border-t border-border-subtle/70">
+              <span class="text-text-muted block text-[11px] uppercase tracking-wider font-bold mb-1.5 flex items-center gap-1">
+                <span class="material-symbols-outlined text-[13px] text-amber-500">pin_drop</span>
+                {% trans "Kabupaten / Kota Terkait" %}
+              </span>
+              <div class="flex flex-wrap gap-1 max-h-32 overflow-y-auto">
+                {% for reg in project.regencies.all %}
+                  <span class="inline-flex items-center gap-1 bg-amber-50 text-amber-900 border border-amber-200/80 px-2 py-0.5 rounded-md text-[11px] font-medium">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block"></span>
+                    {{ reg.display_name }}
+                  </span>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+
             <p class="text-[11px] text-text-muted flex items-center gap-1">
               <span class="material-symbols-outlined text-amber-500 text-sm">location_on</span>
               <span>{% trans "Wilayah proyek disorot warna hijau & ditandai pin." %}</span>
@@ -377,7 +394,44 @@
           return projectLocationCodes.includes(kode) ? 'pointer' : 'default';
         });
 
-      // Render Pin Marker untuk Lokasi Proyek Ini
+      // Render Marker Lokasi: Titik Kabupaten/Kota jika ada, atau Pin Provinsi sebagai Fallback
+      const projectRegencies = [
+        {% for reg in project.regencies.all %}
+          {
+            name: "{{ reg.display_name|escapejs }}",
+            prov: "{{ reg.provinsi.nama_provinsi|escapejs }}",
+            lon: {{ reg.longitude|unlocalize }},
+            lat: {{ reg.latitude|unlocalize }}
+          },
+        {% endfor %}
+      ];
+
+      if (projectRegencies.length > 0) {
+        projectRegencies.forEach(function(reg) {
+          if (!reg.lon || !reg.lat || isNaN(reg.lon) || isNaN(reg.lat)) return;
+          const projected = projection([reg.lon, reg.lat]);
+          if (!projected || isNaN(projected[0]) || isNaN(projected[1])) return;
+
+          const leftPct = (projected[0] / mapWidth) * 100;
+          const topPct = (projected[1] / mapHeight) * 100;
+
+          const dotEl = document.createElement('div');
+          dotEl.className = 'absolute z-30 -translate-x-1/2 -translate-y-1/2 group cursor-pointer';
+          dotEl.style.left = leftPct + '%';
+          dotEl.style.top = topPct + '%';
+          dotEl.innerHTML = `
+            <div class="relative flex items-center justify-center p-1">
+              <span class="w-3 h-3 rounded-full bg-amber-500 border-2 border-white shadow-[0_2px_5px_rgba(0,0,0,0.35)] group-hover:scale-150 transition-transform block"></span>
+              <div class="hidden group-hover:block absolute bottom-full mb-1 bg-slate-900/95 backdrop-blur-sm text-white text-[10px] font-bold py-1 px-2.5 rounded-md whitespace-nowrap shadow-xl z-30 pointer-events-none">
+                ${reg.name}
+              </div>
+            </div>
+          `;
+          mapContainer.appendChild(dotEl);
+        });
+      }
+
+      // Render Pin Marker Provinsi
       projectLocationCodes.forEach(function(kode) {
         const coords = PROVINCE_COORDS[kode];
         if (!coords) return;
@@ -389,19 +443,22 @@
         const topPct = (projected[1] / mapHeight) * 100;
         const provName = projectLocationNames[kode] || 'Lokasi Proyek';
 
-        const pinEl = document.createElement('div');
-        pinEl.className = 'detail-province-pin group';
-        pinEl.style.left = leftPct + '%';
-        pinEl.style.top = topPct + '%';
-        pinEl.innerHTML = `
-          <div class="relative flex flex-col items-center">
-            <span class="material-symbols-outlined text-amber-500 text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] select-none group-hover:scale-125 transition-transform">location_on</span>
-            <div class="hidden group-hover:block absolute bottom-full mb-1 bg-slate-900/90 backdrop-blur-sm text-white text-[10px] font-bold py-1 px-2.5 rounded-md whitespace-nowrap shadow-xl z-30 pointer-events-none">
-              ${provName}
+        // Jika sudah ada titik kabkot di peta, tampilkan pin provinsi lebih subtle atau hanya jika tidak ada kabkot
+        if (projectRegencies.length === 0) {
+          const pinEl = document.createElement('div');
+          pinEl.className = 'detail-province-pin group';
+          pinEl.style.left = leftPct + '%';
+          pinEl.style.top = topPct + '%';
+          pinEl.innerHTML = `
+            <div class="relative flex flex-col items-center">
+              <span class="material-symbols-outlined text-amber-500 text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] select-none group-hover:scale-125 transition-transform">location_on</span>
+              <div class="hidden group-hover:block absolute bottom-full mb-1 bg-slate-900/90 backdrop-blur-sm text-white text-[10px] font-bold py-1 px-2.5 rounded-md whitespace-nowrap shadow-xl z-30 pointer-events-none">
+                ${provName}
+              </div>
             </div>
-          </div>
-        `;
-        mapContainer.appendChild(pinEl);
+          `;
+          mapContainer.appendChild(pinEl);
+        }
       });
 
     }).catch(function(err) {

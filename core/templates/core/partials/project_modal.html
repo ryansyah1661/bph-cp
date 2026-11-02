@@ -4,13 +4,13 @@
   <div class="bg-white w-11/12 h-[90vh] md:w-4/5 md:h-[90vh] rounded-2xl overflow-hidden flex flex-col shadow-2xl transform scale-95 transition-transform duration-300" id="project-modal-content-{{ project.id }}">
     
     <!-- Modal Header -->
-    <div class="flex justify-between items-center px-4 py-3 bg-slate-50 border-b border-gray-200">
-      <h3 class="font-bold text-slate-700 text-sm flex items-center gap-2">
-        <span class="material-symbols-outlined text-primary text-lg">description</span>
+    <div class="flex justify-between items-center px-6 py-4 bg-slate-50 border-b border-gray-200">
+      <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-xl">description</span>
         {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Project Details{% else %}Detail Proyek{% endif %}
       </h3>
       <div class="flex items-center gap-3">
-        <button type="button" onclick="closeProjectModal('{{ project.id }}')" class="text-slate-400 hover:text-red-500 transition-colors p-1" aria-label="Tutup">
+        <button type="button" onclick="closeProjectModal('{{ project.id }}')" class="text-slate-400 hover:text-red-500 transition-colors p-1 rounded-lg hover:bg-gray-100 cursor-pointer bg-transparent border-none flex items-center justify-center" aria-label="Tutup">
           <span class="material-symbols-outlined text-xl">close</span>
         </button>
       </div>
@@ -20,16 +20,79 @@
     <div class="flex-grow w-full h-full bg-white relative overflow-y-auto">
       <div class="px-6 py-8 md:px-12 md:py-10 text-on-surface-variant font-body-md text-body-md leading-relaxed prose max-w-none custom-project-content max-w-4xl mx-auto">
         
-        <h1 class="text-2xl md:text-3xl font-black text-emerald-950 mb-2 leading-tight">{{ project.name }}</h1>
-        <p class="text-sm text-primary font-bold mb-8 border-b border-gray-100 pb-4">
-          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Project Year:{% else %}Tahun Pelaksanaan:{% endif %} {{ project.tahun }}
-        </p>
+        <h1 class="text-2xl md:text-3xl font-black text-emerald-950 mb-3 leading-tight">{{ project.name }}</h1>
+        
+        <!-- Meta info (Tahun, Klien, Portofolio) -->
+        <div class="flex flex-wrap items-center gap-2.5 text-xs mb-6 not-prose">
+          <span class="inline-flex items-center gap-1.5 font-bold text-primary bg-primary/10 px-3 py-1.5 rounded-lg">
+            <span class="material-symbols-outlined text-sm">calendar_today</span>
+            {{ project.tahun }}
+          </span>
+          {% if project.client %}
+          <span class="inline-flex items-center gap-1.5 font-semibold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg">
+            <span class="material-symbols-outlined text-sm">business</span>
+            {{ project.client.nama }}
+          </span>
+          {% endif %}
+          {% if project.service_portfolio %}
+          <span class="inline-flex items-center gap-1.5 font-semibold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100">
+            <span class="material-symbols-outlined text-sm">eco</span>
+            {{ project.service_portfolio.title }}
+          </span>
+          {% endif %}
+        </div>
+
+        <!-- Box Lokasi Wilayah (Provinsi & Kabupaten/Kota) -->
+        {% if project.locations.all or project.regencies.all %}
+        <div class="mb-8 p-4 md:p-5 bg-emerald-50/50 rounded-2xl border border-emerald-100/80 space-y-3 not-prose">
+          {% if project.locations.all %}
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-xs font-bold text-emerald-900 uppercase tracking-wider flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm text-[#308935]">location_on</span>
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Province:{% else %}Provinsi:{% endif %}
+            </span>
+            {% for loc in project.locations.all %}
+            <span class="inline-flex items-center gap-1 bg-white border border-emerald-200 text-emerald-950 px-2.5 py-1 rounded-lg text-xs font-bold shadow-xs">
+              {{ loc.nama_provinsi }}
+            </span>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          {% if project.regencies.all %}
+          <div class="flex items-start gap-2 flex-wrap pt-3 border-t border-emerald-100">
+            <span class="text-xs font-bold text-amber-900 uppercase tracking-wider flex items-center gap-1 mt-0.5">
+              <span class="material-symbols-outlined text-sm text-amber-600">pin_drop</span>
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Regencies / Cities:{% else %}Kabupaten / Kota Terkait:{% endif %}
+            </span>
+            <div class="flex flex-wrap gap-1.5 flex-1">
+              {% for reg in project.regencies.all %}
+              <span class="inline-flex items-center gap-1 bg-amber-50 text-amber-900 border border-amber-200/80 px-2.5 py-1 rounded-lg text-xs font-medium">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block"></span>
+                {{ reg.display_name }}
+              </span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+        </div>
+        {% endif %}
 
         {% if project.description %}
           {{ project.description|safe }}
         {% else %}
           <p class="text-gray-400 italic">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No description available for this project.{% else %}Belum ada deskripsi untuk proyek ini.{% endif %}</p>
         {% endif %}
+
+        <div class="mt-8 pt-6 border-t border-gray-200/80 flex flex-col sm:flex-row items-center justify-between gap-4 not-prose">
+          <span class="text-xs text-slate-500 font-medium text-center sm:text-left">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Want to see the interactive location map &amp; full report?{% else %}Ingin melihat peta interaktif lokasi &amp; modul teknis lengkap?{% endif %}
+          </span>
+          <a href="{% url 'detail-experience' slug=project.slug %}" class="inline-flex items-center gap-2 bg-[#308935] hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-xl transition shadow shrink-0" style="text-decoration:none;">
+            <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Full Case Study &amp; Map{% else %}Studi Kasus Lengkap &amp; Peta{% endif %}</span>
+            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </a>
+        </div>
         
       </div>
     </div>
