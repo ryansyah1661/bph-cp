@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -401,6 +402,19 @@ class ProjectCreateView(AdminRequiredMixin, CreateView):
     fields = ['name_ind', 'name_en', 'slug_ind', 'slug_en', 'description_ind', 'description_en', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'regencies', 'categories']
     success_url = reverse_lazy('project_list')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        all_regencies = Regency.objects.select_related('provinsi').all()
+        context['regencies_json'] = json.dumps([
+            {
+                'id': str(r.id),
+                'text': str(r),
+                'provinsi_id': str(r.provinsi_id)
+            }
+            for r in all_regencies
+        ])
+        return context
+
     def form_valid(self, form):
         if not form.instance.slug_en and form.instance.slug_ind:
             form.instance.slug_en = form.instance.slug_ind
@@ -412,6 +426,19 @@ class ProjectUpdateView(AdminRequiredMixin, UpdateView):
     template_name = 'core/custom_admin/experience/experience_form.html'
     fields = ['name_ind', 'name_en', 'slug_ind', 'slug_en', 'description_ind', 'description_en', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'regencies', 'categories']
     success_url = reverse_lazy('project_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        all_regencies = Regency.objects.select_related('provinsi').all()
+        context['regencies_json'] = json.dumps([
+            {
+                'id': str(r.id),
+                'text': str(r),
+                'provinsi_id': str(r.provinsi_id)
+            }
+            for r in all_regencies
+        ])
+        return context
 
     def form_valid(self, form):
         if not form.instance.slug_en and form.instance.slug_ind:

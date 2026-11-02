@@ -66,15 +66,15 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="block-input-group">
-            <label class="block text-sm font-semibold text-slate-700 mb-1">Lokasi Kabupaten / Kota</label>
-            <div class="text-xs custom-multi-select w-full mt-1">{{ form.regencies }}</div>
-            <p class="text-xs text-gray-400 mt-1">Pilih Kabupaten / Kota proyek. Nama daerah sudah lengkap dengan provinsi.</p>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Lokasi Provinsi</label>
+            <div class="text-xs custom-multi-select w-full mt-1">{{ form.locations }}</div>
+            <p class="text-xs text-gray-400 mt-1">Pilih satu atau beberapa provinsi wilayah kerja proyek.</p>
           </div>
           
           <div class="block-input-group">
-            <label class="block text-sm font-semibold text-slate-700 mb-1">Lokasi Provinsi</label>
-            <div class="text-xs custom-multi-select w-full mt-1">{{ form.locations }}</div>
-            <p class="text-xs text-gray-400 mt-1">Provinsi otomatis terhubung jika memilih Kabupaten/Kota di samping.</p>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Lokasi Kabupaten / Kota</label>
+            <div class="text-xs custom-multi-select w-full mt-1">{{ form.regencies }}</div>
+            <p class="text-xs text-gray-400 mt-1">Pilihan Kabupaten / Kota otomatis tersaring sesuai provinsi yang dipilih di sebelah kiri.</p>
           </div>
         </div>
 
@@ -259,25 +259,90 @@
   });
 
 
-  const regenciesSelect = document.getElementById('id_regencies');
-  if (regenciesSelect) {
-    new TomSelect(regenciesSelect, {
-      plugins: ['remove_button'],
-      create: false,
-      placeholder: "Ketik atau pilih Kabupaten / Kota...",
-      allowEmptyOption: true,
-      maxOptions: 600,
-    });
-  }
+  const allRegenciesData = {{ regencies_json|default:"[]"|safe }};
 
   const locationsSelect = document.getElementById('id_locations');
+  const regenciesSelect = document.getElementById('id_regencies');
+
+  let locTom = null;
+  let regTom = null;
+
   if (locationsSelect) {
-    new TomSelect(locationsSelect, {
+    locTom = new TomSelect(locationsSelect, {
       plugins: ['remove_button'],
       create: false,
       placeholder: "Pilih lokasi provinsi...",
       allowEmptyOption: true,
       maxOptions: 50,
+    });
+  }
+
+  if (regenciesSelect) {
+    regTom = new TomSelect(regenciesSelect, {
+      plugins: ['remove_button'],
+      create: false,
+      placeholder: "Pilih provinsi terlebih dahulu di sebelah kiri...",
+      allowEmptyOption: true,
+      maxOptions: 600,
+    });
+  }
+
+  // Fungsi sinkronisasi: filter opsi kabupaten/kota sesuai provinsi yang dipilih
+  function updateRegenciesOptions(selectedProvIds, isInitial = false) {
+    if (!regTom) return;
+
+    let provIds = [];
+    if (Array.isArray(selectedProvIds)) {
+      provIds = selectedProvIds.map(String).filter(Boolean);
+    } else if (selectedProvIds) {
+      provIds = String(selectedProvIds).split(',').map(s => s.trim()).filter(Boolean);
+    }
+
+    // Ambil nilai kabupaten/kota yang saat ini terpilih
+    let currentRegValues = regTom.getValue();
+    let currentValues = [];
+    if (Array.isArray(currentRegValues)) {
+      currentValues = currentRegValues.map(String).filter(Boolean);
+    } else if (currentRegValues) {
+      currentValues = String(currentRegValues).split(',').map(s => s.trim()).filter(Boolean);
+    }
+
+    if (provIds.length === 0) {
+      // Jika belum ada provinsi yang dipilih
+      regTom.clear(true);
+      regTom.clearOptions();
+      regTom.settings.placeholder = "Pilih provinsi terlebih dahulu di sebelah kiri...";
+      regTom.inputState();
+      return;
+    }
+
+    // Ambil kabupaten/kota yang provinsi_id-nya termasuk dalam provIds
+    const validRegs = allRegenciesData.filter(r => provIds.includes(String(r.provinsi_id)));
+
+    // Nilai kabupaten yang masih cocok dengan provinsi terpilih
+    const validValuesToKeep = currentValues.filter(val => validRegs.some(r => String(r.id) === val));
+
+    // Perbarui daftar opsi di TomSelect kabupaten/kota
+    regTom.clearOptions();
+    validRegs.forEach(r => {
+      regTom.addOption({ value: String(r.id), text: r.text });
+    });
+
+    regTom.settings.placeholder = "Ketik atau pilih Kabupaten / Kota...";
+    regTom.inputState();
+
+    // Pulihkan nilai kabupaten/kota yang valid
+    regTom.setValue(validValuesToKeep, true);
+  }
+
+  if (locTom && regTom) {
+    // Jalankan filter saat halaman selesai dimuat (berguna untuk mode Edit Proyek)
+    const initialProvs = locTom.getValue();
+    updateRegenciesOptions(initialProvs, true);
+
+    // Event listener: saat pilihan provinsi ditambah atau dihapus
+    locTom.on('change', function(values) {
+      updateRegenciesOptions(values, false);
     });
   }
 
