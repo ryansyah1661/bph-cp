@@ -225,28 +225,10 @@
                   </div>
                 </div>
 
-                <!-- DAFTAR KABUPATEN / KOTA TERKAIT DI PROVINSI INI -->
-                {% if loc.active_regencies %}
-                <div class="mb-3 pb-2.5 border-b border-gray-100">
-                  <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1.5 flex items-center gap-1">
-                    <span class="material-symbols-outlined text-amber-500 text-[13px]">pin_drop</span>
-                    {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Regencies / Cities in this Province:{% else %}Kabupaten / Kota Terkait:{% endif %}
-                  </span>
-                  <div class="flex flex-wrap gap-1 max-h-24 overflow-y-auto">
-                    {% for reg in loc.active_regencies %}
-                      <span class="inline-flex items-center gap-1 bg-amber-50 text-amber-900 border border-amber-200/80 px-2 py-0.5 rounded-md text-[10px] font-medium">
-                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block"></span>
-                        {{ reg.display_name }}
-                      </span>
-                    {% endfor %}
-                  </div>
-                </div>
-                {% endif %}
-
                 <!-- DAFTAR KARTU PROYEK DI PROVINSI INI -->
-                <div class="space-y-3 max-h-[280px] overflow-y-auto pr-1">
+                <div class="space-y-3 max-h-[300px] overflow-y-auto pr-1">
                   {% for proj in loc.projects.all %}
-                  <div class="bg-neutral-50 hover:bg-emerald-50/40 p-3 rounded-xl border border-gray-100 transition-all flex flex-col gap-2">
+                  <div class="bg-neutral-50 hover:bg-emerald-50/40 p-3 rounded-xl border border-gray-100 transition-all flex flex-col gap-2 cursor-pointer" onclick="openProjectModal('{{ proj.id }}');">
                     <div class="flex items-start gap-3">
                       {% if proj.image %}
                       <img src="{{ proj.image.url }}" alt="{{ proj.name }}" class="w-12 h-12 rounded-lg object-cover flex-shrink-0 border border-gray-200">
@@ -263,15 +245,6 @@
                           {% endif %}
                         </div>
                         <h5 class="text-xs font-bold text-neutral-900 line-clamp-2 leading-snug">{{ proj.name }}</h5>
-                        {% if proj.regencies.all %}
-                        <div class="flex flex-wrap gap-1 mt-1">
-                          {% for preg in proj.regencies.all %}
-                            <span class="text-[9px] bg-amber-100/80 text-amber-900 px-1.5 py-0.2 rounded font-medium">
-                              {{ preg.display_name }}
-                            </span>
-                          {% endfor %}
-                        </div>
-                        {% endif %}
                       </div>
                     </div>
                     {% if proj.description %}
@@ -279,16 +252,6 @@
                       {{ proj.description|striptags }}
                     </p>
                     {% endif %}
-                    <div class="flex items-center justify-between pt-1 border-t border-gray-100/60 mt-0.5">
-                      <a href="{% url 'detail-experience' slug=proj.slug %}" class="text-[11px] text-gray-500 hover:text-[#308935] font-medium flex items-center gap-0.5" style="text-decoration:none;">
-                        <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Full Case Study{% else %}Studi Kasus{% endif %}</span>
-                        <span class="material-symbols-outlined text-[12px]">open_in_new</span>
-                      </a>
-                      <button type="button" onclick="event.stopPropagation(); openProjectModal('{{ proj.id }}');" class="inline-flex items-center gap-1 text-[11px] font-bold text-[#308935] hover:text-emerald-700 transition cursor-pointer bg-transparent border-none p-0">
-                        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Quick View{% else %}Lihat Detail{% endif %}
-                        <span class="material-symbols-outlined text-[13px]">arrow_forward</span>
-                      </button>
-                    </div>
                   </div>
                   {% empty %}
                   <p class="text-xs text-neutral-400 py-3 text-center">{% trans "Belum ada proyek di wilayah ini." %}</p>
