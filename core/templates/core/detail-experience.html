@@ -67,6 +67,95 @@
             {% if project.intro %}{{ project.intro|safe }}{% else %}{{ project.description|safe }}{% endif %}
           </div>
         </div>
+        <!-- PETA SEBARAN WILAYAH PROYEK (MENYATU DENGAN DESKRIPSI) -->
+        <div class="bg-surface-white border border-border-subtle rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-subtle pb-4">
+            <div>
+              <h3 class="font-headline-lg text-lg font-bold text-on-surface flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-2xl">map</span>
+                <span>{% trans "Peta Sebaran Wilayah Proyek" %}</span>
+              </h3>
+              <p class="text-xs text-text-muted mt-0.5">
+                {% trans "Sebaran titik kerja proyek di tingkat Kabupaten / Kota" %}
+              </p>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <span id="detail-map-counter" class="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+                {% if project.regencies.all %}
+                  {{ project.regencies.count }} {% trans "Kabupaten / Kota" %}
+                {% else %}
+                  {{ project.locations.count }} {% trans "Provinsi" %}
+                {% endif %}
+              </span>
+            </div>
+          </div>
+
+          <!-- Tab Filter Provinsi (jika proyek memiliki lebih dari 1 provinsi) -->
+          {% if project.locations.all.count > 1 %}
+          <div class="flex flex-wrap items-center gap-1.5 pt-1">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">{% trans "Pilih Provinsi:" %}</span>
+            <button type="button" onclick="filterDetailProvince('all')" class="detail-prov-filter-btn active text-xs font-bold px-3 py-1.5 rounded-lg border transition-all cursor-pointer bg-primary text-white border-primary shadow-xs" data-prov="all">
+              {% trans "Semua Wilayah" %}
+            </button>
+            {% for loc in project.locations.all %}
+              {% if loc.kode_wilayah %}
+              <button type="button" onclick="filterDetailProvince('{{ loc.kode_wilayah }}')" class="detail-prov-filter-btn text-xs font-semibold px-3 py-1.5 rounded-lg border transition-all cursor-pointer bg-slate-50 text-slate-700 border-slate-200 hover:border-primary hover:text-primary" data-prov="{{ loc.kode_wilayah }}">
+                {{ loc.nama_provinsi }}
+              </button>
+              {% endif %}
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <!-- Container Peta Mini SVG -->
+          <div id="detail-map-svg-container" class="shadow-inner relative aspect-[960/420] w-full rounded-xl overflow-hidden bg-gradient-to-br from-slate-50 to-emerald-50/20 border border-slate-200">
+            <div id="detail-map-loading" class="absolute inset-0 flex items-center justify-center text-slate-400 text-xs gap-2 font-medium">
+              <span class="material-symbols-outlined text-base animate-spin text-primary">progress_activity</span>
+              <span>{% trans "Memuat peta..." %}</span>
+            </div>
+          </div>
+
+          <!-- Keterangan & Badge Lokasi -->
+          <div class="space-y-3 pt-2">
+            <div class="flex flex-wrap gap-1.5 detail-prov-badge-container">
+              {% for loc in project.locations.all %}
+                <span class="detail-prov-badge inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-800 dark:text-emerald-300 border border-emerald-200/70 px-2.5 py-1 rounded-lg text-xs font-semibold" data-prov="{{ loc.kode_wilayah }}">
+                  <span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+                  {{ loc.nama_provinsi }}
+                </span>
+              {% endfor %}
+            </div>
+
+            {% if project.regencies.all %}
+            <div class="pt-2 border-t border-border-subtle/70">
+              <span class="text-text-muted block text-[11px] uppercase tracking-wider font-bold mb-1.5 flex items-center gap-1">
+                <span class="material-symbols-outlined text-[13px] text-amber-500">pin_drop</span>
+                {% trans "Kabupaten / Kota Terkait" %}
+              </span>
+              <div class="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto pr-1 detail-reg-badge-container">
+                {% for reg in project.regencies.all %}
+                  <span class="detail-reg-badge inline-flex items-center gap-1 bg-amber-50 text-amber-900 border border-amber-200/80 px-2.5 py-1 rounded-md text-xs font-medium" data-prov="{{ reg.provinsi.kode_wilayah }}">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block"></span>
+                    {{ reg.display_name }}
+                  </span>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+
+            <div class="pt-2 border-t border-border-subtle flex items-center justify-between text-[11px] text-text-muted">
+              <span class="flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-amber-500 inline-block"></span>
+                <span>{% trans "Titik oranye menandakan lokasi kerja Kabupaten / Kota." %}</span>
+              </span>
+              <a href="{% url 'experience' %}" class="text-xs font-bold text-primary hover:underline flex items-center gap-0.5" style="text-decoration:none;">
+                <span>{% trans "Buka di Peta Utama" %}</span>
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              </a>
+            </div>
+          </div>
+        </div>
 
         {% if project.challenge %}
         <div class="space-y-4">
@@ -168,72 +257,6 @@
           </div>
         </div>
 
-        <!-- CARD 2: Peta Lokasi Wilayah Proyek -->
-        <div class="bg-surface-white border border-border-subtle rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.01)] space-y-4">
-          <div class="flex items-center justify-between border-b border-border-subtle pb-3">
-            <h3 class="font-headline-lg text-base font-bold text-on-surface flex items-center gap-2">
-              <span class="material-symbols-outlined text-primary text-xl">map</span>
-              <span>{% trans "Peta Lokasi Proyek" %}</span>
-            </h3>
-            {% if project.locations.all %}
-              <span class="text-[11px] font-bold text-primary bg-primary/10 px-2.5 py-0.5 rounded-full">
-                {{ project.locations.count }} {% trans "Provinsi" %}
-              </span>
-            {% endif %}
-          </div>
-
-          <!-- Mini Map SVG Container -->
-          <div id="detail-map-svg-container" class="shadow-inner">
-            <div id="detail-map-loading" class="absolute inset-0 flex items-center justify-center text-slate-400 text-xs gap-2 font-medium">
-              <span class="material-symbols-outlined text-base animate-spin text-primary">progress_activity</span>
-              <span>{% trans "Memuat peta..." %}</span>
-            </div>
-          </div>
-
-          <!-- Keterangan & Badge Lokasi -->
-          <div class="space-y-3 pt-1">
-            <div class="flex flex-wrap gap-1.5">
-              {% for loc in project.locations.all %}
-                <span class="inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-800 dark:text-emerald-300 border border-emerald-200/70 px-2.5 py-1 rounded-lg text-xs font-semibold">
-                  <span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
-                  {{ loc.nama_provinsi }}
-                </span>
-              {% empty %}
-                <span class="text-xs text-text-muted italic">{% trans "Lokasi wilayah belum ditentukan." %}</span>
-              {% endfor %}
-            </div>
-
-            {% if project.regencies.all %}
-            <div class="pt-2 border-t border-border-subtle/70">
-              <span class="text-text-muted block text-[11px] uppercase tracking-wider font-bold mb-1.5 flex items-center gap-1">
-                <span class="material-symbols-outlined text-[13px] text-amber-500">pin_drop</span>
-                {% trans "Kabupaten / Kota Terkait" %}
-              </span>
-              <div class="flex flex-wrap gap-1 max-h-32 overflow-y-auto">
-                {% for reg in project.regencies.all %}
-                  <span class="inline-flex items-center gap-1 bg-amber-50 text-amber-900 border border-amber-200/80 px-2 py-0.5 rounded-md text-[11px] font-medium">
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block"></span>
-                    {{ reg.display_name }}
-                  </span>
-                {% endfor %}
-              </div>
-            </div>
-            {% endif %}
-
-            <p class="text-[11px] text-text-muted flex items-center gap-1">
-              <span class="material-symbols-outlined text-amber-500 text-sm">location_on</span>
-              <span>{% trans "Wilayah proyek disorot warna hijau & ditandai pin." %}</span>
-            </p>
-
-            <div class="pt-2 border-t border-border-subtle">
-              <a href="{% url 'experience' %}" class="text-xs font-bold text-primary hover:text-forest-deep flex items-center justify-between group pt-0.5" style="text-decoration: none;">
-                <span>{% trans "Buka di Peta Pengalaman Utama" %}</span>
-                <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
-              </a>
-            </div>
-          </div>
-        </div>
-
         <a href="{% url 'experience' %}" class="w-full inline-flex items-center justify-center gap-2 border-2 border-border-subtle text-on-surface-variant font-label-caps text-xs font-bold uppercase tracking-wider py-3.5 rounded-xl hover:border-primary hover:text-primary transition-all duration-300" style="text-decoration: none;">
           <span class="material-symbols-outlined text-sm">arrow_back</span>
           <span>{% trans "Kembali ke Pengalaman" %}</span>
@@ -323,20 +346,24 @@
     const loadingEl = document.getElementById('detail-map-loading');
     if (!mapContainer) return;
 
-    // Lokasi proyek ini dari context Django
-    const projectLocationCodes = [
+    const allProjectLocationCodes = [
       {% for loc in project.locations.all %}
         {% if loc.kode_wilayah %}"{{ loc.kode_wilayah }}",{% endif %}
       {% endfor %}
     ];
 
-    const projectLocationNames = {
-      {% for loc in project.locations.all %}
-        {% if loc.kode_wilayah %}"{{ loc.kode_wilayah }}": "{{ loc.nama_provinsi|escapejs }}",{% endif %}
+    const projectRegencies = [
+      {% for reg in project.regencies.all %}
+        {
+          name: "{{ reg.display_name|escapejs }}",
+          prov: "{{ reg.provinsi.nama_provinsi|escapejs }}",
+          provKode: "{{ reg.provinsi.kode_wilayah }}",
+          lon: {{ reg.longitude|unlocalize }},
+          lat: {{ reg.latitude|unlocalize }}
+        },
       {% endfor %}
-    };
+    ];
 
-    // Titik koordinat pusat tiap provinsi (lon, lat)
     const PROVINCE_COORDS = {
       "11": [96.928, 4.3118], "12": [99.1385, 2.3192], "13": [100.6215, -0.6597],
       "14": [101.7467, 0.4556], "15": [102.7515, -1.692], "16": [104.1861, -3.2307],
@@ -349,16 +376,97 @@
       "71": [124.2525, 0.8705], "72": [121.1094, -0.9752], "73": [120.1672, -3.5972],
       "74": [121.8337, -3.8132], "75": [122.3614, 0.6872], "76": [119.3446, -2.4609],
       "81": [129.4663, -3.2008], "82": [128.0172, 0.8705], "91": [138.5, -3.0],
-        "92": [133.0, -1.8], "93": [139.5, -6.8], "94": [136.5, -3.8],
-        "95": [139.0, -4.2], "96": [132.0, -1.2]
+      "92": [133.0, -1.8], "93": [139.5, -6.8], "94": [136.5, -3.8],
+      "95": [139.0, -4.2], "96": [132.0, -1.2]
     };
 
     const GEOJSON_URL = "{% url 'provinces_geojson' %}";
     const mapWidth = 960;
-    const mapHeight = 430;
+    const mapHeight = 420;
+
+    let globalGeojson = null;
+    let currentProvFilter = new URLSearchParams(window.location.search).get('prov') || 'all';
+
+    // Cek jika filter prov dari URL valid untuk proyek ini
+    if (currentProvFilter !== 'all' && !allProjectLocationCodes.includes(currentProvFilter)) {
+      currentProvFilter = 'all';
+    }
 
     d3.json(GEOJSON_URL).then(function(geojson) {
       if (loadingEl) loadingEl.remove();
+      globalGeojson = geojson;
+
+      renderMap(currentProvFilter);
+      applyBadgeFilter(currentProvFilter);
+      updateFilterButtons(currentProvFilter);
+    }).catch(function(err) {
+      console.error('Gagal memuat peta detail:', err);
+      if (loadingEl) {
+        loadingEl.innerHTML = '<span class="text-xs text-rose-500">Gagal memuat peta lokasi</span>';
+      }
+    });
+
+    window.filterDetailProvince = function(provCode) {
+      currentProvFilter = provCode;
+      renderMap(provCode);
+      applyBadgeFilter(provCode);
+      updateFilterButtons(provCode);
+
+      // Update URL query param tanpa reload halaman
+      const url = new URL(window.location);
+      if (provCode === 'all') {
+        url.searchParams.delete('prov');
+      } else {
+        url.searchParams.set('prov', provCode);
+      }
+      window.history.replaceState({}, '', url);
+    };
+
+    function updateFilterButtons(provCode) {
+      document.querySelectorAll('.detail-prov-filter-btn').forEach(btn => {
+        const p = btn.getAttribute('data-prov');
+        if (p === provCode) {
+          btn.className = 'detail-prov-filter-btn active text-xs font-bold px-3 py-1.5 rounded-lg border transition-all cursor-pointer bg-primary text-white border-primary shadow-xs';
+        } else {
+          btn.className = 'detail-prov-filter-btn text-xs font-semibold px-3 py-1.5 rounded-lg border transition-all cursor-pointer bg-slate-50 text-slate-700 border-slate-200 hover:border-primary hover:text-primary';
+        }
+      });
+    }
+
+    function applyBadgeFilter(provCode) {
+      const provBadges = document.querySelectorAll('.detail-prov-badge');
+      const regBadges = document.querySelectorAll('.detail-reg-badge');
+      const counterEl = document.getElementById('detail-map-counter');
+
+      if (provCode === 'all') {
+        provBadges.forEach(b => b.style.display = 'inline-flex');
+        regBadges.forEach(b => b.style.display = 'inline-flex');
+        if (counterEl) {
+          const totalProv = allProjectLocationCodes.length;
+          const totalReg = projectRegencies.length;
+          counterEl.textContent = totalReg > 0 ? `${totalReg} Kabupaten / Kota` : `${totalProv} Provinsi`;
+        }
+      } else {
+        provBadges.forEach(b => {
+          b.style.display = (b.getAttribute('data-prov') === provCode) ? 'inline-flex' : 'none';
+        });
+        let visibleRegCount = 0;
+        regBadges.forEach(b => {
+          const match = (b.getAttribute('data-prov') === provCode);
+          b.style.display = match ? 'inline-flex' : 'none';
+          if (match) visibleRegCount++;
+        });
+        if (counterEl) {
+          counterEl.textContent = `${visibleRegCount} Kabupaten / Kota`;
+        }
+      }
+    }
+
+    function renderMap(provCode) {
+      if (!globalGeojson) return;
+
+      // Bersihkan SVG & Titik Lama
+      mapContainer.querySelectorAll('svg, div:not(#detail-map-loading)').forEach(el => el.remove());
 
       const svg = d3.select(mapContainer)
         .append('svg')
@@ -366,107 +474,102 @@
         .attr('preserveAspectRatio', 'xMidYMid meet')
         .attr('class', 'w-full h-full block select-none');
 
-      const projection = d3.geoMercator().fitSize([mapWidth, mapHeight], geojson);
+      const projection = d3.geoMercator().fitSize([mapWidth, mapHeight], globalGeojson);
       const pathGenerator = d3.geoPath().projection(projection);
 
-      // Render Poligon Seluruh Provinsi Indonesia
+      const activeCodes = (provCode === 'all') ? allProjectLocationCodes : [provCode];
+      const activeCodesSet = new Set(activeCodes);
+
+      // Render Poligon Provinsi: Hanya provinsi aktif yang disorot hijau
       svg.selectAll('path.detail-province-path')
-        .data(geojson.features)
+        .data(globalGeojson.features)
         .enter()
         .append('path')
-        .attr('class', function(d) {
+        .attr('class', d => {
           const kode = d.properties.kode_wilayah;
-          const isProjectLoc = projectLocationCodes.includes(kode);
-          return 'detail-province-path' + (isProjectLoc ? ' active-location' : '');
+          return 'detail-province-path' + (activeCodesSet.has(kode) ? ' active-location' : '');
         })
         .attr('d', pathGenerator)
-        .style('fill', function(d) {
+        .style('fill', d => {
           const kode = d.properties.kode_wilayah;
-          return projectLocationCodes.includes(kode) ? '#308935' : '#e2e8f0';
+          return activeCodesSet.has(kode) ? '#308935' : '#e2e8f0';
+        })
+        .style('fill-opacity', d => {
+          const kode = d.properties.kode_wilayah;
+          return activeCodesSet.has(kode) ? '0.90' : '1';
         })
         .style('stroke', '#ffffff')
-        .style('stroke-width', function(d) {
+        .style('stroke-width', d => {
           const kode = d.properties.kode_wilayah;
-          return projectLocationCodes.includes(kode) ? '1.5px' : '0.6px';
-        })
-        .style('cursor', function(d) {
-          const kode = d.properties.kode_wilayah;
-          return projectLocationCodes.includes(kode) ? 'pointer' : 'default';
+          return activeCodesSet.has(kode) ? '1.5px' : '0.6px';
         });
 
-      // Render Marker Lokasi: Titik Kabupaten/Kota jika ada, atau Pin Provinsi sebagai Fallback
-      const projectRegencies = [
-        {% for reg in project.regencies.all %}
-          {
-            name: "{{ reg.display_name|escapejs }}",
-            prov: "{{ reg.provinsi.nama_provinsi|escapejs }}",
-            lon: {{ reg.longitude|unlocalize }},
-            lat: {{ reg.latitude|unlocalize }}
-          },
-        {% endfor %}
-      ];
+      // Filter Titik Kabupaten / Kota Milik Provinsi Terpilih
+      const filteredRegencies = (provCode === 'all') 
+        ? projectRegencies 
+        : projectRegencies.filter(r => r.provKode === provCode);
 
-      if (projectRegencies.length > 0) {
-        projectRegencies.forEach(function(reg) {
-          if (!reg.lon || !reg.lat || isNaN(reg.lon) || isNaN(reg.lat)) return;
-          const projected = projection([reg.lon, reg.lat]);
-          if (!projected || isNaN(projected[0]) || isNaN(projected[1])) return;
-
-          const leftPct = (projected[0] / mapWidth) * 100;
-          const topPct = (projected[1] / mapHeight) * 100;
-
-          const dotEl = document.createElement('div');
-          dotEl.className = 'absolute z-30 -translate-x-1/2 -translate-y-1/2 group cursor-pointer';
-          dotEl.style.left = leftPct + '%';
-          dotEl.style.top = topPct + '%';
-          dotEl.innerHTML = `
-            <div class="relative flex items-center justify-center p-1">
-              <span class="w-3 h-3 rounded-full bg-amber-500 border-2 border-white shadow-[0_2px_5px_rgba(0,0,0,0.35)] group-hover:scale-150 transition-transform block"></span>
-              <div class="hidden group-hover:block absolute bottom-full mb-1 bg-slate-900/95 backdrop-blur-sm text-white text-[10px] font-bold py-1 px-2.5 rounded-md whitespace-nowrap shadow-xl z-30 pointer-events-none">
-                ${reg.name}
-              </div>
-            </div>
-          `;
-          mapContainer.appendChild(dotEl);
-        });
-      }
-
-      // Render Pin Marker Provinsi
-      projectLocationCodes.forEach(function(kode) {
-        const coords = PROVINCE_COORDS[kode];
-        if (!coords) return;
-
-        const projected = projection(coords);
+      const placedPoints = [];
+      filteredRegencies.forEach(reg => {
+        if (!reg.lon || !reg.lat || isNaN(reg.lon) || isNaN(reg.lat)) return;
+        const projected = projection([reg.lon, reg.lat]);
         if (!projected || isNaN(projected[0]) || isNaN(projected[1])) return;
 
-        const leftPct = (projected[0] / mapWidth) * 100;
-        const topPct = (projected[1] / mapHeight) * 100;
-        const provName = projectLocationNames[kode] || 'Lokasi Proyek';
+        let x = projected[0];
+        let y = projected[1];
 
-        // Jika sudah ada titik kabkot di peta, tampilkan pin provinsi lebih subtle atau hanya jika tidak ada kabkot
-        if (projectRegencies.length === 0) {
-          const pinEl = document.createElement('div');
-          pinEl.className = 'detail-province-pin group';
-          pinEl.style.left = leftPct + '%';
-          pinEl.style.top = topPct + '%';
-          pinEl.innerHTML = `
-            <div class="relative flex flex-col items-center">
-              <span class="material-symbols-outlined text-amber-500 text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] select-none group-hover:scale-125 transition-transform">location_on</span>
-              <div class="hidden group-hover:block absolute bottom-full mb-1 bg-slate-900/90 backdrop-blur-sm text-white text-[10px] font-bold py-1 px-2.5 rounded-md whitespace-nowrap shadow-xl z-30 pointer-events-none">
-                ${provName}
-              </div>
-            </div>
-          `;
-          mapContainer.appendChild(pinEl);
+        // Anti-overlap offset jika titik kab/kota berdekatan
+        let overlaps = 0;
+        placedPoints.forEach(p => {
+          if (Math.hypot(p.x - x, p.y - y) < 16) overlaps++;
+        });
+        if (overlaps > 0) {
+          const angle = (overlaps * Math.PI * 0.75) + 0.5;
+          x += Math.cos(angle) * 12;
+          y += Math.sin(angle) * 12;
         }
+        placedPoints.push({ x, y });
+
+        const leftPct = (x / mapWidth) * 100;
+        const topPct = (y / mapHeight) * 100;
+
+        const dot = document.createElement('div');
+        dot.className = 'absolute z-30 -translate-x-1/2 -translate-y-1/2 group cursor-pointer';
+        dot.style.left = leftPct + '%';
+        dot.style.top = topPct + '%';
+        dot.innerHTML = `
+          <div class="relative flex items-center justify-center p-1">
+            <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white shadow-[0_2px_5px_rgba(0,0,0,0.35)] group-hover:scale-150 transition-transform block"></span>
+            <div class="hidden group-hover:block absolute bottom-full mb-1 bg-slate-900/95 backdrop-blur-sm text-white text-[10px] font-bold py-1 px-2.5 rounded-md whitespace-nowrap shadow-xl z-30 pointer-events-none">
+              ${reg.name} (${reg.prov})
+            </div>
+          </div>
+        `;
+        mapContainer.appendChild(dot);
       });
 
-    }).catch(function(err) {
-      console.error('Gagal memuat peta detail:', err);
-      if (loadingEl) {
-        loadingEl.innerHTML = '<span class="text-xs text-rose-500">Gagal memuat peta lokasi</span>';
+      // Fallback: Jika tidak ada kabkot, buat pin provinsi
+      if (filteredRegencies.length === 0 && activeCodes.length > 0) {
+        activeCodes.forEach(kode => {
+          const coords = PROVINCE_COORDS[kode];
+          if (!coords) return;
+          const projected = projection(coords);
+          if (!projected) return;
+          const leftPct = (projected[0] / mapWidth) * 100;
+          const topPct = (projected[1] / mapHeight) * 100;
+          const pin = document.createElement('div');
+          pin.className = 'absolute z-30 -translate-x-1/2 -translate-y-1/2 group cursor-pointer';
+          pin.style.left = leftPct + '%';
+          pin.style.top = topPct + '%';
+          pin.innerHTML = `
+            <div class="relative flex items-center justify-center p-1">
+              <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white shadow-md block"></span>
+            </div>
+          `;
+          mapContainer.appendChild(pin);
+        });
       }
-    });
+    }
   });
 </script>
 {% endblock %}

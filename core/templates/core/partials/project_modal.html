@@ -134,7 +134,7 @@
           <span class="text-xs text-slate-500 font-medium text-center sm:text-left">
             {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Want to see the interactive location map &amp; full report?{% else %}Ingin melihat peta interaktif lokasi &amp; modul teknis lengkap?{% endif %}
           </span>
-          <a href="{% url 'detail-experience' slug=project.slug %}" class="inline-flex items-center gap-2 bg-[#308935] hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-xl transition shadow shrink-0" style="text-decoration:none;">
+          <a href="{% url 'detail-experience' slug=project.slug %}" id="modal-full-study-link-{{ project.id }}" data-base-url="{% url 'detail-experience' slug=project.slug %}" class="inline-flex items-center gap-2 bg-[#308935] hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-xl transition shadow shrink-0" style="text-decoration:none;">
             <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Full Case Study &amp; Map{% else %}Studi Kasus Lengkap &amp; Peta{% endif %}</span>
             <span class="material-symbols-outlined text-sm">arrow_forward</span>
           </a>

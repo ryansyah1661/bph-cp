@@ -215,7 +215,7 @@ def detail_articles_view(request, slug):
 
 def detail_experience_view(request, slug):
     project_data = get_object_or_404(
-        Project.objects.select_related('client', 'service_portfolio').prefetch_related('locations', 'categories', 'metrics'),
+        Project.objects.select_related('client', 'service_portfolio').prefetch_related('locations', 'regencies__provinsi', 'categories', 'metrics'),
         Q(slug_ind=slug) | Q(slug_en=slug) if hasattr(Project, 'slug_en') else Q(slug=slug)
     )
     related_projects = Project.objects.filter(

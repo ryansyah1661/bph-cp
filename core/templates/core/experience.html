@@ -385,6 +385,13 @@
         }
       }
 
+      // Update link ke halaman studi kasus lengkap dengan parameter prov
+      const studyLink = document.getElementById('modal-full-study-link-' + projectId);
+      if (studyLink) {
+        const baseUrl = studyLink.getAttribute('data-base-url') || studyLink.href.split('?')[0];
+        studyLink.href = provKode ? `${baseUrl}?prov=${provKode}` : baseUrl;
+      }
+
       // Inisialisasi / perbarui peta di dalam modal
       setTimeout(() => {
         initModalMap(projectId, provKode);
