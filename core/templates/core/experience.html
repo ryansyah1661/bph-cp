@@ -472,16 +472,18 @@
       .attr('preserveAspectRatio', 'xMidYMid meet')
       .attr('class', 'w-full h-full block select-none');
 
-    const projection = d3.geoMercator().fitSize([width, height], window.CACHED_GEOJSON);
+    const padding = 25;
+    const projection = d3.geoMercator().fitExtent([[padding, padding], [width - padding, height - padding]], window.CACHED_GEOJSON);
     const pathGenerator = d3.geoPath().projection(projection);
 
     const activeProvsSet = new Set(targetProvs);
 
     // Render Poligon Provinsi: Hanya provinsi terpilih yang disorot hijau
-    svg.selectAll('path.modal-prov-path')
+    const provPaths = svg.selectAll('path.modal-prov-path')
       .data(window.CACHED_GEOJSON.features)
       .enter()
       .append('path')
+      .attr('class', 'modal-prov-path')
       .attr('d', pathGenerator)
       .style('fill', d => {
         const kode = d.properties.kode_wilayah;
@@ -489,13 +491,24 @@
       })
       .style('fill-opacity', d => {
         const kode = d.properties.kode_wilayah;
-        return activeProvsSet.has(kode) ? '0.85' : '1';
+        return activeProvsSet.has(kode) ? '0.90' : '1';
       })
-      .style('stroke', '#ffffff')
+      .style('stroke', d => {
+        const kode = d.properties.kode_wilayah;
+        return activeProvsSet.has(kode) ? '#1b5e20' : '#ffffff';
+      })
       .style('stroke-width', d => {
         const kode = d.properties.kode_wilayah;
-        return activeProvsSet.has(kode) ? '1.5px' : '0.5px';
+        if (!activeProvsSet.has(kode)) return '0.5px';
+        return (kode === '31') ? '5px' : '2px';
+      })
+      .style('filter', d => {
+        const kode = d.properties.kode_wilayah;
+        return activeProvsSet.has(kode) ? 'drop-shadow(0 0 6px rgba(48, 137, 53, 0.9))' : 'none';
       });
+
+    // Angkat provinsi aktif ke tumpukan paling atas agar tidak tertimpa perbatasan provinsi lain
+    provPaths.filter(d => activeProvsSet.has(d.properties.kode_wilayah)).raise();
 
     // Render Titik-Titik Kabupaten / Kota Milik Proyek di Provinsi Ini Saja
     const placedPoints = [];
@@ -522,14 +535,27 @@
       const leftPct = (x / width) * 100;
       const topPct = (y / height) * 100;
 
+      const isJakarta = (reg.provKode === '31');
       const dot = document.createElement('div');
       dot.className = 'absolute z-30 -translate-x-1/2 -translate-y-1/2 group cursor-pointer';
       dot.style.left = leftPct + '%';
       dot.style.top = topPct + '%';
+
+      // Smart tooltip positioning agar tidak terpotong tepi layar
+      const tooltipVPos = (topPct < 25) ? 'top-full mt-2' : 'bottom-full mb-2';
+      const tooltipHPos = (leftPct < 18) ? 'left-0' : (leftPct > 82 ? 'right-0' : 'left-1/2 -translate-x-1/2');
+
+      // Efek pulsing halo hijau agar provinsi kecil seperti DKI Jakarta tampak bersinar jelas
+      const jakartaGlow = isJakarta ? `
+        <span class="absolute w-7 h-7 rounded-full bg-emerald-500/40 animate-ping pointer-events-none"></span>
+        <span class="absolute w-6 h-6 rounded-full bg-emerald-600/30 border border-emerald-500 pointer-events-none"></span>
+      ` : '';
+
       dot.innerHTML = `
         <div class="relative flex items-center justify-center p-1">
-          <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white shadow-[0_2px_5px_rgba(0,0,0,0.35)] group-hover:scale-150 transition-transform block"></span>
-          <div class="hidden group-hover:block absolute bottom-full mb-1 bg-slate-900/95 backdrop-blur-sm text-white text-[10px] font-bold py-1 px-2.5 rounded-md whitespace-nowrap shadow-xl z-30 pointer-events-none">
+          ${jakartaGlow}
+          <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white shadow-[0_2px_5px_rgba(0,0,0,0.35)] group-hover:scale-150 transition-transform block relative z-10"></span>
+          <div class="hidden group-hover:block absolute ${tooltipVPos} ${tooltipHPos} bg-slate-900/95 backdrop-blur-sm text-white text-[10px] font-bold py-1 px-2.5 rounded-md whitespace-nowrap shadow-xl z-30 pointer-events-none">
             ${reg.name} ${reg.prov ? '(' + reg.prov + ')' : ''}
           </div>
         </div>
@@ -546,13 +572,21 @@
         if (!projected) return;
         const leftPct = (projected[0] / width) * 100;
         const topPct = (projected[1] / height) * 100;
+
+        const isJakarta = (kode === '31');
+        const jakartaGlow = isJakarta ? `
+          <span class="absolute w-7 h-7 rounded-full bg-emerald-500/40 animate-ping pointer-events-none"></span>
+          <span class="absolute w-6 h-6 rounded-full bg-emerald-600/30 border border-emerald-500 pointer-events-none"></span>
+        ` : '';
+
         const dot = document.createElement('div');
         dot.className = 'absolute z-30 -translate-x-1/2 -translate-y-1/2 group cursor-pointer';
         dot.style.left = leftPct + '%';
         dot.style.top = topPct + '%';
         dot.innerHTML = `
           <div class="relative flex items-center justify-center p-1">
-            <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white shadow-[0_2px_5px_rgba(0,0,0,0.35)] block"></span>
+            ${jakartaGlow}
+            <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white shadow-[0_2px_5px_rgba(0,0,0,0.35)] block relative z-10"></span>
           </div>
         `;
         container.appendChild(dot);

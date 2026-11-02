@@ -467,11 +467,12 @@
         .attr('preserveAspectRatio', 'xMidYMid meet')
         .attr('class', 'w-full h-full block select-none');
 
-      const projection = d3.geoMercator().fitSize([mapWidth, mapHeight], globalGeojson);
+      const padding = 25;
+      const projection = d3.geoMercator().fitExtent([[padding, padding], [mapWidth - padding, mapHeight - padding]], globalGeojson);
       const pathGenerator = d3.geoPath().projection(projection);
 
       // Render Poligon Provinsi: Hanya provinsi terpilih yang disorot hijau
-      svg.selectAll('path.detail-province-path')
+      const provPaths = svg.selectAll('path.detail-province-path')
         .data(globalGeojson.features)
         .enter()
         .append('path')
@@ -488,11 +489,22 @@
           const kode = d.properties.kode_wilayah;
           return (kode === provCode) ? '0.90' : '1';
         })
-        .style('stroke', '#ffffff')
+        .style('stroke', d => {
+          const kode = d.properties.kode_wilayah;
+          return (kode === provCode) ? '#1b5e20' : '#ffffff';
+        })
         .style('stroke-width', d => {
           const kode = d.properties.kode_wilayah;
-          return (kode === provCode) ? '1.5px' : '0.6px';
+          if (kode !== provCode) return '0.6px';
+          return (kode === '31') ? '5px' : '2px';
+        })
+        .style('filter', d => {
+          const kode = d.properties.kode_wilayah;
+          return (kode === provCode) ? 'drop-shadow(0 0 6px rgba(48, 137, 53, 0.9))' : 'none';
         });
+
+      // Angkat provinsi aktif ke paling atas agar tidak tertimpa perbatasan provinsi lain
+      provPaths.filter(d => d.properties.kode_wilayah === provCode).raise();
 
       // Filter Titik Kabupaten / Kota Milik Provinsi Terpilih
       const filteredRegencies = projectRegencies.filter(r => r.provKode === provCode);
@@ -521,14 +533,24 @@
         const leftPct = (x / mapWidth) * 100;
         const topPct = (y / mapHeight) * 100;
 
+        const isJakarta = (reg.provKode === '31');
+        const tooltipVPos = (topPct < 25) ? 'top-full mt-2' : 'bottom-full mb-2';
+        const tooltipHPos = (leftPct < 18) ? 'left-0' : (leftPct > 82 ? 'right-0' : 'left-1/2 -translate-x-1/2');
+
+        const jakartaGlow = isJakarta ? `
+          <span class="absolute w-7 h-7 rounded-full bg-emerald-500/40 animate-ping pointer-events-none"></span>
+          <span class="absolute w-6 h-6 rounded-full bg-emerald-600/30 border border-emerald-500 pointer-events-none"></span>
+        ` : '';
+
         const dot = document.createElement('div');
         dot.className = 'absolute z-30 -translate-x-1/2 -translate-y-1/2 group cursor-pointer';
         dot.style.left = leftPct + '%';
         dot.style.top = topPct + '%';
         dot.innerHTML = `
           <div class="relative flex items-center justify-center p-1">
-            <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white shadow-[0_2px_5px_rgba(0,0,0,0.35)] group-hover:scale-150 transition-transform block"></span>
-            <div class="hidden group-hover:block absolute bottom-full mb-1 bg-slate-900/95 backdrop-blur-sm text-white text-[10px] font-bold py-1 px-2.5 rounded-md whitespace-nowrap shadow-xl z-30 pointer-events-none">
+            ${jakartaGlow}
+            <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white shadow-[0_2px_5px_rgba(0,0,0,0.35)] group-hover:scale-150 transition-transform block relative z-10"></span>
+            <div class="hidden group-hover:block absolute ${tooltipVPos} ${tooltipHPos} bg-slate-900/95 backdrop-blur-sm text-white text-[10px] font-bold py-1 px-2.5 rounded-md whitespace-nowrap shadow-xl z-30 pointer-events-none">
               ${reg.name} (${reg.prov})
             </div>
           </div>
@@ -544,13 +566,21 @@
           if (projected) {
             const leftPct = (projected[0] / mapWidth) * 100;
             const topPct = (projected[1] / mapHeight) * 100;
+
+            const isJakarta = (provCode === '31');
+            const jakartaGlow = isJakarta ? `
+              <span class="absolute w-7 h-7 rounded-full bg-emerald-500/40 animate-ping pointer-events-none"></span>
+              <span class="absolute w-6 h-6 rounded-full bg-emerald-600/30 border border-emerald-500 pointer-events-none"></span>
+            ` : '';
+
             const pin = document.createElement('div');
             pin.className = 'absolute z-30 -translate-x-1/2 -translate-y-1/2 group cursor-pointer';
             pin.style.left = leftPct + '%';
             pin.style.top = topPct + '%';
             pin.innerHTML = `
               <div class="relative flex items-center justify-center p-1">
-                <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white shadow-md block"></span>
+                ${jakartaGlow}
+                <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white shadow-md block relative z-10"></span>
               </div>
             `;
             mapContainer.appendChild(pin);
