@@ -387,7 +387,7 @@
 
     let globalGeojson = null;
     let currentProvFilter = new URLSearchParams(window.location.search).get('prov');
-    if (!currentProvFilter || !allProjectLocationCodes.includes(currentProvFilter)) {
+    if (!currentProvFilter || !allProjectLocationCodes.map(String).includes(String(currentProvFilter))) {
       currentProvFilter = allProjectLocationCodes[0] || '';
     }
 
@@ -422,7 +422,7 @@
     function updateFilterButtons(provCode) {
       document.querySelectorAll('.detail-prov-filter-btn').forEach(btn => {
         const p = btn.getAttribute('data-prov');
-        if (p === provCode) {
+        if (String(p) === String(provCode)) {
           btn.className = 'detail-prov-filter-btn active text-xs font-bold px-3 py-1.5 rounded-lg border transition-all cursor-pointer bg-primary text-white border-primary shadow-xs';
         } else {
           btn.className = 'detail-prov-filter-btn text-xs font-semibold px-3 py-1.5 rounded-lg border transition-all cursor-pointer bg-slate-50 text-slate-700 border-slate-200 hover:border-primary hover:text-primary';
@@ -436,12 +436,12 @@
       const counterEl = document.getElementById('detail-map-counter');
 
       provBadges.forEach(b => {
-        b.style.display = (b.getAttribute('data-prov') === provCode) ? 'inline-flex' : 'none';
+        b.style.display = (String(b.getAttribute('data-prov')) === String(provCode)) ? 'inline-flex' : 'none';
       });
 
       let visibleRegCount = 0;
       regBadges.forEach(b => {
-        const match = (b.getAttribute('data-prov') === provCode);
+        const match = (String(b.getAttribute('data-prov')) === String(provCode));
         b.style.display = match ? 'inline-flex' : 'none';
         if (match) visibleRegCount++;
       });
@@ -468,35 +468,29 @@
         .attr('class', 'w-full h-full block select-none');
 
       // Cari feature GeoJSON dari provinsi yang dipilih
-      const activeFeature = globalGeojson.features.find(f => f.properties.kode_wilayah === provCode);
+      const activeFeature = globalGeojson.features.find(f => String(f.properties.kode_wilayah) === String(provCode));
 
-      // Tentukan target fokus zoom: fokus ke provinsi terpilih
-      let fitTarget = activeFeature || globalGeojson;
-      if (activeFeature) {
-        const bounds = d3.geoBounds(activeFeature); // [[minLon, minLat], [maxLon, maxLat]]
-        const dLon = bounds[1][0] - bounds[0][0];
-        const dLat = bounds[1][1] - bounds[0][1];
+      let fitTarget = activeFeature;
 
-        // Jika provinsi sangat kecil (seperti DKI Jakarta dengan rentang < 1.2 derajat),
-        // gunakan buffer sekitarnya agar tidak over-magnified dan tetap terlihat konteks sekitarnya
-        if (dLon < 1.2 || dLat < 1.0) {
-          const padLon = Math.max((1.6 - dLon) / 2, 0.5);
-          const padLat = Math.max((1.2 - dLat) / 2, 0.4);
-          fitTarget = {
-            type: "Polygon",
-            coordinates: [[
-              [bounds[0][0] - padLon, bounds[0][1] - padLat],
-              [bounds[1][0] + padLon, bounds[0][1] - padLat],
-              [bounds[1][0] + padLon, bounds[1][1] + padLat],
-              [bounds[0][0] - padLon, bounds[1][1] + padLat],
-              [bounds[0][0] - padLon, bounds[0][1] - padLat]
-            ]]
-          };
+      // Khusus DKI Jakarta (luas sangat kecil):
+      // Zoom bersama Jawa Barat & Banten agar skalanya pas, terlihat konteks Teluk Jakarta dan perbatasan sekitarnya
+      if (String(provCode) === '31') {
+        const neighbors = globalGeojson.features.filter(f => ['31', '32', '36'].includes(String(f.properties.kode_wilayah)));
+        if (neighbors.length > 0) {
+          fitTarget = { type: "FeatureCollection", features: neighbors };
+        }
+      } else if (String(provCode) === '34') {
+        // Khusus DI Yogyakarta, zoom bersama Jawa Tengah agar proporsional
+        const neighbors = globalGeojson.features.filter(f => ['34', '33'].includes(String(f.properties.kode_wilayah)));
+        if (neighbors.length > 0) {
+          fitTarget = { type: "FeatureCollection", features: neighbors };
         }
       }
 
-      const padX = 50;
-      const padY = 35;
+      if (!fitTarget) fitTarget = globalGeojson;
+
+      const padX = 40;
+      const padY = 30;
       const projection = d3.geoMercator().fitExtent([[padX, padY], [mapWidth - padX, mapHeight - padY]], fitTarget);
       const pathGenerator = d3.geoPath().projection(projection);
 
@@ -507,36 +501,36 @@
         .enter()
         .append('path')
         .attr('class', d => {
-          const kode = d.properties.kode_wilayah;
-          return 'detail-province-path' + (kode === provCode ? ' active-location' : '');
+          const kode = String(d.properties.kode_wilayah);
+          return 'detail-province-path' + (kode === String(provCode) ? ' active-location' : '');
         })
         .attr('d', pathGenerator)
         .style('fill', d => {
-          const kode = d.properties.kode_wilayah;
-          return (kode === provCode) ? '#308935' : '#f1f5f9';
+          const kode = String(d.properties.kode_wilayah);
+          return (kode === String(provCode)) ? '#308935' : '#f1f5f9';
         })
         .style('fill-opacity', d => {
-          const kode = d.properties.kode_wilayah;
-          return (kode === provCode) ? '1' : '0.90';
+          const kode = String(d.properties.kode_wilayah);
+          return (kode === String(provCode)) ? '1' : '0.85';
         })
         .style('stroke', d => {
-          const kode = d.properties.kode_wilayah;
-          return (kode === provCode) ? '#1b5e20' : '#cbd5e1';
+          const kode = String(d.properties.kode_wilayah);
+          return (kode === String(provCode)) ? '#1b5e20' : '#cbd5e1';
         })
         .style('stroke-width', d => {
-          const kode = d.properties.kode_wilayah;
-          return (kode === provCode) ? '2px' : '0.8px';
+          const kode = String(d.properties.kode_wilayah);
+          return (kode === String(provCode)) ? '2px' : '0.8px';
         })
         .style('filter', d => {
-          const kode = d.properties.kode_wilayah;
-          return (kode === provCode) ? 'drop-shadow(0 2px 6px rgba(48, 137, 53, 0.35))' : 'none';
+          const kode = String(d.properties.kode_wilayah);
+          return (kode === String(provCode)) ? 'drop-shadow(0 2px 6px rgba(48, 137, 53, 0.35))' : 'none';
         });
 
       // Angkat provinsi aktif ke paling atas agar perbatasan hijaunya tampak tajam
-      provPaths.filter(d => d.properties.kode_wilayah === provCode).raise();
+      provPaths.filter(d => String(d.properties.kode_wilayah) === String(provCode)).raise();
 
       // Filter Titik Kabupaten / Kota Milik Provinsi Terpilih
-      const filteredRegencies = projectRegencies.filter(r => r.provKode === provCode);
+      const filteredRegencies = projectRegencies.filter(r => String(r.provKode) === String(provCode));
 
       const placedPoints = [];
       filteredRegencies.forEach(reg => {
@@ -582,7 +576,7 @@
 
       // Fallback: Jika tidak ada titik kabkot pada provinsi ini, buat pin provinsi
       if (filteredRegencies.length === 0 && provCode) {
-        const coords = PROVINCE_COORDS[provCode];
+        const coords = PROVINCE_COORDS[String(provCode)];
         if (coords) {
           const projected = projection(coords);
           if (projected) {
