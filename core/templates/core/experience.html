@@ -358,6 +358,8 @@
 </div>
 
 <script>
+  const renderedModalMaps = new Set();
+
   function openProjectModal(projectId) {
     const modal = document.getElementById('project-modal-' + projectId);
     const content = document.getElementById('project-modal-content-' + projectId);
@@ -366,6 +368,11 @@
       content.classList.remove('scale-95');
       content.classList.add('scale-100');
       document.body.style.overflow = 'hidden';
+
+      // Inisialisasi peta interaktif di dalam modal
+      setTimeout(() => {
+        initModalMap(projectId);
+      }, 50);
     }
   }
 
@@ -383,7 +390,128 @@
     }
   }
 
-  // Close modal when clicking outside content
+  function initModalMap(projectId) {
+    if (renderedModalMaps.has(projectId)) return;
+
+    const container = document.getElementById('modal-map-container-' + projectId);
+    const dataScript = document.getElementById('modal-map-data-' + projectId);
+    if (!container || !dataScript) return;
+
+    if (!window.CACHED_GEOJSON) {
+      setTimeout(() => initModalMap(projectId), 150);
+      return;
+    }
+
+    renderedModalMaps.add(projectId);
+
+    let mapData;
+    try {
+      mapData = JSON.parse(dataScript.textContent);
+    } catch(e) {
+      console.error('Error parsing modal map data:', e);
+      return;
+    }
+
+    const loading = container.querySelector('.modal-map-loading');
+    if (loading) loading.remove();
+
+    const width = 960;
+    const height = 400;
+
+    const svg = d3.select(container)
+      .append('svg')
+      .attr('viewBox', `0 0 ${width} ${height}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet')
+      .attr('class', 'w-full h-full block select-none');
+
+    const projection = d3.geoMercator().fitSize([width, height], window.CACHED_GEOJSON);
+    const pathGenerator = d3.geoPath().projection(projection);
+
+    const activeProvs = new Set(mapData.provinces || []);
+
+    // Render Poligon Provinsi
+    svg.selectAll('path.modal-prov-path')
+      .data(window.CACHED_GEOJSON.features)
+      .enter()
+      .append('path')
+      .attr('d', pathGenerator)
+      .style('fill', d => {
+        const kode = d.properties.kode_wilayah;
+        return activeProvs.has(kode) ? '#308935' : '#e2e8f0';
+      })
+      .style('fill-opacity', d => {
+        const kode = d.properties.kode_wilayah;
+        return activeProvs.has(kode) ? '0.85' : '1';
+      })
+      .style('stroke', '#ffffff')
+      .style('stroke-width', d => {
+        const kode = d.properties.kode_wilayah;
+        return activeProvs.has(kode) ? '1.5px' : '0.5px';
+      });
+
+    // Render Titik-Titik Kabupaten / Kota Milik Proyek Ini
+    const placedPoints = [];
+    (mapData.regencies || []).forEach(reg => {
+      if (!reg.lon || !reg.lat || isNaN(reg.lon) || isNaN(reg.lat)) return;
+      const projected = projection([reg.lon, reg.lat]);
+      if (!projected || isNaN(projected[0]) || isNaN(projected[1])) return;
+
+      let x = projected[0];
+      let y = projected[1];
+
+      // Anti-overlap jika titik kab/kota berdekatan
+      let overlaps = 0;
+      placedPoints.forEach(p => {
+        if (Math.hypot(p.x - x, p.y - y) < 16) overlaps++;
+      });
+      if (overlaps > 0) {
+        const angle = (overlaps * Math.PI * 0.75) + 0.5;
+        x += Math.cos(angle) * 12;
+        y += Math.sin(angle) * 12;
+      }
+      placedPoints.push({ x, y });
+
+      const leftPct = (x / width) * 100;
+      const topPct = (y / height) * 100;
+
+      const dot = document.createElement('div');
+      dot.className = 'absolute z-30 -translate-x-1/2 -translate-y-1/2 group cursor-pointer';
+      dot.style.left = leftPct + '%';
+      dot.style.top = topPct + '%';
+      dot.innerHTML = `
+        <div class="relative flex items-center justify-center p-1">
+          <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white shadow-[0_2px_5px_rgba(0,0,0,0.35)] group-hover:scale-150 transition-transform block"></span>
+          <div class="hidden group-hover:block absolute bottom-full mb-1 bg-slate-900/95 backdrop-blur-sm text-white text-[10px] font-bold py-1 px-2.5 rounded-md whitespace-nowrap shadow-xl z-30 pointer-events-none">
+            ${reg.name} ${reg.prov ? '(' + reg.prov + ')' : ''}
+          </div>
+        </div>
+      `;
+      container.appendChild(dot);
+    });
+
+    // Fallback: jika proyek belum memiliki relasi kabupaten/kota spesifik, render pin pada provinsi terkait
+    if ((!mapData.regencies || mapData.regencies.length === 0) && mapData.provinces) {
+      mapData.provinces.forEach(kode => {
+        const coords = PROVINCE_COORDS[kode];
+        if (!coords) return;
+        const projected = projection(coords);
+        if (!projected) return;
+        const leftPct = (projected[0] / width) * 100;
+        const topPct = (projected[1] / height) * 100;
+        const dot = document.createElement('div');
+        dot.className = 'absolute z-30 -translate-x-1/2 -translate-y-1/2 group cursor-pointer';
+        dot.style.left = leftPct + '%';
+        dot.style.top = topPct + '%';
+        dot.innerHTML = `
+          <div class="relative flex items-center justify-center p-1">
+            <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white shadow-[0_2px_5px_rgba(0,0,0,0.35)] block"></span>
+          </div>
+        `;
+        container.appendChild(dot);
+      });
+    }
+  }
+// Close modal when clicking outside content
   document.addEventListener('click', function(e) {
     if (e.target.id && e.target.id.startsWith('project-modal-') && !e.target.id.includes('content')) {
       const projectId = e.target.id.replace('project-modal-', '');
@@ -573,6 +701,7 @@
     const GEOJSON_URL = "{% url 'provinces_geojson' %}";
 
     d3.json(GEOJSON_URL).then(function (geojson) {
+        window.CACHED_GEOJSON = geojson;
         const width = mapContainer.clientWidth || 960;
         const height = mapContainer.clientHeight || (width * (430 / 960));
 
