@@ -95,9 +95,6 @@
           {% if project.locations.all.count > 1 %}
           <div class="flex flex-wrap items-center gap-1.5 pt-1">
             <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">{% trans "Pilih Provinsi:" %}</span>
-            <button type="button" onclick="filterDetailProvince('all')" class="detail-prov-filter-btn active text-xs font-bold px-3 py-1.5 rounded-lg border transition-all cursor-pointer bg-primary text-white border-primary shadow-xs" data-prov="all">
-              {% trans "Semua Wilayah" %}
-            </button>
             {% for loc in project.locations.all %}
               {% if loc.kode_wilayah %}
               <button type="button" onclick="filterDetailProvince('{{ loc.kode_wilayah }}')" class="detail-prov-filter-btn text-xs font-semibold px-3 py-1.5 rounded-lg border transition-all cursor-pointer bg-slate-50 text-slate-700 border-slate-200 hover:border-primary hover:text-primary" data-prov="{{ loc.kode_wilayah }}">
@@ -118,12 +115,17 @@
 
           <!-- Keterangan & Badge Lokasi -->
           <div class="space-y-3 pt-2">
-            <div class="flex flex-wrap gap-1.5 detail-prov-badge-container">
+            <div class="flex items-center gap-2 flex-wrap detail-prov-badge-container">
+              <span class="text-xs font-bold text-emerald-900 uppercase tracking-wider flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-primary">location_on</span>
+                {% trans "Provinsi:" %}
+              </span>
               {% for loc in project.locations.all %}
-                <span class="detail-prov-badge inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-800 dark:text-emerald-300 border border-emerald-200/70 px-2.5 py-1 rounded-lg text-xs font-semibold" data-prov="{{ loc.kode_wilayah }}">
-                  <span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+                {% if loc.kode_wilayah %}
+                <span class="detail-prov-badge inline-flex items-center gap-1 bg-emerald-50 border border-emerald-200 text-emerald-950 px-2.5 py-1 rounded-lg text-xs font-bold shadow-xs" data-prov="{{ loc.kode_wilayah }}">
                   {{ loc.nama_provinsi }}
                 </span>
+                {% endif %}
               {% endfor %}
             </div>
 
@@ -131,7 +133,7 @@
             <div class="pt-2 border-t border-border-subtle/70">
               <span class="text-text-muted block text-[11px] uppercase tracking-wider font-bold mb-1.5 flex items-center gap-1">
                 <span class="material-symbols-outlined text-[13px] text-amber-500">pin_drop</span>
-                {% trans "Kabupaten / Kota Terkait" %}
+                {% trans "Kabupaten / Kota Terkait:" %}
               </span>
               <div class="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto pr-1 detail-reg-badge-container">
                 {% for reg in project.regencies.all %}
@@ -156,7 +158,6 @@
             </div>
           </div>
         </div>
-
         {% if project.challenge %}
         <div class="space-y-4">
           <div class="flex items-center gap-3 text-primary">
@@ -385,20 +386,20 @@
     const mapHeight = 420;
 
     let globalGeojson = null;
-    let currentProvFilter = new URLSearchParams(window.location.search).get('prov') || 'all';
-
-    // Cek jika filter prov dari URL valid untuk proyek ini
-    if (currentProvFilter !== 'all' && !allProjectLocationCodes.includes(currentProvFilter)) {
-      currentProvFilter = 'all';
+    let currentProvFilter = new URLSearchParams(window.location.search).get('prov');
+    if (!currentProvFilter || !allProjectLocationCodes.includes(currentProvFilter)) {
+      currentProvFilter = allProjectLocationCodes[0] || '';
     }
 
     d3.json(GEOJSON_URL).then(function(geojson) {
       if (loadingEl) loadingEl.remove();
       globalGeojson = geojson;
 
-      renderMap(currentProvFilter);
-      applyBadgeFilter(currentProvFilter);
-      updateFilterButtons(currentProvFilter);
+      if (currentProvFilter) {
+        renderMap(currentProvFilter);
+        applyBadgeFilter(currentProvFilter);
+        updateFilterButtons(currentProvFilter);
+      }
     }).catch(function(err) {
       console.error('Gagal memuat peta detail:', err);
       if (loadingEl) {
@@ -414,11 +415,7 @@
 
       // Update URL query param tanpa reload halaman
       const url = new URL(window.location);
-      if (provCode === 'all') {
-        url.searchParams.delete('prov');
-      } else {
-        url.searchParams.set('prov', provCode);
-      }
+      url.searchParams.set('prov', provCode);
       window.history.replaceState({}, '', url);
     };
 
@@ -438,32 +435,28 @@
       const regBadges = document.querySelectorAll('.detail-reg-badge');
       const counterEl = document.getElementById('detail-map-counter');
 
-      if (provCode === 'all') {
-        provBadges.forEach(b => b.style.display = 'inline-flex');
-        regBadges.forEach(b => b.style.display = 'inline-flex');
-        if (counterEl) {
-          const totalProv = allProjectLocationCodes.length;
-          const totalReg = projectRegencies.length;
-          counterEl.textContent = totalReg > 0 ? `${totalReg} Kabupaten / Kota` : `${totalProv} Provinsi`;
-        }
-      } else {
-        provBadges.forEach(b => {
-          b.style.display = (b.getAttribute('data-prov') === provCode) ? 'inline-flex' : 'none';
-        });
-        let visibleRegCount = 0;
-        regBadges.forEach(b => {
-          const match = (b.getAttribute('data-prov') === provCode);
-          b.style.display = match ? 'inline-flex' : 'none';
-          if (match) visibleRegCount++;
-        });
-        if (counterEl) {
+      provBadges.forEach(b => {
+        b.style.display = (b.getAttribute('data-prov') === provCode) ? 'inline-flex' : 'none';
+      });
+
+      let visibleRegCount = 0;
+      regBadges.forEach(b => {
+        const match = (b.getAttribute('data-prov') === provCode);
+        b.style.display = match ? 'inline-flex' : 'none';
+        if (match) visibleRegCount++;
+      });
+
+      if (counterEl) {
+        if (visibleRegCount > 0) {
           counterEl.textContent = `${visibleRegCount} Kabupaten / Kota`;
+        } else {
+          counterEl.textContent = `1 Provinsi`;
         }
       }
     }
 
     function renderMap(provCode) {
-      if (!globalGeojson) return;
+      if (!globalGeojson || !provCode) return;
 
       // Bersihkan SVG & Titik Lama
       mapContainer.querySelectorAll('svg, div:not(#detail-map-loading)').forEach(el => el.remove());
@@ -477,37 +470,32 @@
       const projection = d3.geoMercator().fitSize([mapWidth, mapHeight], globalGeojson);
       const pathGenerator = d3.geoPath().projection(projection);
 
-      const activeCodes = (provCode === 'all') ? allProjectLocationCodes : [provCode];
-      const activeCodesSet = new Set(activeCodes);
-
-      // Render Poligon Provinsi: Hanya provinsi aktif yang disorot hijau
+      // Render Poligon Provinsi: Hanya provinsi terpilih yang disorot hijau
       svg.selectAll('path.detail-province-path')
         .data(globalGeojson.features)
         .enter()
         .append('path')
         .attr('class', d => {
           const kode = d.properties.kode_wilayah;
-          return 'detail-province-path' + (activeCodesSet.has(kode) ? ' active-location' : '');
+          return 'detail-province-path' + (kode === provCode ? ' active-location' : '');
         })
         .attr('d', pathGenerator)
         .style('fill', d => {
           const kode = d.properties.kode_wilayah;
-          return activeCodesSet.has(kode) ? '#308935' : '#e2e8f0';
+          return (kode === provCode) ? '#308935' : '#e2e8f0';
         })
         .style('fill-opacity', d => {
           const kode = d.properties.kode_wilayah;
-          return activeCodesSet.has(kode) ? '0.90' : '1';
+          return (kode === provCode) ? '0.90' : '1';
         })
         .style('stroke', '#ffffff')
         .style('stroke-width', d => {
           const kode = d.properties.kode_wilayah;
-          return activeCodesSet.has(kode) ? '1.5px' : '0.6px';
+          return (kode === provCode) ? '1.5px' : '0.6px';
         });
 
       // Filter Titik Kabupaten / Kota Milik Provinsi Terpilih
-      const filteredRegencies = (provCode === 'all') 
-        ? projectRegencies 
-        : projectRegencies.filter(r => r.provKode === provCode);
+      const filteredRegencies = projectRegencies.filter(r => r.provKode === provCode);
 
       const placedPoints = [];
       filteredRegencies.forEach(reg => {
@@ -548,26 +536,26 @@
         mapContainer.appendChild(dot);
       });
 
-      // Fallback: Jika tidak ada kabkot, buat pin provinsi
-      if (filteredRegencies.length === 0 && activeCodes.length > 0) {
-        activeCodes.forEach(kode => {
-          const coords = PROVINCE_COORDS[kode];
-          if (!coords) return;
+      // Fallback: Jika tidak ada titik kabkot pada provinsi ini, buat pin provinsi
+      if (filteredRegencies.length === 0 && provCode) {
+        const coords = PROVINCE_COORDS[provCode];
+        if (coords) {
           const projected = projection(coords);
-          if (!projected) return;
-          const leftPct = (projected[0] / mapWidth) * 100;
-          const topPct = (projected[1] / mapHeight) * 100;
-          const pin = document.createElement('div');
-          pin.className = 'absolute z-30 -translate-x-1/2 -translate-y-1/2 group cursor-pointer';
-          pin.style.left = leftPct + '%';
-          pin.style.top = topPct + '%';
-          pin.innerHTML = `
-            <div class="relative flex items-center justify-center p-1">
-              <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white shadow-md block"></span>
-            </div>
-          `;
-          mapContainer.appendChild(pin);
-        });
+          if (projected) {
+            const leftPct = (projected[0] / mapWidth) * 100;
+            const topPct = (projected[1] / mapHeight) * 100;
+            const pin = document.createElement('div');
+            pin.className = 'absolute z-30 -translate-x-1/2 -translate-y-1/2 group cursor-pointer';
+            pin.style.left = leftPct + '%';
+            pin.style.top = topPct + '%';
+            pin.innerHTML = `
+              <div class="relative flex items-center justify-center p-1">
+                <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white shadow-md block"></span>
+              </div>
+            `;
+            mapContainer.appendChild(pin);
+          }
+        }
       }
     }
   });
