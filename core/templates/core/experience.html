@@ -238,20 +238,19 @@
                       </div>
                       {% endif %}
                       <div class="flex-1 min-w-0">
-                        <div class="flex items-center justify-between gap-1 mb-1">
+                        <div class="flex items-center justify-between gap-2 mb-1">
                           <span class="text-[10px] font-bold bg-white text-neutral-600 px-1.5 py-0.5 rounded border border-gray-200">{{ proj.tahun }}</span>
-                          {% if proj.client %}
-                          <span class="text-[10px] font-semibold text-neutral-500 truncate max-w-[120px]">{{ proj.client.nama }}</span>
-                          {% endif %}
+                          <button type="button" onclick="event.stopPropagation(); openProjectModal('{{ proj.id }}');" class="inline-flex items-center gap-1 text-[10px] font-bold text-[#308935] bg-emerald-50 hover:bg-emerald-100 hover:text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-200/70 transition cursor-pointer">
+                            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Details{% else %}Lihat Detail{% endif %}
+                            <span class="material-symbols-outlined text-[12px]">arrow_forward</span>
+                          </button>
                         </div>
                         <h5 class="text-xs font-bold text-neutral-900 line-clamp-2 leading-snug">{{ proj.name }}</h5>
+                        {% if proj.client %}
+                        <span class="text-[10px] text-neutral-500 block truncate mt-0.5">{{ proj.client.nama }}</span>
+                        {% endif %}
                       </div>
                     </div>
-                    {% if proj.description %}
-                    <p class="text-[11px] text-neutral-600 line-clamp-2 leading-relaxed">
-                      {{ proj.description|striptags }}
-                    </p>
-                    {% endif %}
                   </div>
                   {% empty %}
                   <p class="text-xs text-neutral-400 py-3 text-center">{% trans "Belum ada proyek di wilayah ini." %}</p>
