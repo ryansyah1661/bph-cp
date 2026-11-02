@@ -472,8 +472,35 @@
       .attr('preserveAspectRatio', 'xMidYMid meet')
       .attr('class', 'w-full h-full block select-none');
 
-    const padding = 25;
-    const projection = d3.geoMercator().fitExtent([[padding, padding], [width - padding, height - padding]], window.CACHED_GEOJSON);
+    // Cari feature GeoJSON provinsi yang dipilih untuk auto-zoom fokus wilayah
+    const activeProvCode = (targetProvs && targetProvs.length === 1) ? targetProvs[0] : provKode;
+    const activeFeature = activeProvCode ? window.CACHED_GEOJSON.features.find(f => f.properties.kode_wilayah === activeProvCode) : null;
+
+    let fitTarget = activeFeature || window.CACHED_GEOJSON;
+    if (activeFeature) {
+      const bounds = d3.geoBounds(activeFeature);
+      const dLon = bounds[1][0] - bounds[0][0];
+      const dLat = bounds[1][1] - bounds[0][1];
+
+      if (dLon < 1.2 || dLat < 1.0) {
+        const padLon = Math.max((1.6 - dLon) / 2, 0.5);
+        const padLat = Math.max((1.2 - dLat) / 2, 0.4);
+        fitTarget = {
+          type: "Polygon",
+          coordinates: [[
+            [bounds[0][0] - padLon, bounds[0][1] - padLat],
+            [bounds[1][0] + padLon, bounds[0][1] - padLat],
+            [bounds[1][0] + padLon, bounds[1][1] + padLat],
+            [bounds[0][0] - padLon, bounds[1][1] + padLat],
+            [bounds[0][0] - padLon, bounds[0][1] - padLat]
+          ]]
+        };
+      }
+    }
+
+    const padX = 50;
+    const padY = 35;
+    const projection = d3.geoMercator().fitExtent([[padX, padY], [width - padX, height - padY]], fitTarget);
     const pathGenerator = d3.geoPath().projection(projection);
 
     const activeProvsSet = new Set(targetProvs);
@@ -487,25 +514,24 @@
       .attr('d', pathGenerator)
       .style('fill', d => {
         const kode = d.properties.kode_wilayah;
-        return activeProvsSet.has(kode) ? '#308935' : '#e2e8f0';
+        return activeProvsSet.has(kode) ? '#308935' : '#f1f5f9';
       })
       .style('fill-opacity', d => {
         const kode = d.properties.kode_wilayah;
-        return activeProvsSet.has(kode) ? '0.95' : '1';
+        return activeProvsSet.has(kode) ? '1' : '0.90';
       })
       .style('stroke', d => {
         const kode = d.properties.kode_wilayah;
-        if (activeProvsSet.has(kode) && kode === '31') return '#308935';
-        return '#ffffff';
+        return activeProvsSet.has(kode) ? '#1b5e20' : '#cbd5e1';
       })
       .style('stroke-width', d => {
         const kode = d.properties.kode_wilayah;
-        if (activeProvsSet.has(kode) && kode === '31') return '15px';
-        return activeProvsSet.has(kode) ? '1.2px' : '0.5px';
+        return activeProvsSet.has(kode) ? '2px' : '0.8px';
       })
-      .style('stroke-linejoin', 'round')
-      .style('stroke-linecap', 'round')
-      .style('paint-order', 'stroke fill');
+      .style('filter', d => {
+        const kode = d.properties.kode_wilayah;
+        return activeProvsSet.has(kode) ? 'drop-shadow(0 2px 6px rgba(48, 137, 53, 0.35))' : 'none';
+      });
 
     // Angkat provinsi aktif ke tumpukan paling atas agar tidak tertimpa perbatasan provinsi lain
     provPaths.filter(d => activeProvsSet.has(d.properties.kode_wilayah)).raise();
