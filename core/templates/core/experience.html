@@ -228,7 +228,7 @@
                 <!-- DAFTAR KARTU PROYEK DI PROVINSI INI -->
                 <div class="space-y-3 max-h-[300px] overflow-y-auto pr-1">
                   {% for proj in loc.projects.all %}
-                  <div class="bg-neutral-50 hover:bg-emerald-50/40 p-3 rounded-xl border border-gray-100 transition-all flex flex-col gap-2 cursor-pointer" onclick="openProjectModal('{{ proj.id }}');">
+                  <div class="bg-neutral-50 hover:bg-emerald-50/40 p-3 rounded-xl border border-gray-100 transition-all flex flex-col gap-2 cursor-pointer" onclick="openProjectModal('{{ proj.id }}', '{{ loc.kode_wilayah }}');">
                     <div class="flex items-start gap-3">
                       {% if proj.image %}
                       <img src="{{ proj.image.url }}" alt="{{ proj.name }}" class="w-12 h-12 rounded-lg object-cover flex-shrink-0 border border-gray-200">
@@ -240,7 +240,7 @@
                       <div class="flex-1 min-w-0">
                         <div class="flex items-center justify-between gap-2 mb-1">
                           <span class="text-[10px] font-bold bg-white text-neutral-600 px-1.5 py-0.5 rounded border border-gray-200">{{ proj.tahun }}</span>
-                          <button type="button" onclick="event.stopPropagation(); openProjectModal('{{ proj.id }}');" class="inline-flex items-center gap-1 text-[10px] font-bold text-[#308935] bg-emerald-50 hover:bg-emerald-100 hover:text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-200/70 transition cursor-pointer">
+                          <button type="button" onclick="event.stopPropagation(); openProjectModal('{{ proj.id }}', '{{ loc.kode_wilayah }}');" class="inline-flex items-center gap-1 text-[10px] font-bold text-[#308935] bg-emerald-50 hover:bg-emerald-100 hover:text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-200/70 transition cursor-pointer">
                             {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Details{% else %}Lihat Detail{% endif %}
                             <span class="material-symbols-outlined text-[12px]">arrow_forward</span>
                           </button>
@@ -358,9 +358,7 @@
 </div>
 
 <script>
-  const renderedModalMaps = new Set();
-
-  function openProjectModal(projectId) {
+  function openProjectModal(projectId, provKode) {
     const modal = document.getElementById('project-modal-' + projectId);
     const content = document.getElementById('project-modal-content-' + projectId);
     if (modal && content) {
@@ -369,9 +367,27 @@
       content.classList.add('scale-100');
       document.body.style.overflow = 'hidden';
 
-      // Inisialisasi peta interaktif di dalam modal
+      // Filter badge lokasi sesuai provinsi yang diklik jika ada
+      const locBox = document.getElementById('modal-locations-box-' + projectId);
+      if (locBox) {
+        const provBadges = locBox.querySelectorAll('.modal-prov-badge');
+        const regBadges = locBox.querySelectorAll('.modal-reg-badge');
+        if (provKode) {
+          provBadges.forEach(b => {
+            b.style.display = (b.getAttribute('data-prov-kode') === provKode) ? 'inline-flex' : 'none';
+          });
+          regBadges.forEach(b => {
+            b.style.display = (b.getAttribute('data-prov-kode') === provKode) ? 'inline-flex' : 'none';
+          });
+        } else {
+          provBadges.forEach(b => b.style.display = 'inline-flex');
+          regBadges.forEach(b => b.style.display = 'inline-flex');
+        }
+      }
+
+      // Inisialisasi / perbarui peta di dalam modal
       setTimeout(() => {
-        initModalMap(projectId);
+        initModalMap(projectId, provKode);
       }, 50);
     }
   }
@@ -390,19 +406,19 @@
     }
   }
 
-  function initModalMap(projectId) {
-    if (renderedModalMaps.has(projectId)) return;
-
+  function initModalMap(projectId, provKode) {
     const container = document.getElementById('modal-map-container-' + projectId);
     const dataScript = document.getElementById('modal-map-data-' + projectId);
     if (!container || !dataScript) return;
 
     if (!window.CACHED_GEOJSON) {
-      setTimeout(() => initModalMap(projectId), 150);
+      setTimeout(() => initModalMap(projectId, provKode), 150);
       return;
     }
 
-    renderedModalMaps.add(projectId);
+    const currentKey = provKode || 'all';
+    if (container.dataset.renderedKey === currentKey) return;
+    container.dataset.renderedKey = currentKey;
 
     let mapData;
     try {
@@ -412,8 +428,33 @@
       return;
     }
 
+    // Bersihkan SVG atau titik lama saat berganti provinsi
+    container.querySelectorAll('svg, div:not(.modal-map-loading)').forEach(el => el.remove());
     const loading = container.querySelector('.modal-map-loading');
     if (loading) loading.remove();
+
+    // Filter data provinsi & kabupaten/kota sesuai provinsi yang dipilih
+    let targetProvs = mapData.provinces || [];
+    let targetRegencies = mapData.regencies || [];
+
+    if (provKode) {
+      targetProvs = targetProvs.filter(code => code === provKode);
+      targetRegencies = targetRegencies.filter(reg => reg.provKode === provKode);
+    }
+
+    // Update Counter di Header Peta Modal
+    const counterEl = document.getElementById('modal-map-counter-' + projectId);
+    if (counterEl) {
+      if (targetRegencies.length > 0) {
+        counterEl.textContent = `${targetRegencies.length} Kabupaten / Kota`;
+        counterEl.style.display = 'inline-block';
+      } else if (targetProvs.length > 0) {
+        counterEl.textContent = `${targetProvs.length} Provinsi`;
+        counterEl.style.display = 'inline-block';
+      } else {
+        counterEl.style.display = 'none';
+      }
+    }
 
     const width = 960;
     const height = 400;
@@ -427,9 +468,9 @@
     const projection = d3.geoMercator().fitSize([width, height], window.CACHED_GEOJSON);
     const pathGenerator = d3.geoPath().projection(projection);
 
-    const activeProvs = new Set(mapData.provinces || []);
+    const activeProvsSet = new Set(targetProvs);
 
-    // Render Poligon Provinsi
+    // Render Poligon Provinsi: Hanya provinsi terpilih yang disorot hijau
     svg.selectAll('path.modal-prov-path')
       .data(window.CACHED_GEOJSON.features)
       .enter()
@@ -437,21 +478,21 @@
       .attr('d', pathGenerator)
       .style('fill', d => {
         const kode = d.properties.kode_wilayah;
-        return activeProvs.has(kode) ? '#308935' : '#e2e8f0';
+        return activeProvsSet.has(kode) ? '#308935' : '#e2e8f0';
       })
       .style('fill-opacity', d => {
         const kode = d.properties.kode_wilayah;
-        return activeProvs.has(kode) ? '0.85' : '1';
+        return activeProvsSet.has(kode) ? '0.85' : '1';
       })
       .style('stroke', '#ffffff')
       .style('stroke-width', d => {
         const kode = d.properties.kode_wilayah;
-        return activeProvs.has(kode) ? '1.5px' : '0.5px';
+        return activeProvsSet.has(kode) ? '1.5px' : '0.5px';
       });
 
-    // Render Titik-Titik Kabupaten / Kota Milik Proyek Ini
+    // Render Titik-Titik Kabupaten / Kota Milik Proyek di Provinsi Ini Saja
     const placedPoints = [];
-    (mapData.regencies || []).forEach(reg => {
+    targetRegencies.forEach(reg => {
       if (!reg.lon || !reg.lat || isNaN(reg.lon) || isNaN(reg.lat)) return;
       const projected = projection([reg.lon, reg.lat]);
       if (!projected || isNaN(projected[0]) || isNaN(projected[1])) return;
@@ -489,9 +530,9 @@
       container.appendChild(dot);
     });
 
-    // Fallback: jika proyek belum memiliki relasi kabupaten/kota spesifik, render pin pada provinsi terkait
-    if ((!mapData.regencies || mapData.regencies.length === 0) && mapData.provinces) {
-      mapData.provinces.forEach(kode => {
+    // Fallback: Jika tidak ada titik kab/kota, render pin pada pusat provinsi
+    if (targetRegencies.length === 0 && targetProvs.length > 0) {
+      targetProvs.forEach(kode => {
         const coords = PROVINCE_COORDS[kode];
         if (!coords) return;
         const projected = projection(coords);

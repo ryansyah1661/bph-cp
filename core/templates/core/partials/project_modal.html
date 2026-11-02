@@ -47,19 +47,16 @@
           <div class="flex items-center justify-between mb-2.5">
             <h4 class="text-xs font-bold text-emerald-950 uppercase tracking-wider flex items-center gap-1.5">
               <span class="material-symbols-outlined text-[#308935] text-base">map</span>
-              <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Project Area Map{% else %}Peta Lokasi Wilayah Proyek{% endif %}</span>
+              <span id="modal-map-title-{{ project.id }}">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Project Area Map{% else %}Peta Lokasi Wilayah Proyek{% endif %}</span>
             </h4>
             <div class="flex items-center gap-1.5">
-              {% if project.regencies.all %}
-              <span class="text-[11px] font-bold text-amber-900 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full">
-                {{ project.regencies.count }} {% trans "Kabupaten / Kota" %}
+              <span id="modal-map-counter-{{ project.id }}" class="text-[11px] font-bold text-amber-900 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full">
+                {% if project.regencies.all %}
+                  {{ project.regencies.count }} {% trans "Kabupaten / Kota" %}
+                {% elif project.locations.all %}
+                  {{ project.locations.count }} {% trans "Provinsi" %}
+                {% endif %}
               </span>
-              {% endif %}
-              {% if project.locations.all %}
-              <span class="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
-                {{ project.locations.count }} {% trans "Provinsi" %}
-              </span>
-              {% endif %}
             </div>
           </div>
 
@@ -76,6 +73,7 @@
                     {
                       "name": "{{ reg.display_name|escapejs }}",
                       "prov": "{{ reg.provinsi.nama_provinsi|escapejs }}",
+                      "provKode": "{{ reg.provinsi.kode_wilayah }}",
                       "lon": {{ reg.longitude|unlocalize }},
                       "lat": {{ reg.latitude|unlocalize }}
                     }{% if not forloop.last %},{% endif %}
@@ -92,15 +90,15 @@
 
         <!-- Box Lokasi Wilayah (Provinsi & Kabupaten/Kota) -->
         {% if project.locations.all or project.regencies.all %}
-        <div class="mb-8 p-4 md:p-5 bg-emerald-50/50 rounded-2xl border border-emerald-100/80 space-y-3 not-prose">
+        <div class="mb-8 p-4 md:p-5 bg-emerald-50/50 rounded-2xl border border-emerald-100/80 space-y-3 not-prose" id="modal-locations-box-{{ project.id }}">
           {% if project.locations.all %}
-          <div class="flex items-center gap-2 flex-wrap">
+          <div class="flex items-center gap-2 flex-wrap modal-prov-row">
             <span class="text-xs font-bold text-emerald-900 uppercase tracking-wider flex items-center gap-1">
               <span class="material-symbols-outlined text-sm text-[#308935]">location_on</span>
               {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Province:{% else %}Provinsi:{% endif %}
             </span>
             {% for loc in project.locations.all %}
-            <span class="inline-flex items-center gap-1 bg-white border border-emerald-200 text-emerald-950 px-2.5 py-1 rounded-lg text-xs font-bold shadow-xs">
+            <span class="modal-prov-badge inline-flex items-center gap-1 bg-white border border-emerald-200 text-emerald-950 px-2.5 py-1 rounded-lg text-xs font-bold shadow-xs" data-prov-kode="{{ loc.kode_wilayah }}">
               {{ loc.nama_provinsi }}
             </span>
             {% endfor %}
@@ -108,14 +106,14 @@
           {% endif %}
 
           {% if project.regencies.all %}
-          <div class="flex items-start gap-2 flex-wrap pt-3 border-t border-emerald-100">
+          <div class="flex items-start gap-2 flex-wrap pt-3 border-t border-emerald-100 modal-reg-row">
             <span class="text-xs font-bold text-amber-900 uppercase tracking-wider flex items-center gap-1 mt-0.5">
               <span class="material-symbols-outlined text-sm text-amber-600">pin_drop</span>
               {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Regencies / Cities:{% else %}Kabupaten / Kota Terkait:{% endif %}
             </span>
             <div class="flex flex-wrap gap-1.5 flex-1 max-h-40 overflow-y-auto pr-1">
               {% for reg in project.regencies.all %}
-              <span class="inline-flex items-center gap-1 bg-amber-50 text-amber-900 border border-amber-200/80 px-2.5 py-1 rounded-lg text-xs font-medium">
+              <span class="modal-reg-badge inline-flex items-center gap-1 bg-amber-50 text-amber-900 border border-amber-200/80 px-2.5 py-1 rounded-lg text-xs font-medium" data-prov-kode="{{ reg.provinsi.kode_wilayah }}">
                 <span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block"></span>
                 {{ reg.display_name }}
               </span>
