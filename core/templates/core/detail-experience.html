@@ -68,11 +68,17 @@
           </div>
         </div>
         <!-- PETA SEBARAN WILAYAH PROYEK (MENYATU DENGAN DESKRIPSI) -->
+        <!-- OPSI 1: PETA FOKUS PER PROVINSI (LAMA - TETAP DIPERTAHANKAN) -->
         <div class="bg-surface-white border border-border-subtle rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] space-y-4">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-subtle pb-4">
             <div>
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-700 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full">
+                  {% trans "Opsi 1: Tampilan Fokus Per Wilayah" %}
+                </span>
+              </div>
               <h3 class="font-headline-lg text-lg font-bold text-on-surface flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary text-2xl">map</span>
+                <span class="material-symbols-outlined text-primary text-2xl">filter_center_focus</span>
                 <span>{% trans "Peta Sebaran Wilayah Proyek" %}</span>
               </h3>
               <p class="text-xs text-text-muted mt-0.5">
@@ -151,6 +157,96 @@
                 <span class="w-2 h-2 rounded-full bg-amber-500 inline-block"></span>
                 <span>{% trans "Titik oranye menandakan lokasi kerja Kabupaten / Kota." %}</span>
               </span>
+              <a href="{% url 'experience' %}" class="text-xs font-bold text-primary hover:underline flex items-center gap-0.5" style="text-decoration:none;">
+                <span>{% trans "Buka di Peta Utama" %}</span>
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- OPSI 2: PETA SEBARAN MENYELURUH / GABUNGAN (BARU) -->
+        <div class="bg-surface-white border border-border-subtle rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-subtle pb-4">
+            <div>
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                  {% trans "Opsi 2: Tampilan Gabungan Terpadu" %}
+                </span>
+              </div>
+              <h3 class="font-headline-lg text-lg font-bold text-on-surface flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-2xl">public</span>
+                <span>{% trans "Peta Sebaran Menyeluruh (Semua Wilayah Proyek)" %}</span>
+              </h3>
+              <p class="text-xs text-text-muted mt-0.5">
+                {% trans "Seluruh provinsi dan titik lokasi kerja proyek ditampilkan bersamaan dalam satu peta terintegrasi." %}
+              </p>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+                {{ project.locations.count }} {% trans "Provinsi" %}{% if project.regencies.all %} • {{ project.regencies.count }} {% trans "Kab/Kota" %}{% endif %}
+              </span>
+            </div>
+          </div>
+
+          <!-- Container Peta Mini SVG Gabungan -->
+          <div id="detail-map-combined-svg-container" class="shadow-inner relative aspect-[960/420] w-full rounded-xl overflow-hidden bg-gradient-to-br from-slate-50 to-emerald-50/20 border border-slate-200">
+            <div id="detail-map-combined-loading" class="absolute inset-0 flex items-center justify-center text-slate-400 text-xs gap-2 font-medium">
+              <span class="material-symbols-outlined text-base animate-spin text-primary">progress_activity</span>
+              <span>{% trans "Memuat peta..." %}</span>
+            </div>
+          </div>
+
+          <!-- Keterangan & Badge Lokasi Gabungan -->
+          <div class="space-y-3 pt-2">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs font-bold text-emerald-900 uppercase tracking-wider flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-primary">location_on</span>
+                {% trans "Semua Provinsi Terlibat:" %}
+              </span>
+              {% for loc in project.locations.all %}
+                {% if loc.kode_wilayah %}
+                <span class="inline-flex items-center gap-1 bg-emerald-50 border border-emerald-200 text-emerald-950 px-2.5 py-1 rounded-lg text-xs font-bold shadow-xs">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#308935]"></span>
+                  {{ loc.nama_provinsi }}
+                </span>
+                {% endif %}
+              {% endfor %}
+            </div>
+
+            {% if project.regencies.all %}
+            <div class="pt-2 border-t border-border-subtle/70">
+              <span class="text-text-muted block text-[11px] uppercase tracking-wider font-bold mb-1.5 flex items-center gap-1">
+                <span class="material-symbols-outlined text-[13px] text-amber-500">pin_drop</span>
+                {% trans "Semua Kabupaten / Kota Terkait:" %}
+              </span>
+              <div class="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto pr-1">
+                {% for reg in project.regencies.all %}
+                  <span class="inline-flex items-center gap-1 bg-amber-50 text-amber-900 border border-amber-200/80 px-2.5 py-1 rounded-md text-xs font-medium">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block"></span>
+                    {{ reg.display_name }} ({{ reg.provinsi.nama_provinsi }})
+                  </span>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+
+            <div class="pt-2 border-t border-border-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-text-muted">
+              <div class="flex flex-wrap items-center gap-3">
+                <span class="flex items-center gap-1">
+                  <span class="w-2.5 h-2.5 rounded-sm bg-[#308935] inline-block"></span>
+                  <span>{% trans "Provinsi Aktif Proyek" %}</span>
+                </span>
+                <span class="flex items-center gap-1">
+                  <span class="w-2.5 h-2.5 rounded-sm bg-[#e2e8f0] border border-[#94a3b8] inline-block"></span>
+                  <span>{% trans "Provinsi Lain" %}</span>
+                </span>
+                <span class="flex items-center gap-1">
+                  <span class="w-2.5 h-2.5 rounded-full bg-amber-500 border border-white inline-block"></span>
+                  <span>{% trans "Titik Kabupaten / Kota" %}</span>
+                </span>
+              </div>
               <a href="{% url 'experience' %}" class="text-xs font-bold text-primary hover:underline flex items-center gap-0.5" style="text-decoration:none;">
                 <span>{% trans "Buka di Peta Utama" %}</span>
                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
@@ -400,6 +496,7 @@
         applyBadgeFilter(currentProvFilter);
         updateFilterButtons(currentProvFilter);
       }
+      renderCombinedMap();
     }).catch(function(err) {
       console.error('Gagal memuat peta detail:', err);
       if (loadingEl) {
@@ -507,19 +604,19 @@
         .attr('d', pathGenerator)
         .style('fill', d => {
           const kode = String(d.properties.kode_wilayah);
-          return (kode === String(provCode)) ? '#308935' : '#f1f5f9';
+          return (kode === String(provCode)) ? '#308935' : '#e2e8f0';
         })
         .style('fill-opacity', d => {
           const kode = String(d.properties.kode_wilayah);
-          return (kode === String(provCode)) ? '1' : '0.85';
+          return (kode === String(provCode)) ? '1' : '0.95';
         })
         .style('stroke', d => {
           const kode = String(d.properties.kode_wilayah);
-          return (kode === String(provCode)) ? '#1b5e20' : '#cbd5e1';
+          return (kode === String(provCode)) ? '#1b5e20' : '#94a3b8';
         })
         .style('stroke-width', d => {
           const kode = String(d.properties.kode_wilayah);
-          return (kode === String(provCode)) ? '2px' : '0.8px';
+          return (kode === String(provCode)) ? '2px' : '0.9px';
         })
         .style('filter', d => {
           const kode = String(d.properties.kode_wilayah);
@@ -598,5 +695,149 @@
       }
     }
   });
-</script>
+
+    function renderCombinedMap() {
+      const combinedContainer = document.getElementById('detail-map-combined-svg-container');
+      const combinedLoading = document.getElementById('detail-map-combined-loading');
+      if (!combinedContainer || !globalGeojson) return;
+      if (combinedLoading) combinedLoading.remove();
+
+      combinedContainer.querySelectorAll('svg, div:not(#detail-map-combined-loading)').forEach(el => el.remove());
+
+      const svg = d3.select(combinedContainer)
+        .append('svg')
+        .attr('viewBox', `0 0 ${mapWidth} ${mapHeight}`)
+        .attr('preserveAspectRatio', 'xMidYMid meet')
+        .attr('class', 'w-full h-full block select-none');
+
+      const activeCodesSet = new Set(allProjectLocationCodes.map(String));
+
+      // Ambil fitur GeoJSON dari semua provinsi proyek
+      const activeFeatures = globalGeojson.features.filter(f => activeCodesSet.has(String(f.properties.kode_wilayah)));
+
+      let fitTarget = null;
+      if (activeFeatures.length === 1 && String(activeFeatures[0].properties.kode_wilayah) === '31') {
+        // Khusus hanya DKI Jakarta: sertakan Jabar dan Banten agar skala proporsional
+        const neighbors = globalGeojson.features.filter(f => ['31', '32', '36'].includes(String(f.properties.kode_wilayah)));
+        fitTarget = { type: "FeatureCollection", features: neighbors };
+      } else if (activeFeatures.length === 1 && String(activeFeatures[0].properties.kode_wilayah) === '34') {
+        // Khusus hanya DI Yogyakarta: sertakan Jawa Tengah
+        const neighbors = globalGeojson.features.filter(f => ['34', '33'].includes(String(f.properties.kode_wilayah)));
+        fitTarget = { type: "FeatureCollection", features: neighbors };
+      } else if (activeFeatures.length > 0) {
+        fitTarget = { type: "FeatureCollection", features: activeFeatures };
+      } else {
+        fitTarget = globalGeojson;
+      }
+
+      const padX = 40;
+      const padY = 30;
+      const projection = d3.geoMercator().fitExtent([[padX, padY], [mapWidth - padX, mapHeight - padY]], fitTarget);
+      const pathGenerator = d3.geoPath().projection(projection);
+
+      // Render Poligon Seluruh Provinsi Indonesia
+      const provPaths = svg.selectAll('path.combined-province-path')
+        .data(globalGeojson.features)
+        .enter()
+        .append('path')
+        .attr('class', d => {
+          const kode = String(d.properties.kode_wilayah);
+          return 'combined-province-path' + (activeCodesSet.has(kode) ? ' active-location' : '');
+        })
+        .attr('d', pathGenerator)
+        .style('fill', d => {
+          const kode = String(d.properties.kode_wilayah);
+          return activeCodesSet.has(kode) ? '#308935' : '#e2e8f0';
+        })
+        .style('fill-opacity', d => {
+          const kode = String(d.properties.kode_wilayah);
+          return activeCodesSet.has(kode) ? '1' : '0.95';
+        })
+        .style('stroke', d => {
+          const kode = String(d.properties.kode_wilayah);
+          return activeCodesSet.has(kode) ? '#1b5e20' : '#94a3b8';
+        })
+        .style('stroke-width', d => {
+          const kode = String(d.properties.kode_wilayah);
+          return activeCodesSet.has(kode) ? '2px' : '0.9px';
+        })
+        .style('filter', d => {
+          const kode = String(d.properties.kode_wilayah);
+          return activeCodesSet.has(kode) ? 'drop-shadow(0 2px 6px rgba(48, 137, 53, 0.35))' : 'none';
+        });
+
+      // Angkat seluruh provinsi aktif ke atas
+      provPaths.filter(d => activeCodesSet.has(String(d.properties.kode_wilayah))).raise();
+
+      // Render Titik-Titik Kabupaten / Kota untuk SELURUH PROYEK
+      const placedPoints = [];
+      projectRegencies.forEach(reg => {
+        if (!reg.lon || !reg.lat || isNaN(reg.lon) || isNaN(reg.lat)) return;
+        const projected = projection([reg.lon, reg.lat]);
+        if (!projected || isNaN(projected[0]) || isNaN(projected[1])) return;
+
+        let x = projected[0];
+        let y = projected[1];
+
+        // Anti-overlap offset jika titik berdekatan
+        let overlaps = 0;
+        placedPoints.forEach(p => {
+          if (Math.hypot(p.x - x, p.y - y) < 16) overlaps++;
+        });
+        if (overlaps > 0) {
+          const angle = (overlaps * Math.PI * 0.75) + 0.5;
+          x += Math.cos(angle) * 12;
+          y += Math.sin(angle) * 12;
+        }
+        placedPoints.push({ x, y });
+
+        const leftPct = (x / mapWidth) * 100;
+        const topPct = (y / mapHeight) * 100;
+
+        const tooltipVPos = (topPct < 25) ? 'top-full mt-2' : 'bottom-full mb-2';
+        const tooltipHPos = (leftPct < 18) ? 'left-0' : (leftPct > 82 ? 'right-0' : 'left-1/2 -translate-x-1/2');
+
+        const dot = document.createElement('div');
+        dot.className = 'absolute z-30 -translate-x-1/2 -translate-y-1/2 group cursor-pointer';
+        dot.style.left = leftPct + '%';
+        dot.style.top = topPct + '%';
+        dot.innerHTML = `
+          <div class="relative flex items-center justify-center p-1">
+            <span class="w-3 h-3 rounded-full bg-amber-500 border-2 border-white shadow-[0_2px_4px_rgba(0,0,0,0.35)] group-hover:scale-150 transition-transform block"></span>
+            <div class="hidden group-hover:block absolute ${tooltipVPos} ${tooltipHPos} bg-slate-900/95 backdrop-blur-sm text-white text-[10px] font-bold py-1 px-2.5 rounded-md whitespace-nowrap shadow-xl z-30 pointer-events-none">
+              ${reg.name} (${reg.prov})
+            </div>
+          </div>
+        `;
+        combinedContainer.appendChild(dot);
+      });
+
+      // Fallback Pin untuk provinsi yang tidak memiliki titik kab/kota spesifik
+      const regProvCodes = new Set(projectRegencies.map(r => String(r.provKode)));
+      allProjectLocationCodes.forEach(kode => {
+        if (!regProvCodes.has(String(kode))) {
+          const coords = PROVINCE_COORDS[String(kode)];
+          if (coords) {
+            const projected = projection(coords);
+            if (projected) {
+              const leftPct = (projected[0] / mapWidth) * 100;
+              const topPct = (projected[1] / mapHeight) * 100;
+
+              const pin = document.createElement('div');
+              pin.className = 'absolute z-30 -translate-x-1/2 -translate-y-1/2 group cursor-pointer';
+              pin.style.left = leftPct + '%';
+              pin.style.top = topPct + '%';
+              pin.innerHTML = `
+                <div class="relative flex items-center justify-center p-1">
+                  <span class="material-symbols-outlined text-amber-500 text-xl drop-shadow group-hover:scale-125 transition-transform">location_on</span>
+                </div>
+              `;
+              combinedContainer.appendChild(pin);
+            }
+          }
+        }
+      });
+    }
+
+  </script>
 {% endblock %}

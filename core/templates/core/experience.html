@@ -511,19 +511,19 @@
       .attr('d', pathGenerator)
       .style('fill', d => {
         const kode = String(d.properties.kode_wilayah);
-        return activeProvsSet.has(kode) ? '#308935' : '#f1f5f9';
+        return activeProvsSet.has(kode) ? '#308935' : '#e2e8f0';
       })
       .style('fill-opacity', d => {
         const kode = String(d.properties.kode_wilayah);
-        return activeProvsSet.has(kode) ? '1' : '0.85';
+        return activeProvsSet.has(kode) ? '1' : '0.95';
       })
       .style('stroke', d => {
         const kode = String(d.properties.kode_wilayah);
-        return activeProvsSet.has(kode) ? '#1b5e20' : '#cbd5e1';
+        return activeProvsSet.has(kode) ? '#1b5e20' : '#94a3b8';
       })
       .style('stroke-width', d => {
         const kode = String(d.properties.kode_wilayah);
-        return activeProvsSet.has(kode) ? '2px' : '0.8px';
+        return activeProvsSet.has(kode) ? '2px' : '0.9px';
       })
       .style('filter', d => {
         const kode = String(d.properties.kode_wilayah);
