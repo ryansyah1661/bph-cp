@@ -133,6 +133,20 @@
           </label>
           <div id="file-name-display" class="text-xs text-gray-400 mt-2 text-center font-medium"></div>
           <div class="bph-hidden-file-input">{{ form.gambar }}</div>
+
+          <div class="mt-3 flex items-center justify-center">
+            <button type="button" onclick="openMediaPickerModal({
+              fileInputId: 'id_gambar',
+              previewImgId: 'image-preview',
+              previewContainerId: 'preview-container',
+              hiddenAssetId: 'selected-asset-id',
+              fileNameDisplayId: 'file-name-display'
+            })" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-emerald-300 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold transition cursor-pointer shadow-xs w-full justify-center">
+              <span class="material-symbols-outlined text-sm">photo_library</span>
+              <span>Pilih dari Asset Media</span>
+            </button>
+          </div>
+          <input type="hidden" name="selected_asset_media" id="selected-asset-id" value="">
         </div>
 
         <!-- Tombol Batal & Simpan Data Menyatu di Bawah Card Kanan -->
@@ -318,4 +332,5 @@
   .ql-editor p { margin-bottom: 1em;
 }
 </style>
+{% include 'core/custom_admin/partials/media_picker_modal.html' %}
 {% endblock %}

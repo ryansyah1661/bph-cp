@@ -320,7 +320,32 @@ class ArticleListView(AdminRequiredMixin, ListView):
     def get_queryset(self):
         return Article.objects.all().order_by('-tanggal', '-id')
 
-class ArticleCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
+
+class MediaAssetPickerMixin:
+    """
+    Mixin untuk mendukung pemilihan gambar langsung dari Asset Media
+    selain dari upload berkas lokal di laptop.
+    """
+    image_field_name = 'gambar'
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        selected_asset = self.request.POST.get('selected_asset_media')
+        has_existing = bool(getattr(getattr(self, 'object', None), self.image_field_name, None))
+        if selected_asset or has_existing:
+            if self.image_field_name in form.fields:
+                form.fields[self.image_field_name].required = False
+        return form
+
+    def form_valid(self, form):
+        selected_asset_id = self.request.POST.get('selected_asset_media')
+        if selected_asset_id and not self.request.FILES.get(self.image_field_name):
+            asset = Gallery.objects.filter(id=selected_asset_id).first()
+            if asset and asset.gambar:
+                setattr(form.instance, self.image_field_name, asset.gambar.name)
+        return super().form_valid(form)
+
+class ArticleCreateView(AdminRequiredMixin, DateInputMixin, MediaAssetPickerMixin, CreateView):
     model = Article
     template_name = 'core/custom_admin/articles/articles_form.html'
     fields = ['judul_ind', 'judul_en', 'slug_ind', 'slug_en', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'tanggal', 'gambar']
@@ -347,7 +372,7 @@ class ArticleCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
         messages.success(self.request, 'Artikel baru berhasil ditambahkan!')
         return super().form_valid(form)
 
-class ArticleUpdateView(AdminRequiredMixin, DateInputMixin, UpdateView):
+class ArticleUpdateView(AdminRequiredMixin, DateInputMixin, MediaAssetPickerMixin, UpdateView):
     model = Article
     template_name = 'core/custom_admin/articles/articles_form.html'
     fields = ['judul_ind', 'judul_en', 'slug_ind', 'slug_en', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'tanggal', 'gambar']
@@ -396,8 +421,9 @@ class ProjectListView(AdminRequiredMixin, ListView):
     def get_queryset(self):
         return Project.objects.all().order_by('-tahun', '-id')
 
-class ProjectCreateView(AdminRequiredMixin, CreateView):
+class ProjectCreateView(AdminRequiredMixin, MediaAssetPickerMixin, CreateView):
     model = Project
+    image_field_name = 'image' 
     template_name = 'core/custom_admin/experience/experience_form.html'
     fields = ['name_ind', 'name_en', 'slug_ind', 'slug_en', 'description_ind', 'description_en', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'regencies', 'categories']
     success_url = reverse_lazy('project_list')
@@ -421,8 +447,9 @@ class ProjectCreateView(AdminRequiredMixin, CreateView):
         messages.success(self.request, 'Proyek baru berhasil ditambahkan!')
         return super().form_valid(form)
 
-class ProjectUpdateView(AdminRequiredMixin, UpdateView):
+class ProjectUpdateView(AdminRequiredMixin, MediaAssetPickerMixin, UpdateView):
     model = Project
+    image_field_name = 'image' 
     template_name = 'core/custom_admin/experience/experience_form.html'
     fields = ['name_ind', 'name_en', 'slug_ind', 'slug_en', 'description_ind', 'description_en', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'regencies', 'categories']
     success_url = reverse_lazy('project_list')
@@ -467,7 +494,7 @@ class StoryListView(AdminRequiredMixin, ListView):
     def get_queryset(self):
         return Story.objects.all().order_by('-tanggal', '-id')
 
-class StoryCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
+class StoryCreateView(AdminRequiredMixin, DateInputMixin, MediaAssetPickerMixin, CreateView):
     model = Story
     template_name = 'core/custom_admin/story/story_form.html'
     fields = ['judul_ind', 'judul_en', 'slug_ind', 'slug_en', 'tanggal', 'lokasi', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'gambar', 'project']
@@ -494,7 +521,7 @@ class StoryCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
         messages.success(self.request, 'Cerita lapangan baru berhasil ditambahkan!')
         return super().form_valid(form)
 
-class StoryUpdateView(AdminRequiredMixin, DateInputMixin, UpdateView):
+class StoryUpdateView(AdminRequiredMixin, DateInputMixin, MediaAssetPickerMixin, UpdateView):
     model = Story
     template_name = 'core/custom_admin/story/story_form.html'
     fields = ['judul_ind', 'judul_en', 'slug_ind', 'slug_en', 'tanggal', 'lokasi', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'gambar', 'project']
@@ -781,16 +808,118 @@ def mark_message_as_read(request, pk):
 
 
 # ==========================================
-# 10. MANAGEMENT GALERI DOKUMENTASI
+# 10. MANAGEMENT ASSET MEDIA & GALERI
 # ==========================================
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def quick_add_folder_view(request):
+    """
+    Membuat Folder / Album baru langsung dari halaman Asset Media
+    atau modal picker tanpa perlu berpindah menu.
+    """
+    if request.method == 'POST':
+        from datetime import datetime
+
+        nama_ind = request.POST.get('nama_ind', '').strip()
+        nama_en = request.POST.get('nama_en', '').strip() or nama_ind
+        tahun = request.POST.get('tahun') or datetime.now().year
+        kategori_id = request.POST.get('kategori') or None
+
+        if not nama_ind:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.POST.get('is_ajax'):
+                return JsonResponse({'success': False, 'message': 'Nama album/folder wajib diisi.'}, status=400)
+            messages.error(request, 'Nama album/folder wajib diisi.')
+            return redirect(request.META.get('HTTP_REFERER', 'gallery_admin_list'))
+
+        kategori = None
+        if kategori_id:
+            kategori = Category.objects.filter(id=kategori_id).first()
+
+        folder = Folder.objects.create(
+            nama=nama_ind,
+            nama_ind=nama_ind,
+            nama_en=nama_en,
+            tahun=tahun,
+            kategori=kategori
+        )
+
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.POST.get('is_ajax'):
+            return JsonResponse({
+                'success': True,
+                'id': folder.id,
+                'name': folder.nama_ind,
+                'tahun': folder.tahun,
+                'message': f'Album "{folder.nama_ind}" berhasil dibuat!'
+            })
+
+        messages.success(request, f'Album "{folder.nama_ind}" berhasil dibuat!')
+        return redirect(request.META.get('HTTP_REFERER', 'gallery_admin_list'))
+
+    return JsonResponse({'success': False, 'message': 'Metode tidak diizinkan.'}, status=405)
+
+
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def media_assets_api(request):
+    """
+    API endpoint untuk Media Library Picker
+    Mengembalikan daftar aset foto dan album/folder.
+    """
+    folder_id = request.GET.get('folder')
+    search = request.GET.get('q', '').strip()
+
+    qs = Gallery.objects.select_related('folder').all().order_by('-tanggal_upload', '-id')
+    if folder_id:
+        qs = qs.filter(folder_id=folder_id)
+    if search:
+        qs = qs.filter(Q(caption_ind__icontains=search) | Q(caption_en__icontains=search) | Q(caption__icontains=search))
+
+    assets = []
+    for g in qs[:80]:
+        if g.gambar:
+            assets.append({
+                'id': g.id,
+                'caption': g.caption_ind or g.caption or 'Tanpa Keterangan',
+                'url': g.gambar.url,
+                'folder_id': g.folder.id if g.folder else None,
+                'folder_name': g.folder.nama_ind if g.folder else 'Tanpa Album',
+                'date': g.tanggal_upload.strftime('%d/%m/%Y') if g.tanggal_upload else ''
+            })
+
+    folders = []
+    for f in Folder.objects.all().order_by('-tahun', 'nama_ind'):
+        folders.append({
+            'id': f.id,
+            'name': f.nama_ind or f.nama,
+            'tahun': f.tahun
+        })
+
+    return JsonResponse({'assets': assets, 'folders': folders})
+
+
 class GalleryListView(AdminRequiredMixin, ListView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_list.html'
     context_object_name = 'items'
-    paginate_by = 10
+    paginate_by = 12
 
     def get_queryset(self):
-        return Gallery.objects.all().order_by('-tanggal_upload', '-id')
+        qs = Gallery.objects.select_related('folder').all().order_by('-tanggal_upload', '-id')
+        folder_id = self.request.GET.get('folder')
+        if folder_id:
+            qs = qs.filter(folder_id=folder_id)
+        search = self.request.GET.get('q')
+        if search:
+            qs = qs.filter(Q(caption_ind__icontains=search) | Q(caption_en__icontains=search) | Q(caption__icontains=search))
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['folders'] = Folder.objects.all().order_by('-tahun', 'nama_ind')
+        ctx['categories'] = Category.objects.all().order_by('name')
+        ctx['current_folder'] = self.request.GET.get('folder', '')
+        ctx['search_query'] = self.request.GET.get('q', '')
+        return ctx
 
 class GalleryCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
     model = Gallery
@@ -1188,7 +1317,7 @@ class ProgramListView(AdminRequiredMixin, ListView):
     def get_queryset(self):
         return Program.objects.all().order_by('-tanggal', '-id')
 
-class ProgramCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
+class ProgramCreateView(AdminRequiredMixin, DateInputMixin, MediaAssetPickerMixin, CreateView):
     model = Program
     template_name = 'core/custom_admin/programs/programs_form.html'
     fields = ['judul_ind', 'judul_en', 'slug_ind', 'slug_en', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'tanggal', 'gambar']
@@ -1218,7 +1347,7 @@ class ProgramCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
         messages.success(self.request, 'Program baru berhasil ditambahkan!')
         return super().form_valid(form)
 
-class ProgramUpdateView(AdminRequiredMixin, DateInputMixin, UpdateView):
+class ProgramUpdateView(AdminRequiredMixin, DateInputMixin, MediaAssetPickerMixin, UpdateView):
     model = Program
     template_name = 'core/custom_admin/programs/programs_form.html'
     fields = ['judul_ind', 'judul_en', 'slug_ind', 'slug_en', 'short_ind', 'short_en', 'deskripsi_ind', 'deskripsi_en', 'tanggal', 'gambar']

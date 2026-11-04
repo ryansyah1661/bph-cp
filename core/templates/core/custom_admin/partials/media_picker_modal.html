@@ -1,0 +1,266 @@
+<!-- MODAL MEDIA LIBRARY PICKER -->
+<div id="media-picker-modal" class="fixed inset-0 z-[99999] bg-slate-950/80 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-200">
+  <div class="bg-white w-11/12 max-w-4xl max-h-[90vh] rounded-2xl overflow-hidden flex flex-col shadow-2xl border border-slate-100 transform scale-95 transition-transform duration-200" id="media-picker-content">
+    
+    <!-- Modal Header -->
+    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-slate-50/70">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
+          <span class="material-symbols-outlined text-xl">perm_media</span>
+        </div>
+        <div>
+          <h3 class="font-bold text-slate-800 text-sm">Pilih dari Asset Media</h3>
+          <p class="text-[11px] text-gray-500">Pilih berkas gambar yang sudah tersedia tanpa perlu upload ulang dari laptop.</p>
+        </div>
+      </div>
+      <button type="button" onclick="closeMediaPickerModal()" class="text-gray-400 hover:text-gray-700 hover:bg-gray-100 p-1.5 rounded-xl transition cursor-pointer border-none bg-transparent flex items-center justify-center" aria-label="Tutup">
+        <span class="material-symbols-outlined text-lg">close</span>
+      </button>
+    </div>
+
+    <!-- Filter & Search Toolbar -->
+    <div class="px-6 py-3 bg-white border-b border-gray-100 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2 flex-1 min-w-[240px]">
+        <div class="relative flex-1">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</span>
+          <input type="text" id="media-picker-search" placeholder="Cari keterangan foto..." class="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-gray-200 bg-slate-50 focus:bg-white focus:border-emerald-500 focus:outline-none transition">
+        </div>
+        <select id="media-picker-folder-filter" class="py-2 px-3 text-xs rounded-xl border border-gray-200 bg-slate-50 focus:bg-white focus:border-emerald-500 focus:outline-none transition font-medium text-slate-700">
+          <option value="">Semua Album / Folder</option>
+        </select>
+      </div>
+
+      <div class="text-[11px] text-gray-400 font-medium" id="media-picker-count">
+        Memuat aset...
+      </div>
+    </div>
+
+    <!-- Gallery Grid Container -->
+    <div class="flex-1 overflow-y-auto p-6 bg-slate-50/50 min-h-[300px] max-h-[50vh]">
+      <!-- Loading State -->
+      <div id="media-picker-loading" class="flex flex-col items-center justify-center py-16 text-gray-400 text-xs gap-2">
+        <span class="material-symbols-outlined text-3xl animate-spin text-emerald-500">progress_activity</span>
+        <span>Mengambil daftar aset media...</span>
+      </div>
+
+      <!-- Empty State -->
+      <div id="media-picker-empty" class="hidden flex flex-col items-center justify-center py-16 text-gray-400 text-xs gap-2">
+        <span class="material-symbols-outlined text-4xl text-gray-300">image_not_supported</span>
+        <span>Tidak ada foto yang cocok atau belum ada foto di album ini.</span>
+      </div>
+
+      <!-- Grid Cards -->
+      <div id="media-picker-grid" class="hidden grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="px-6 py-3.5 bg-white border-t border-gray-100 flex items-center justify-between gap-3">
+      <!-- Selected Item Info -->
+      <div class="flex items-center gap-2.5 min-w-0" id="media-picker-selected-info">
+        <div class="w-10 h-10 rounded-lg bg-gray-100 border border-gray-200 overflow-hidden flex-shrink-0 flex items-center justify-center" id="media-picker-selected-thumb">
+          <span class="material-symbols-outlined text-gray-400 text-sm">photo</span>
+        </div>
+        <div class="min-w-0">
+          <div class="text-xs font-bold text-slate-800 truncate" id="media-picker-selected-title">Belum ada foto yang dipilih</div>
+          <div class="text-[10px] text-gray-400 truncate" id="media-picker-selected-sub">Klik salah satu foto pada galeri di atas</div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <button type="button" onclick="closeMediaPickerModal()" class="px-4 py-2 border border-gray-200 text-gray-600 rounded-xl text-xs font-semibold hover:bg-gray-50 transition cursor-pointer">Batal</button>
+        <button type="button" id="media-picker-confirm-btn" disabled class="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition cursor-pointer border-none disabled:opacity-40 disabled:cursor-not-allowed shadow-sm shadow-emerald-100 flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-sm">check_circle</span>
+          <span>Gunakan Gambar Ini</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  (function() {
+    let currentConfig = null;
+    let cachedAssets = [];
+    let cachedFolders = [];
+    let selectedAsset = null;
+    let isLoaded = false;
+
+    const modal = document.getElementById('media-picker-modal');
+    const content = document.getElementById('media-picker-content');
+    const searchInput = document.getElementById('media-picker-search');
+    const folderSelect = document.getElementById('media-picker-folder-filter');
+    const gridEl = document.getElementById('media-picker-grid');
+    const loadingEl = document.getElementById('media-picker-loading');
+    const emptyEl = document.getElementById('media-picker-empty');
+    const countEl = document.getElementById('media-picker-count');
+    const confirmBtn = document.getElementById('media-picker-confirm-btn');
+    const selectedThumb = document.getElementById('media-picker-selected-thumb');
+    const selectedTitle = document.getElementById('media-picker-selected-title');
+    const selectedSub = document.getElementById('media-picker-selected-sub');
+
+    window.openMediaPickerModal = function(config) {
+      currentConfig = config;
+      selectedAsset = null;
+      updateConfirmUI();
+
+      modal.classList.remove('pointer-events-none', 'opacity-0');
+      content.classList.remove('scale-95');
+      content.classList.add('scale-100');
+      document.body.style.overflow = 'hidden';
+
+      if (!isLoaded) {
+        fetchMediaAssets();
+      } else {
+        renderFilteredGrid();
+      }
+    };
+
+    window.closeMediaPickerModal = function() {
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      content.classList.remove('scale-100');
+      content.classList.add('scale-95');
+      document.body.style.overflow = '';
+    };
+
+    function fetchMediaAssets() {
+      loadingEl.classList.remove('hidden');
+      gridEl.classList.add('hidden');
+      emptyEl.classList.add('hidden');
+
+      fetch("{% url 'media_assets_api' %}")
+        .then(res => res.json())
+        .then(data => {
+          isLoaded = true;
+          cachedAssets = data.assets || [];
+          cachedFolders = data.folders || [];
+
+          // Populate folder dropdown
+          folderSelect.innerHTML = '<option value="">Semua Album / Folder</option>';
+          cachedFolders.forEach(f => {
+            const opt = document.createElement('option');
+            opt.value = f.id;
+            opt.textContent = `${f.name} (${f.tahun || '-'})`;
+            folderSelect.appendChild(opt);
+          });
+
+          renderFilteredGrid();
+        })
+        .catch(err => {
+          console.error('Gagal mengambil asset media:', err);
+          loadingEl.classList.add('hidden');
+          emptyEl.classList.remove('hidden');
+          emptyEl.querySelector('span:last-child').textContent = 'Gagal memuat galeri. Pastikan Anda sudah login admin.';
+        });
+    }
+
+    function renderFilteredGrid() {
+      loadingEl.classList.add('hidden');
+      const q = (searchInput.value || '').toLowerCase().trim();
+      const folderId = folderSelect.value;
+
+      const filtered = cachedAssets.filter(item => {
+        const matchQ = !q || (item.caption && item.caption.toLowerCase().includes(q)) || (item.folder_name && item.folder_name.toLowerCase().includes(q));
+        const matchFolder = !folderId || String(item.folder_id) === String(folderId);
+        return matchQ && matchFolder;
+      });
+
+      countEl.textContent = `${filtered.length} aset foto ditemukan`;
+
+      if (filtered.length === 0) {
+        gridEl.classList.add('hidden');
+        emptyEl.classList.remove('hidden');
+        return;
+      }
+
+      emptyEl.classList.add('hidden');
+      gridEl.classList.remove('hidden');
+      gridEl.innerHTML = '';
+
+      filtered.forEach(item => {
+        const isSelected = selectedAsset && selectedAsset.id === item.id;
+        const card = document.createElement('div');
+        card.className = `group relative rounded-xl overflow-hidden border bg-white p-2 transition cursor-pointer hover:shadow-md ${isSelected ? 'border-emerald-500 ring-2 ring-emerald-500 bg-emerald-50/20' : 'border-gray-200 hover:border-emerald-300'}`;
+        card.innerHTML = `
+          <div class="aspect-[4/3] w-full rounded-lg overflow-hidden bg-slate-100 relative mb-1.5">
+            <img src="${item.url}" alt="${item.caption}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+            <span class="absolute top-1.5 left-1.5 bg-black/70 backdrop-blur-xs text-white text-[9px] font-semibold px-2 py-0.5 rounded-full truncate max-w-[85%]">${item.folder_name}</span>
+            ${isSelected ? '<span class="absolute top-1.5 right-1.5 bg-emerald-500 text-white rounded-full p-0.5 shadow flex items-center justify-center"><span class="material-symbols-outlined text-xs">check</span></span>' : ''}
+          </div>
+          <div class="text-[11px] font-bold text-slate-800 line-clamp-1 leading-tight" title="${item.caption}">${item.caption}</div>
+          <div class="text-[10px] text-gray-400 mt-0.5 flex items-center justify-between">
+            <span>${item.date || ''}</span>
+            <span class="text-emerald-700 font-semibold group-hover:underline">Pilih</span>
+          </div>
+        `;
+
+        card.addEventListener('click', () => {
+          selectedAsset = item;
+          updateConfirmUI();
+          renderFilteredGrid();
+        });
+
+        gridEl.appendChild(card);
+      });
+    }
+
+    function updateConfirmUI() {
+      if (selectedAsset) {
+        confirmBtn.disabled = false;
+        selectedThumb.innerHTML = `<img src="${selectedAsset.url}" class="w-full h-full object-cover rounded-lg">`;
+        selectedTitle.textContent = selectedAsset.caption;
+        selectedSub.textContent = `Album: ${selectedAsset.folder_name}`;
+      } else {
+        confirmBtn.disabled = true;
+        selectedThumb.innerHTML = `<span class="material-symbols-outlined text-gray-400 text-sm">photo</span>`;
+        selectedTitle.textContent = 'Belum ada foto yang dipilih';
+        selectedSub.textContent = 'Klik salah satu foto pada galeri di atas';
+      }
+    }
+
+    searchInput.addEventListener('input', renderFilteredGrid);
+    folderSelect.addEventListener('change', renderFilteredGrid);
+
+    confirmBtn.addEventListener('click', () => {
+      if (!selectedAsset || !currentConfig) return;
+
+      // 1. Update preview image
+      if (currentConfig.previewImgId) {
+        const img = document.getElementById(currentConfig.previewImgId);
+        if (img) img.src = selectedAsset.url;
+      }
+
+      // 2. Unhide preview container
+      if (currentConfig.previewContainerId) {
+        const cont = document.getElementById(currentConfig.previewContainerId);
+        if (cont) cont.classList.remove('hidden');
+      }
+
+      // 3. Set hidden input with asset ID
+      if (currentConfig.hiddenAssetId) {
+        const hidden = document.getElementById(currentConfig.hiddenAssetId);
+        if (hidden) hidden.value = selectedAsset.id;
+      }
+
+      // 4. Update file name label
+      if (currentConfig.fileNameDisplayId) {
+        const nameDisp = document.getElementById(currentConfig.fileNameDisplayId);
+        if (nameDisp) {
+          nameDisp.innerHTML = `<span class="text-emerald-700 font-bold flex items-center justify-center gap-1"><span class="material-symbols-outlined text-xs">check_circle</span> Dipilih dari Asset Media: "${selectedAsset.caption}"</span>`;
+        }
+      }
+
+      // 5. Clear native file input so server knows we are using selected asset
+      if (currentConfig.fileInputId) {
+        const fileIn = document.getElementById(currentConfig.fileInputId);
+        if (fileIn) fileIn.value = '';
+      }
+
+      closeMediaPickerModal();
+    });
+
+  })();
+</script>

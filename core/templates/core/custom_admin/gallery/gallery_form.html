@@ -2,7 +2,7 @@
 
 {% block admin_content %}
 <div class="mb-6 pt-2">
-  <h2 class="text-xl font-bold text-emerald-900">{% if object %}Edit{% else %}Tambah{% endif %} Foto Dokumentasi Galeri</h2>
+  <h2 class="text-xl font-bold text-emerald-900">{% if object %}Edit{% else %}Tambah{% endif %} Foto &amp; Asset Media</h2>
   <p class="text-xs text-gray-500 mt-1">Unggah berkas foto aksi lapangan baru beserta relasi folder dan kategori filternya.</p>
 </div>
 
@@ -32,7 +32,12 @@
         </div>
 
         <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1">Pilih Folder / Album Kegiatan <span class="text-red-500">*</span></label>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-sm font-semibold text-slate-700">Pilih Folder / Album Kegiatan <span class="text-red-500">*</span></label>
+            <button type="button" onclick="openQuickAddFolderModal()" class="text-xs font-bold text-emerald-600 hover:text-emerald-700 hover:underline flex items-center gap-1 cursor-pointer bg-transparent border-none">
+              <span class="material-symbols-outlined text-sm">create_new_folder</span> + Buat Album Baru
+            </button>
+          </div>
           {{ form.folder }}
           <p class="text-[11px] text-gray-400 mt-1">Pilih folder kegiatan penampung foto ini agar dikelompokkan secara rapi di frontend.</p>
         </div>
@@ -169,4 +174,120 @@
     box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1); 
   }
 </style>
+
+  <!-- MODAL QUICK BUAT ALBUM BARU -->
+  <div id="quick-folder-modal" class="fixed inset-0 z-[99999] bg-slate-950/70 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-200">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 scale-95 transition-transform duration-200" id="quick-folder-content">
+      <div class="flex items-center justify-between border-b border-gray-100 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-emerald-600 text-xl">create_new_folder</span>
+          <h3 class="text-base font-bold text-slate-900">Buat Album / Folder Baru</h3>
+        </div>
+        <button type="button" onclick="closeQuickAddFolderModal()" class="text-gray-400 hover:text-gray-600 p-1 rounded-lg cursor-pointer bg-transparent border-none flex items-center justify-center">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <form id="quick-folder-form" class="space-y-4">
+        {% csrf_token %}
+        <input type="hidden" name="is_ajax" value="1">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Nama Album (Bahasa Indonesia) <span class="text-rose-500">*</span></label>
+          <input type="text" id="quick-folder-nama-ind" name="nama_ind" required placeholder="Contoh: Dokumentasi Restorasi Gambut 2026" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 focus:border-emerald-500 focus:outline-none transition">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Album (English / Opsional)</label>
+          <input type="text" name="nama_en" placeholder="Contoh: Peatland Restoration Documentation 2026" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 focus:border-emerald-500 focus:outline-none transition">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Tahun Kegiatan</label>
+          <input type="number" name="tahun" value="{% now 'Y' %}" min="2000" max="2099" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 focus:border-emerald-500 focus:outline-none transition">
+        </div>
+
+        <div id="quick-folder-error" class="hidden text-xs text-rose-600 font-medium"></div>
+
+        <div class="pt-3 border-t border-gray-100 flex gap-2.5 justify-end">
+          <button type="button" onclick="closeQuickAddFolderModal()" class="px-4 py-2 rounded-xl border border-slate-200 text-xs font-bold cursor-pointer text-slate-600 bg-white hover:bg-slate-50 transition">Batal</button>
+          <button type="submit" id="quick-folder-submit-btn" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold cursor-pointer border-none shadow-sm transition flex items-center gap-1.5">
+            <span>Simpan Album</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const quickFolderModal = document.getElementById('quick-folder-modal');
+    const quickFolderContent = document.getElementById('quick-folder-content');
+    const quickFolderForm = document.getElementById('quick-folder-form');
+    const quickFolderError = document.getElementById('quick-folder-error');
+    const quickFolderSubmitBtn = document.getElementById('quick-folder-submit-btn');
+
+    function openQuickAddFolderModal() {
+      if (quickFolderModal) {
+        quickFolderModal.classList.remove('pointer-events-none', 'opacity-0');
+        quickFolderContent.classList.remove('scale-95');
+        quickFolderContent.classList.add('scale-100');
+        document.getElementById('quick-folder-nama-ind').focus();
+      }
+    }
+
+    function closeQuickAddFolderModal() {
+      if (quickFolderModal) {
+        quickFolderModal.classList.add('opacity-0', 'pointer-events-none');
+        quickFolderContent.classList.remove('scale-100');
+        quickFolderContent.classList.add('scale-95');
+      }
+    }
+
+    if (quickFolderForm) {
+      quickFolderForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        quickFolderError.classList.add('hidden');
+        quickFolderSubmitBtn.disabled = true;
+        quickFolderSubmitBtn.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin">progress_activity</span> Menyimpan...';
+
+        const formData = new FormData(this);
+        fetch("{% url 'quick_add_folder' %}", {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        })
+        .then(res => res.json())
+        .then(data => {
+          quickFolderSubmitBtn.disabled = false;
+          quickFolderSubmitBtn.innerHTML = '<span>Simpan Album</span>';
+
+          if (data.success) {
+            // Append and select in id_folder dropdown
+            const folderSelect = document.getElementById('id_folder');
+            if (folderSelect) {
+              const opt = document.createElement('option');
+              opt.value = data.id;
+              opt.textContent = data.name + (data.tahun ? ' (' + data.tahun + ')' : '');
+              opt.selected = true;
+              folderSelect.appendChild(opt);
+            }
+            closeQuickAddFolderModal();
+            quickFolderForm.reset();
+          } else {
+            quickFolderError.textContent = data.message || 'Gagal menyimpan album.';
+            quickFolderError.classList.remove('hidden');
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          quickFolderSubmitBtn.disabled = false;
+          quickFolderSubmitBtn.innerHTML = '<span>Simpan Album</span>';
+          quickFolderError.textContent = 'Terjadi kesalahan koneksi server.';
+          quickFolderError.classList.remove('hidden');
+        });
+      });
+    }
+  </script>
+
 {% endblock %}

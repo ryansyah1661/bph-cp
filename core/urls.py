@@ -93,11 +93,13 @@ urlpatterns = [
     path('be/messages/<int:pk>/delete/', views.contact_delete_view, name='contact_delete'),
     path('be/messages/<int:pk>/read/', views.mark_message_as_read, name='mark_message_as_read'),
 
-    # URL ROUTING CRUD GALERI DOKUMENTASI
+    # URL ROUTING ASSET MEDIA & GALERI DOKUMENTASI
     path('be/gallery/', views.GalleryListView.as_view(), name='gallery_admin_list'),
     path('be/gallery/add/', views.GalleryCreateView.as_view(), name='gallery_admin_create'),
     path('be/gallery/<int:pk>/edit/', views.GalleryUpdateView.as_view(), name='gallery_admin_update'),
     path('be/gallery/<int:pk>/delete/', views.gallery_delete_view, name='gallery_admin_delete'),
+    path('be/api/media-assets/', views.media_assets_api, name='media_assets_api'),
+    path('be/folders/quick-add/', views.quick_add_folder_view, name='quick_add_folder'),
 
     # URL ROUTING CRUD FOLDER GALERI DOKUMENTASI
     path('be/folders/', views.FolderListView.as_view(), name='folder_list'),
