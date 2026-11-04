@@ -6,6 +6,62 @@ from django.dispatch import receiver
 from django.contrib.gis.db import models as gis_models
 from django.utils import timezone
 
+import os
+import io
+import logging
+from PIL import Image
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
+
+logger = logging.getLogger(__name__)
+
+def convert_image_to_webp(image_field, target_folder='articles', quality=85, max_dimension=2400):
+    """
+    Otomatis konversi file gambar ke format WebP berkualitas tinggi & ringan.
+    Menghasilkan file .webp di storage dan mengupdate referensi field.
+    """
+    if not image_field or not image_field.name:
+        return False
+    
+    name = image_field.name
+    ext = os.path.splitext(name)[1].lower()
+    if ext == '.webp':
+        return False
+        
+    try:
+        # Buka stream gambar
+        if hasattr(image_field, 'file') and image_field.file:
+            image_field.file.seek(0)
+            img = Image.open(image_field.file)
+        else:
+            with default_storage.open(name, 'rb') as f:
+                img = Image.open(f)
+                
+        # Pertahankan transparansi bila RGBA/LA atau palet transparan
+        if img.mode in ('RGBA', 'LA') or (img.mode == 'P' and 'transparency' in img.info):
+            pass
+        elif img.mode != 'RGB':
+            img = img.convert('RGB')
+            
+        # Optimasi dimensi untuk web (maksimal 2400px) agar konversi cepat & hemat penyimpanan
+        if max_dimension and (img.width > max_dimension or img.height > max_dimension):
+            img.thumbnail((max_dimension, max_dimension), Image.Resampling.LANCZOS)
+
+        out_io = io.BytesIO()
+        img.save(out_io, format='WEBP', quality=quality, method=4)
+        out_io.seek(0)
+        
+        base_name = os.path.splitext(os.path.basename(name))[0]
+        new_path = f"{target_folder}/{base_name}.webp"
+        
+        # Simpan file webp baru ke storage
+        saved_path = default_storage.save(new_path, ContentFile(out_io.getvalue()))
+        image_field.name = saved_path
+        return True
+    except Exception as e:
+        logger.warning(f"Gagal mengonversi {name} ke WebP: {e}")
+        return False
+
 # === 1. TABEL MASTER KATEGORI ===
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name="Nama Kategori")
@@ -223,10 +279,33 @@ class Story(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.judul)
+        if self.gambar:
+            convert_image_to_webp(self.gambar, target_folder='stories')
         super().save(*args, **kwargs)
 
     def __str__(self):
         return self.judul
+
+    @property
+    def author_profile(self):
+        from django.apps import apps
+        Profile = apps.get_model('core', 'Profile')
+        TeamMember = apps.get_model('core', 'TeamMember')
+        if not self.author:
+            return None
+        author_name = self.author.strip()
+        p = Profile.objects.filter(nama_lengkap__iexact=author_name).first()
+        if not p:
+            p = Profile.objects.filter(user__username__iexact=author_name).first()
+        if p and p.foto_profil:
+            return p
+        tm = TeamMember.objects.filter(nama__icontains=author_name).first()
+        if tm and tm.foto:
+            class TeamShim:
+                foto_profil = tm.foto
+                nama_lengkap = tm.nama
+            return TeamShim()
+        return p
     
 # === 8. TABEL ARTIKEL (Articles) ===
 class Article(models.Model):
@@ -248,6 +327,8 @@ class Article(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.judul)
+        if self.gambar:
+            convert_image_to_webp(self.gambar, target_folder='articles')
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -434,6 +515,8 @@ class Program(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.judul)
+        if self.gambar:
+            convert_image_to_webp(self.gambar, target_folder='programs')
         super().save(*args, **kwargs)
 
     def __str__(self):
