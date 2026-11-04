@@ -205,6 +205,8 @@
 
   function handleImageFile(file) {
     if (file) {
+      const hiddenAsset = document.getElementById('selected-asset-id');
+      if (hiddenAsset) hiddenAsset.value = '';
       fileNameDisplay.textContent = file.name;
       const reader = new FileReader();
       reader.onload = function(e) {

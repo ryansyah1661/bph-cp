@@ -245,22 +245,68 @@
         if (hidden) hidden.value = selectedAsset.id;
       }
 
-      // 4. Update file name label
+      // 4. Update file name label with clear option
       if (currentConfig.fileNameDisplayId) {
         const nameDisp = document.getElementById(currentConfig.fileNameDisplayId);
         if (nameDisp) {
-          nameDisp.innerHTML = `<span class="text-emerald-700 font-bold flex items-center justify-center gap-1"><span class="material-symbols-outlined text-xs">check_circle</span> Dipilih dari Asset Media: "${selectedAsset.caption}"</span>`;
+          nameDisp.innerHTML = `
+            <div class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-lg text-xs font-semibold my-1">
+              <span class="material-symbols-outlined text-sm text-emerald-600">check_circle</span>
+              <span class="truncate max-w-[220px]" title="${selectedAsset.caption}">Asset: "${selectedAsset.caption}"</span>
+              <button type="button" onclick="clearSelectedMediaAsset('${currentConfig.fileInputId}', '${currentConfig.previewImgId}', '${currentConfig.previewContainerId}', '${currentConfig.hiddenAssetId}', '${currentConfig.fileNameDisplayId}')" class="text-rose-500 hover:text-rose-700 ml-1 p-0.5 rounded cursor-pointer bg-transparent border-none flex items-center" title="Batal & Hapus Pilihan Asset">
+                <span class="material-symbols-outlined text-xs">close</span>
+              </button>
+            </div>
+          `;
         }
       }
 
-      // 5. Clear native file input so server knows we are using selected asset
+      // 5. Clear native file input & REMOVE required attribute so browser HTML5 validation passes!
       if (currentConfig.fileInputId) {
         const fileIn = document.getElementById(currentConfig.fileInputId);
-        if (fileIn) fileIn.value = '';
+        if (fileIn) {
+          fileIn.value = '';
+          fileIn.removeAttribute('required');
+          fileIn.required = false;
+        }
       }
 
       closeMediaPickerModal();
     });
+
+    window.clearSelectedMediaAsset = function(fileInputId, previewImgId, previewContainerId, hiddenAssetId, fileNameDisplayId) {
+      const hidden = document.getElementById(hiddenAssetId);
+      if (hidden) hidden.value = '';
+
+      const fileIn = document.getElementById(fileInputId);
+      if (fileIn) {
+        fileIn.value = '';
+        fileIn.setAttribute('required', 'required');
+        fileIn.required = true;
+      }
+
+      const img = document.getElementById(previewImgId);
+      if (img) img.src = '';
+
+      const cont = document.getElementById(previewContainerId);
+      if (cont) cont.classList.add('hidden');
+
+      const nameDisp = document.getElementById(fileNameDisplayId);
+      if (nameDisp) nameDisp.innerHTML = '';
+    };
+
+    // Global capture listener: Before browser checks HTML5 validation on submit,
+    // if an asset is selected, ensure file input required attribute is removed!
+    document.addEventListener('submit', function(e) {
+      const hidden = document.getElementById('selected-asset-id');
+      if (hidden && hidden.value) {
+        const fileInputs = e.target.querySelectorAll('input[type="file"]');
+        fileInputs.forEach(fi => {
+          fi.removeAttribute('required');
+          fi.required = false;
+        });
+      }
+    }, true);
 
   })();
 </script>
