@@ -245,6 +245,39 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def locations_hierarchy(self):
+        """
+        Mengelompokkan kabupaten/kota per provinsi secara hierarkis (Bab Provinsi -> Subbab Kab/Kota).
+        """
+        regencies_by_prov = {}
+        for reg in self.regencies.select_related('provinsi').order_by('nama'):
+            prov_id = reg.provinsi_id
+            if prov_id not in regencies_by_prov:
+                regencies_by_prov[prov_id] = []
+            regencies_by_prov[prov_id].append(reg)
+
+        all_locs = list(self.locations.all().order_by('nama_provinsi'))
+        existing_loc_ids = {loc.id for loc in all_locs}
+
+        for prov_id, regs in regencies_by_prov.items():
+            if prov_id not in existing_loc_ids and regs:
+                all_locs.append(regs[0].provinsi)
+                existing_loc_ids.add(prov_id)
+
+        all_locs.sort(key=lambda x: x.nama_provinsi)
+
+        hierarchy = []
+        for loc in all_locs:
+            regs = regencies_by_prov.get(loc.id, [])
+            hierarchy.append({
+                'provinsi': loc,
+                'regencies': regs,
+                'regencies_count': len(regs)
+            })
+        return hierarchy
+
+
 # === 6b. TABEL MATRIKS CAPAIAN KINERJA PROYEK ===
 class ProjectMetric(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='metrics', verbose_name="Untuk Proyek")
