@@ -680,22 +680,16 @@
             document.body.style.overflow = '';
           }, 250);
         };
+
+        // Tutup modal saat klik area gelap (backdrop)
+        if (modal) {
+          modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+              closePdfModal();
+            }
+          });
+        }
       })();
-    </script>
-
-      // Tutup modal saat klik area gelap (backdrop)
-      pdfModal.addEventListener('click', function(e) {
-        if (e.target === pdfModal) {
-          closePdfModal();
-        }
-      });
-
-      // Tutup modal saat tekan Escape
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && !pdfModal.classList.contains('pointer-events-none')) {
-          closePdfModal();
-        }
-      });
 
       // ========================================================
       // TOAST NOTIFIKASI ELEGAN (MENGGANTIKAN ALERT BAWAAN BROWSER)
