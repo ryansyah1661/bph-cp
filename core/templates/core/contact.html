@@ -127,11 +127,43 @@
             </div>
 
             <div class="space-y-2">
-              <label for="subject" class="font-label-caps text-xs tracking-wide text-on-surface font-bold uppercase">
-                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Subject / Institution Name{% else %}Subjek / Nama Instansi{% endif %}
+              <label for="subject" class="font-label-caps text-xs tracking-wide text-on-surface font-bold uppercase flex items-center justify-between">
+                <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Service You Wish to Inquire{% else %}Layanan yang Ingin Ditanyakan{% endif %}</span>
+                <span class="text-[11px] text-emerald-700 font-semibold normal-case flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs">arrow_drop_down_circle</span>
+                  {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Choose from list{% else %}Pilih salah satu{% endif %}
+                </span>
               </label>
-              <input type="text" id="subject" name="subjek" required placeholder="{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Example: NRM Audit Consultation - PT Sukses Bersama{% else %}Contoh: Konsultasi Audit NRM - PT Sukses Bersama{% endif %}"
-                    class="w-full bg-surface border border-border-subtle rounded-lg px-4 py-3 font-body-sm text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all">
+              
+              <div class="relative">
+                <select id="subject" name="subjek" required
+                        class="w-full bg-surface border border-border-subtle rounded-lg px-4 py-3 font-body-sm text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-on-surface appearance-none cursor-pointer pr-10">
+                  <option value="" disabled {% if not selected_service %}selected{% endif %}>
+                    {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}-- Select Service You Wish to Inquire --{% else %}-- Pilih Layanan yang Ingin Ditanyakan --{% endif %}
+                  </option>
+                  {% for svc in services %}
+                    {% with svc_title=svc.title_ind|default:svc.title %}
+                      {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+                        {% with svc_title_en=svc.title_en|default:svc.title %}
+                          <option value="{{ svc_title_en }}" {% if selected_service == svc_title_en or selected_service == svc_title or selected_service == svc.slug %}selected{% endif %}>
+                            {{ svc_title_en }}
+                          </option>
+                        {% endwith %}
+                      {% else %}
+                        <option value="{{ svc_title }}" {% if selected_service == svc_title or selected_service == svc.slug %}selected{% endif %}>
+                          {{ svc_title }}
+                        </option>
+                      {% endif %}
+                    {% endwith %}
+                  {% endfor %}
+                  <option value="{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}General Inquiry / Other Topics{% else %}Pertanyaan Umum / Topik Lainnya{% endif %}" {% if selected_service == 'lainnya' %}selected{% endif %}>
+                    {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}General Inquiry / Other Topics{% else %}Pertanyaan Umum / Topik Lainnya{% endif %}
+                  </option>
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center px-3.5 pointer-events-none text-slate-400">
+                  <span class="material-symbols-outlined text-base">expand_more</span>
+                </div>
+              </div>
             </div>
 
             <div class="space-y-2">

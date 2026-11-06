@@ -135,6 +135,9 @@ def gallery_view(request):
     })
 
 def contact_view(request):
+    services = Service.objects.all().order_by('id')
+    selected_service = request.GET.get('service', '').strip()
+
     if request.method == 'POST':
         nama = request.POST.get('nama_lengkap')
         email = request.POST.get('email')
@@ -162,7 +165,7 @@ Ada pesan baru masuk melalui Kontak Website:
 --------------------------------------------------
 Nama Pengirim : {nama}
 Email Pengirim: {email}
-Subjek/Topik  : {subjek}
+Layanan/Topik : {subjek}
 
 Isi Pesan:
 {pesan}
@@ -186,7 +189,10 @@ Pesan ini telah tersimpan di Dashboard Admin Bhumi Pasa Hijau.
         else:
             messages.error(request, 'Gagal mengirim pesan. Harap isi semua kolom formulir dengan benar.')
 
-    return render(request, 'core/contact.html')
+    return render(request, 'core/contact.html', {
+        'services': services,
+        'selected_service': selected_service,
+    })
 
 def story_view(request):
     stories_data = Story.objects.select_related('lokasi', 'project').order_by('-tanggal')
