@@ -16,7 +16,9 @@
     </div>
     <div class="relative z-20 w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-surface-white">
       <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg max-w-5xl mb-stack-lg leading-tight">
-        Sustainable decisions begin with <span class="text-tertiary">science and site conditions.</span>
+        Sustainable decisions begin with
+        <br />
+        <span class="text-tertiary typewriter-cursor pr-1" id="typewriter">science and site conditions.</span>
       </h1>
       <p class="font-body-lg text-body-lg max-w-2xl mb-stack-lg text-surface-white">
         {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
@@ -244,4 +246,53 @@
       </div>
     </div>
   </section>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+  const words = ["science and site conditions."];
+  let i = 0;
+  let timer;
+  const target = document.getElementById("typewriter");
+
+  function typingEffect() {
+    let word = words[i].split("");
+    var loopTyping = function () {
+      if (word.length > 0) {
+        target.innerHTML += word.shift();
+      } else {
+        setTimeout(deletingEffect, 3000);
+        return false;
+      }
+      timer = setTimeout(loopTyping, 80);
+    };
+    loopTyping();
+  }
+
+  function deletingEffect() {
+    let word = words[i].split("");
+    var loopDeleting = function () {
+      if (word.length > 0) {
+        word.pop();
+        target.innerHTML = word.join("");
+      } else {
+        if (words.length > i + 1) {
+          i++;
+        } else {
+          i = 0;
+        }
+        setTimeout(typingEffect, 400);
+        return false;
+      }
+      timer = setTimeout(loopDeleting, 40);
+    };
+    loopDeleting();
+  }
+
+  if (target) {
+    setTimeout(() => {
+      deletingEffect();
+    }, 2500);
+  }
+  </script>
 {% endblock %}
