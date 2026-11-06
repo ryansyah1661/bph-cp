@@ -161,6 +161,23 @@
       .no-scrollbar::-webkit-scrollbar { display: none; }
       .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+      /* Sleek dark scrollbar for PDF Viewer */
+      #pdf-viewer-scroll-container::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      #pdf-viewer-scroll-container::-webkit-scrollbar-track {
+        background: #0a0e17;
+      }
+      #pdf-viewer-scroll-container::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 9999px;
+      }
+      #pdf-viewer-scroll-container::-webkit-scrollbar-thumb:hover {
+        background: #475569;
+      }
+
+
       /* ================================================= */
       /* EFEK TRANSISI HALAMAN / PAGE TRANSITION           */
       /* ================================================= */
@@ -400,59 +417,75 @@
     </script>
 
     <!-- MODAL PDF PREVIEW (PROTECTED CANVAS VIEWER - ANTI DOWNLOAD & ANTI RIGHT-CLICK) -->
-    <div id="pdf-preview-modal" class="fixed inset-0 z-[99999] bg-black/85 backdrop-blur-md flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 select-none" oncontextmenu="return false;">
-      <div class="bg-slate-900 w-11/12 h-[92vh] md:w-5/6 md:h-[92vh] rounded-2xl overflow-hidden flex flex-col shadow-2xl transform scale-95 transition-transform duration-300 border border-slate-700/60" id="pdf-modal-content">
+    <div id="pdf-preview-modal" class="fixed inset-0 z-[99999] bg-black/90 backdrop-blur-md flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 select-none p-2 sm:p-4" oncontextmenu="return false;">
+      <div class="bg-slate-900 w-full max-w-7xl h-[94vh] rounded-2xl overflow-hidden flex flex-col shadow-[0_25px_70px_rgba(0,0,0,0.85)] transform scale-95 transition-all duration-300 border border-slate-700/70" id="pdf-modal-content">
         
         <!-- Header & Toolbar -->
-        <div class="flex flex-wrap justify-between items-center px-4 py-2.5 bg-slate-800/95 border-b border-slate-700/80 text-white z-20 gap-2">
-          <div class="flex items-center gap-2 min-w-0">
-            <span class="material-symbols-outlined text-emerald-400 text-xl">menu_book</span>
-            <h3 class="font-bold text-slate-100 text-sm truncate" id="pdf-modal-title">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Document Reader{% else %}Pratinjau Dokumen{% endif %}
-            </h3>
-            <span class="text-[10px] font-semibold text-slate-400 bg-slate-700/70 border border-slate-600 px-2 py-0.5 rounded-full hidden sm:inline-block">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Protected Read-Only{% else %}Mode Baca Terproteksi{% endif %}
-            </span>
+        <div class="flex flex-wrap justify-between items-center px-4 py-2.5 bg-slate-900/95 border-b border-slate-700/80 text-white z-20 gap-2 shrink-0">
+          <!-- Document Title & Badge -->
+          <div class="flex items-center gap-2.5 min-w-0 max-w-[45%] sm:max-w-md">
+            <span class="material-symbols-outlined text-emerald-400 text-xl shrink-0">menu_book</span>
+            <div class="min-w-0">
+              <h3 class="font-bold text-slate-100 text-sm truncate leading-tight" id="pdf-modal-title">
+                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Document Reader{% else %}Pratinjau Dokumen{% endif %}
+              </h3>
+              <p class="text-[10px] text-slate-400 hidden sm:block truncate">PT Bhumi Pasa Hijau &bull; Mode Terproteksi</p>
+            </div>
           </div>
 
           <!-- Reader Controls -->
-          <div class="flex items-center gap-1.5 sm:gap-2">
+          <div class="flex items-center gap-1 sm:gap-2">
             <!-- Page Nav -->
-            <div class="flex items-center bg-slate-900/80 rounded-lg p-0.5 border border-slate-700 text-xs">
-              <button type="button" id="pdf-prev-btn" class="p-1 text-slate-300 hover:text-white hover:bg-slate-700/60 rounded cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition" title="Halaman Sebelumnya">
+            <div class="flex items-center bg-slate-800/90 rounded-lg p-0.5 border border-slate-700/70 text-xs shadow-inner">
+              <button type="button" id="pdf-prev-btn" class="p-1.5 text-slate-300 hover:text-white hover:bg-slate-700/70 rounded cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed transition" title="Halaman Sebelumnya (Panah Kiri)">
                 <span class="material-symbols-outlined text-sm">chevron_left</span>
               </button>
-              <span class="px-2 font-mono font-medium text-slate-200">
+              <span class="px-2 font-mono font-medium text-slate-200 text-xs">
                 <span id="pdf-current-page">1</span> / <span id="pdf-total-pages">-</span>
               </span>
-              <button type="button" id="pdf-next-btn" class="p-1 text-slate-300 hover:text-white hover:bg-slate-700/60 rounded cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition" title="Halaman Selanjutnya">
+              <button type="button" id="pdf-next-btn" class="p-1.5 text-slate-300 hover:text-white hover:bg-slate-700/70 rounded cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed transition" title="Halaman Selanjutnya (Panah Kanan)">
                 <span class="material-symbols-outlined text-sm">chevron_right</span>
               </button>
             </div>
 
-            <!-- Zoom Controls -->
-            <div class="hidden sm:flex items-center bg-slate-900/80 rounded-lg p-0.5 border border-slate-700 text-xs">
-              <button type="button" id="pdf-zoom-out-btn" class="p-1 text-slate-300 hover:text-white hover:bg-slate-700/60 rounded cursor-pointer transition" title="Perkecil">
+            <!-- Zoom & Fit Controls -->
+            <div class="hidden sm:flex items-center bg-slate-800/90 rounded-lg p-0.5 border border-slate-700/70 text-xs shadow-inner">
+              <button type="button" id="pdf-zoom-out-btn" class="p-1.5 text-slate-300 hover:text-white hover:bg-slate-700/70 rounded cursor-pointer transition" title="Perkecil (-)">
                 <span class="material-symbols-outlined text-sm">remove</span>
               </button>
-              <span id="pdf-zoom-percent" class="px-1.5 font-mono text-[11px] text-slate-300 min-w-[42px] text-center">100%</span>
-              <button type="button" id="pdf-zoom-in-btn" class="p-1 text-slate-300 hover:text-white hover:bg-slate-700/60 rounded cursor-pointer transition" title="Perbesar">
+              <button type="button" id="pdf-zoom-fit-page-btn" class="px-2 font-mono text-[11px] text-slate-200 hover:text-emerald-400 min-w-[50px] text-center transition cursor-pointer" title="Klik untuk Toggle Pas Layar / Pas Lebar">
+                <span id="pdf-zoom-percent">Fit</span>
+              </button>
+              <button type="button" id="pdf-zoom-in-btn" class="p-1.5 text-slate-300 hover:text-white hover:bg-slate-700/70 rounded cursor-pointer transition" title="Perbesar (+)">
                 <span class="material-symbols-outlined text-sm">add</span>
               </button>
-              <button type="button" id="pdf-zoom-fit-btn" class="p-1 text-slate-300 hover:text-white hover:bg-slate-700/60 rounded cursor-pointer transition ml-0.5 border-l border-slate-700 pl-1" title="Sesuaikan Lebar">
+
+              <div class="h-3 w-[1px] bg-slate-700 mx-0.5"></div>
+
+              <!-- Fit Page Button -->
+              <button type="button" id="pdf-fit-page-btn" class="p-1.5 text-slate-300 hover:text-emerald-400 hover:bg-slate-700/70 rounded cursor-pointer transition" title="Sesuaikan Halaman Penuh (Pas Layar)">
                 <span class="material-symbols-outlined text-sm">fit_screen</span>
+              </button>
+              <!-- Fit Width Button -->
+              <button type="button" id="pdf-fit-width-btn" class="p-1.5 text-slate-300 hover:text-emerald-400 hover:bg-slate-700/70 rounded cursor-pointer transition" title="Sesuaikan Lebar Layar">
+                <span class="material-symbols-outlined text-sm">width_full</span>
               </button>
             </div>
 
+            <!-- Fullscreen Toggle -->
+            <button type="button" id="pdf-fullscreen-btn" class="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-700/70 rounded-lg cursor-pointer transition" title="Layar Penuh (F11)">
+              <span class="material-symbols-outlined text-lg" id="pdf-fullscreen-icon">fullscreen</span>
+            </button>
+
             <!-- Close Button -->
-            <button type="button" onclick="closePdfModal()" class="text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors p-1.5 rounded-lg cursor-pointer ml-1" aria-label="Tutup Pratinjau" title="Tutup (Esc)">
+            <button type="button" onclick="closePdfModal()" class="text-slate-400 hover:text-white hover:bg-rose-500/80 transition-all p-1.5 rounded-lg cursor-pointer ml-1" aria-label="Tutup Pratinjau" title="Tutup (Esc)">
               <span class="material-symbols-outlined text-xl">close</span>
             </button>
           </div>
         </div>
 
         <!-- Canvas Viewer Area -->
-        <div id="pdf-viewer-scroll-container" class="flex-grow w-full h-full bg-slate-950/95 relative overflow-y-auto overflow-x-auto flex flex-col items-center p-4 sm:p-6" oncontextmenu="return false;" style="-webkit-user-select:none; user-select:none;">
+        <div id="pdf-viewer-scroll-container" class="group flex-grow w-full h-full bg-[#0a0e17] relative overflow-auto flex flex-col items-center justify-start p-3 sm:p-6" oncontextmenu="return false;" style="-webkit-user-select:none; user-select:none;">
           <!-- Loading Spinner -->
           <div id="pdf-loading-indicator" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 text-xs gap-3 z-30 bg-slate-950/80 backdrop-blur-xs">
             <span class="material-symbols-outlined text-3xl animate-spin text-emerald-500">progress_activity</span>
@@ -465,9 +498,17 @@
             <span class="font-semibold text-rose-300">{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Failed to render document preview.{% else %}Gagal memuat pratinjau dokumen.{% endif %}</span>
           </div>
 
-          <!-- Rendered Canvas Wrapper -->
-          <div id="pdf-pages-wrapper" class="flex flex-col items-center gap-6 shadow-2xl relative">
-            <canvas id="pdf-single-canvas" class="rounded-lg shadow-2xl bg-white max-w-full block"></canvas>
+          <!-- Floating Prev/Next Controls (Hover on Viewer) -->
+          <button type="button" id="pdf-float-prev-btn" class="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-slate-800/85 hover:bg-emerald-600 text-white backdrop-blur flex-col items-center justify-center shadow-xl transition-all duration-200 opacity-0 group-hover:opacity-75 hover:!opacity-100 disabled:opacity-0 disabled:pointer-events-none z-20 cursor-pointer border border-white/10" title="Halaman Sebelumnya">
+            <span class="material-symbols-outlined text-xl">chevron_left</span>
+          </button>
+          <button type="button" id="pdf-float-next-btn" class="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-slate-800/85 hover:bg-emerald-600 text-white backdrop-blur flex-col items-center justify-center shadow-xl transition-all duration-200 opacity-0 group-hover:opacity-75 hover:!opacity-100 disabled:opacity-0 disabled:pointer-events-none z-20 cursor-pointer border border-white/10" title="Halaman Selanjutnya">
+            <span class="material-symbols-outlined text-xl">chevron_right</span>
+          </button>
+
+          <!-- Rendered Canvas Wrapper with realistic book/slide shadow and centered with m-auto -->
+          <div id="pdf-pages-wrapper" class="m-auto flex flex-col items-center justify-center transition-all duration-200 relative">
+            <canvas id="pdf-single-canvas" class="rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.7),0_0_0_1px_rgba(255,255,255,0.12)] bg-white block"></canvas>
           </div>
         </div>
       </div>
@@ -493,14 +534,21 @@
         const zoomSpan = document.getElementById('pdf-zoom-percent');
         const prevBtn = document.getElementById('pdf-prev-btn');
         const nextBtn = document.getElementById('pdf-next-btn');
+        const floatPrevBtn = document.getElementById('pdf-float-prev-btn');
+        const floatNextBtn = document.getElementById('pdf-float-next-btn');
         const zoomInBtn = document.getElementById('pdf-zoom-in-btn');
         const zoomOutBtn = document.getElementById('pdf-zoom-out-btn');
-        const zoomFitBtn = document.getElementById('pdf-zoom-fit-btn');
+        const zoomFitPageBtn = document.getElementById('pdf-zoom-fit-page-btn');
+        const fitPageBtn = document.getElementById('pdf-fit-page-btn');
+        const fitWidthBtn = document.getElementById('pdf-fit-width-btn');
+        const fullscreenBtn = document.getElementById('pdf-fullscreen-btn');
+        const fullscreenIcon = document.getElementById('pdf-fullscreen-icon');
 
         let currentPdfDoc = null;
         let currentPageNum = 1;
         let totalPages = 0;
-        let currentScale = 1.35;
+        let currentScale = 1.0;
+        let fitMode = 'page'; // 'page' | 'width' | 'custom'
         let isRendering = false;
         let pendingPageNum = null;
         let isModalOpen = false;
@@ -515,19 +563,34 @@
         window.addEventListener('keydown', function(e) {
           if (!isModalOpen) return;
 
-          // Tutup modal dengan tombol Escape
           if (e.key === 'Escape') {
             closePdfModal();
             return;
           }
 
-          // Navigasi panah kiri/kanan
-          if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+          if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
             if (currentPageNum < totalPages) queueRenderPage(currentPageNum + 1);
             return;
           }
           if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
             if (currentPageNum > 1) queueRenderPage(currentPageNum - 1);
+            return;
+          }
+
+          // Zoom shortcuts (+, -, 0)
+          if ((e.ctrlKey || e.metaKey) && (e.key === '=' || e.key === '+')) {
+            e.preventDefault();
+            zoomIn();
+            return;
+          }
+          if ((e.ctrlKey || e.metaKey) && e.key === '-') {
+            e.preventDefault();
+            zoomOut();
+            return;
+          }
+          if ((e.ctrlKey || e.metaKey) && e.key === '0') {
+            e.preventDefault();
+            setFitPage();
             return;
           }
 
@@ -539,30 +602,48 @@
           }
         });
 
+        function calculateScale(page) {
+          const unscaled = page.getViewport({ scale: 1.0 });
+          const paddingX = window.innerWidth < 640 ? 20 : 48;
+          const paddingY = window.innerWidth < 640 ? 20 : 48;
+          const availW = Math.max(scrollContainer.clientWidth - paddingX, 260);
+          const availH = Math.max(scrollContainer.clientHeight - paddingY, 260);
+
+          if (fitMode === 'width') {
+            return availW / unscaled.width;
+          }
+          if (fitMode === 'page') {
+            const scaleW = availW / unscaled.width;
+            const scaleH = availH / unscaled.height;
+            return Math.min(scaleW, scaleH);
+          }
+          return currentScale;
+        }
+
         function renderPage(num) {
           if (!currentPdfDoc || !ctx) return;
           isRendering = true;
           if (loader) loader.classList.remove('hidden');
 
           currentPdfDoc.getPage(num).then(function(page) {
-            // Hitung skala tampilan
-            let viewport = page.getViewport({ scale: currentScale });
+            const finalScale = calculateScale(page);
+            currentScale = finalScale;
 
-            // Responsif di layar HP: jika viewport lebih lebar dari container, sesuaikan skala
-            const containerWidth = scrollContainer.clientWidth - 48;
-            if (containerWidth > 0 && viewport.width > containerWidth) {
-              const responsiveScale = (containerWidth / page.getViewport({ scale: 1.0 }).width);
-              viewport = page.getViewport({ scale: responsiveScale });
-              if (zoomSpan) zoomSpan.textContent = Math.round(responsiveScale * 100) + '%';
-            } else {
-              if (zoomSpan) zoomSpan.textContent = Math.round(currentScale * 100) + '%';
+            const viewport = page.getViewport({ scale: finalScale });
+            const dpr = window.devicePixelRatio || 1;
+
+            canvas.width = Math.floor(viewport.width * dpr);
+            canvas.height = Math.floor(viewport.height * dpr);
+            canvas.style.width = Math.floor(viewport.width) + 'px';
+            canvas.style.height = Math.floor(viewport.height) + 'px';
+
+            if (zoomSpan) {
+              zoomSpan.textContent = Math.round(finalScale * 100) + '%';
             }
-
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
 
             const renderContext = {
               canvasContext: ctx,
+              transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : null,
               viewport: viewport
             };
 
@@ -572,8 +653,13 @@
               if (loader) loader.classList.add('hidden');
               if (curPageSpan) curPageSpan.textContent = num;
 
-              if (prevBtn) prevBtn.disabled = (num <= 1);
-              if (nextBtn) nextBtn.disabled = (num >= totalPages);
+              const disablePrev = (num <= 1);
+              const disableNext = (num >= totalPages);
+
+              if (prevBtn) prevBtn.disabled = disablePrev;
+              if (nextBtn) nextBtn.disabled = disableNext;
+              if (floatPrevBtn) floatPrevBtn.disabled = disablePrev;
+              if (floatNextBtn) floatNextBtn.disabled = disableNext;
 
               if (pendingPageNum !== null) {
                 renderPage(pendingPageNum);
@@ -601,27 +687,83 @@
           }
         }
 
-        if (prevBtn) prevBtn.addEventListener('click', () => {
-          if (currentPageNum > 1) queueRenderPage(currentPageNum - 1);
-        });
-
-        if (nextBtn) nextBtn.addEventListener('click', () => {
-          if (currentPageNum < totalPages) queueRenderPage(currentPageNum + 1);
-        });
-
-        if (zoomInBtn) zoomInBtn.addEventListener('click', () => {
-          currentScale = Math.min(currentScale + 0.25, 3.0);
+        function zoomIn() {
+          fitMode = 'custom';
+          currentScale = Math.min(currentScale + 0.15, 3.0);
           queueRenderPage(currentPageNum);
+        }
+
+        function zoomOut() {
+          fitMode = 'custom';
+          currentScale = Math.max(currentScale - 0.15, 0.4);
+          queueRenderPage(currentPageNum);
+        }
+
+        function setFitPage() {
+          fitMode = 'page';
+          queueRenderPage(currentPageNum);
+        }
+
+        function setFitWidth() {
+          fitMode = 'width';
+          queueRenderPage(currentPageNum);
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', () => queueRenderPage(currentPageNum - 1));
+        if (nextBtn) nextBtn.addEventListener('click', () => queueRenderPage(currentPageNum + 1));
+        if (floatPrevBtn) floatPrevBtn.addEventListener('click', () => queueRenderPage(currentPageNum - 1));
+        if (floatNextBtn) floatNextBtn.addEventListener('click', () => queueRenderPage(currentPageNum + 1));
+
+        if (zoomInBtn) zoomInBtn.addEventListener('click', zoomIn);
+        if (zoomOutBtn) zoomOutBtn.addEventListener('click', zoomOut);
+        if (fitPageBtn) fitPageBtn.addEventListener('click', setFitPage);
+        if (fitWidthBtn) fitWidthBtn.addEventListener('click', setFitWidth);
+        if (zoomFitPageBtn) zoomFitPageBtn.addEventListener('click', () => {
+          if (fitMode === 'page') {
+            setFitWidth();
+          } else {
+            setFitPage();
+          }
         });
 
-        if (zoomOutBtn) zoomOutBtn.addEventListener('click', () => {
-          currentScale = Math.max(currentScale - 0.25, 0.75);
-          queueRenderPage(currentPageNum);
+        // Fullscreen Toggle
+        function toggleFullscreen() {
+          if (!document.fullscreenElement) {
+            if (modalContent.requestFullscreen) {
+              modalContent.requestFullscreen();
+            } else if (modalContent.webkitRequestFullscreen) {
+              modalContent.webkitRequestFullscreen();
+            }
+          } else {
+            if (document.exitFullscreen) {
+              document.exitFullscreen();
+            }
+          }
+        }
+        if (fullscreenBtn) fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+        document.addEventListener('fullscreenchange', () => {
+          const isFs = !!document.fullscreenElement;
+          if (fullscreenIcon) {
+            fullscreenIcon.textContent = isFs ? 'fullscreen_exit' : 'fullscreen';
+          }
+          if (isFs) {
+            modalContent.classList.remove('w-full', 'max-w-7xl', 'h-[94vh]', 'rounded-2xl', 'border');
+            modalContent.classList.add('w-full', 'h-full', 'rounded-none', 'border-0');
+          } else {
+            modalContent.classList.add('w-full', 'max-w-7xl', 'h-[94vh]', 'rounded-2xl', 'border');
+            modalContent.classList.remove('w-full', 'h-full', 'rounded-none', 'border-0');
+          }
+          setTimeout(() => {
+            if (currentPdfDoc) renderPage(currentPageNum);
+          }, 150);
         });
 
-        if (zoomFitBtn) zoomFitBtn.addEventListener('click', () => {
-          currentScale = 1.35;
-          queueRenderPage(currentPageNum);
+        // Responsif saat resize browser
+        window.addEventListener('resize', () => {
+          if (isModalOpen && currentPdfDoc && fitMode !== 'custom') {
+            renderPage(currentPageNum);
+          }
         });
 
         window.openPdfModal = function(e, url, title) {
@@ -630,7 +772,7 @@
 
           isModalOpen = true;
           currentPageNum = 1;
-          currentScale = 1.35;
+          fitMode = 'page';
           pendingPageNum = null;
 
           if (loader) loader.classList.remove('hidden');
@@ -639,8 +781,12 @@
           if (totalPageSpan) totalPageSpan.textContent = '-';
 
           const titleEl = document.getElementById('pdf-modal-title');
-          if (titleEl && title) {
-            titleEl.textContent = title;
+          if (titleEl) {
+            if (typeof title === 'string' && title.trim()) {
+              titleEl.textContent = title;
+            } else {
+              titleEl.textContent = 'Company Profile - PT Bhumi Pasa Hijau';
+            }
           }
 
           modal.classList.remove('pointer-events-none', 'opacity-0');
@@ -648,7 +794,6 @@
           modalContent.classList.add('scale-100');
           document.body.style.overflow = 'hidden';
 
-          // Muat dokumen PDF via PDF.js ke canvas
           if (window.pdfjsLib) {
             pdfjsLib.getDocument(url).promise.then(function(pdfDoc) {
               currentPdfDoc = pdfDoc;
@@ -666,6 +811,9 @@
         };
 
         window.closePdfModal = function() {
+          if (document.fullscreenElement) {
+            document.exitFullscreen().catch(() => {});
+          }
           isModalOpen = false;
           modal.classList.add('opacity-0');
           modalContent.classList.remove('scale-100');
@@ -681,7 +829,6 @@
           }, 250);
         };
 
-        // Tutup modal saat klik area gelap (backdrop)
         if (modal) {
           modal.addEventListener('click', function(e) {
             if (e.target === modal) {
@@ -690,8 +837,8 @@
           });
         }
       })();
-
-      // ========================================================
+    </script>
+// ========================================================
       // TOAST NOTIFIKASI ELEGAN (MENGGANTIKAN ALERT BAWAAN BROWSER)
       // ========================================================
       window.showBphToast = function(message, type) {
