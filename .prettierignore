@@ -1,0 +1,3 @@
+# Jangan format file template Django agar tag template tidak terpotong baris
+**/templates/**
+*.html
