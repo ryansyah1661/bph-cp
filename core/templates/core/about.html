@@ -49,55 +49,68 @@
     </div>
   </section>
 
-  <!-- SEKSI VISI & MISI -->
+  <!-- SEKSI VISI, MISI & STRATEGIC PARTNER -->
   <section class="bg-surface-container-lowest border-y border-border-subtle py-section-gap">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
         
-        <div class="bg-surface-white border border-border-subtle rounded-xl p-8 md:p-12 hover:shadow-[0_20px_40px_rgba(0,0,0,0.04)] transition-shadow duration-500 flex flex-col h-full">
-          <div class="mb-stack-md text-primary">
-            <span class="material-symbols-outlined text-[48px]" style="font-variation-settings: 'FILL' 1;">visibility</span>
+        <!-- KOLOM KIRI: JUDUL & DESKRIPSI -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 text-primary font-semibold text-xs md:text-sm uppercase tracking-wider">
+            <span class="material-symbols-outlined text-lg fill">eco</span>
+            <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Our Commitment{% else %}{% trans "Komitmen Kami" %}{% endif %}</span>
           </div>
-          <h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">
-            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Our Vision{% else %}Visi Kami{% endif %}
-          </h3>
-          <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed flex-grow">
-            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-              To be a trusted strategic partner in delivering sustainability solutions based on knowledge, environment, social, and governance that have a real impact.
-            {% else %}
-              Menjadi mitra strategis terpercaya dalam menghadirkan solusi keberlanjutan berbasis pengetahuan, lingkungan, sosial dan tata kelola yang berdampak nyata.
-            {% endif %}
-          </p>
+          <h2 class="text-3xl sm:text-4xl lg:text-[44px] font-bold text-on-surface tracking-tight leading-[1.15]">
+            A strategic partner for sustainable business
+          </h2>
+          <div class="space-y-4 text-on-surface-variant text-base md:text-lg leading-relaxed pt-1">
+            <p>
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+                Bhumi Pasa Hijau is a consultancy with experience in natural resources, environmental, and social management. We respond to regulatory demands and site conditions that differ at every location, so clients can operate responsibly and for the long term.
+              {% else %}
+                {% trans "Bhumi Pasa Hijau adalah konsultan berpengalaman dalam pengelolaan sumber daya alam, lingkungan, dan sosial. Kami menjawab tuntutan regulasi dan kondisi tapak yang berbeda di setiap lokasi, agar klien dapat beroperasi secara bertanggung jawab dan berkelanjutan untuk jangka panjang." %}
+              {% endif %}
+            </p>
+            <p>
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+                Every recommendation is built on data, scientific methods, and current policy developments.
+              {% else %}
+                {% trans "Setiap rekomendasi kami dibangun berlandaskan pada data, metode ilmiah, serta kepatuhan terhadap perkembangan kebijakan dan regulasi nasional maupun internasional." %}
+              {% endif %}
+            </p>
+          </div>
         </div>
-        
-        <!-- <div class="bg-surface-white border border-border-subtle rounded-xl p-8 md:p-12 hover:shadow-[0_20px_40px_rgba(0,0,0,0.04)] transition-shadow duration-500 flex flex-col h-full">
-          <div class="mb-stack-md text-primary">
-            <span class="material-symbols-outlined text-[48px]" style="font-variation-settings: 'FILL' 1;">track_changes</span>
+
+        <!-- KOLOM KANAN: VISI & MISI DENGAN GARIS EMAS/KUNING -->
+        <div class="lg:col-span-5 border-l-2 border-tertiary pl-6 md:pl-8 space-y-6 lg:mt-6">
+          <!-- Visi -->
+          <div class="space-y-2">
+            <h3 class="text-lg md:text-xl font-bold text-on-surface tracking-tight">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Vision{% else %}{% trans "Visi" %}{% endif %}
+            </h3>
+            <p class="text-sm md:text-base text-on-surface-variant leading-relaxed">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+                To be a trusted strategic partner in delivering sustainability solutions based on knowledge, environment, social, and governance that have a real impact.
+              {% else %}
+                {% trans "Menjadi mitra strategis terpercaya dalam menghadirkan solusi keberlanjutan berbasis pengetahuan, lingkungan, sosial dan tata kelola yang berdampak nyata." %}
+              {% endif %}
+            </p>
           </div>
-          <h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">
-            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Our Mission{% else %}Misi Kami{% endif %}
-          </h3>
-          <ul class="font-body-md text-body-md text-on-surface-variant space-y-stack-sm flex-grow">
-            <li class="flex items-start">
-              <span class="material-symbols-outlined text-primary mr-3 mt-1 text-[20px]">check_circle</span>
-              <span>
-                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Reducing industrial environmental impacts through precise audits and mitigation strategies.{% else %}Mengurangi dampak lingkungan industri melalui audit dan strategi mitigasi yang presisi.{% endif %}
-              </span>
-            </li>
-            <li class="flex items-start">
-              <span class="material-symbols-outlined text-primary mr-3 mt-1 text-[20px]">check_circle</span>
-              <span>
-                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Providing knowledge-based solutions and empirical data for decision-making.{% else %}Menyediakan solusi berbasis pengetahuan and data empiris untuk pengambilan keputusan.{% endif %}
-              </span>
-            </li>
-            <li class="flex items-start">
-              <span class="material-symbols-outlined text-primary mr-3 mt-1 text-[20px]">check_circle</span>
-              <span>
-                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Promoting environmentally-conscious Good Corporate Governance.{% else %}Mendorong tata kelola perusahaan yang baik (Good Corporate Governance) berwawasan lingkungan.{% endif %}
-              </span>
-            </li>
-          </ul>
-        </div> -->
+
+          <!-- Misi -->
+          <div class="space-y-2">
+            <h3 class="text-lg md:text-xl font-bold text-on-surface tracking-tight">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Mission{% else %}{% trans "Misi" %}{% endif %}
+            </h3>
+            <p class="text-sm md:text-base text-on-surface-variant leading-relaxed">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+                To deliver professional, science-based services and empirical data, ensure regulatory compliance, and guide clients toward sound site-level decisions.
+              {% else %}
+                {% trans "Menghadirkan solusi berbasis pengetahuan dan data empiris untuk pengambilan keputusan, mengurangi dampak lingkungan, serta memandu mitra menuju tata kelola berkelanjutan." %}
+              {% endif %}
+            </p>
+          </div>
+        </div>
 
       </div>
     </div>

@@ -22,9 +22,9 @@
       </h1>
       <p class="font-body-lg text-body-lg max-w-2xl mb-stack-lg text-surface-white">
         {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-          We help businesses manage natural resources, the environment and social dimensions, grounded in science, compliance with national and international regulation.
+          We are committed to reducing environmental impact and minimizing waste and pollution from our activities. We strive to be a trusted strategic partner in delivering knowledge-based, environmental, social, and governance sustainability solutions that create tangible impact.
         {% else %}
-          {% trans "Kami membantu pelaku bisnis dalam mengelola sumber daya alam, lingkungan, dan dimensi sosial, dengan berlandaskan pada sains, kepatuhan terhadap regulasi nasional maupun internasional." %}
+          {% trans "Kami berkomitmen untuk mengurangi dampak lingkungan dan meminimalkan limbah dan polusi dari kegiatan kami. Kami akan menjadi mitra strategis terpercaya dalam menghadirkan solusi keberlanjutan berbasis pengetahuan, lingkungan, sosial dan tata kelola yang berdampak nyata." %}
         {% endif %}
       </p>
       <a class="inline-flex items-center justify-center bg-primary text-surface-white px-8 py-4 rounded font-label-caps text-label-caps uppercase hover:bg-forest-deep hover:-translate-y-[2px] transition-all duration-300"
@@ -36,68 +36,18 @@
 
   <!-- KOMITMEN KAMI SECTION -->
   <section class="py-section-gap bg-surface w-full">
-    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
-        
-        <!-- KOLOM KIRI: JUDUL & DESKRIPSI -->
-        <div class="lg:col-span-7 space-y-6">
-          <div class="inline-flex items-center gap-2 text-primary font-semibold text-xs md:text-sm uppercase tracking-wider">
-            <span class="material-symbols-outlined text-lg fill">eco</span>
-            <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Our Commitment{% else %}{% trans "Komitmen Kami" %}{% endif %}</span>
-          </div>
-          <h2 class="text-3xl sm:text-4xl lg:text-[44px] font-bold text-on-surface tracking-tight leading-[1.15]">
-            A strategic partner for sustainable business
-          </h2>
-          <div class="space-y-4 text-on-surface-variant text-base md:text-lg leading-relaxed pt-1">
-            <p>
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-                Bhumi Pasa Hijau is a consultancy with experience in natural resources, environmental, and social management. We respond to regulatory demands and site conditions that differ at every location, so clients can operate responsibly and for the long term.
-              {% else %}
-                {% trans "Bhumi Pasa Hijau adalah konsultan berpengalaman dalam pengelolaan sumber daya alam, lingkungan, dan sosial. Kami menjawab tuntutan regulasi dan kondisi tapak yang berbeda di setiap lokasi, agar klien dapat beroperasi secara bertanggung jawab dan berkelanjutan untuk jangka panjang." %}
-              {% endif %}
-            </p>
-            <p>
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-                Every recommendation is built on data, scientific methods, and current policy developments.
-              {% else %}
-                {% trans "Setiap rekomendasi kami dibangun berlandaskan pada data, metode ilmiah, serta kepatuhan terhadap perkembangan kebijakan dan regulasi nasional maupun internasional." %}
-              {% endif %}
-            </p>
-          </div>
-        </div>
-
-        <!-- KOLOM KANAN: VISI & MISI DENGAN GARIS EMAS/KUNING -->
-        <div class="lg:col-span-5 border-l-2 border-tertiary pl-6 md:pl-8 space-y-6 lg:mt-6">
-          <!-- Visi -->
-          <div class="space-y-2">
-            <h3 class="text-lg md:text-xl font-bold text-on-surface tracking-tight">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Vision{% else %}{% trans "Visi" %}{% endif %}
-            </h3>
-            <p class="text-sm md:text-base text-on-surface-variant leading-relaxed">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-                To be a trusted strategic partner in delivering sustainability solutions based on knowledge, environment, social, and governance that have a real impact.
-              {% else %}
-                {% trans "Menjadi mitra strategis terpercaya dalam menghadirkan solusi keberlanjutan berbasis pengetahuan, lingkungan, sosial dan tata kelola yang berdampak nyata." %}
-              {% endif %}
-            </p>
-          </div>
-
-          <!-- Misi -->
-          <div class="space-y-2">
-            <h3 class="text-lg md:text-xl font-bold text-on-surface tracking-tight">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Mission{% else %}{% trans "Misi" %}{% endif %}
-            </h3>
-            <p class="text-sm md:text-base text-on-surface-variant leading-relaxed">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-                To deliver professional, science-based services and empirical data, ensure regulatory compliance, and guide clients toward sound site-level decisions.
-              {% else %}
-                {% trans "Menghadirkan solusi berbasis pengetahuan dan data empiris untuk pengambilan keputusan, mengurangi dampak lingkungan, serta memandu mitra menuju tata kelola berkelanjutan." %}
-              {% endif %}
-            </p>
-          </div>
-        </div>
-
-      </div>
+    <div class="max-w-3xl mx-auto text-center px-margin-mobile md:px-margin-desktop">
+      <span class="material-symbols-outlined text-primary text-4xl mb-stack-md fill">eco</span>
+      <h2 class="font-headline-xl text-headline-xl text-on-surface mb-stack-lg">
+        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Our Commitment{% else %}{% trans "Komitmen Kami" %}{% endif %}
+      </h2>
+      <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+          We are committed to supporting the acceleration of the green transition and the achievement of global sustainability targets in the face of climate change challenges. We serve as a trusted strategic partner in delivering impactful solutions grounded in knowledge and Environmental, Social, and Governance (ESG) principles.
+        {% else %}
+          {% trans "Kami berkomitmen untuk mendukung percepatan transisi hijau dan pencapaian target keberlanjutan global dalam menghadapi tantangan perubahan iklim. Kami hadir sebagai mitra strategis terpercaya dalam menghadirkan solusi berbasis pengetahuan, lingkungan, sosial, dan tata kelola (ESG) yang berdampak nyata." %}
+        {% endif %}
+      </p>
     </div>
   </section>
 
