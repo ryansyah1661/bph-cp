@@ -17,30 +17,34 @@
   <!-- HERO BANNER (RINGKAS & TIDAK PADAT) -->
   {% include 'core/partials/hero-banner.html' with title="Tentang Kami" title_en="About Us" subtitle="Corporate Profile" subtitle_en="Corporate Profile" desc="Bhumi Pasa Hijau (BPH) didirikan oleh para profesional muda di Bogor sebagai firma konsultan strategis yang berfokus pada pemahaman dan tata kelola sumber daya alam, lingkungan, serta sosial berkelanjutan." desc_en="Bhumi Pasa Hijau (BPH) was founded by young professionals in Bogor as a strategic consulting firm focusing on the understanding and governance of natural resources, environment, and sustainable social development." bg_image="images/about-hero.jpg" %}
 
-  <!-- SEKSI MEMBANGUN MASA DEPAN -->
+  <!-- SEKSI PROFIL PERUSAHAAN (ABOUT BPH) -->
   <section class="max-w-container-max bg-surface mx-auto px-margin-mobile md:px-margin-desktop py-section-gap">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center">
-      <div class="md:col-span-5 md:col-start-1">
-        <h2 class="font-headline-xl text-headline-xl text-on-surface mb-stack-lg">
-          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Creating a Sustainable Future{% else %}Mewujudkan Masa Depan yang Berkelanjutan{% endif %}
+      <div class="md:col-span-6 md:col-start-1 space-y-4">
+        <div class="inline-flex items-center gap-2 text-primary font-semibold text-xs md:text-sm uppercase tracking-wider">
+          <span class="material-symbols-outlined text-lg fill">eco</span>
+          <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}About BPH{% else %}{% trans "Tentang BPH" %}{% endif %}</span>
+        </div>
+        <h2 class="font-headline-xl text-3xl md:text-4xl font-bold text-on-surface mb-stack-lg leading-tight">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Specializing in Natural Resources Management{% else %}{% trans "Firma Konsultan Tata Kelola Sumber Daya Alam" %}{% endif %}
         </h2>
-        <p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-md leading-relaxed">
+        <p class="font-body-lg text-base md:text-lg text-on-surface-variant leading-relaxed">
           {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-            Bhumi Pasa Hijau (BPH) was established with a deep awareness of the importance of balance between industrial progress and environmental preservation. As a strategic environmental management firm, we are dedicated to providing accurate and accountable data-driven solutions.
+            BPH is a consulting company specializing in understanding and management of natural resources. BPH was established on July 25, 2018 at Bogor. BPH is committed to protecting the natural resources and environment.
           {% else %}
-            Bhumi Pasa Hijau (BPH) didirikan dengan kesadaran mendalam akan pentingnya keseimbangan antara kemajuan industri dan pelestarian lingkungan. Sebagai firma manajemen lingkungan strategis, kami berdedikasi untuk menyediakan solusi berbasis data yang akurat dan dapat dipertanggungjawabkan.
+            {% trans "BPH adalah perusahaan konsultan yang mengkhususkan diri pada pemahaman dan pengelolaan sumber daya alam. BPH didirikan pada tanggal 25 Juli 2018 di Bogor. BPH berkomitmen penuh untuk melindungi sumber daya alam dan lingkungan hidup." %}
           {% endif %}
         </p>
-        <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+        <p class="font-body-lg text-base md:text-lg text-on-surface-variant leading-relaxed">
           {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
-            From the very beginning, our commitment has been to bridge global environmental policies with practical field implementation, ensuring that every step of development brings measurable positive impacts to the ecosystem.
+            We commit to reduce environmental impact and to minimizing waste and pollution from our activities. We ensure that measures are implemented to protect and reserve natural ecosystem. We are committed to maintaining an effective environmental management system that complies with national and international standards. All our activities are carried out in conformance with applicable environmental legislation and other compliance obligations.
           {% else %}
-            Sejak awal mula, komitmen kami adalah menjadi penghubung antara kebijakan lingkungan global dan implementasi praktis di lapangan, memastikan bahwa setiap langkah pembangunan membawa dampak positif yang terukur bagi ekosistem.
+            {% trans "Kami berkomitmen untuk mengurangi dampak lingkungan serta meminimalkan limbah dan polusi dari aktivitas kami. Kami memastikan langkah-langkah perlindungan dan pelestarian ekosistem alami terlaksana dengan optimal. Kami berdedikasi menjaga sistem manajemen lingkungan yang efektif sesuai standar nasional dan internasional. Seluruh aktivitas kami dijalankan selaras dengan perundang-undangan lingkungan yang berlaku serta kewajiban kepatuhan lainnya." %}
           {% endif %}
         </p>
       </div>
-      <div class="md:col-span-6 md:col-start-7 mt-12 md:mt-0 relative group">
-        <div class="overflow-hidden rounded-xl bg-surface-container-low border border-border-subtle aspect-[4/3]">
+      <div class="md:col-span-6 md:col-start-7 mt-8 md:mt-0 relative group">
+        <div class="overflow-hidden rounded-2xl bg-surface-container-low border border-border-subtle aspect-[4/3] shadow-lg">
           <img class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
                alt="A professional team of environmental scientists and corporate strategists collaborating." 
                src="{% static 'images/about-section.jpg' %}"/>
@@ -48,7 +52,6 @@
       </div>
     </div>
   </section>
-
   <!-- SEKSI VISI & MISI -->
   <section class="bg-surface-container-lowest border-y border-border-subtle py-section-gap">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
@@ -101,6 +104,189 @@
           </ul>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- SEKSI OUR VALUES (NILAI-NILAI KAMI) -->
+  <section class="py-section-gap bg-surface w-full border-b border-border-subtle">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <div class="inline-flex items-center gap-2 text-primary font-semibold text-xs md:text-sm uppercase tracking-wider mb-2">
+          <span class="material-symbols-outlined text-lg fill">stars</span>
+          <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Core Principles{% else %}{% trans "Prinsip Utama" %}{% endif %}</span>
+        </div>
+        <h2 class="font-headline-xl text-3xl md:text-4xl font-bold text-on-surface mb-3">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Our Values{% else %}{% trans "Nilai-Nilai Kami" %}{% endif %}
+        </h2>
+        <p class="font-body-md text-sm md:text-base text-on-surface-variant">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}The foundational pillars guiding every research, assessment, and field engagement at BPH.{% else %}{% trans "Pilar fundamental yang memandu setiap riset, kajian, dan aksi lapangan BPH." %}{% endif %}
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- VALUE 1: Knowledge based -->
+        <div class="bg-surface-white border border-border-subtle rounded-2xl p-6 md:p-8 hover:shadow-[0_15px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group">
+          <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+            <span class="material-symbols-outlined text-2xl">menu_book</span>
+          </div>
+          <h3 class="text-lg font-bold text-on-surface mb-3">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Knowledge based{% else %}{% trans "Knowledge based" %}{% endif %}
+          </h3>
+          <p class="text-sm text-on-surface-variant leading-relaxed flex-grow">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+              BPH clearly does not work based on opinion or mere document compliance. Everything it does is based on data, research, and scientific methods.
+            {% else %}
+              {% trans "BPH jelas tidak bekerja berdasarkan opini atau sekadar kepatuhan dokumen. Segala tindakan yang kami ambil berakar pada data, riset mendalam, dan metode ilmiah." %}
+            {% endif %}
+          </p>
+        </div>
+
+        <!-- VALUE 2: Context-driven & Place based approach -->
+        <div class="bg-surface-white border border-border-subtle rounded-2xl p-6 md:p-8 hover:shadow-[0_15px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group">
+          <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+            <span class="material-symbols-outlined text-2xl">explore</span>
+          </div>
+          <h3 class="text-lg font-bold text-on-surface mb-3">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Context-driven &amp; Place based approach{% else %}{% trans "Context-driven &amp; Place based approach" %}{% endif %}
+          </h3>
+          <p class="text-sm text-on-surface-variant leading-relaxed flex-grow">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+              BPH does not impose a template on every service product it provides. Each location is treated as a unique system: its ecology, its people, and its history.
+            {% else %}
+              {% trans "BPH tidak memaksakan template seragam pada setiap produk layanan. Setiap lokasi diperlakukan sebagai sistem yang unik: ekologinya, masyarakatnya, dan sejarahnya." %}
+            {% endif %}
+          </p>
+        </div>
+
+        <!-- VALUE 3: Collaborative stewardship -->
+        <div class="bg-surface-white border border-border-subtle rounded-2xl p-6 md:p-8 hover:shadow-[0_15px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group">
+          <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+            <span class="material-symbols-outlined text-2xl">groups</span>
+          </div>
+          <h3 class="text-lg font-bold text-on-surface mb-3">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Collaborative stewardship{% else %}{% trans "Collaborative stewardship" %}{% endif %}
+          </h3>
+          <p class="text-sm text-on-surface-variant leading-relaxed flex-grow">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+              BPH positions itself not as an “expert in an ivory tower.” Co-creation beyond mere formality: working together with communities, universities, government, and the private sector.
+            {% else %}
+              {% trans "BPH memosisikan diri bukan sebagai “pakar di menara gading”. Ko-kreasi melampaui sekadar formalitas: bekerja bersama dengan masyarakat, universitas, pemerintah, dan sektor swasta." %}
+            {% endif %}
+          </p>
+        </div>
+
+        <!-- VALUE 4: Accountable to Real Impact -->
+        <div class="bg-surface-white border border-border-subtle rounded-2xl p-6 md:p-8 hover:shadow-[0_15px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group">
+          <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+            <span class="material-symbols-outlined text-2xl">verified</span>
+          </div>
+          <h3 class="text-lg font-bold text-on-surface mb-3">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Accountable to Real Impact{% else %}{% trans "Accountable to Real Impact" %}{% endif %}
+          </h3>
+          <p class="text-sm text-on-surface-variant leading-relaxed flex-grow">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+              BPH goes beyond producing reports. We strive to ensure that everything we do has a positive impact in the ground.
+            {% else %}
+              {% trans "BPH melangkah lebih jauh dari sekadar menghasilkan laporan. Kami berusaha memastikan bahwa semua yang kami lakukan memiliki dampak positif nyata langsung di lapangan." %}
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEKSI QUALITY POLICY (KEBIJAKAN MUTU) -->
+  <section class="py-section-gap bg-surface-container-lowest w-full border-b border-border-subtle">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <div class="inline-flex items-center gap-2 text-primary font-semibold text-xs md:text-sm uppercase tracking-wider mb-2">
+          <span class="material-symbols-outlined text-lg fill">verified_user</span>
+          <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Governance &amp; Standards{% else %}{% trans "Tata Kelola &amp; Standar" %}{% endif %}</span>
+        </div>
+        <h2 class="font-headline-xl text-3xl md:text-4xl font-bold text-on-surface mb-3">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Quality Policy{% else %}{% trans "Kebijakan Mutu" %}{% endif %}
+        </h2>
+        <p class="font-body-md text-sm md:text-base text-on-surface-variant">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Our commitment to international quality, environmental stewardship, and continuous improvement.{% else %}{% trans "Komitmen kami terhadap mutu standar internasional, kepedulian lingkungan, dan perbaikan berkelanjutan." %}{% endif %}
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <!-- POLICY 1: Commitment -->
+        <div class="bg-surface-white border border-border-subtle rounded-2xl p-6 md:p-8 flex flex-col h-full shadow-sm hover:border-primary/40 transition-colors">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-xl">shield</span>
+            </div>
+            <h3 class="text-lg font-bold text-on-surface">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Commitment{% else %}{% trans "Commitment" %}{% endif %}
+            </h3>
+          </div>
+          <p class="text-sm text-on-surface-variant leading-relaxed">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+              To protect the environment and natural resources, and maintain an effective environmental management system that complies with national and international standards.
+            {% else %}
+              {% trans "Melindungi lingkungan dan sumber daya alam, serta memelihara sistem manajemen lingkungan yang efektif dan patuh terhadap standar nasional maupun internasional." %}
+            {% endif %}
+          </p>
+        </div>
+
+        <!-- POLICY 2: Promotion -->
+        <div class="bg-surface-white border border-border-subtle rounded-2xl p-6 md:p-8 flex flex-col h-full shadow-sm hover:border-primary/40 transition-colors">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-xl">campaign</span>
+            </div>
+            <h3 class="text-lg font-bold text-on-surface">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Promotion{% else %}{% trans "Promotion" %}{% endif %}
+            </h3>
+          </div>
+          <p class="text-sm text-on-surface-variant leading-relaxed">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+              On environmental awareness among the staff, sub-consultants, and our clients through the distribution of policy in the refresher and induction training program.
+            {% else %}
+              {% trans "Membangun kesadaran lingkungan di antara seluruh staf, sub-konsultan, dan klien melalui penyampaian kebijakan dalam program pelatihan induksi serta pelatihan penyegaran berkala." %}
+            {% endif %}
+          </p>
+        </div>
+
+        <!-- POLICY 3: Support -->
+        <div class="bg-surface-white border border-border-subtle rounded-2xl p-6 md:p-8 flex flex-col h-full shadow-sm hover:border-primary/40 transition-colors">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-xl">volunteer_activism</span>
+            </div>
+            <h3 class="text-lg font-bold text-on-surface">
+              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Support{% else %}{% trans "Support" %}{% endif %}
+            </h3>
+          </div>
+          <p class="text-sm text-on-surface-variant leading-relaxed">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+              For any environmental initiatives from our staff and our clients and encourage the implementation of environmentally sustainable practices.
+            {% else %}
+              {% trans "Mendukung setiap inisiatif lingkungan dari staf maupun klien serta mendorong penerapan praktik keberlanjutan yang ramah lingkungan." %}
+            {% endif %}
+          </p>
+        </div>
+      </div>
+
+      <!-- Quote Box dari Direksi -->
+      <div class="relative bg-emerald-900 text-surface-white rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-4 shadow-md overflow-hidden">
+        <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-white/5 rounded-full blur-xl pointer-events-none"></div>
+        <div class="flex items-center gap-4 z-10">
+          <span class="material-symbols-outlined text-tertiary text-3xl shrink-0">format_quote</span>
+          <p class="font-serif italic text-sm md:text-base text-surface-white/95 leading-relaxed">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+              “This Quality Policy is reviewed regularly by The Directors with continual improvement targets set and monitored”
+            {% else %}
+              {% trans "“Kebijakan Mutu ini ditinjau secara berkala oleh Direksi dengan target perbaikan berkelanjutan yang ditetapkan dan dipantau secara konsisten.”" %}
+            {% endif %}
+          </p>
+        </div>
+        <span class="z-10 shrink-0 text-xs uppercase tracking-wider font-bold bg-white/10 text-white px-3 py-1.5 rounded-full border border-white/15">
+          BPH Board of Directors
+        </span>
       </div>
     </div>
   </section>
