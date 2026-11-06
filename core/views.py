@@ -924,21 +924,65 @@ class GalleryListView(AdminRequiredMixin, ListView):
 class GalleryCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_form.html'
-    fields = ['caption_ind', 'caption_en', 'gambar', 'folder', 'kategori', 'tanggal_upload']
+    fields = ['caption_ind', 'folder', 'gambar']
     success_url = reverse_lazy('gallery_admin_list')
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if 'caption_ind' in form.fields:
+            form.fields['caption_ind'].required = False
+            form.fields['caption_ind'].label = "Nama / Keterangan Asset (Opsional)"
+        if 'folder' in form.fields:
+            form.fields['folder'].required = False
+            form.fields['folder'].label = "Pilih Album / Folder (Opsional)"
+        return form
+
     def form_valid(self, form):
-        messages.success(self.request, 'Gambar baru berhasil ditambahkan ke galeri!')
+        import os
+        # Jika caption_ind tidak diisi, otomatis gunakan nama file asli (tanpa ekstensi)
+        if not form.cleaned_data.get('caption_ind') and self.request.FILES.get('gambar'):
+            orig_name = self.request.FILES['gambar'].name
+            base_name = os.path.splitext(orig_name)[0].replace('-', ' ').replace('_', ' ').strip().title()
+            form.instance.caption_ind = base_name or "Asset Media"
+
+        if hasattr(form.instance, 'caption_en'):
+            form.instance.caption_en = form.instance.caption_ind
+        form.instance.caption = form.instance.caption_ind or "Asset Media"
+        if not form.instance.tanggal_upload:
+            form.instance.tanggal_upload = timezone.now().date()
+
+        messages.success(self.request, 'Asset media baru berhasil diunggah!')
         return super().form_valid(form)
 
 class GalleryUpdateView(AdminRequiredMixin, DateInputMixin, UpdateView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_form.html'
-    fields = ['caption_ind', 'caption_en', 'gambar', 'folder', 'kategori', 'tanggal_upload']
+    fields = ['caption_ind', 'folder', 'gambar']
     success_url = reverse_lazy('gallery_admin_list')
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if 'caption_ind' in form.fields:
+            form.fields['caption_ind'].required = False
+            form.fields['caption_ind'].label = "Nama / Keterangan Asset (Opsional)"
+        if 'folder' in form.fields:
+            form.fields['folder'].required = False
+            form.fields['folder'].label = "Pilih Album / Folder (Opsional)"
+        if 'gambar' in form.fields:
+            form.fields['gambar'].required = False
+        return form
+
     def form_valid(self, form):
-        messages.success(self.request, 'Data gambar berhasil diperbarui!')
+        import os
+        if not form.cleaned_data.get('caption_ind') and self.request.FILES.get('gambar'):
+            orig_name = self.request.FILES['gambar'].name
+            base_name = os.path.splitext(orig_name)[0].replace('-', ' ').replace('_', ' ').strip().title()
+            form.instance.caption_ind = base_name or "Asset Media"
+
+        if hasattr(form.instance, 'caption_en'):
+            form.instance.caption_en = form.instance.caption_ind
+        form.instance.caption = form.instance.caption_ind or "Asset Media"
+        messages.success(self.request, 'Data asset media berhasil diperbarui!')
         return super().form_valid(form)
 
 @login_required(login_url='/be/login/')

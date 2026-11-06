@@ -426,6 +426,11 @@ class Gallery(models.Model):
     class Meta:
         verbose_name_plural = "Galeri Dokumentasi"
 
+    def save(self, *args, **kwargs):
+        if self.gambar:
+            convert_image_to_webp(self.gambar, target_folder='gallery')
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.caption
 
