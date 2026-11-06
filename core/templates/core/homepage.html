@@ -1,297 +1,247 @@
-{% extends 'core/base.html' %} {% load static i18n %} {% get_current_language as LANGUAGE_CODE %} {% block title %}Bhumi
-Pasa Hijau - Sustainable decisions begin with science and site conditions.{% endblock %} {% block content %}
-<!-- HERO SECTION -->
-<section class="relative h-screen min-h-[600px] w-full flex items-center overflow-hidden bg-on-background">
-  <div class="absolute inset-0 z-0">
-    <div class="absolute inset-0 bg-gradient-to-r from-on-background/80 to-on-background/20 z-10"></div>
-    <img
-      alt="Tropical Rainforest"
-      class="w-full h-full object-cover animate-kenburns origin-center"
-      src="{% static 'images/forest.jpg' %}" />
-  </div>
-  <div
-    class="relative z-20 w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-surface-white">
-    <h1
-      class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg max-w-5xl mb-stack-lg leading-tight">
-      Sustainable decisions begin with <span class="text-tertiary">science and site conditions.</span>
-    </h1>
-    <p class="font-body-lg text-body-lg max-w-2xl mb-stack-lg text-surface-white">
-      {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %} We are committed to reducing environmental impact and
-      minimizing waste and pollution from our activities. We strive to be a trusted strategic partner in delivering
-      knowledge-based, environmental, social, and governance sustainability solutions that create tangible impact. {%
-      else %} {% trans "Kami berkomitmen untuk mengurangi dampak lingkungan dan meminimalkan limbah dan polusi dari
-      kegiatan kami. Kami akan menjadi mitra strategis terpercaya dalam menghadirkan solusi keberlanjutan berbasis
-      pengetahuan, lingkungan, sosial dan tata kelola yang berdampak nyata." %} {% endif %}
-    </p>
-    <a
-      class="inline-flex items-center justify-center bg-primary text-surface-white px-8 py-4 rounded font-label-caps text-label-caps uppercase hover:bg-forest-deep hover:-translate-y-[2px] transition-all duration-300"
-      href="{% url 'about' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}">
-      {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Get to Know Us Better{% else %}{% trans "Kenali Kami
-      Lebih Dekat" %}{% endif %}
-    </a>
-  </div>
-</section>
+{% extends 'core/base.html' %}
+{% load static i18n %}
 
-<!-- KOMITMEN KAMI SECTION -->
-<section class="py-section-gap bg-surface w-full">
-  <div class="max-w-3xl mx-auto text-center px-margin-mobile md:px-margin-desktop">
-    <span class="material-symbols-outlined text-primary text-4xl mb-stack-md fill">eco</span>
-    <h2 class="font-headline-xl text-headline-xl text-on-surface mb-stack-lg">
-      {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Our Commitment{% else %}{% trans "Komitmen Kami" %}{%
-      endif %}
-    </h2>
-    <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-      {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %} We are committed to supporting the acceleration of the
-      green transition and the achievement of global sustainability targets in the face of climate change challenges. We
-      serve as a trusted strategic partner in delivering impactful solutions grounded in knowledge and Environmental,
-      Social, and Governance (ESG) principles. {% else %} {% trans "Kami berkomitmen untuk mendukung percepatan transisi
-      hijau dan pencapaian target keberlanjutan global dalam menghadapi tantangan perubahan iklim. Kami hadir sebagai
-      mitra strategis terpercaya dalam menghadirkan solusi berbasis pengetahuan, lingkungan, sosial, dan tata kelola
-      (ESG) yang berdampak nyata." %} {% endif %}
-    </p>
-  </div>
-</section>
+{% get_current_language as LANGUAGE_CODE %}
 
-<!-- ARTIKEL TERBARU SECTION -->
-<section class="py-section-gap bg-surface-container-lowest border-t border-border-subtle w-full">
-  <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-4">
-      <div>
-        <h2 class="font-headline-lg text-3xl font-bold text-on-surface mb-2">
-          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Latest News{% else %}{% trans "Berita Terbaru" %}{%
-          endif %}
-        </h2>
-        <p class="font-body-md text-sm text-on-surface-variant">
-          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Insights and real action for the environment.{% else
-          %}{% trans "Wawasan dan tindakan nyata untuk lingkungan." %}{% endif %}
-        </p>
-      </div>
+{% block title %}Bhumi Pasa Hijau - Sustainable decisions begin with science and site conditions.{% endblock %}
 
-      <a
-        class="font-label-caps text-xs font-bold uppercase tracking-wider text-primary border border-primary px-7 py-3 rounded-full hover:bg-forest-deep hover:text-surface-white transition-all items-center inline-flex"
-        href="{% url 'publications' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}#seksi-artikel">
-        <span
-          >{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}View All{% else %}{% trans "Lihat Semua" %}{% endif
-          %}</span
-        >
+{% block content %}
+  <!-- HERO SECTION -->
+  <section class="relative h-screen min-h-[600px] w-full flex items-center overflow-hidden bg-on-background">
+    <div class="absolute inset-0 z-0">
+      <div class="absolute inset-0 bg-gradient-to-r from-on-background/80 to-on-background/20 z-10"></div>
+      <img alt="Tropical Rainforest"
+           class="w-full h-full object-cover animate-kenburns origin-center"
+           src="{% static 'images/forest.jpg' %}" />
+    </div>
+    <div class="relative z-20 w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-surface-white">
+      <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg max-w-5xl mb-stack-lg leading-tight">
+        Sustainable decisions begin with <span class="text-tertiary">science and site conditions.</span>
+      </h1>
+      <p class="font-body-lg text-body-lg max-w-2xl mb-stack-lg text-surface-white">
+        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+          We are committed to reducing environmental impact and minimizing waste and pollution from our activities. We strive to be a trusted strategic partner in delivering knowledge-based, environmental, social, and governance sustainability solutions that create tangible impact.
+        {% else %}
+          {% trans "Kami berkomitmen untuk mengurangi dampak lingkungan dan meminimalkan limbah dan polusi dari kegiatan kami. Kami akan menjadi mitra strategis terpercaya dalam menghadirkan solusi keberlanjutan berbasis pengetahuan, lingkungan, sosial dan tata kelola yang berdampak nyata." %}
+        {% endif %}
+      </p>
+      <a class="inline-flex items-center justify-center bg-primary text-surface-white px-8 py-4 rounded font-label-caps text-label-caps uppercase hover:bg-forest-deep hover:-translate-y-[2px] transition-all duration-300"
+         href="{% url 'about' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}">
+        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Get to Know Us Better{% else %}{% trans "Kenali Kami Lebih Dekat" %}{% endif %}
       </a>
     </div>
+  </section>
 
-    <div id="container-artikel" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {% for article in articles %}
-      <!-- PERBAIKAN TAG A DAN KELAS CSS YANG RAPI -->
-      <a
-        href="{% url 'detail-articles' slug=article.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}"
-        class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300"
-        style="text-decoration: none">
-        <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
-          {% if article.gambar %}
-          <img
-            alt="{{ article.judul }}"
-            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            src="{{ article.gambar.url }}" />
-          {% else %}
-          <img
-            alt="{{ article.judul }}"
-            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            src="{% static 'images/artikel1.jpg' %}" />
-          {% endif %}
-        </div>
-        <div class="p-6 flex-1 flex flex-col">
-          <div class="text-xs text-text-muted font-medium tracking-wide mb-2 flex items-center justify-between">
-            <span
-              >{{ article.tanggal|date:"d F Y" }} <span class="mx-1">•</span> {% if LANGUAGE_CODE == 'en' or
-              request.GET.lang == 'en' %}By{% else %}{% trans "Oleh" %}{% endif %} {{ article.author }}</span
-            >
-            <span class="flex items-center gap-1"
-              ><span class="material-symbols-outlined text-[14px]">visibility</span> {{ article.views_count }}</span
-            >
-          </div>
-          <h3
-            class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">
-            {{ article.judul }}
-          </h3>
-          <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">{{ article.short }}</p>
-          <span
-            class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
-            <span
-              class="relative inline-block pb-1 after:pointer-events-none after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-              {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Read More{% else %}{% trans "Baca Selengkapnya"
-              %}{% endif %}
-            </span>
-            <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1"
-              >arrow_right_alt</span
-            >
-          </span>
-        </div>
-      </a>
-      {% empty %}
-      <div class="bg-white border border-dashed border-slate-200 rounded-3xl p-12 text-center col-span-full">
-        <span class="material-symbols-outlined text-5xl text-slate-300 mb-2">article</span>
-        <h3 class="text-base font-bold text-slate-700">
-          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No news published yet{% else %}{% trans "Belum ada
-          berita yang dipublikasikan" %}{% endif %}
-        </h3>
-        <p class="text-xs text-slate-400 mt-1">
-          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Add data to display latest insights and news.{% else
-          %}{% trans "Tambahkan data untuk menampilkan wawasan dan berita terbaru." %}{% endif %}
-        </p>
-      </div>
-      {% endfor %}
+  <!-- KOMITMEN KAMI SECTION -->
+  <section class="py-section-gap bg-surface w-full">
+    <div class="max-w-3xl mx-auto text-center px-margin-mobile md:px-margin-desktop">
+      <span class="material-symbols-outlined text-primary text-4xl mb-stack-md fill">eco</span>
+      <h2 class="font-headline-xl text-headline-xl text-on-surface mb-stack-lg">
+        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Our Commitment{% else %}{% trans "Komitmen Kami" %}{% endif %}
+      </h2>
+      <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+          We are committed to supporting the acceleration of the green transition and the achievement of global sustainability targets in the face of climate change challenges. We serve as a trusted strategic partner in delivering impactful solutions grounded in knowledge and Environmental, Social, and Governance (ESG) principles.
+        {% else %}
+          {% trans "Kami berkomitmen untuk mendukung percepatan transisi hijau dan pencapaian target keberlanjutan global dalam menghadapi tantangan perubahan iklim. Kami hadir sebagai mitra strategis terpercaya dalam menghadirkan solusi berbasis pengetahuan, lingkungan, sosial, dan tata kelola (ESG) yang berdampak nyata." %}
+        {% endif %}
+      </p>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- CERITA DARI LAPANGAN SECTION -->
-<section class="py-16 bg-[#f8faf9] border-t border-border-subtle w-full">
-  <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-    <!-- HEADER SEKSI CERITA LAPANGAN -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
-      <div>
-        <h2 class="font-headline-lg text-3xl font-bold text-on-surface mb-2">
-          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Stories from the Field{% else %}{% trans "Cerita
-          dari Lapangan" %}{% endif %}
-        </h2>
-        <p class="font-body-md text-sm text-on-surface-variant">
-          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Action notes and real conservation narratives from
-          the BPH team.{% else %}{% trans "Catatan aksi dan narasi konservasi riil tim BPH." %}{% endif %}
-        </p>
-      </div>
-      <a
-        href="{% url 'publications' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}#seksi-cerita"
-        class="font-label-caps text-xs font-bold uppercase tracking-wider text-primary border border-primary px-7 py-3 rounded-full hover:bg-forest-deep hover:text-surface-white transition-all items-center inline-flex"
-        style="text-decoration: none">
-        <span
-          >{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}View All Stories{% else %}{% trans "Lihat Semua
-          Cerita" %}{% endif %}</span
-        >
-      </a>
-    </div>
-
-    <!-- BANNER CARD UTAMA -->
-    {% if stories %} {% with latest_story=stories.0 %}
-    <div class="bg-white border border-border-subtle/80 rounded-3xl p-6 md:p-8 shadow-[0_4px_25px_rgba(0,0,0,0.02)]">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        <!-- GAMBAR DI KIRI (BISA DIKLIK) -->
-        <a
-          href="{% url 'detail-story' slug=latest_story.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}"
-          class="lg:col-span-6 relative group overflow-hidden rounded-2xl aspect-[4/3] md:aspect-[16/10] bg-surface-container block"
-          style="text-decoration: none">
-          {% if latest_story.gambar %}
-          <img
-            src="{{ latest_story.gambar.url }}"
-            alt="{{ latest_story.judul }}"
-            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-          {% else %}
-          <img
-            src="{% static 'images/cerita.jpg' %}"
-            alt="Cerita dari Lapangan BPH"
-            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-          {% endif %} {% if latest_story.lokasi %}
-          <div
-            class="absolute bottom-4 left-4 bg-emerald-900/80 backdrop-blur-md text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1 shadow-md">
-            <span class="material-symbols-outlined text-xs text-amber-400">location_on</span>
-            {{ latest_story.lokasi.nama_provinsi }}
-          </div>
-          {% endif %}
-        </a>
-
-        <!-- TEKS DI KANAN -->
-        <div class="lg:col-span-6 flex flex-col justify-center space-y-4 group">
-          <!-- BADGE SOROTAN LAPANGAN -->
-          <div class="flex items-center gap-3">
-            <span
-              class="bg-emerald-50 text-emerald-800 border border-emerald-100 text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-sm text-emerald-700">explore</span>
-              <span
-                >{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Field Story{% else %}{% trans "Cerita
-                Lapangan" %}{% endif %}</span
-              >
-            </span>
-            <span class="text-xs text-slate-400 font-medium">{{ latest_story.tanggal|date:"d F Y" }}</span>
-            <span class="text-xs text-slate-400 font-medium flex items-center gap-1"
-              ><span class="material-symbols-outlined text-[14px]">visibility</span> {{ latest_story.views_count
-              }}</span
-            >
-          </div>
-
-          <!-- JUDUL (BISA DIKLIK) -->
-          <a
-            href="{% url 'detail-story' slug=latest_story.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}"
-            style="text-decoration: none">
-            <h3
-              class="font-headline-lg text-xl md:text-2xl font-bold text-on-surface leading-snug group-hover:text-primary transition-colors duration-300">
-              {{ latest_story.judul }}
-            </h3>
-          </a>
-
-          <p class="font-body-md text-sm text-on-surface-variant leading-relaxed line-clamp-4">
-            {{ latest_story.short }}
+  <!-- ARTIKEL TERBARU SECTION -->
+  <section class="py-section-gap bg-surface-container-lowest border-t border-border-subtle w-full">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-4">
+        <div>
+          <h2 class="font-headline-lg text-3xl font-bold text-on-surface mb-2">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Latest News{% else %}{% trans "Berita Terbaru" %}{% endif %}
+          </h2>
+          <p class="font-body-md text-sm text-on-surface-variant">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Insights and real action for the environment.{% else %}{% trans "Wawasan dan tindakan nyata untuk lingkungan." %}{% endif %}
           </p>
-
-          <!-- BACA SELENGKAPNYA -->
-          <div class="pt-2">
-            <a
-              href="{% url 'detail-story' slug=latest_story.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}"
-              class="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300"
-              style="text-decoration: none">
-              <span
-                class="relative inline-block pb-1 after:pointer-events-none after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
-                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Read More{% else %}{% trans "Baca
-                Selengkapnya" %}{% endif %}
-              </span>
-              <span
-                class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1"
-                >arrow_right_alt</span
-              >
-            </a>
-          </div>
         </div>
+        
+        <a class="font-label-caps text-xs font-bold uppercase tracking-wider text-primary border border-primary px-7 py-3 rounded-full hover:bg-forest-deep hover:text-surface-white transition-all items-center inline-flex"
+            href="{% url 'publications' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}#seksi-artikel">
+          <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}View All{% else %}{% trans "Lihat Semua" %}{% endif %}</span>
+        </a>
+      </div>
+      
+      <div id="container-artikel" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {% for article in articles %}
+        <!-- PERBAIKAN TAG A DAN KELAS CSS YANG RAPI -->
+        <a href="{% url 'detail-articles' slug=article.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}"
+           class="group flex flex-col bg-surface-white border border-border-subtle rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300" style="text-decoration: none;">
+          <div class="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+            {% if article.gambar %}
+            <img alt="{{ article.judul }}"
+                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                 src="{{ article.gambar.url }}" />
+            {% else %}
+            <img alt="{{ article.judul }}"
+                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                 src="{% static 'images/artikel1.jpg' %}" />
+            {% endif %}
+          </div>
+          <div class="p-6 flex-1 flex flex-col">
+            <div class="text-xs text-text-muted font-medium tracking-wide mb-2 flex items-center justify-between">
+              <span>{{ article.tanggal|date:"d F Y" }} <span class="mx-1">•</span> {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}By{% else %}{% trans "Oleh" %}{% endif %} {{ article.author }}</span>
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">visibility</span> {{ article.views_count }}</span>
+            </div>
+            <h3 class="font-headline-md text-lg font-bold text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300">
+              {{ article.judul }}
+            </h3>
+            <p class="text-sm text-on-surface-variant line-clamp-3 mb-6 leading-relaxed">
+              {{ article.short }}
+            </p>
+            <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300">
+              <span class="relative inline-block pb-1 after:pointer-events-none after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
+                {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Read More{% else %}{% trans "Baca Selengkapnya" %}{% endif %}
+              </span>
+              <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
+            </span>
+          </div>
+        </a>
+        {% empty %}
+        <div class="bg-white border border-dashed border-slate-200 rounded-3xl p-12 text-center col-span-full">
+          <span class="material-symbols-outlined text-5xl text-slate-300 mb-2">article</span>
+          <h3 class="text-base font-bold text-slate-700">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No news published yet{% else %}{% trans "Belum ada berita yang dipublikasikan" %}{% endif %}
+          </h3>
+          <p class="text-xs text-slate-400 mt-1">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Add data to display latest insights and news.{% else %}{% trans "Tambahkan data untuk menampilkan wawasan dan berita terbaru." %}{% endif %}
+          </p>
+        </div>
+        {% endfor %}
       </div>
     </div>
-    {% endwith %} {% else %}
-    <div class="bg-white border border-dashed border-slate-200 rounded-3xl p-12 text-center">
-      <span class="material-symbols-outlined text-5xl text-slate-300 mb-2">potted_plant</span>
-      <h3 class="text-base font-bold text-slate-700">
-        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No field stories yet{% else %}{% trans "Belum ada
-        cerita lapangan" %}{% endif %}
-      </h3>
-      <p class="text-xs text-slate-400 mt-1">
-        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Add data to display latest field stories.{% else %}{%
-        trans "Tambahkan data untuk menampilkan cerita lapangan terbaru." %}{% endif %}
-      </p>
-    </div>
-    {% endif %}
-  </div>
-</section>
+  </section>
 
-<!-- CTA SECTION -->
-<section class="pb-20 pt-10 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
-  <div
-    class="relative bg-primary dark:bg-surface-container-high rounded-3xl p-8 md:p-14 flex flex-col md:flex-row justify-between items-center gap-8 shadow-[0_12px_40px_rgba(0,107,41,0.15)] overflow-hidden">
-    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/5 rounded-full blur-xl pointer-events-none"></div>
-    <div class="absolute -left-10 -top-10 w-40 h-40 bg-black/5 rounded-full blur-xl pointer-events-none"></div>
+  <!-- CERITA DARI LAPANGAN SECTION -->
+  <section class="py-16 bg-[#f8faf9] border-t border-border-subtle w-full">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+      
+      <!-- HEADER SEKSI CERITA LAPANGAN -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
+        <div>
+          <h2 class="font-headline-lg text-3xl font-bold text-on-surface mb-2">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Stories from the Field{% else %}{% trans "Cerita dari Lapangan" %}{% endif %}
+          </h2>
+          <p class="font-body-md text-sm text-on-surface-variant">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Action notes and real conservation narratives from the BPH team.{% else %}{% trans "Catatan aksi dan narasi konservasi riil tim BPH." %}{% endif %}
+          </p>
+        </div>
+        <a href="{% url 'publications' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}#seksi-cerita" class="font-label-caps text-xs font-bold uppercase tracking-wider text-primary border border-primary px-7 py-3 rounded-full hover:bg-forest-deep hover:text-surface-white transition-all items-center inline-flex" style="text-decoration: none;">
+          <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}View All Stories{% else %}{% trans "Lihat Semua Cerita" %}{% endif %}</span>
+        </a>
+      </div>
 
-    <div class="space-y-2 text-center md:text-left z-10 max-w-xl">
-      <h3 class="text-2xl md:text-3xl font-bold text-surface-white">
-        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Ready to Collaborate With Us?{% else %}{% trans
-        "Temukan solusi tepat usaha Anda!" %}{% endif %}
-      </h3>
-      <p class="text-surface-white/80 text-xs md:text-sm leading-relaxed">
-        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %} Interested in partnering or want to learn more?
-        Contact our team of experts today. {% else %} {% trans "Kami hadir sebagai mitra strategis untuk membangun
-        bisnis yang berkelanjutan." %} {% endif %}
-      </p>
+      <!-- BANNER CARD UTAMA -->
+      {% if stories %}
+        {% with latest_story=stories.0 %}
+        <div class="bg-white border border-border-subtle/80 rounded-3xl p-6 md:p-8 shadow-[0_4px_25px_rgba(0,0,0,0.02)]">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            <!-- GAMBAR DI KIRI (BISA DIKLIK) -->
+            <a href="{% url 'detail-story' slug=latest_story.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}" class="lg:col-span-6 relative group overflow-hidden rounded-2xl aspect-[4/3] md:aspect-[16/10] bg-surface-container block" style="text-decoration: none;">
+              {% if latest_story.gambar %}
+                <img src="{{ latest_story.gambar.url }}" 
+                     alt="{{ latest_story.judul }}" 
+                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              {% else %}
+                <img src="{% static 'images/cerita.jpg' %}" 
+                     alt="Cerita dari Lapangan BPH" 
+                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              {% endif %}
+              
+              {% if latest_story.lokasi %}
+              <div class="absolute bottom-4 left-4 bg-emerald-900/80 backdrop-blur-md text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1 shadow-md">
+                <span class="material-symbols-outlined text-xs text-amber-400">location_on</span>
+                {{ latest_story.lokasi.nama_provinsi }}
+              </div>
+              {% endif %}
+            </a>
+
+            <!-- TEKS DI KANAN -->
+            <div class="lg:col-span-6 flex flex-col justify-center space-y-4 group">
+              
+              <!-- BADGE SOROTAN LAPANGAN -->
+              <div class="flex items-center gap-3">
+                <span class="bg-emerald-50 text-emerald-800 border border-emerald-100 text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm text-emerald-700">explore</span>
+                  <span>{% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Field Story{% else %}{% trans "Cerita Lapangan" %}{% endif %}</span>
+                </span>
+                <span class="text-xs text-slate-400 font-medium">{{ latest_story.tanggal|date:"d F Y" }}</span>
+                <span class="text-xs text-slate-400 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">visibility</span> {{ latest_story.views_count }}</span>
+              </div>
+
+              <!-- JUDUL (BISA DIKLIK) -->
+              <a href="{% url 'detail-story' slug=latest_story.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}" style="text-decoration: none;">
+                <h3 class="font-headline-lg text-xl md:text-2xl font-bold text-on-surface leading-snug group-hover:text-primary transition-colors duration-300">
+                  {{ latest_story.judul }}
+                </h3>
+              </a>
+
+              <p class="font-body-md text-sm text-on-surface-variant leading-relaxed line-clamp-4">
+                {{ latest_story.short }}
+              </p>
+
+              <!-- BACA SELENGKAPNYA -->
+              <div class="pt-2">
+                <a href="{% url 'detail-story' slug=latest_story.slug %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}" 
+                   class="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary group-hover:text-forest-deep transition-colors duration-300"
+                   style="text-decoration: none;">
+                  <span class="relative inline-block pb-1 after:pointer-events-none after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-left transform-gpu group-hover:after:scale-x-100">
+                    {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Read More{% else %}{% trans "Baca Selengkapnya" %}{% endif %}
+                  </span>
+                  <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_right_alt</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        {% endwith %}
+      {% else %}
+        <div class="bg-white border border-dashed border-slate-200 rounded-3xl p-12 text-center">
+          <span class="material-symbols-outlined text-5xl text-slate-300 mb-2">potted_plant</span>
+          <h3 class="text-base font-bold text-slate-700">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}No field stories yet{% else %}{% trans "Belum ada cerita lapangan" %}{% endif %}
+          </h3>
+          <p class="text-xs text-slate-400 mt-1">
+            {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Add data to display latest field stories.{% else %}{% trans "Tambahkan data untuk menampilkan cerita lapangan terbaru." %}{% endif %}
+          </p>
+        </div>
+      {% endif %}
+
     </div>
-    <div class="z-10 shrink-0">
-      <a
-        href="{% url 'contact' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}"
-        class="inline-flex items-center justify-center bg-surface-white text-primary font-bold text-xs tracking-widest uppercase px-8 py-4 rounded-full shadow-lg hover:bg-neutral-100 hover:-translate-y-[1px] active:translate-y-0 transition-all duration-300">
-        {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Contact Us{% else %}{% trans "Hubungi Kami" %}{% endif
-        %}
-      </a>
+  </section>
+
+
+  <!-- CTA SECTION -->
+  <section class="pb-20 pt-10 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
+    <div class="relative bg-primary dark:bg-surface-container-high rounded-3xl p-8 md:p-14 flex flex-col md:flex-row justify-between items-center gap-8 shadow-[0_12px_40px_rgba(0,107,41,0.15)] overflow-hidden">
+      <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/5 rounded-full blur-xl pointer-events-none"></div>
+      <div class="absolute -left-10 -top-10 w-40 h-40 bg-black/5 rounded-full blur-xl pointer-events-none"></div>
+      
+      <div class="space-y-2 text-center md:text-left z-10 max-w-xl">
+        <h3 class="text-2xl md:text-3xl font-bold text-surface-white">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Ready to Collaborate With Us?{% else %}{% trans "Temukan solusi tepat usaha Anda!" %}{% endif %}
+        </h3>
+        <p class="text-surface-white/80 text-xs md:text-sm leading-relaxed">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}
+            Interested in partnering or want to learn more? Contact our team of experts today.
+          {% else %}
+            {% trans "Kami hadir sebagai mitra strategis untuk membangun bisnis yang berkelanjutan." %}
+          {% endif %}
+        </p>
+      </div>
+      <div class="z-10 shrink-0">
+        <a href="{% url 'contact' %}{% if request.GET.lang == 'en' %}?lang=en{% endif %}" class="inline-flex items-center justify-center bg-surface-white text-primary font-bold text-xs tracking-widest uppercase px-8 py-4 rounded-full shadow-lg hover:bg-neutral-100 hover:-translate-y-[1px] active:translate-y-0 transition-all duration-300">
+          {% if LANGUAGE_CODE == 'en' or request.GET.lang == 'en' %}Contact Us{% else %}{% trans "Hubungi Kami" %}{% endif %}
+        </a>
+      </div>
     </div>
-  </div>
-</section>
-{% endblock %}
+  </section>
 {% endblock %}
