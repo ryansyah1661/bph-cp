@@ -23,6 +23,10 @@ DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 't')
 ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
+    'https://bhumipasahijau.com',
+    'https://www.bhumipasahijau.com',
+    'http://bhumipasahijau.com',
+    'http://www.bhumipasahijau.com',
     'https://*.up.railway.app',
     'https://*.railway.app',
     'https://*.trycloudflare.com',
