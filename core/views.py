@@ -663,7 +663,7 @@ class LocationListView(AdminRequiredMixin, ListView):
 class LocationCreateView(AdminRequiredMixin, CreateView):
     model = Location
     template_name = 'core/custom_admin/location/location_form.html'
-    fields = ['nama_provinsi_ind', 'nama_provinsi_en', 'slug_ind', 'slug_en', 'kode_wilayah', 'geom']
+    fields = ['nama_provinsi_ind', 'nama_provinsi_en', 'slug_ind', 'slug_en', 'kode_wilayah']
     success_url = reverse_lazy('location_list')
 
     def form_valid(self, form):
@@ -675,7 +675,7 @@ class LocationCreateView(AdminRequiredMixin, CreateView):
 class LocationUpdateView(AdminRequiredMixin, UpdateView):
     model = Location
     template_name = 'core/custom_admin/location/location_form.html'
-    fields = ['nama_provinsi_ind', 'nama_provinsi_en', 'slug_ind', 'slug_en', 'kode_wilayah', 'geom']
+    fields = ['nama_provinsi_ind', 'nama_provinsi_en', 'slug_ind', 'slug_en', 'kode_wilayah']
     success_url = reverse_lazy('location_list')
 
     def form_valid(self, form):

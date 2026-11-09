@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.gis',  # Ditambahkan untuk GeoDjango
 ]
 
 MIDDLEWARE = [
@@ -87,14 +86,14 @@ if DATABASE_URL:
         'default': dj_database_url.config(
             default=DATABASE_URL,
             conn_max_age=600,
-            engine='django.contrib.gis.db.backends.postgis',
+            engine='django.db.backends.postgresql',
             ssl_require=True
         )
     }
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.contrib.gis.db.backends.postgis',  # Diubah ke database spasial PostGIS
+            'ENGINE': 'django.db.backends.postgresql',  # Diubah ke database spasial PostGIS
             'NAME': 'db_bph',
             'USER': 'postgres',
             'PASSWORD': 'ryan1602',
