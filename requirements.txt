@@ -11,7 +11,7 @@ djlint==1.36.4
 EditorConfig==0.17.1
 jsbeautifier==1.15.4
 json5==0.14.0
-mysqlclient==2.2.8
+# mysqlclient removed (project uses PostgreSQL / psycopg2-binary)
 pathspec==1.1.1
 pillow==12.2.0
 psycopg2-binary==2.9.12
