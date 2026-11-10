@@ -332,10 +332,97 @@ class ArticleListView(AdminRequiredMixin, ListView):
         return Article.objects.all().order_by('-tanggal', '-id')
 
 
+logger = logging.getLogger(__name__)
+
+def auto_sync_file_to_gallery(instance, file_field_name='gambar', folder_name=None, caption=None):
+    """
+    Otomatis mendaftarkan file gambar yang diunggah dari laptop ke Asset Media (Gallery)
+    di bawah Folder yang sesuai dengan konteks modulnya.
+    """
+    if not instance:
+        return
+    file_field = getattr(instance, file_field_name, None)
+    if not file_field or not getattr(file_field, 'name', None):
+        return
+
+    try:
+        from datetime import datetime
+        from django.utils import timezone
+
+        # Pemetaan folder otomatis berdasarkan nama model jika folder_name tidak ditentukan
+        if not folder_name:
+            model_name = instance._meta.model_name.lower()
+            folder_map = {
+                'article': ('Dokumentasi Artikel & Wawasan', 'Article & Insights Documentation'),
+                'story': ('Dokumentasi Cerita Lapangan', 'Field Stories Documentation'),
+                'project': ('Dokumentasi Proyek', 'Project Documentation'),
+                'clientgroup': ('Logo Klien & Mitra', 'Client & Partner Logos'),
+                'teammember': ('Foto Tim & Pengurus', 'Team & Management Photos'),
+                'program': ('Dokumentasi Program', 'Program Documentation'),
+                'infografis': ('Infografis & Visual Data', 'Infographics & Visual Data'),
+                'service': ('Dokumentasi Layanan', 'Services Documentation'),
+            }
+            nama_id, nama_en = folder_map.get(model_name, ('Unggahan Sistem', 'System Uploads'))
+        else:
+            nama_id = folder_name
+            nama_en = folder_name
+
+        folder, _ = Folder.objects.get_or_create(
+            nama=nama_id,
+            defaults={
+                'nama_ind': nama_id,
+                'nama_en': nama_en,
+                'tahun': datetime.now().year,
+            }
+        )
+
+        # Penentuan caption otomatis yang informatif
+        if not caption:
+            if hasattr(instance, 'judul') and instance.judul:
+                caption = str(instance.judul)
+            elif hasattr(instance, 'judul_ind') and instance.judul_ind:
+                caption = str(instance.judul_ind)
+            elif hasattr(instance, 'name') and instance.name:
+                caption = str(instance.name)
+            elif hasattr(instance, 'name_ind') and instance.name_ind:
+                caption = str(instance.name_ind)
+            elif hasattr(instance, 'title') and instance.title:
+                caption = str(instance.title)
+            elif hasattr(instance, 'title_ind') and instance.title_ind:
+                caption = str(instance.title_ind)
+            elif hasattr(instance, 'nama') and instance.nama:
+                if instance._meta.model_name == 'clientgroup':
+                    caption = f"Logo {instance.nama}"
+                else:
+                    caption = str(instance.nama)
+            elif hasattr(instance, 'deskripsi') and instance.deskripsi:
+                caption = str(instance.deskripsi)[:60]
+            else:
+                caption = f"Foto {nama_id}"
+
+        # Cegah duplikasi di Galeri jika gambar dengan path yang sama sudah ada
+        if not Gallery.objects.filter(gambar=file_field.name).exists():
+            Gallery.objects.create(
+                caption=caption,
+                caption_ind=caption,
+                caption_en=caption,
+                gambar=file_field.name,
+                folder=folder,
+                tanggal_upload=timezone.now().date(),
+            )
+    except Exception as e:
+        logger.warning(f"Gagal auto-sync gambar ke galeri: {e}")
+
+def auto_save_logo_to_gallery(client_group):
+    return auto_sync_file_to_gallery(client_group, file_field_name='logo')
+
+
 class MediaAssetPickerMixin:
     """
     Mixin untuk mendukung pemilihan gambar langsung dari Asset Media
     selain dari upload berkas lokal di laptop.
+    Juga otomatis mendaftarkan file yang baru diunggah dari laptop ke Asset Media (Gallery)
+    ke dalam folder yang sesuai dengan modulnya.
     """
     image_field_name = 'gambar'
 
@@ -350,11 +437,20 @@ class MediaAssetPickerMixin:
 
     def form_valid(self, form):
         selected_asset_id = self.request.POST.get('selected_asset_media')
-        if selected_asset_id and not self.request.FILES.get(self.image_field_name):
+        has_uploaded_file = bool(self.request.FILES.get(self.image_field_name))
+        if selected_asset_id and not has_uploaded_file:
             asset = Gallery.objects.filter(id=selected_asset_id).first()
             if asset and asset.gambar:
                 setattr(form.instance, self.image_field_name, asset.gambar.name)
-        return super().form_valid(form)
+
+        response = super().form_valid(form)
+
+        # Jika diunggah langsung dari file manager laptop (bukan memilih dari asset media),
+        # otomatis daftarkan ke Gallery di folder modul terkait!
+        if has_uploaded_file and getattr(self, 'object', None):
+            auto_sync_file_to_gallery(self.object, file_field_name=self.image_field_name)
+
+        return response
 
 class ArticleCreateView(AdminRequiredMixin, DateInputMixin, MediaAssetPickerMixin, CreateView):
     model = Article
@@ -625,40 +721,6 @@ def story_delete_view(request, pk):
 # 4. MANAGEMENT MITRA / KLIEN (GROUP + CLIENT)
 # ==========================================
 
-logger = logging.getLogger(__name__)
-
-def auto_save_logo_to_gallery(client_group):
-    """
-    Otomatis mendaftarkan logo klien/mitra yang diunggah dari laptop
-    ke sistem Galeri / Aset Media ke dalam folder 'Logo Klien & Mitra'.
-    """
-    if not client_group or not client_group.logo:
-        return
-    try:
-        from datetime import datetime
-        from django.utils import timezone
-        folder, _ = Folder.objects.get_or_create(
-            nama="Logo Klien & Mitra",
-            defaults={
-                'nama_ind': 'Logo Klien & Mitra',
-                'nama_en': 'Client & Partner Logos',
-                'tahun': datetime.now().year,
-            }
-        )
-        caption = f"Logo {client_group.nama}"
-        # Cek apakah sudah pernah ada di gallery dengan file yang sama agar tidak duplikat
-        if not Gallery.objects.filter(gambar=client_group.logo.name).exists():
-            Gallery.objects.create(
-                caption=caption,
-                caption_ind=caption,
-                caption_en=caption,
-                gambar=client_group.logo.name,
-                folder=folder,
-                tanggal_upload=timezone.now().date(),
-            )
-    except Exception as e:
-        logger.warning(f"Gagal auto-save logo ke galeri: {e}")
-
 # --- CLIENT GROUP (Perusahaan Utama) ---
 class ClientGroupListView(AdminRequiredMixin, ListView):
     model = ClientGroup
@@ -885,8 +947,13 @@ class ServiceCreateView(AdminRequiredMixin, CreateView):
     success_url = reverse_lazy('service_list')
 
     def form_valid(self, form):
+        response = super().form_valid(form)
+        if self.request.FILES.get('thumbnail') and getattr(self, 'object', None):
+            auto_sync_file_to_gallery(self.object, file_field_name='thumbnail', caption=f"Thumbnail Layanan {self.object.title}")
+        if self.request.FILES.get('bg_image') and getattr(self, 'object', None):
+            auto_sync_file_to_gallery(self.object, file_field_name='bg_image', caption=f"Banner Layanan {self.object.title}")
         messages.success(self.request, 'Layanan baru berhasil ditambahkan!')
-        return super().form_valid(form)
+        return response
 
 class ServiceUpdateView(AdminRequiredMixin, UpdateView):
     model = Service
@@ -895,8 +962,13 @@ class ServiceUpdateView(AdminRequiredMixin, UpdateView):
     success_url = reverse_lazy('service_list')
 
     def form_valid(self, form):
+        response = super().form_valid(form)
+        if self.request.FILES.get('thumbnail') and getattr(self, 'object', None):
+            auto_sync_file_to_gallery(self.object, file_field_name='thumbnail', caption=f"Thumbnail Layanan {self.object.title}")
+        if self.request.FILES.get('bg_image') and getattr(self, 'object', None):
+            auto_sync_file_to_gallery(self.object, file_field_name='bg_image', caption=f"Banner Layanan {self.object.title}")
         messages.success(self.request, 'Data layanan berhasil diperbarui!')
-        return super().form_valid(form)
+        return response
 
 @login_required(login_url='/be/login/')
 @user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
@@ -1315,8 +1387,9 @@ class TeamListView(AdminRequiredMixin, ListView):
     def get_queryset(self):
         return TeamMember.objects.all().order_by('urutan', '-id')
 
-class TeamCreateView(AdminRequiredMixin, CreateView):
+class TeamCreateView(AdminRequiredMixin, MediaAssetPickerMixin, CreateView):
     model = TeamMember
+    image_field_name = 'foto'
     template_name = 'core/custom_admin/team/team_form.html'
     fields = ['nama', 'jabatan_ind', 'jabatan_en', 'bio_ind', 'bio_en', 'kategori_ind', 'kategori_en', 'urutan', 'foto']
     success_url = reverse_lazy('team_list')
@@ -1325,8 +1398,9 @@ class TeamCreateView(AdminRequiredMixin, CreateView):
         messages.success(self.request, 'Anggota tim baru berhasil ditambahkan!')
         return super().form_valid(form)
 
-class TeamUpdateView(AdminRequiredMixin, UpdateView):
+class TeamUpdateView(AdminRequiredMixin, MediaAssetPickerMixin, UpdateView):
     model = TeamMember
+    image_field_name = 'foto'
     template_name = 'core/custom_admin/team/team_form.html'
     fields = ['nama', 'jabatan_ind', 'jabatan_en', 'bio_ind', 'bio_en', 'kategori_ind', 'kategori_en', 'urutan', 'foto']
     success_url = reverse_lazy('team_list')
@@ -1356,8 +1430,9 @@ class InfografisListView(AdminRequiredMixin, ListView):
     def get_queryset(self):
         return Infografis.objects.all().order_by('-tanggal_unggah', '-id')
 
-class InfografisCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
+class InfografisCreateView(AdminRequiredMixin, DateInputMixin, MediaAssetPickerMixin, CreateView):
     model = Infografis
+    image_field_name = 'gambar'
     template_name = 'core/custom_admin/infografis/infografis_form.html'
     fields = ['deskripsi', 'gambar']
     success_url = reverse_lazy('infografis_list')
@@ -1366,8 +1441,9 @@ class InfografisCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
         messages.success(self.request, 'Infografis baru berhasil ditambahkan!')
         return super().form_valid(form)
 
-class InfografisUpdateView(AdminRequiredMixin, DateInputMixin, UpdateView):
+class InfografisUpdateView(AdminRequiredMixin, DateInputMixin, MediaAssetPickerMixin, UpdateView):
     model = Infografis
+    image_field_name = 'gambar'
     template_name = 'core/custom_admin/infografis/infografis_form.html'
     fields = ['deskripsi', 'gambar']
     success_url = reverse_lazy('infografis_list')
