@@ -131,7 +131,7 @@
         <div class="flex items-center gap-2 shrink-0" onclick="event.stopPropagation()">
           <button type="button" onclick="openAddChildModal('{{ group.id }}', '{{ group.nama|escapejs }}')" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-semibold border border-emerald-200 transition cursor-pointer">
             <span class="material-symbols-outlined text-sm">add</span>
-            <span class="hidden sm:inline">Tambah Anak</span>
+            <span class="hidden sm:inline">Tambah Anak Perusahaan</span>
           </button>
           
           <a href="{% url 'client_group_update' group.pk %}" title="Edit Group Perusahaan" class="inline-flex items-center justify-center p-2 rounded-xl bg-slate-50 hover:bg-amber-50 text-slate-500 hover:text-amber-700 border border-slate-200 hover:border-amber-200 transition">
