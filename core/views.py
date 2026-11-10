@@ -1083,10 +1083,10 @@ class DocumentListView(AdminRequiredMixin, ListView):
     def get_queryset(self):
         return Modul.objects.all().order_by('-tanggal_rilis', '-id')
 
-class DocumentCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
+class DocumentCreateView(AdminRequiredMixin, CreateView):
     model = Modul
     template_name = 'core/custom_admin/modul/modul_form.html'
-    fields = ['judul_ind', 'judul_en', 'deskripsi_ind', 'deskripsi_en', 'file_dokumen', 'url_dokumen', 'tanggal_rilis']
+    fields = ['judul_ind', 'judul_en', 'deskripsi_ind', 'deskripsi_en', 'file_dokumen', 'url_dokumen']
     success_url = reverse_lazy('document_list')
 
     def get_form(self, form_class=None):
@@ -1098,13 +1098,16 @@ class DocumentCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
         return form
 
     def form_valid(self, form):
+        from django.utils import timezone
+        if not form.instance.tanggal_rilis:
+            form.instance.tanggal_rilis = timezone.now().date()
         messages.success(self.request, 'Modul baru berhasil ditambahkan!')
         return super().form_valid(form)
 
-class DocumentUpdateView(AdminRequiredMixin, DateInputMixin, UpdateView):
+class DocumentUpdateView(AdminRequiredMixin, UpdateView):
     model = Modul
     template_name = 'core/custom_admin/modul/modul_form.html'
-    fields = ['judul_ind', 'judul_en', 'deskripsi_ind', 'deskripsi_en', 'file_dokumen', 'url_dokumen', 'tanggal_rilis']
+    fields = ['judul_ind', 'judul_en', 'deskripsi_ind', 'deskripsi_en', 'file_dokumen', 'url_dokumen']
     success_url = reverse_lazy('document_list')
 
     def get_form(self, form_class=None):
