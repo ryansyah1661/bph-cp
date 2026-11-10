@@ -1239,7 +1239,7 @@ class GalleryListView(AdminRequiredMixin, ListView):
     model = Gallery
     template_name = 'core/custom_admin/gallery/gallery_list.html'
     context_object_name = 'items'
-    paginate_by = 12
+    paginate_by = 24
 
     def get_queryset(self):
         qs = Gallery.objects.select_related('folder').all().order_by('-tanggal_upload', '-id')
