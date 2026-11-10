@@ -54,8 +54,8 @@ def experience_view(request):
     categories = Category.objects.filter(projects__isnull=False).distinct().order_by('name')
     years = Project.objects.order_by('-tahun').values_list('tahun', flat=True).distinct()
     
-    clients_swasta = ClientGroup.objects.filter(sektor='swasta')
-    clients_publik = ClientGroup.objects.filter(sektor='publik')
+    clients_swasta = ClientGroup.objects.filter(sektor='swasta').order_by('nama')
+    clients_publik = ClientGroup.objects.filter(sektor='publik').order_by('nama')
 
     total_proyek = Project.objects.count()
     total_provinsi = Location.objects.filter(projects__isnull=False).distinct().count()
