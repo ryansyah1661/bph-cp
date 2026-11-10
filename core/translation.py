@@ -23,7 +23,7 @@ class ServiceStepTranslationOptions(TranslationOptions):
 
 @register(Modul)
 class ModulTranslationOptions(TranslationOptions):
-    fields = ('judul',)
+    fields = ('judul', 'deskripsi')
 
 @register(Category)
 class CategoryTranslationOptions(TranslationOptions):

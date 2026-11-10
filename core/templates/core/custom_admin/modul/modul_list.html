@@ -47,7 +47,7 @@
         <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
           <th class="p-4 font-semibold w-14 text-center">No.</th>
           <th class="p-4 font-semibold">Judul Modul / Dokumen</th>
-          <th class="p-4 font-semibold">File Berkas</th>
+          <th class="p-4 font-semibold">File / Link</th>
           <th class="p-4 font-semibold">Tanggal Unggah</th>
           <th class="p-4 font-semibold text-center w-28">Aksi</th>
         </tr>
@@ -61,15 +61,24 @@
           
           <td class="p-4 font-semibold text-slate-700 align-middle text-sm transition">
             <div class="line-clamp-2 leading-snug">{{ modul.judul }}</div>
+            {% if modul.deskripsi_ind %}
+            <p class="text-xs text-gray-400 font-normal mt-1 line-clamp-1">{{ modul.deskripsi_ind }}</p>
+            {% endif %}
           </td>
 
           <td class="p-4 align-middle font-medium">
             {% if modul.file_dokumen %}
-              <a href="{{ modul.file_dokumen.url }}" target="_blank" class="text-emerald-600 hover:text-emerald-700 inline-flex items-center gap-1 font-semibold transition" style="text-decoration: none;">
+              <a href="{{ modul.file_dokumen.url }}" target="_blank" class="text-emerald-600 hover:text-emerald-700 inline-flex items-center gap-1 font-semibold transition text-xs" style="text-decoration: none;">
                 <span class="material-symbols-outlined text-lg">description</span> Lihat File
               </a>
-            {% else %}
-              <span class="text-gray-400 italic text-xs">Tidak ada file</span>
+            {% endif %}
+            {% if modul.url_dokumen %}
+              <a href="{{ modul.url_dokumen }}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-700 inline-flex items-center gap-1 font-semibold transition text-xs {% if modul.file_dokumen %}mt-1{% endif %}" style="text-decoration: none;">
+                <span class="material-symbols-outlined text-lg">link</span> Buka Link
+              </a>
+            {% endif %}
+            {% if not modul.file_dokumen and not modul.url_dokumen %}
+              <span class="text-gray-400 italic text-xs">Tidak ada file/link</span>
             {% endif %}
           </td>
 

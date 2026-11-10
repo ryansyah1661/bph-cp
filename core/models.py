@@ -419,7 +419,9 @@ class Article(models.Model):
 # === 9. TABEL MODUL DOKUMENTASI STRATEGIS (Modul) ===
 class Modul(models.Model):
     judul = models.CharField(max_length=200, verbose_name="Judul Dokumen Publikasi")
-    file_dokumen = models.FileField(upload_to='documents/', verbose_name="Berkas File (PDF/Docs)")
+    deskripsi = models.TextField(blank=True, verbose_name="Deskripsi Singkat", help_text="Opsional. Ringkasan singkat mengenai isi dokumen.")
+    file_dokumen = models.FileField(upload_to='documents/', blank=True, verbose_name="Berkas File (PDF/Docs)")
+    url_dokumen = models.URLField(blank=True, verbose_name="URL / Link Dokumen Eksternal", help_text="Opsional. Isi jika dokumen diakses via link eksternal (Google Drive, dsb).")
     tanggal_rilis = models.DateField(default=timezone.now, verbose_name="Tanggal Unggah")
 
     class Meta:

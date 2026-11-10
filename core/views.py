@@ -1086,8 +1086,16 @@ class DocumentListView(AdminRequiredMixin, ListView):
 class DocumentCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
     model = Modul
     template_name = 'core/custom_admin/modul/modul_form.html'
-    fields = '__all__'
+    fields = ['judul_ind', 'judul_en', 'deskripsi_ind', 'deskripsi_en', 'file_dokumen', 'url_dokumen', 'tanggal_rilis']
     success_url = reverse_lazy('document_list')
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['deskripsi_ind'].required = False
+        form.fields['deskripsi_en'].required = False
+        form.fields['file_dokumen'].required = False
+        form.fields['url_dokumen'].required = False
+        return form
 
     def form_valid(self, form):
         messages.success(self.request, 'Modul baru berhasil ditambahkan!')
@@ -1096,8 +1104,16 @@ class DocumentCreateView(AdminRequiredMixin, DateInputMixin, CreateView):
 class DocumentUpdateView(AdminRequiredMixin, DateInputMixin, UpdateView):
     model = Modul
     template_name = 'core/custom_admin/modul/modul_form.html'
-    fields = '__all__'
+    fields = ['judul_ind', 'judul_en', 'deskripsi_ind', 'deskripsi_en', 'file_dokumen', 'url_dokumen', 'tanggal_rilis']
     success_url = reverse_lazy('document_list')
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['deskripsi_ind'].required = False
+        form.fields['deskripsi_en'].required = False
+        form.fields['file_dokumen'].required = False
+        form.fields['url_dokumen'].required = False
+        return form
 
     def form_valid(self, form):
         messages.success(self.request, 'Data modul berhasil diperbarui!')
