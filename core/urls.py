@@ -58,7 +58,14 @@ urlpatterns = [
     path('be/stories/<int:pk>/edit/', views.StoryUpdateView.as_view(), name='story_update'),
     path('be/stories/<int:pk>/delete/', views.story_delete_view, name='story_delete'),
 
-    # URL ROUTING CRUD KLIEN / MITRA
+    # URL ROUTING CRUD GROUP KLIEN (Perusahaan Utama)
+    path('be/client-groups/', views.ClientGroupListView.as_view(), name='client_group_list'),
+    path('be/client-groups/add/', views.ClientGroupCreateView.as_view(), name='client_group_create'),
+    path('be/client-groups/<int:pk>/edit/', views.ClientGroupUpdateView.as_view(), name='client_group_update'),
+    path('be/client-groups/<int:pk>/delete/', views.client_group_delete_view, name='client_group_delete'),
+    path('be/client-groups/quick-add/', views.quick_add_client_group_view, name='quick_add_client_group'),
+
+    # URL ROUTING CRUD KLIEN (Anak Perusahaan)
     path('be/clients/', views.ClientListView.as_view(), name='client_list'),
     path('be/clients/add/', views.ClientCreateView.as_view(), name='client_create'),
     path('be/clients/<int:pk>/edit/', views.ClientUpdateView.as_view(), name='client_update'),

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
-from .models import Category, Service, ServiceStep, Location, Client, Project, Story, Article, Modul, Regency
+from .models import Category, Service, ServiceStep, Location, Client, ClientGroup, Project, Story, Article, Modul, Regency
 
 base_index = admin.site.index
 
@@ -63,6 +63,7 @@ class ModulAdmin(TranslationAdmin):
 
 admin.site.register(Category)
 admin.site.register(Location)
+admin.site.register(ClientGroup)
 admin.site.register(Client)
 @admin.register(Regency)
 class RegencyAdmin(TranslationAdmin):

@@ -241,7 +241,13 @@
           <div class="space-y-4 font-body-sm text-sm">
             <div>
               <span class="text-text-muted block text-xs uppercase tracking-wider font-bold">{% trans "Mitra / Klien" %}</span>
-              <span class="text-on-surface font-semibold text-base mt-0.5 block">{{ project.client.nama|default:"Kemitraan Strategis BPH" }}</span>
+              <span class="text-on-surface font-semibold text-base mt-0.5 block">
+                {% if project.client %}
+                  {{ project.client.nama }}{% if project.client.group %} <span class="text-text-muted text-sm font-normal">({{ project.client.group.nama }})</span>{% endif %}
+                {% else %}
+                  Kemitraan Strategis BPH
+                {% endif %}
+              </span>
             </div>
 
             <div>

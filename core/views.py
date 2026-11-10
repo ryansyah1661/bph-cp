@@ -15,7 +15,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.core.serializers import serialize
 from django.http import HttpResponse
-from .models import Article, Project, Client, Story, Service, Location, Category, Modul, ContactMessage, Gallery, Profile, Folder, TeamMember, Infografis, Video, Regency
+from .models import Article, Project, ClientGroup, Client, Story, Service, Location, Category, Modul, ContactMessage, Gallery, Profile, Folder, TeamMember, Infografis, Video, Regency
 
 # ==========================================
 # JALUR FRONTEND WEBSITE (NAVBAR & MENU)
@@ -54,8 +54,8 @@ def experience_view(request):
     categories = Category.objects.filter(projects__isnull=False).distinct().order_by('name')
     years = Project.objects.order_by('-tahun').values_list('tahun', flat=True).distinct()
     
-    clients_swasta = Client.objects.filter(sektor='swasta')
-    clients_publik = Client.objects.filter(sektor='publik')
+    clients_swasta = ClientGroup.objects.filter(sektor='swasta')
+    clients_publik = ClientGroup.objects.filter(sektor='publik')
 
     total_proyek = Project.objects.count()
     total_provinsi = Location.objects.filter(projects__isnull=False).distinct().count()
@@ -281,7 +281,7 @@ def custom_dashboard(request):
     context = {
         'total_articles': Article.objects.count(),
         'total_projects': Project.objects.count(),
-        'total_clients': Client.objects.count(),
+        'total_clients': ClientGroup.objects.count(),
         'total_stories': Story.objects.count(),
         'total_documents': Modul.objects.count(),  
         'total_messages': ContactMessage.objects.count(),
@@ -445,6 +445,17 @@ class ProjectCreateView(AdminRequiredMixin, MediaAssetPickerMixin, CreateView):
             }
             for r in all_regencies
         ])
+        context['client_groups'] = ClientGroup.objects.all().order_by('nama')
+        all_clients = Client.objects.select_related('group').all().order_by('nama')
+        context['clients_json'] = json.dumps([
+            {
+                'id': str(c.id),
+                'text': str(c.nama),
+                'group_id': str(c.group_id) if c.group_id else ''
+            }
+            for c in all_clients
+        ])
+        context['selected_group_id'] = ''
         return context
 
     def form_valid(self, form):
@@ -471,6 +482,20 @@ class ProjectUpdateView(AdminRequiredMixin, MediaAssetPickerMixin, UpdateView):
             }
             for r in all_regencies
         ])
+        context['client_groups'] = ClientGroup.objects.all().order_by('nama')
+        all_clients = Client.objects.select_related('group').all().order_by('nama')
+        context['clients_json'] = json.dumps([
+            {
+                'id': str(c.id),
+                'text': str(c.nama),
+                'group_id': str(c.group_id) if c.group_id else ''
+            }
+            for c in all_clients
+        ])
+        if self.object and self.object.client and self.object.client.group_id:
+            context['selected_group_id'] = str(self.object.client.group_id)
+        else:
+            context['selected_group_id'] = ''
         return context
 
     def form_valid(self, form):
@@ -565,8 +590,88 @@ def story_delete_view(request, pk):
 
 
 # ==========================================
-# 4. MANAGEMENT MITRA / KLIEN
+# 4. MANAGEMENT MITRA / KLIEN (GROUP + CLIENT)
 # ==========================================
+
+# --- CLIENT GROUP (Perusahaan Utama) ---
+class ClientGroupListView(AdminRequiredMixin, ListView):
+    model = ClientGroup
+    template_name = 'core/custom_admin/client/group_list.html'
+    context_object_name = 'groups'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return ClientGroup.objects.prefetch_related('clients').all().order_by('-id')
+
+class ClientGroupCreateView(AdminRequiredMixin, CreateView):
+    model = ClientGroup
+    template_name = 'core/custom_admin/client/group_form.html'
+    fields = ['nama', 'sektor', 'logo']
+    success_url = reverse_lazy('client_group_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Group klien baru berhasil ditambahkan!')
+        return super().form_valid(form)
+
+class ClientGroupUpdateView(AdminRequiredMixin, UpdateView):
+    model = ClientGroup
+    template_name = 'core/custom_admin/client/group_form.html'
+    fields = ['nama', 'sektor', 'logo']
+    success_url = reverse_lazy('client_group_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Data group klien berhasil diperbarui!')
+        return super().form_valid(form)
+
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def client_group_delete_view(request, pk):
+    group = get_object_or_404(ClientGroup, pk=pk)
+    if request.method == 'POST':
+        group.delete()
+        messages.success(request, 'Group klien berhasil dihapus!')
+    return redirect('client_group_list')
+
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def quick_add_client_group_view(request):
+    """
+    Modal quick add group perusahaan utama langsung dari form tambah klien.
+    """
+    if request.method == 'POST':
+        nama = request.POST.get('nama', '').strip()
+        sektor = request.POST.get('sektor', 'swasta')
+        logo = request.FILES.get('logo', None)
+
+        if not nama:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.POST.get('is_ajax'):
+                return JsonResponse({'success': False, 'message': 'Nama group wajib diisi.'}, status=400)
+            messages.error(request, 'Nama group wajib diisi.')
+            return redirect(request.META.get('HTTP_REFERER', 'client_list'))
+
+        group = ClientGroup.objects.create(
+            nama=nama,
+            nama_ind=nama,
+            nama_en=nama,
+            sektor=sektor,
+            logo=logo
+        )
+
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.POST.get('is_ajax'):
+            return JsonResponse({
+                'success': True,
+                'id': group.id,
+                'name': group.nama,
+                'sektor': group.get_sektor_display(),
+                'message': f'Group "{group.nama}" berhasil dibuat!'
+            })
+
+        messages.success(request, f'Group "{group.nama}" berhasil dibuat!')
+        return redirect(request.META.get('HTTP_REFERER', 'client_list'))
+
+    return JsonResponse({'success': False, 'message': 'Metode tidak diizinkan.'}, status=405)
+
+# --- CLIENT (Anak Perusahaan) ---
 class ClientListView(AdminRequiredMixin, ListView):
     model = Client
     template_name = 'core/custom_admin/client/client_list.html'
@@ -574,25 +679,62 @@ class ClientListView(AdminRequiredMixin, ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Client.objects.all().order_by('-id')
+        qs = Client.objects.select_related('group').prefetch_related('projects').all().order_by('-id')
+        group_id = self.request.GET.get('group')
+        if group_id:
+            qs = qs.filter(group_id=group_id)
+        search = self.request.GET.get('q')
+        if search:
+            qs = qs.filter(Q(nama__icontains=search) | Q(group__nama__icontains=search))
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['groups'] = ClientGroup.objects.all().order_by('nama')
+        ctx['current_group'] = self.request.GET.get('group', '')
+        ctx['search_query'] = self.request.GET.get('q', '')
+        return ctx
 
 class ClientCreateView(AdminRequiredMixin, CreateView):
     model = Client
     template_name = 'core/custom_admin/client/client_form.html'
-    fields = ['nama_ind', 'nama_en', 'sektor', 'logo']
+    fields = ['group', 'nama_ind', 'nama_en']
     success_url = reverse_lazy('client_list')
 
+    def get_initial(self):
+        initial = super().get_initial()
+        group_id = self.request.GET.get('group')
+        if group_id:
+            initial['group'] = group_id
+        return initial
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['groups'] = ClientGroup.objects.all().order_by('nama')
+        return ctx
+
     def form_valid(self, form):
+        if not form.instance.nama_en and form.instance.nama_ind:
+            form.instance.nama_en = form.instance.nama_ind
+        form.instance.nama = form.instance.nama_ind or form.instance.nama
         messages.success(self.request, 'Klien baru berhasil ditambahkan!')
         return super().form_valid(form)
 
 class ClientUpdateView(AdminRequiredMixin, UpdateView):
     model = Client
     template_name = 'core/custom_admin/client/client_form.html'
-    fields = ['nama_ind', 'nama_en', 'sektor', 'logo']
+    fields = ['group', 'nama_ind', 'nama_en']
     success_url = reverse_lazy('client_list')
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['groups'] = ClientGroup.objects.all().order_by('nama')
+        return ctx
+
     def form_valid(self, form):
+        if not form.instance.nama_en and form.instance.nama_ind:
+            form.instance.nama_en = form.instance.nama_ind
+        form.instance.nama = form.instance.nama_ind or form.instance.nama
         messages.success(self.request, 'Data klien berhasil diperbarui!')
         return super().form_valid(form)
 

@@ -1,5 +1,5 @@
 from modeltranslation.translator import register, TranslationOptions
-from .models import Article, Project, Story, Service, ServiceStep, Modul, Category, Location, Client, Gallery, Folder, TeamMember, Regency
+from .models import Article, Project, Story, Service, ServiceStep, Modul, Category, Location, Client, ClientGroup, Gallery, Folder, TeamMember, Regency
 
 @register(Article)
 class ArticleTranslationOptions(TranslationOptions):
@@ -32,6 +32,10 @@ class CategoryTranslationOptions(TranslationOptions):
 @register(Location)
 class LocationTranslationOptions(TranslationOptions):
     fields = ('nama_provinsi', 'slug')
+
+@register(ClientGroup)
+class ClientGroupTranslationOptions(TranslationOptions):
+    fields = ('nama',)
 
 @register(Client)
 class ClientTranslationOptions(TranslationOptions):

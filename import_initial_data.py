@@ -6,7 +6,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bph_project.settings')
 django.setup()
 
 from core.models import (
-    Category, Folder, Service, Client, Project,
+    Category, Folder, Service, Client, ClientGroup, Project,
     Story, Article, Modul, ContactMessage, Gallery,
     Profile, TeamMember, Infografis, Video, Program, Location, Regency
 )
@@ -33,12 +33,20 @@ for it in items:
             obj.categories.set(categories)
 print("Services processed")
 
-# 3. Clients
+# 3. Clients & Groups
 for it in items:
     if it['model'] == 'core.client':
         fields = it['fields'].copy()
+        sektor = fields.pop('sektor', 'swasta')
+        logo = fields.pop('logo', '')
+        group_nama = fields.get('nama', '')
+        group, _ = ClientGroup.objects.update_or_create(
+            nama=group_nama,
+            defaults={'sektor': sektor, 'logo': logo}
+        )
+        fields['group'] = group
         Client.objects.update_or_create(id=it['pk'], defaults=fields)
-print("Clients processed")
+print("Clients & Groups processed")
 
 # 4. Team Members
 for it in items:

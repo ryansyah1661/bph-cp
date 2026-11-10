@@ -191,13 +191,13 @@ class Regency(models.Model):
 
     
 # === 5. TABEL KLIEN (Clients) ===
-class Client(models.Model):
+class ClientGroup(models.Model):
     SECTOR_CHOICES = [
         ('swasta', 'Sektor Swasta'),
         ('publik', 'Sektor Publik'),
     ]
 
-    nama = models.CharField(max_length=200, verbose_name="Nama Instansi/Perusahaan")
+    nama = models.CharField(max_length=200, verbose_name="Nama Group / Perusahaan Utama")
     sektor = models.CharField(
         max_length=10, 
         choices=SECTOR_CHOICES, 
@@ -207,10 +207,24 @@ class Client(models.Model):
     logo = models.ImageField(upload_to='clients/logos/', blank=True, help_text="Logo grup untuk bagian partner ticker")
 
     class Meta:
-        verbose_name_plural = "Klien / Mitra Kolaborasi"
+        verbose_name_plural = "Group Klien (Perusahaan Utama)"
+        ordering = ['nama']
 
     def __str__(self):
         return f"{self.nama} ({self.get_sektor_display()})"
+
+class Client(models.Model):
+    nama = models.CharField(max_length=200, verbose_name="Nama Anak Perusahaan / Klien")
+    group = models.ForeignKey(ClientGroup, on_delete=models.CASCADE, related_name='clients', null=True, blank=True, verbose_name="Group / Perusahaan Utama")
+
+    class Meta:
+        verbose_name_plural = "Klien (Anak Perusahaan)"
+        ordering = ['nama']
+
+    def __str__(self):
+        if self.group:
+            return f"{self.group.nama} — {self.nama}"
+        return self.nama
     
 # === 6. TABEL PROYEK (Experiences) ===
 class Project(models.Model):

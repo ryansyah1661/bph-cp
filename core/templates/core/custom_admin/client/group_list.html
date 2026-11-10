@@ -1,0 +1,148 @@
+{% extends "core/custom_admin/base.html" %}
+
+{% block admin_content %}
+
+<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
+  
+  <div class="flex justify-between items-center border-b border-gray-100 pb-5">
+    <div>
+      <div class="flex items-center gap-2 mb-1">
+        <span class="material-symbols-outlined text-emerald-600 text-2xl">domain</span>
+        <h2 class="text-xl font-bold text-emerald-900">Manajemen Group Perusahaan</h2>
+      </div>
+      <p class="text-xs text-gray-500 mt-1">Kelola perusahaan utama / induk mitra strategis Bhumi Pasa Hijau (Logo dan Sektor).</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <a href="{% url 'client_list' %}" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3.5 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1.5 border border-slate-200" style="text-decoration:none;">
+        <span class="material-symbols-outlined text-sm">arrow_back</span> Kembali ke Klien
+      </a>
+      <a href="{% url 'client_group_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100" style="text-decoration:none;">
+        <span class="material-symbols-outlined text-sm">add</span> Tambah Group
+      </a>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto w-full">
+    <table class="w-full text-left border-collapse text-sm table-auto">
+      <thead>
+        <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
+          <th class="p-4 font-semibold w-14 text-center">No.</th>
+          <th class="p-4 font-semibold w-24 text-center">Logo</th>
+          <th class="p-4 font-semibold">Nama Group / Perusahaan Utama</th>
+          <th class="p-4 font-semibold text-center">Sektor</th>
+          <th class="p-4 font-semibold text-center">Jumlah Anak Perusahaan</th>
+          <th class="p-4 font-semibold text-center w-36">Aksi</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700 divide-y divide-gray-50">
+        {% for group in groups %}
+        <tr class="hover:bg-slate-50/50 transition">
+          <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
+            {% if is_paginated %}{{ page_obj.start_index|add:forloop.counter0 }}{% else %}{{ forloop.counter }}{% endif %}
+          </td>
+
+          <td class="p-4 align-middle text-center">
+            {% if group.logo %}
+              <img src="{{ group.logo.url }}" class="w-12 h-12 object-contain rounded-xl border border-gray-100 p-1 bg-white shadow-sm mx-auto">
+            {% else %}
+               <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded-md">No Logo</span>
+            {% endif %}
+          </td>
+          
+          <td class="p-4 font-semibold text-slate-800 align-middle text-base">
+            <a href="{% url 'client_list' %}?group={{ group.pk }}" class="hover:text-emerald-700 transition" style="text-decoration:none;">
+              <div class="line-clamp-1 leading-snug">{{ group.nama }}</div>
+            </a>
+          </td>
+
+          <td class="p-4 align-middle text-center font-semibold">
+            <span class="inline-block px-3 py-1 rounded-full text-xs 
+              {% if group.sektor == 'swasta' %}bg-blue-100 text-blue-800{% else %}bg-purple-100 text-purple-800{% endif %}">
+              {{ group.get_sektor_display }}
+            </span>
+          </td>
+
+          <td class="p-4 align-middle text-center">
+            <a href="{% url 'client_list' %}?group={{ group.pk }}" class="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-900 font-semibold text-sm transition" style="text-decoration:none;">
+              <span class="material-symbols-outlined text-sm">corporate_fare</span>
+              {{ group.clients.count }} klien
+            </a>
+          </td>
+          
+          <td class="p-4 text-center align-middle whitespace-nowrap">
+            <div class="flex justify-center items-center gap-2">
+              <a href="{% url 'client_list' %}?group={{ group.pk }}" title="Lihat Anak Perusahaan" class="inline-flex items-center justify-center bg-emerald-50 hover:bg-emerald-100 text-emerald-700 p-2 rounded-xl border border-emerald-200 shadow-sm transition">
+                <span class="material-symbols-outlined text-sm">visibility</span>
+              </a>
+              <a href="{% url 'client_group_update' group.pk %}" title="Edit Group" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
+                <span class="material-symbols-outlined text-sm">edit</span>
+              </a>
+              <button type="button" data-url="{% url 'client_group_delete' group.pk %}" data-title="{{ group.nama }}" onclick="openDeleteModal(this.dataset.url, this.dataset.title)" title="Hapus Group" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition cursor-pointer">
+                <span class="material-symbols-outlined text-sm">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="p-8 text-center text-gray-400 font-medium">Belum ada data group klien.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% include 'core/custom_admin/partials/pagination.html' %}
+
+</div>
+
+<!-- MODAL POPUP KONFIRMASI HAPUS -->
+<div id="deleteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl border border-gray-100 text-center transform transition-all scale-95 opacity-0 duration-300" id="modalContent">
+        <div class="w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-4">
+            <span class="material-symbols-outlined text-2xl">delete</span>
+        </div>
+        <h3 class="text-lg font-bold text-neutral-900 mb-2">Hapus Group Klien?</h3>
+        <p class="text-sm text-gray-500 mb-6">Apakah Anda yakin ingin menghapus group <strong id="articleTitle" class="text-neutral-800"></strong> beserta semua klien di dalamnya? Tindakan ini tidak bisa dibatalkan.</p>
+        
+        <form id="deleteForm" method="POST" class="flex items-center justify-center gap-3">
+            {% csrf_token %}
+            <button type="button" onclick="closeDeleteModal()" class="w-full py-2.5 rounded-xl bg-gray-100 text-gray-700 text-sm font-semibold hover:bg-gray-200 transition-colors">
+                Batal
+            </button>
+            <button type="submit" class="w-full py-2.5 rounded-xl bg-rose-600 text-white text-sm font-semibold hover:bg-rose-700 transition-colors shadow-md shadow-rose-500/20">
+                Ya, Hapus
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openDeleteModal(deleteUrl, itemName) {
+        const modal = document.getElementById('deleteModal');
+        const modalContent = document.getElementById('modalContent');
+        const deleteForm = document.getElementById('deleteForm');
+        const titleSpan = document.getElementById('articleTitle');
+
+        deleteForm.action = deleteUrl;
+        titleSpan.innerText = `"${itemName}"`;
+
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modalContent.classList.remove('scale-95', 'opacity-0');
+            modalContent.classList.add('scale-100', 'opacity-100');
+        }, 10);
+    }
+
+    function closeDeleteModal() {
+        const modal = document.getElementById('deleteModal');
+        const modalContent = document.getElementById('modalContent');
+
+        modalContent.classList.remove('scale-100', 'opacity-100');
+        modalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+</script>
+{% endblock %}

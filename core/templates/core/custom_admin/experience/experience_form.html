@@ -53,9 +53,21 @@
           <div class="django-input-wrapper" id="tahun-select-container">{{ form.tahun }}</div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="block-input-group">
-            <label class="block text-sm font-semibold text-slate-700 mb-1">Klien / Mitra <span class="text-red-500">*</span></label>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Perusahaan Utama (Group)</label>
+            <div class="django-input-wrapper">
+              <select id="group-filter-select">
+                <option value="">-- Semua Group --</option>
+                {% for g in client_groups %}
+                  <option value="{{ g.id }}" {% if selected_group_id == g.id|stringformat:"s" %}selected{% endif %}>{{ g.nama }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <p class="text-[11px] text-gray-400 mt-1">Pilih group untuk menyaring anak perusahaan.</p>
+          </div>
+          <div class="block-input-group">
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Klien (Anak Perusahaan) <span class="text-red-500">*</span></label>
             <div class="django-input-wrapper">{{ form.client }}</div>
           </div>
           <div class="block-input-group">
@@ -272,6 +284,38 @@
     }
   });
 
+
+  // Filter Klien berdasarkan Group Perusahaan Utama
+  const allClientsData = {{ clients_json|default:"[]"|safe }};
+  const groupFilterSelect = document.getElementById('group-filter-select');
+  const clientInputSelect = document.getElementById('id_client');
+
+  if (groupFilterSelect && clientInputSelect) {
+    function syncClientOptions() {
+      const selectedGroupId = groupFilterSelect.value;
+      const currentVal = clientInputSelect.value;
+
+      clientInputSelect.innerHTML = '<option value="">---------</option>';
+
+      allClientsData.forEach(c => {
+        if (!selectedGroupId || c.group_id === selectedGroupId) {
+          const opt = document.createElement('option');
+          opt.value = c.id;
+          opt.textContent = c.text;
+          if (String(c.id) === String(currentVal)) {
+            opt.selected = true;
+          }
+          clientInputSelect.appendChild(opt);
+        }
+      });
+    }
+
+    groupFilterSelect.addEventListener('change', syncClientOptions);
+
+    if (groupFilterSelect.value) {
+      syncClientOptions();
+    }
+  }
 
   const allRegenciesData = {{ regencies_json|default:"[]"|safe }};
 

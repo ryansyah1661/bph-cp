@@ -4,24 +4,75 @@
 
 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
   
-  <div class="flex justify-between items-center border-b border-gray-100 pb-5">
+  <!-- Header & Actions -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-100 pb-5 gap-4">
     <div>
-      <h2 class="text-xl font-bold text-emerald-900">Manajemen Klien & Mitra Kolaborasi</h2>
-      <p class="text-xs text-gray-500 mt-1">Kelola logo dan arsip data instansi mitra strategis Bhumi Pasa Hijau.</p>
+      <div class="flex items-center gap-2 mb-1">
+        <span class="material-symbols-outlined text-emerald-600 text-2xl">corporate_fare</span>
+        <h2 class="text-xl font-bold text-emerald-900">Manajemen Klien &amp; Mitra Kolaborasi</h2>
+      </div>
+      <p class="text-xs text-gray-500">Kelola anak perusahaan (klien) dan perusahaan induk / group mitra strategis Bhumi Pasa Hijau.</p>
     </div>
-    <a href="{% url 'client_create' %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1 shadow-sm shadow-emerald-100">
-      <span class="material-symbols-outlined text-sm">add</span> Tambah Mitra
-    </a>
+    
+    <div class="flex items-center gap-2.5 flex-wrap">
+      <a href="{% url 'client_group_list' %}" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3.5 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1.5 border border-slate-200" style="text-decoration:none;">
+        <span class="material-symbols-outlined text-sm">domain</span> Kelola Group Perusahaan
+      </a>
+
+      <button type="button" onclick="openQuickAddGroupModal()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold px-3.5 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1.5 border border-emerald-200 cursor-pointer">
+        <span class="material-symbols-outlined text-sm">add_circle</span> + Buat Group Baru
+      </button>
+
+      <a href="{% url 'client_create' %}{% if current_group %}?group={{ current_group }}{% endif %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1.5 shadow-sm shadow-emerald-100" style="text-decoration: none;">
+        <span class="material-symbols-outlined text-sm">add</span> Tambah Klien
+      </a>
+    </div>
   </div>
 
+  <!-- Filter & Search Toolbar (Sama persis seperti Asset Media) -->
+  <form method="get" class="flex flex-wrap items-center justify-between gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+    <div class="flex flex-wrap items-center gap-2.5 flex-1 min-w-[280px]">
+      <div class="relative flex-1 min-w-[180px]">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</span>
+        <input type="text" name="q" value="{{ search_query }}" placeholder="Cari nama klien atau perusahaan utama..." class="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-gray-200 bg-white focus:border-emerald-500 focus:outline-none transition">
+      </div>
+
+      <select name="group" onchange="this.form.submit()" class="py-2 px-3 text-xs rounded-lg border border-gray-200 bg-white text-slate-700 font-medium focus:border-emerald-500 focus:outline-none transition">
+        <option value="">Semua Group / Perusahaan Utama ({{ groups.count }})</option>
+        {% for g in groups %}
+          <option value="{{ g.id }}" {% if current_group == g.id|stringformat:"s" %}selected{% endif %}>
+            {{ g.nama }} ({{ g.get_sektor_display }})
+          </option>
+        {% endfor %}
+      </select>
+
+      <button type="submit" class="px-3.5 py-2 bg-slate-800 text-white text-xs font-semibold rounded-lg hover:bg-slate-700 transition cursor-pointer border-none">
+        Filter
+      </button>
+
+      {% if search_query or current_group %}
+      <a href="{% url 'client_list' %}" class="text-xs text-rose-600 hover:underline flex items-center gap-0.5 ml-1" style="text-decoration:none;">
+        <span class="material-symbols-outlined text-xs">clear</span> Reset
+      </a>
+      {% endif %}
+    </div>
+
+    <div class="text-xs text-slate-500 font-medium">
+      Total: <span class="font-bold text-slate-800">{{ page_obj.paginator.count|default:clients.count }}</span> Klien
+    </div>
+  </form>
+
+  <!-- Tabel Klien -->
   <div class="overflow-x-auto w-full">
     <table class="w-full text-left border-collapse text-sm table-auto">
       <thead>
         <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
           <th class="p-4 font-semibold w-14 text-center">No.</th>
-          <th class="p-4 font-semibold w-24 text-center">Logo</th>
-          <th class="p-4 font-semibold">Nama Instansi / Perusahaan</th>
+          <th class="p-4 font-semibold w-24 text-center">Logo Group</th>
+          <th class="p-4 font-semibold">Nama Klien / Anak Perusahaan</th>
+          <th class="p-4 font-semibold">Group / Perusahaan Utama</th>
           <th class="p-4 font-semibold text-center">Sektor</th>
+          <th class="p-4 font-semibold text-center">Proyek</th>
           <th class="p-4 font-semibold text-center w-28">Aksi</th>
         </tr>
       </thead>
@@ -33,8 +84,8 @@
           </td>
 
           <td class="p-4 align-middle text-center">
-            {% if client.logo %}
-              <img src="{{ client.logo.url }}" class="w-12 h-12 object-contain rounded-xl border border-gray-100 p-1 bg-white shadow-sm mx-auto">
+            {% if client.group and client.group.logo %}
+              <img src="{{ client.group.logo.url }}" class="w-12 h-12 object-contain rounded-xl border border-gray-100 p-1 bg-white shadow-sm mx-auto" alt="{{ client.group.nama }}">
             {% else %}
                <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded-md">No Logo</span>
             {% endif %}
@@ -44,10 +95,31 @@
             <div class="line-clamp-1 leading-snug">{{ client.nama }}</div>
           </td>
 
+          <td class="p-4 align-middle text-slate-600 font-medium text-sm">
+            {% if client.group %}
+              <a href="?group={{ client.group.id }}" class="text-emerald-700 hover:underline flex items-center gap-1 font-semibold" style="text-decoration:none;">
+                <span class="material-symbols-outlined text-xs">domain</span> {{ client.group.nama }}
+              </a>
+            {% else %}
+              <span class="text-gray-400 italic">Tanpa Group</span>
+            {% endif %}
+          </td>
+
           <td class="p-4 align-middle text-center font-semibold">
-            <span class="inline-block px-3 py-1 rounded-full text-xs 
-              {% if client.sektor == 'swasta' %}bg-blue-100 text-blue-800{% else %}bg-purple-100 text-purple-800{% endif %}">
-              {{ client.get_sektor_display }}
+            {% if client.group %}
+              <span class="inline-block px-3 py-1 rounded-full text-xs 
+                {% if client.group.sektor == 'swasta' %}bg-blue-100 text-blue-800{% else %}bg-purple-100 text-purple-800{% endif %}">
+                {{ client.group.get_sektor_display }}
+              </span>
+            {% else %}
+              <span class="text-gray-400 text-xs">-</span>
+            {% endif %}
+          </td>
+
+          <td class="p-4 align-middle text-center">
+            <span class="inline-flex items-center gap-1 text-slate-600 font-semibold text-xs">
+              <span class="material-symbols-outlined text-xs text-slate-400">assignment</span>
+              {{ client.projects.count }}
             </span>
           </td>
           
@@ -64,7 +136,13 @@
         </tr>
         {% empty %}
         <tr>
-          <td colspan="5" class="p-8 text-center text-gray-400 font-medium">Belum ada data klien / mitra.</td>
+          <td colspan="7" class="p-8 text-center text-gray-400 font-medium">
+            {% if current_group or search_query %}
+              Tidak ada klien yang cocok dengan filter. <a href="{% url 'client_list' %}" class="text-emerald-600 hover:underline">Reset filter</a>
+            {% else %}
+              Belum ada data klien / mitra. Klik "Tambah Klien" di atas untuk menambahkan.
+            {% endif %}
+          </td>
         </tr>
         {% endfor %}
       </tbody>
@@ -75,6 +153,51 @@
 
 </div>
 
+<!-- MODAL QUICK ADD GROUP -->
+<div id="quickGroupModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl border border-gray-100 transform transition-all scale-95 opacity-0 duration-300" id="quickGroupContent">
+        <div class="flex items-center justify-between border-b border-gray-100 pb-3 mb-4">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-emerald-600 text-xl">domain</span>
+                <h3 class="text-base font-bold text-neutral-900">Buat Group Perusahaan Baru</h3>
+            </div>
+            <button type="button" onclick="closeQuickAddGroupModal()" class="text-gray-400 hover:text-gray-600 cursor-pointer">
+                <span class="material-symbols-outlined text-lg">close</span>
+            </button>
+        </div>
+        
+        <form id="quickGroupForm" method="POST" action="{% url 'quick_add_client_group' %}" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Group / Perusahaan Utama <span class="text-red-500">*</span></label>
+                <input type="text" name="nama" required placeholder="Contoh: PT Pertamina (Persero)" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-xl focus:border-emerald-500 focus:outline-none">
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Kategori Sektor <span class="text-red-500">*</span></label>
+                <select name="sektor" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-xl focus:border-emerald-500 focus:outline-none bg-white">
+                    <option value="swasta">Sektor Swasta</option>
+                    <option value="publik">Sektor Publik</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Logo Group (Opsional)</label>
+                <input type="file" name="logo" accept="image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+            </div>
+
+            <div class="pt-3 border-t border-gray-100 flex items-center justify-end gap-2">
+                <button type="button" onclick="closeQuickAddGroupModal()" class="px-4 py-2 rounded-xl bg-gray-100 text-gray-700 text-xs font-semibold hover:bg-gray-200 transition-colors">
+                    Batal
+                </button>
+                <button type="submit" class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-colors shadow-sm">
+                    Simpan Group
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <!-- MODAL POPUP KONFIRMASI HAPUS -->
 <div id="deleteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden">
     <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl border border-gray-100 text-center transform transition-all scale-95 opacity-0 duration-300" id="modalContent">
@@ -82,7 +205,7 @@
             <span class="material-symbols-outlined text-2xl">delete</span>
         </div>
         <h3 class="text-lg font-bold text-neutral-900 mb-2">Hapus Klien / Mitra?</h3>
-        <p class="text-sm text-gray-500 mb-6">Apakah Anda yakin ingin menghapus data instansi <strong id="articleTitle" class="text-neutral-800"></strong> secara permanen? Tindakan ini tidak bisa dibatalkan.</p>
+        <p class="text-sm text-gray-500 mb-6">Apakah Anda yakin ingin menghapus data klien <strong id="articleTitle" class="text-neutral-800"></strong> secara permanen? Tindakan ini tidak bisa dibatalkan.</p>
         
         <form id="deleteForm" method="POST" class="flex items-center justify-center gap-3">
             {% csrf_token %}
@@ -97,6 +220,26 @@
 </div>
 
 <script>
+    function openQuickAddGroupModal() {
+        const modal = document.getElementById('quickGroupModal');
+        const content = document.getElementById('quickGroupContent');
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+        }, 10);
+    }
+
+    function closeQuickAddGroupModal() {
+        const modal = document.getElementById('quickGroupModal');
+        const content = document.getElementById('quickGroupContent');
+        content.classList.remove('scale-100', 'opacity-100');
+        content.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+
     function openDeleteModal(deleteUrl, itemName) {
         const modal = document.getElementById('deleteModal');
         const modalContent = document.getElementById('modalContent');
