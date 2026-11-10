@@ -60,7 +60,11 @@ def experience_view(request):
     total_proyek = Project.objects.count()
     total_provinsi = Location.objects.filter(projects__isnull=False).distinct().count()
     total_kabkot = Regency.objects.filter(projects__isnull=False).distinct().count()
-    total_klien = Client.objects.filter(projects__isnull=False).distinct().count()
+    
+    # Hitung: jumlah anak perusahaan + jumlah grup yang tidak ada anak perusahaan
+    anak_count = Client.objects.count()
+    grup_tanpa_anak = ClientGroup.objects.filter(clients__isnull=True).distinct().count()
+    total_klien = anak_count + grup_tanpa_anak
     
     tahun_bounds = Project.objects.all().aggregate(Min('tahun'), Max('tahun'))
     if tahun_bounds['tahun__min'] and tahun_bounds['tahun__max']:
@@ -281,7 +285,7 @@ def custom_dashboard(request):
     context = {
         'total_articles': Article.objects.count(),
         'total_projects': Project.objects.count(),
-        'total_clients': ClientGroup.objects.count(),
+        'total_clients': Client.objects.count() + ClientGroup.objects.filter(clients__isnull=True).distinct().count(),
         'total_stories': Story.objects.count(),
         'total_documents': Modul.objects.count(),  
         'total_messages': ContactMessage.objects.count(),
