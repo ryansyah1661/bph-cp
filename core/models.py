@@ -241,7 +241,8 @@ class Project(models.Model):
     pdf_cover = models.ImageField(upload_to='projects/pdf_covers/', blank=True, null=True, verbose_name="Sampul Modul PDF")
     pdf_file = models.FileField(upload_to='projects/pdf_files/', blank=True, null=True, verbose_name="Berkas Modul Laporan Teknis (PDF)")
 
-    client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True, related_name='projects')
+    client_group = models.ForeignKey(ClientGroup, on_delete=models.SET_NULL, null=True, blank=True, related_name='projects', verbose_name="Perusahaan Utama (Group)")
+    client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True, blank=True, related_name='projects', verbose_name="Klien (Anak Perusahaan)")
     service_portfolio = models.ForeignKey(Service, on_delete=models.SET_NULL, null=True, related_name='projects', verbose_name="Sesuai Portofolio Layanan")
     locations = models.ManyToManyField(Location, blank=True, related_name='projects', verbose_name="Lokasi Wilayah Provinsi")
     regencies = models.ManyToManyField(Regency, blank=True, related_name='projects', verbose_name="Lokasi Kabupaten/Kota")
@@ -257,6 +258,20 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def client_display_name(self):
+        """
+        Menampilkan nama mitra proyek: Anak Perusahaan (Group) atau Group saja jika berdiri sendiri.
+        """
+        if self.client:
+            grp = self.client_group or getattr(self.client, 'group', None)
+            if grp and grp.nama != self.client.nama:
+                return f"{self.client.nama} ({grp.nama})"
+            return self.client.nama
+        elif self.client_group:
+            return self.client_group.nama
+        return "Kemitraan Strategis BPH"
 
     @property
     def locations_hierarchy(self):

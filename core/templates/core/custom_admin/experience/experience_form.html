@@ -55,20 +55,16 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="block-input-group">
-            <label class="block text-sm font-semibold text-slate-700 mb-1">Perusahaan Utama (Group)</label>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Perusahaan Utama (Group) <span class="text-red-500">*</span></label>
             <div class="django-input-wrapper">
-              <select id="group-filter-select">
-                <option value="">-- Semua Group --</option>
-                {% for g in client_groups %}
-                  <option value="{{ g.id }}" {% if selected_group_id == g.id|stringformat:"s" %}selected{% endif %}>{{ g.nama }}</option>
-                {% endfor %}
-              </select>
+              {{ form.client_group }}
             </div>
-            <p class="text-[11px] text-gray-400 mt-1">Pilih group untuk menyaring anak perusahaan.</p>
+            <p class="text-[11px] text-gray-400 mt-1">Wajib dipilih. Mitra induk pelaksana proyek.</p>
           </div>
           <div class="block-input-group">
-            <label class="block text-sm font-semibold text-slate-700 mb-1">Klien (Anak Perusahaan) <span class="text-red-500">*</span></label>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Klien (Anak Perusahaan)</label>
             <div class="django-input-wrapper">{{ form.client }}</div>
+            <p class="text-[11px] text-gray-400 mt-1">Opsional jika group tidak memiliki anak perusahaan.</p>
           </div>
           <div class="block-input-group">
             <label class="block text-sm font-semibold text-slate-700 mb-1">Portofolio Layanan <span class="text-red-500">*</span></label>
@@ -287,7 +283,7 @@
 
   // Filter Klien berdasarkan Group Perusahaan Utama
   const allClientsData = {{ clients_json|default:"[]"|safe }};
-  const groupFilterSelect = document.getElementById('group-filter-select');
+  const groupFilterSelect = document.getElementById('id_client_group');
   const clientInputSelect = document.getElementById('id_client');
 
   if (groupFilterSelect && clientInputSelect) {
@@ -295,10 +291,11 @@
       const selectedGroupId = groupFilterSelect.value;
       const currentVal = clientInputSelect.value;
 
-      clientInputSelect.innerHTML = '<option value="">---------</option>';
+      clientInputSelect.innerHTML = '<option value="">-- Tidak ada anak perusahaan (Opsional) --</option>';
 
+      let countAdded = 0;
       allClientsData.forEach(c => {
-        if (!selectedGroupId || c.group_id === selectedGroupId) {
+        if (!selectedGroupId || String(c.group_id) === String(selectedGroupId)) {
           const opt = document.createElement('option');
           opt.value = c.id;
           opt.textContent = c.text;
@@ -306,8 +303,13 @@
             opt.selected = true;
           }
           clientInputSelect.appendChild(opt);
+          countAdded++;
         }
       });
+
+      if (countAdded === 0 && selectedGroupId) {
+        clientInputSelect.options[0].textContent = '-- Group ini tidak memiliki anak perusahaan --';
+      }
     }
 
     groupFilterSelect.addEventListener('change', syncClientOptions);

@@ -435,8 +435,18 @@ class ProjectCreateView(AdminRequiredMixin, MediaAssetPickerMixin, CreateView):
     model = Project
     image_field_name = 'image' 
     template_name = 'core/custom_admin/experience/experience_form.html'
-    fields = ['name_ind', 'name_en', 'slug_ind', 'slug_en', 'description_ind', 'description_en', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'regencies', 'categories']
+    fields = ['name_ind', 'name_en', 'slug_ind', 'slug_en', 'description_ind', 'description_en', 'tahun', 'image', 'client_group', 'client', 'service_portfolio', 'locations', 'regencies', 'categories']
     success_url = reverse_lazy('project_list')
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if 'client_group' in form.fields:
+            form.fields['client_group'].required = True
+            form.fields['client_group'].label = "Perusahaan Utama (Group)"
+        if 'client' in form.fields:
+            form.fields['client'].required = False
+            form.fields['client'].label = "Klien (Anak Perusahaan)"
+        return form
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -465,6 +475,8 @@ class ProjectCreateView(AdminRequiredMixin, MediaAssetPickerMixin, CreateView):
     def form_valid(self, form):
         if not form.instance.slug_en and form.instance.slug_ind:
             form.instance.slug_en = form.instance.slug_ind
+        if form.instance.client and not form.instance.client_group:
+            form.instance.client_group = form.instance.client.group
         messages.success(self.request, 'Proyek baru berhasil ditambahkan!')
         return super().form_valid(form)
 
@@ -472,8 +484,18 @@ class ProjectUpdateView(AdminRequiredMixin, MediaAssetPickerMixin, UpdateView):
     model = Project
     image_field_name = 'image' 
     template_name = 'core/custom_admin/experience/experience_form.html'
-    fields = ['name_ind', 'name_en', 'slug_ind', 'slug_en', 'description_ind', 'description_en', 'tahun', 'image', 'client', 'service_portfolio', 'locations', 'regencies', 'categories']
+    fields = ['name_ind', 'name_en', 'slug_ind', 'slug_en', 'description_ind', 'description_en', 'tahun', 'image', 'client_group', 'client', 'service_portfolio', 'locations', 'regencies', 'categories']
     success_url = reverse_lazy('project_list')
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if 'client_group' in form.fields:
+            form.fields['client_group'].required = True
+            form.fields['client_group'].label = "Perusahaan Utama (Group)"
+        if 'client' in form.fields:
+            form.fields['client'].required = False
+            form.fields['client'].label = "Klien (Anak Perusahaan)"
+        return form
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -496,15 +518,20 @@ class ProjectUpdateView(AdminRequiredMixin, MediaAssetPickerMixin, UpdateView):
             }
             for c in all_clients
         ])
-        if self.object and self.object.client and self.object.client.group_id:
-            context['selected_group_id'] = str(self.object.client.group_id)
-        else:
-            context['selected_group_id'] = ''
+        selected_gid = ''
+        if self.object:
+            if self.object.client_group_id:
+                selected_gid = str(self.object.client_group_id)
+            elif self.object.client and self.object.client.group_id:
+                selected_gid = str(self.object.client.group_id)
+        context['selected_group_id'] = selected_gid
         return context
 
     def form_valid(self, form):
         if not form.instance.slug_en and form.instance.slug_ind:
             form.instance.slug_en = form.instance.slug_ind
+        if form.instance.client and not form.instance.client_group:
+            form.instance.client_group = form.instance.client.group
         messages.success(self.request, 'Perubahan data proyek berhasil disimpan!')
         return super().form_valid(form)
 
@@ -607,8 +634,9 @@ class ClientGroupListView(AdminRequiredMixin, ListView):
     def get_queryset(self):
         return ClientGroup.objects.prefetch_related('clients').all().order_by('-id')
 
-class ClientGroupCreateView(AdminRequiredMixin, CreateView):
+class ClientGroupCreateView(AdminRequiredMixin, MediaAssetPickerMixin, CreateView):
     model = ClientGroup
+    image_field_name = 'logo'
     template_name = 'core/custom_admin/client/group_form.html'
     fields = ['nama', 'sektor', 'logo']
     success_url = reverse_lazy('client_group_list')
@@ -617,8 +645,9 @@ class ClientGroupCreateView(AdminRequiredMixin, CreateView):
         messages.success(self.request, 'Group klien baru berhasil ditambahkan!')
         return super().form_valid(form)
 
-class ClientGroupUpdateView(AdminRequiredMixin, UpdateView):
+class ClientGroupUpdateView(AdminRequiredMixin, MediaAssetPickerMixin, UpdateView):
     model = ClientGroup
+    image_field_name = 'logo'
     template_name = 'core/custom_admin/client/group_form.html'
     fields = ['nama', 'sektor', 'logo']
     success_url = reverse_lazy('client_group_list')
