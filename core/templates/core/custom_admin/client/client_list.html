@@ -25,12 +25,8 @@
           <span class="material-symbols-outlined text-sm">domain</span> Kelola Group
         </a>
 
-        <button type="button" onclick="openQuickAddGroupModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3.5 py-2.5 rounded-xl transition flex items-center gap-1.5 border border-slate-200 cursor-pointer">
-          <span class="material-symbols-outlined text-sm text-emerald-600">add_circle</span> + Buat Group Baru
-        </button>
-
-        <button type="button" onclick="openAddChildModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-sm shadow-emerald-200 cursor-pointer border-none">
-          <span class="material-symbols-outlined text-sm">add</span> Tambah Anak Perusahaan
+        <button type="button" onclick="openQuickAddGroupModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-sm shadow-emerald-200 cursor-pointer border-none">
+          <span class="material-symbols-outlined text-sm">add</span> + Buat Group Baru
         </button>
       </div>
     </div>
@@ -191,12 +187,6 @@
                 {% endfor %}
               </tbody>
             </table>
-          </div>
-
-          <div class="mt-3 flex justify-end">
-            <button type="button" onclick="openAddChildModal('{{ group.id }}', '{{ group.nama|escapejs }}')" class="text-xs font-semibold text-emerald-700 hover:text-emerald-800 hover:underline flex items-center gap-1 cursor-pointer bg-transparent border-none">
-              <span class="material-symbols-outlined text-sm">add</span> + Tambah Anak Perusahaan ke Group Ini
-            </button>
           </div>
 
         {% else %}
