@@ -642,6 +642,17 @@
       const originalChildren = Array.from(innerFlex.children);
       if (originalChildren.length === 0) return;
 
+      // Cek apakah elemen di dalam adalah kartu klien (bukan pesan kosong)
+      const isCard = originalChildren.some(el => el.classList.contains('bg-surface-white'));
+      if (!isCard) return;
+
+      // Jika jumlah klien masih sedikit (< 4), jangan diduplikasi/dikloning agar tidak muncul kartu yang sama berulang
+      if (originalChildren.length < 4) {
+        innerFlex.classList.remove('w-max');
+        innerFlex.classList.add('w-full', 'justify-center');
+        return;
+      }
+
       // Clone elemen 2 kali agar ada 3 set (Kiri, Tengah, Kanan) untuk membuat loop tanpa batas yang mulus
       originalChildren.forEach(child => innerFlex.appendChild(child.cloneNode(true)));
       originalChildren.forEach(child => innerFlex.appendChild(child.cloneNode(true)));
