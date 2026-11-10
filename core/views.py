@@ -1278,10 +1278,15 @@ def user_delete_view(request, pk):
         return redirect('custom_dashboard')
         
     user = get_object_or_404(User, pk=pk)
+    if user == request.user:
+        messages.error(request, 'Anda tidak dapat menghapus akun Anda sendiri yang sedang aktif!')
+        return redirect('user_list')
+
     if request.method == 'POST':
         user.delete()
-        messages.success(request, 'Pengguna berhasil dihapus!')
-    return redirect('user_list')
+        messages.success(request, f'Pengguna "{user.username}" berhasil dihapus!')
+        return redirect('user_list')
+    return render(request, 'core/custom_admin/user/user_confim_delete.html', {'object': user})
 
 
 # ==========================================
