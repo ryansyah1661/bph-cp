@@ -68,6 +68,7 @@ urlpatterns = [
     # URL ROUTING CRUD KLIEN (Anak Perusahaan)
     path('be/clients/', views.ClientListView.as_view(), name='client_list'),
     path('be/clients/add/', views.ClientCreateView.as_view(), name='client_create'),
+    path('be/clients/quick-add/', views.quick_add_client_view, name='quick_add_client'),
     path('be/clients/<int:pk>/edit/', views.ClientUpdateView.as_view(), name='client_update'),
     path('be/clients/<int:pk>/delete/', views.client_delete_view, name='client_delete'),
 

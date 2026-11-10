@@ -675,35 +675,74 @@ def quick_add_client_group_view(request):
 
     return JsonResponse({'success': False, 'message': 'Metode tidak diizinkan.'}, status=405)
 
-# --- CLIENT (Anak Perusahaan) ---
+# --- CLIENT (Manajemen Klien & Group Hierarkis - Tampilan Accordion) ---
 class ClientListView(AdminRequiredMixin, ListView):
-    model = Client
+    model = ClientGroup
     template_name = 'core/custom_admin/client/client_list.html'
-    context_object_name = 'clients'
-    paginate_by = 10
+    context_object_name = 'groups'
+    paginate_by = 25
 
     def get_queryset(self):
-        qs = Client.objects.select_related('group').prefetch_related('projects').all().order_by('-id')
-        group_id = self.request.GET.get('group')
-        if group_id:
-            qs = qs.filter(group_id=group_id)
-        search = self.request.GET.get('q')
+        qs = ClientGroup.objects.prefetch_related(
+            Prefetch('clients', queryset=Client.objects.prefetch_related('projects').order_by('nama'))
+        ).all().order_by('nama')
+
+        search = self.request.GET.get('q', '').strip()
         if search:
-            qs = qs.filter(Q(nama__icontains=search) | Q(group__nama__icontains=search))
+            qs = qs.filter(
+                Q(nama__icontains=search) | 
+                Q(nama_ind__icontains=search) | 
+                Q(clients__nama__icontains=search) |
+                Q(clients__nama_ind__icontains=search)
+            ).distinct()
+
+        sektor = self.request.GET.get('sektor', '').strip()
+        if sektor:
+            qs = qs.filter(sektor=sektor)
+
         return qs
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['groups'] = ClientGroup.objects.all().order_by('nama')
-        ctx['current_group'] = self.request.GET.get('group', '')
         ctx['search_query'] = self.request.GET.get('q', '')
+        ctx['current_sektor'] = self.request.GET.get('sektor', '')
+        ctx['total_groups'] = ClientGroup.objects.count()
+        ctx['total_anak'] = Client.objects.count()
+        ctx['total_klien_efektif'] = ctx['total_anak'] + ClientGroup.objects.filter(clients__isnull=True).distinct().count()
+        ctx['all_groups'] = ClientGroup.objects.all().order_by('nama')
+        ctx['open_group_id'] = self.request.GET.get('open', '')
         return ctx
+
+@login_required(login_url='/be/login/')
+@user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
+def quick_add_client_view(request):
+    """
+    Tambah anak perusahaan (klien) instan dari popup modal atau tombol dalam accordion.
+    """
+    if request.method == 'POST':
+        group_id = request.POST.get('group')
+        nama = request.POST.get('nama', '').strip()
+
+        if not group_id or not nama:
+            messages.error(request, 'Group perusahaan utama dan nama anak perusahaan wajib diisi.')
+            return redirect('client_list')
+
+        group = get_object_or_404(ClientGroup, pk=group_id)
+        client = Client.objects.create(
+            group=group,
+            nama=nama,
+            nama_ind=nama,
+            nama_en=nama
+        )
+        messages.success(request, f'Anak perusahaan "{client.nama}" berhasil ditambahkan ke group "{group.nama}"!')
+        return redirect(f"/be/clients/?open={group.id}")
+
+    return redirect('client_list')
 
 class ClientCreateView(AdminRequiredMixin, CreateView):
     model = Client
     template_name = 'core/custom_admin/client/client_form.html'
     fields = ['group', 'nama_ind', 'nama_en']
-    success_url = reverse_lazy('client_list')
 
     def get_initial(self):
         initial = super().get_initial()
@@ -721,14 +760,14 @@ class ClientCreateView(AdminRequiredMixin, CreateView):
         if not form.instance.nama_en and form.instance.nama_ind:
             form.instance.nama_en = form.instance.nama_ind
         form.instance.nama = form.instance.nama_ind or form.instance.nama
-        messages.success(self.request, 'Klien baru berhasil ditambahkan!')
-        return super().form_valid(form)
+        messages.success(self.request, 'Anak perusahaan baru berhasil ditambahkan!')
+        self.object = form.save()
+        return redirect(f"/be/clients/?open={self.object.group_id}")
 
 class ClientUpdateView(AdminRequiredMixin, UpdateView):
     model = Client
     template_name = 'core/custom_admin/client/client_form.html'
     fields = ['group', 'nama_ind', 'nama_en']
-    success_url = reverse_lazy('client_list')
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -739,17 +778,19 @@ class ClientUpdateView(AdminRequiredMixin, UpdateView):
         if not form.instance.nama_en and form.instance.nama_ind:
             form.instance.nama_en = form.instance.nama_ind
         form.instance.nama = form.instance.nama_ind or form.instance.nama
-        messages.success(self.request, 'Data klien berhasil diperbarui!')
-        return super().form_valid(form)
+        messages.success(self.request, 'Data anak perusahaan berhasil diperbarui!')
+        self.object = form.save()
+        return redirect(f"/be/clients/?open={self.object.group_id}")
 
 @login_required(login_url='/be/login/')
 @user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
 def client_delete_view(request, pk):
     client = get_object_or_404(Client, pk=pk)
+    group_id = client.group_id
     if request.method == 'POST':
         client.delete()
-        messages.success(request, 'Data klien berhasil dihapus!')
-    return redirect('client_list')
+        messages.success(request, 'Data anak perusahaan berhasil dihapus!')
+    return redirect(f"/be/clients/?open={group_id}" if group_id else 'client_list')
 
 
 # ==========================================

@@ -2,151 +2,229 @@
 
 {% block admin_content %}
 
-<div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
-  
-  <!-- Header & Actions -->
-  <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-100 pb-5 gap-4">
-    <div>
-      <div class="flex items-center gap-2 mb-1">
-        <span class="material-symbols-outlined text-emerald-600 text-2xl">corporate_fare</span>
-        <h2 class="text-xl font-bold text-emerald-900">Manajemen Klien &amp; Mitra Kolaborasi</h2>
+<div class="space-y-6">
+
+  <!-- Header & Action Buttons -->
+  <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2.5 mb-1.5">
+          <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+            <span class="material-symbols-outlined text-2xl">corporate_fare</span>
+          </div>
+          <div>
+            <h2 class="text-xl font-bold text-slate-800">Manajemen Klien &amp; Mitra Kolaborasi</h2>
+            <p class="text-xs text-slate-500">Kelola perusahaan utama (group) dan anak perusahaan mitra strategis BPH secara hierarkis.</p>
+          </div>
+        </div>
       </div>
-      <p class="text-xs text-gray-500">Kelola anak perusahaan (klien) dan perusahaan induk / group mitra strategis Bhumi Pasa Hijau.</p>
+      
+      <!-- Quick Action Buttons -->
+      <div class="flex items-center gap-2.5 flex-wrap">
+        <a href="{% url 'client_group_list' %}" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3.5 py-2.5 rounded-xl transition flex items-center gap-1.5 border border-slate-200" style="text-decoration:none;">
+          <span class="material-symbols-outlined text-sm">domain</span> Kelola Group
+        </a>
+
+        <button type="button" onclick="openQuickAddGroupModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3.5 py-2.5 rounded-xl transition flex items-center gap-1.5 border border-slate-200 cursor-pointer">
+          <span class="material-symbols-outlined text-sm text-emerald-600">add_circle</span> + Buat Group Baru
+        </button>
+
+        <button type="button" onclick="openAddChildModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-sm shadow-emerald-200 cursor-pointer border-none">
+          <span class="material-symbols-outlined text-sm">add</span> Tambah Anak Perusahaan
+        </button>
+      </div>
     </div>
-    
-    <div class="flex items-center gap-2.5 flex-wrap">
-      <a href="{% url 'client_group_list' %}" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3.5 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1.5 border border-slate-200" style="text-decoration:none;">
-        <span class="material-symbols-outlined text-sm">domain</span> Kelola Group Perusahaan
-      </a>
 
-      <button type="button" onclick="openQuickAddGroupModal()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold px-3.5 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1.5 border border-emerald-200 cursor-pointer">
-        <span class="material-symbols-outlined text-sm">add_circle</span> + Buat Group Baru
-      </button>
-
-      <a href="{% url 'client_create' %}{% if current_group %}?group={{ current_group }}{% endif %}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider transition flex items-center gap-1.5 shadow-sm shadow-emerald-100" style="text-decoration: none;">
-        <span class="material-symbols-outlined text-sm">add</span> Tambah Klien
-      </a>
+    <!-- Summary Stats Chips -->
+    <div class="flex items-center gap-3 flex-wrap mt-5 pt-4 border-t border-slate-100 text-xs">
+      <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-100 font-medium text-slate-600">
+        <span class="material-symbols-outlined text-sm text-slate-400">domain</span>
+        <span>Perusahaan Utama: <strong class="text-slate-800">{{ total_groups }}</strong> Group</span>
+      </div>
+      <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-100 font-medium text-emerald-700">
+        <span class="material-symbols-outlined text-sm text-emerald-500">account_tree</span>
+        <span>Anak Perusahaan: <strong class="text-emerald-800">{{ total_anak }}</strong> Klien</span>
+      </div>
+      <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 border border-blue-100 font-medium text-blue-700">
+        <span class="material-symbols-outlined text-sm text-blue-500">verified</span>
+        <span>Total Klien Terhitung: <strong class="text-blue-800">{{ total_klien_efektif }}</strong> Klien</span>
+      </div>
     </div>
   </div>
 
-  <!-- Filter & Search Toolbar (Sama persis seperti Asset Media) -->
-  <form method="get" class="flex flex-wrap items-center justify-between gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+  <!-- Filter & Search Toolbar -->
+  <form method="get" class="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
     <div class="flex flex-wrap items-center gap-2.5 flex-1 min-w-[280px]">
-      <div class="relative flex-1 min-w-[180px]">
+      <div class="relative flex-1 min-w-[200px]">
         <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</span>
-        <input type="text" name="q" value="{{ search_query }}" placeholder="Cari nama klien atau perusahaan utama..." class="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-gray-200 bg-white focus:border-emerald-500 focus:outline-none transition">
+        <input type="text" name="q" value="{{ search_query }}" placeholder="Cari nama group atau anak perusahaan..." class="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-gray-200 bg-slate-50/50 focus:bg-white focus:border-emerald-500 focus:outline-none transition">
       </div>
 
-      <select name="group" onchange="this.form.submit()" class="py-2 px-3 text-xs rounded-lg border border-gray-200 bg-white text-slate-700 font-medium focus:border-emerald-500 focus:outline-none transition">
-        <option value="">Semua Group / Perusahaan Utama ({{ groups.count }})</option>
-        {% for g in groups %}
-          <option value="{{ g.id }}" {% if current_group == g.id|stringformat:"s" %}selected{% endif %}>
-            {{ g.nama }} ({{ g.get_sektor_display }})
-          </option>
-        {% endfor %}
+      <select name="sektor" onchange="this.form.submit()" class="py-2 px-3 text-xs rounded-xl border border-gray-200 bg-white text-slate-700 font-medium focus:border-emerald-500 focus:outline-none transition">
+        <option value="">Semua Sektor</option>
+        <option value="swasta" {% if current_sektor == 'swasta' %}selected{% endif %}>Sektor Swasta</option>
+        <option value="publik" {% if current_sektor == 'publik' %}selected{% endif %}>Sektor Publik</option>
       </select>
 
-      <button type="submit" class="px-3.5 py-2 bg-slate-800 text-white text-xs font-semibold rounded-lg hover:bg-slate-700 transition cursor-pointer border-none">
+      <button type="submit" class="px-4 py-2 bg-slate-800 text-white text-xs font-semibold rounded-xl hover:bg-slate-700 transition cursor-pointer border-none">
         Filter
       </button>
 
-      {% if search_query or current_group %}
+      {% if search_query or current_sektor %}
       <a href="{% url 'client_list' %}" class="text-xs text-rose-600 hover:underline flex items-center gap-0.5 ml-1" style="text-decoration:none;">
-        <span class="material-symbols-outlined text-xs">clear</span> Reset
+        <span class="material-symbols-outlined text-xs">clear</span> Reset Filter
       </a>
       {% endif %}
     </div>
 
-    <div class="text-xs text-slate-500 font-medium">
-      Total: <span class="font-bold text-slate-800">{{ page_obj.paginator.count|default:clients.count }}</span> Klien
+    <!-- Quick Expand/Collapse All Buttons -->
+    <div class="flex items-center gap-2 text-xs">
+      <button type="button" onclick="expandAll()" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium transition cursor-pointer border-none flex items-center gap-1">
+        <span class="material-symbols-outlined text-xs">unfold_more</span> Buka Semua
+      </button>
+      <button type="button" onclick="collapseAll()" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium transition cursor-pointer border-none flex items-center gap-1">
+        <span class="material-symbols-outlined text-xs">unfold_less</span> Tutup Semua
+      </button>
     </div>
   </form>
 
-  <!-- Tabel Klien -->
-  <div class="overflow-x-auto w-full">
-    <table class="w-full text-left border-collapse text-sm table-auto">
-      <thead>
-        <tr class="bg-gray-50 border-b border-gray-100 text-gray-600">
-          <th class="p-4 font-semibold w-14 text-center">No.</th>
-          <th class="p-4 font-semibold w-24 text-center">Logo Group</th>
-          <th class="p-4 font-semibold">Nama Klien / Anak Perusahaan</th>
-          <th class="p-4 font-semibold">Group / Perusahaan Utama</th>
-          <th class="p-4 font-semibold text-center">Sektor</th>
-          <th class="p-4 font-semibold text-center">Proyek</th>
-          <th class="p-4 font-semibold text-center w-28">Aksi</th>
-        </tr>
-      </thead>
-      <tbody class="text-gray-700 divide-y divide-gray-50">
-        {% for client in clients %}
-        <tr class="hover:bg-slate-50/50 transition">
-          <td class="p-4 text-center align-middle font-medium text-gray-400 text-xs">
-            {% if is_paginated %}{{ page_obj.start_index|add:forloop.counter0 }}{% else %}{{ forloop.counter }}{% endif %}
-          </td>
-
-          <td class="p-4 align-middle text-center">
-            {% if client.group and client.group.logo %}
-              <img src="{{ client.group.logo.url }}" class="w-12 h-12 object-contain rounded-xl border border-gray-100 p-1 bg-white shadow-sm mx-auto" alt="{{ client.group.nama }}">
-            {% else %}
-               <span class="text-gray-400 text-xs bg-gray-100 px-2 py-1 rounded-md">No Logo</span>
-            {% endif %}
-          </td>
+  <!-- ACCORDION LIST: Group Perusahaan Utama & Anak Perusahaan -->
+  <div class="space-y-3">
+    {% for group in groups %}
+    <div class="border border-slate-200 rounded-2xl bg-white shadow-sm overflow-hidden transition-all duration-200 hover:border-slate-300" id="accordion-card-{{ group.id }}">
+      
+      <!-- HEADER ACCORDION (Perusahaan Utama) -->
+      <div class="p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer select-none bg-white hover:bg-slate-50/70 transition" onclick="toggleAccordion('{{ group.id }}')">
+        <div class="flex items-center gap-3.5 flex-1 min-w-0">
           
-          <td class="p-4 font-semibold text-slate-800 align-middle text-base">
-            <div class="line-clamp-1 leading-snug">{{ client.nama }}</div>
-          </td>
+          <!-- Tombol Segitiga / Triangle Accordion Toggle -->
+          <div class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 transition-transform duration-300 transform shrink-0 accordion-arrow" id="arrow-{{ group.id }}">
+            <span class="material-symbols-outlined text-xl leading-none">arrow_right</span>
+          </div>
 
-          <td class="p-4 align-middle text-slate-600 font-medium text-sm">
-            {% if client.group %}
-              <a href="?group={{ client.group.id }}" class="text-emerald-700 hover:underline flex items-center gap-1 font-semibold" style="text-decoration:none;">
-                <span class="material-symbols-outlined text-xs">domain</span> {{ client.group.nama }}
-              </a>
+          <!-- Logo Group -->
+          <div class="w-12 h-12 rounded-xl border border-slate-100 bg-white p-1 flex items-center justify-center shrink-0 shadow-sm">
+            {% if group.logo %}
+              <img src="{{ group.logo.url }}" alt="Logo {{ group.nama }}" class="max-h-full max-w-full object-contain">
             {% else %}
-              <span class="text-gray-400 italic">Tanpa Group</span>
+              <span class="material-symbols-outlined text-slate-300 text-2xl">domain</span>
             {% endif %}
-          </td>
+          </div>
 
-          <td class="p-4 align-middle text-center font-semibold">
-            {% if client.group %}
-              <span class="inline-block px-3 py-1 rounded-full text-xs 
-                {% if client.group.sektor == 'swasta' %}bg-blue-100 text-blue-800{% else %}bg-purple-100 text-purple-800{% endif %}">
-                {{ client.group.get_sektor_display }}
+          <!-- Nama Group & Metadata -->
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <h3 class="text-base font-bold text-slate-800 hover:text-emerald-700 transition leading-snug">{{ group.nama }}</h3>
+              
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold {% if group.sektor == 'swasta' %}bg-blue-50 text-blue-700 border border-blue-200/60{% else %}bg-purple-50 text-purple-700 border border-purple-200/60{% endif %}">
+                {{ group.get_sektor_display }}
               </span>
-            {% else %}
-              <span class="text-gray-400 text-xs">-</span>
-            {% endif %}
-          </td>
 
-          <td class="p-4 align-middle text-center">
-            <span class="inline-flex items-center gap-1 text-slate-600 font-semibold text-xs">
-              <span class="material-symbols-outlined text-xs text-slate-400">assignment</span>
-              {{ client.projects.count }}
-            </span>
-          </td>
+              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold {% if group.clients.count > 0 %}bg-emerald-50 text-emerald-700 border border-emerald-200/60{% else %}bg-slate-100 text-slate-500 border border-slate-200{% endif %}">
+                <span class="material-symbols-outlined text-xs">account_tree</span>
+                {{ group.clients.count }} Anak Perusahaan
+              </span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
+              <span>Klik untuk melihat daftar anak perusahaan di bawah group ini</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Tombol Aksi Group (stopPropagation agar klik tombol tidak memicu toggle accordion) -->
+        <div class="flex items-center gap-2 shrink-0" onclick="event.stopPropagation()">
+          <button type="button" onclick="openAddChildModal('{{ group.id }}', '{{ group.nama|escapejs }}')" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-semibold border border-emerald-200 transition cursor-pointer">
+            <span class="material-symbols-outlined text-sm">add</span>
+            <span class="hidden sm:inline">Tambah Anak</span>
+          </button>
           
-          <td class="p-4 text-center align-middle whitespace-nowrap">
-            <div class="flex justify-center items-center gap-2">
-              <a href="{% url 'client_update' client.pk %}" title="Edit Klien" class="inline-flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 p-2 rounded-xl border border-amber-200 shadow-sm transition">
-                <span class="material-symbols-outlined text-sm">edit</span>
-              </a>
-              <button type="button" data-url="{% url 'client_delete' client.pk %}" data-title="{{ client.nama }}" onclick="openDeleteModal(this.dataset.url, this.dataset.title)" title="Hapus Klien" class="inline-flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl border border-rose-200 shadow-sm transition cursor-pointer">
-                <span class="material-symbols-outlined text-sm">delete</span>
+          <a href="{% url 'client_group_update' group.pk %}" title="Edit Group Perusahaan" class="inline-flex items-center justify-center p-2 rounded-xl bg-slate-50 hover:bg-amber-50 text-slate-500 hover:text-amber-700 border border-slate-200 hover:border-amber-200 transition">
+            <span class="material-symbols-outlined text-sm">edit</span>
+          </a>
+          
+          <button type="button" onclick="openDeleteModal('{% url 'client_group_delete' group.pk %}', '{{ group.nama|escapejs }}', 'Hapus Group Perusahaan?', 'Semua anak perusahaan di dalam group ini akan ikut terhapus.')" title="Hapus Group Perusahaan" class="inline-flex items-center justify-center p-2 rounded-xl bg-slate-50 hover:bg-rose-50 text-slate-500 hover:text-rose-600 border border-slate-200 hover:border-rose-200 transition cursor-pointer">
+            <span class="material-symbols-outlined text-sm">delete</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- BODY ACCORDION (Daftar Anak Perusahaan) -->
+      <div id="body-{{ group.id }}" class="hidden border-t border-slate-100 bg-slate-50/60 p-4 sm:p-5">
+        {% if group.clients.all %}
+          <div class="overflow-x-auto rounded-xl border border-slate-200/80 bg-white">
+            <table class="w-full text-left border-collapse text-xs table-auto">
+              <thead>
+                <tr class="bg-slate-50/80 border-b border-slate-100 text-slate-500 font-semibold uppercase tracking-wider">
+                  <th class="p-3 w-12 text-center">No.</th>
+                  <th class="p-3">Nama Anak Perusahaan / Klien</th>
+                  <th class="p-3 text-center w-28">Proyek Terkait</th>
+                  <th class="p-3 text-center w-28">Aksi</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-slate-700">
+                {% for child in group.clients.all %}
+                <tr class="hover:bg-slate-50/80 transition">
+                  <td class="p-3 text-center text-slate-400 font-medium">{{ forloop.counter }}</td>
+                  <td class="p-3 font-semibold text-slate-800 text-sm">
+                    <div class="flex items-center gap-2">
+                      <span class="material-symbols-outlined text-slate-400 text-base">subdirectory_arrow_right</span>
+                      <span>{{ child.nama }}</span>
+                    </div>
+                  </td>
+                  <td class="p-3 text-center">
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-semibold text-[11px]">
+                      <span class="material-symbols-outlined text-xs text-slate-400">assignment</span>
+                      {{ child.projects.count }} Proyek
+                    </span>
+                  </td>
+                  <td class="p-3 text-center whitespace-nowrap">
+                    <div class="flex justify-center items-center gap-1.5">
+                      <a href="{% url 'client_update' child.pk %}" title="Edit Anak Perusahaan" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 transition">
+                        <span class="material-symbols-outlined text-xs">edit</span>
+                      </a>
+                      <button type="button" onclick="openDeleteModal('{% url 'client_delete' child.pk %}', '{{ child.nama|escapejs }}', 'Hapus Anak Perusahaan?', 'Klien ini akan dihapus dari group {{ group.nama|escapejs }}.')" title="Hapus Anak Perusahaan" class="inline-flex items-center justify-center p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 transition cursor-pointer">
+                        <span class="material-symbols-outlined text-xs">delete</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mt-3 flex justify-end">
+            <button type="button" onclick="openAddChildModal('{{ group.id }}', '{{ group.nama|escapejs }}')" class="text-xs font-semibold text-emerald-700 hover:text-emerald-800 hover:underline flex items-center gap-1 cursor-pointer bg-transparent border-none">
+              <span class="material-symbols-outlined text-sm">add</span> + Tambah Anak Perusahaan ke Group Ini
+            </button>
+          </div>
+
+        {% else %}
+          <!-- Tampilan Jika Belum Ada Anak Perusahaan -->
+          <div class="p-6 text-center bg-white rounded-xl border border-dashed border-slate-200 space-y-2">
+            <span class="material-symbols-outlined text-slate-300 text-3xl">account_tree</span>
+            <p class="text-xs text-slate-500 font-medium">Group <strong>{{ group.nama }}</strong> belum memiliki anak perusahaan yang didaftarkan.</p>
+            <p class="text-[11px] text-slate-400">Jika group ini berdiri sendiri, sistem tetap otomatis menghitungnya sebagai 1 klien pada portofolio.</p>
+            <div class="pt-2">
+              <button type="button" onclick="openAddChildModal('{{ group.id }}', '{{ group.nama|escapejs }}')" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition cursor-pointer border-none shadow-sm">
+                <span class="material-symbols-outlined text-sm">add</span> Tambah Anak Perusahaan Pertama
               </button>
             </div>
-          </td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="7" class="p-8 text-center text-gray-400 font-medium">
-            {% if current_group or search_query %}
-              Tidak ada klien yang cocok dengan filter. <a href="{% url 'client_list' %}" class="text-emerald-600 hover:underline">Reset filter</a>
-            {% else %}
-              Belum ada data klien / mitra. Klik "Tambah Klien" di atas untuk menambahkan.
-            {% endif %}
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+          </div>
+        {% endif %}
+      </div>
+
+    </div>
+    {% empty %}
+    <div class="bg-white p-12 text-center rounded-2xl border border-dashed border-slate-200 space-y-3">
+      <span class="material-symbols-outlined text-slate-300 text-4xl">domain_disabled</span>
+      <h3 class="text-base font-bold text-slate-700">Belum Ada Group Perusahaan</h3>
+      <p class="text-xs text-slate-400 max-w-sm mx-auto">Mulai tambahkan perusahaan utama / group terlebih dahulu untuk mengelompokkan klien.</p>
+      <button type="button" onclick="openQuickAddGroupModal()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition cursor-pointer border-none shadow-sm">
+        <span class="material-symbols-outlined text-sm">add</span> Tambah Group Pertama
+      </button>
+    </div>
+    {% endfor %}
   </div>
 
   {% include 'core/custom_admin/partials/pagination.html' %}
@@ -161,12 +239,12 @@
                 <span class="material-symbols-outlined text-emerald-600 text-xl">domain</span>
                 <h3 class="text-base font-bold text-neutral-900">Buat Group Perusahaan Baru</h3>
             </div>
-            <button type="button" onclick="closeQuickAddGroupModal()" class="text-gray-400 hover:text-gray-600 cursor-pointer">
+            <button type="button" onclick="closeQuickAddGroupModal()" class="text-gray-400 hover:text-gray-600 cursor-pointer bg-transparent border-none">
                 <span class="material-symbols-outlined text-lg">close</span>
             </button>
         </div>
         
-        <form id="quickGroupForm" method="POST" action="{% url 'quick_add_client_group' %}" enctype="multipart/form-data" class="space-y-4">
+        <form method="POST" action="{% url 'quick_add_client_group' %}" enctype="multipart/form-data" class="space-y-4">
             {% csrf_token %}
             <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Group / Perusahaan Utama <span class="text-red-500">*</span></label>
@@ -187,10 +265,10 @@
             </div>
 
             <div class="pt-3 border-t border-gray-100 flex items-center justify-end gap-2">
-                <button type="button" onclick="closeQuickAddGroupModal()" class="px-4 py-2 rounded-xl bg-gray-100 text-gray-700 text-xs font-semibold hover:bg-gray-200 transition-colors">
+                <button type="button" onclick="closeQuickAddGroupModal()" class="px-4 py-2 rounded-xl bg-gray-100 text-gray-700 text-xs font-semibold hover:bg-gray-200 transition-colors border-none cursor-pointer">
                     Batal
                 </button>
-                <button type="submit" class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-colors shadow-sm">
+                <button type="submit" class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-colors shadow-sm border-none cursor-pointer">
                     Simpan Group
                 </button>
             </div>
@@ -198,21 +276,64 @@
     </div>
 </div>
 
-<!-- MODAL POPUP KONFIRMASI HAPUS -->
+<!-- MODAL QUICK ADD ANAK PERUSAHAAN (CLIENT) -->
+<div id="addChildModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl border border-gray-100 transform transition-all scale-95 opacity-0 duration-300" id="addChildContent">
+        <div class="flex items-center justify-between border-b border-gray-100 pb-3 mb-4">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-emerald-600 text-xl">account_tree</span>
+                <h3 class="text-base font-bold text-neutral-900">Tambah Anak Perusahaan</h3>
+            </div>
+            <button type="button" onclick="closeAddChildModal()" class="text-gray-400 hover:text-gray-600 cursor-pointer bg-transparent border-none">
+                <span class="material-symbols-outlined text-lg">close</span>
+            </button>
+        </div>
+        
+        <form method="POST" action="{% url 'quick_add_client' %}" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Pilih Perusahaan Utama / Group <span class="text-red-500">*</span></label>
+                <select name="group" id="childGroupSelect" required class="w-full px-3 py-2 text-sm border border-gray-200 rounded-xl focus:border-emerald-500 focus:outline-none bg-white">
+                  <option value="">-- Pilih Group --</option>
+                  {% for g in all_groups %}
+                    <option value="{{ g.id }}">{{ g.nama }} ({{ g.get_sektor_display }})</option>
+                  {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Anak Perusahaan / Klien <span class="text-red-500">*</span></label>
+                <input type="text" name="nama" id="childNamaInput" required placeholder="Contoh: PT Pertamina EP Regional 2" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-xl focus:border-emerald-500 focus:outline-none">
+            </div>
+
+            <div class="pt-3 border-t border-gray-100 flex items-center justify-end gap-2">
+                <button type="button" onclick="closeAddChildModal()" class="px-4 py-2 rounded-xl bg-gray-100 text-gray-700 text-xs font-semibold hover:bg-gray-200 transition-colors border-none cursor-pointer">
+                    Batal
+                </button>
+                <button type="submit" class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-colors shadow-sm border-none cursor-pointer">
+                    Simpan Anak Perusahaan
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL POPUP KONFIRMASI HAPUS (UNIVERSAL) -->
 <div id="deleteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden">
     <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl border border-gray-100 text-center transform transition-all scale-95 opacity-0 duration-300" id="modalContent">
         <div class="w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-4">
             <span class="material-symbols-outlined text-2xl">delete</span>
         </div>
-        <h3 class="text-lg font-bold text-neutral-900 mb-2">Hapus Klien / Mitra?</h3>
-        <p class="text-sm text-gray-500 mb-6">Apakah Anda yakin ingin menghapus data klien <strong id="articleTitle" class="text-neutral-800"></strong> secara permanen? Tindakan ini tidak bisa dibatalkan.</p>
+        <h3 class="text-lg font-bold text-neutral-900 mb-2" id="deleteModalTitle">Konfirmasi Hapus</h3>
+        <p class="text-sm text-gray-500 mb-2">Apakah Anda yakin ingin menghapus <strong id="deleteItemName" class="text-neutral-800"></strong>?</p>
+        <p class="text-xs text-rose-600 font-medium mb-6" id="deleteWarningText"></p>
         
         <form id="deleteForm" method="POST" class="flex items-center justify-center gap-3">
             {% csrf_token %}
-            <button type="button" onclick="closeDeleteModal()" class="w-full py-2.5 rounded-xl bg-gray-100 text-gray-700 text-sm font-semibold hover:bg-gray-200 transition-colors">
+            <button type="button" onclick="closeDeleteModal()" class="w-full py-2.5 rounded-xl bg-gray-100 text-gray-700 text-sm font-semibold hover:bg-gray-200 transition-colors border-none cursor-pointer">
                 Batal
             </button>
-            <button type="submit" class="w-full py-2.5 rounded-xl bg-rose-600 text-white text-sm font-semibold hover:bg-rose-700 transition-colors shadow-md shadow-rose-500/20">
+            <button type="submit" class="w-full py-2.5 rounded-xl bg-rose-600 text-white text-sm font-semibold hover:bg-rose-700 transition-colors shadow-md shadow-rose-500/20 border-none cursor-pointer">
                 Ya, Hapus
             </button>
         </form>
@@ -220,6 +341,64 @@
 </div>
 
 <script>
+    // FUNGSI TOGGLE ACCORDION
+    function toggleAccordion(groupId) {
+        const body = document.getElementById('body-' + groupId);
+        const arrow = document.getElementById('arrow-' + groupId);
+        if (!body || !arrow) return;
+
+        const isClosed = body.classList.contains('hidden');
+
+        if (isClosed) {
+            body.classList.remove('hidden');
+            arrow.classList.add('rotate-90', 'text-emerald-700', 'bg-emerald-50');
+        } else {
+            body.classList.add('hidden');
+            arrow.classList.remove('rotate-90', 'text-emerald-700', 'bg-emerald-50');
+        }
+    }
+
+    // BUKA SEMUA ACCORDION
+    function expandAll() {
+        document.querySelectorAll('[id^="body-"]').forEach(body => {
+            body.classList.remove('hidden');
+        });
+        document.querySelectorAll('.accordion-arrow').forEach(arrow => {
+            arrow.classList.add('rotate-90', 'text-emerald-700', 'bg-emerald-50');
+        });
+    }
+
+    // TUTUP SEMUA ACCORDION
+    function collapseAll() {
+        document.querySelectorAll('[id^="body-"]').forEach(body => {
+            body.classList.add('hidden');
+        });
+        document.querySelectorAll('.accordion-arrow').forEach(arrow => {
+            arrow.classList.remove('rotate-90', 'text-emerald-700', 'bg-emerald-50');
+        });
+    }
+
+    // AUTO OPEN JIKA ADA PARAMETER ?open=ID
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const openId = urlParams.get('open');
+        if (openId) {
+            const targetBody = document.getElementById('body-' + openId);
+            const targetArrow = document.getElementById('arrow-' + openId);
+            const targetCard = document.getElementById('accordion-card-' + openId);
+            if (targetBody && targetArrow) {
+                targetBody.classList.remove('hidden');
+                targetArrow.classList.add('rotate-90', 'text-emerald-700', 'bg-emerald-50');
+                if (targetCard) {
+                    targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    targetCard.classList.add('ring-2', 'ring-emerald-400');
+                    setTimeout(() => targetCard.classList.remove('ring-2', 'ring-emerald-400'), 2000);
+                }
+            }
+        }
+    });
+
+    // MODAL QUICK ADD GROUP
     function openQuickAddGroupModal() {
         const modal = document.getElementById('quickGroupModal');
         const content = document.getElementById('quickGroupContent');
@@ -235,19 +414,52 @@
         const content = document.getElementById('quickGroupContent');
         content.classList.remove('scale-100', 'opacity-100');
         content.classList.add('scale-95', 'opacity-0');
-        setTimeout(() => {
-            modal.classList.add('hidden');
-        }, 300);
+        setTimeout(() => modal.classList.add('hidden'), 250);
     }
 
-    function openDeleteModal(deleteUrl, itemName) {
+    // MODAL TAMBAH ANAK PERUSAHAAN
+    function openAddChildModal(groupId = '', groupName = '') {
+        const modal = document.getElementById('addChildModal');
+        const content = document.getElementById('addChildContent');
+        const select = document.getElementById('childGroupSelect');
+        const namaInput = document.getElementById('childNamaInput');
+
+        if (groupId && select) {
+            select.value = groupId;
+        }
+        if (namaInput) {
+            namaInput.value = '';
+        }
+
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+            if (namaInput) namaInput.focus();
+        }, 10);
+    }
+
+    function closeAddChildModal() {
+        const modal = document.getElementById('addChildModal');
+        const content = document.getElementById('addChildContent');
+        content.classList.remove('scale-100', 'opacity-100');
+        content.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => modal.classList.add('hidden'), 250);
+    }
+
+    // MODAL KONFIRMASI HAPUS UNIVERSAL
+    function openDeleteModal(deleteUrl, itemName, title = 'Konfirmasi Hapus', warning = 'Tindakan ini tidak bisa dibatalkan.') {
         const modal = document.getElementById('deleteModal');
         const modalContent = document.getElementById('modalContent');
         const deleteForm = document.getElementById('deleteForm');
-        const titleSpan = document.getElementById('articleTitle');
+        const nameSpan = document.getElementById('deleteItemName');
+        const titleElem = document.getElementById('deleteModalTitle');
+        const warningElem = document.getElementById('deleteWarningText');
 
         deleteForm.action = deleteUrl;
-        titleSpan.innerText = `"${itemName}"`;
+        nameSpan.innerText = `"${itemName}"`;
+        if (titleElem) titleElem.innerText = title;
+        if (warningElem) warningElem.innerText = warning;
 
         modal.classList.remove('hidden');
         setTimeout(() => {
@@ -259,12 +471,10 @@
     function closeDeleteModal() {
         const modal = document.getElementById('deleteModal');
         const modalContent = document.getElementById('modalContent');
-
         modalContent.classList.remove('scale-100', 'opacity-100');
         modalContent.classList.add('scale-95', 'opacity-0');
-        setTimeout(() => {
-            modal.classList.add('hidden');
-        }, 300);
+        setTimeout(() => modal.classList.add('hidden'), 250);
     }
 </script>
+
 {% endblock %}
