@@ -1,4 +1,5 @@
 import json
+import logging
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -624,6 +625,40 @@ def story_delete_view(request, pk):
 # 4. MANAGEMENT MITRA / KLIEN (GROUP + CLIENT)
 # ==========================================
 
+logger = logging.getLogger(__name__)
+
+def auto_save_logo_to_gallery(client_group):
+    """
+    Otomatis mendaftarkan logo klien/mitra yang diunggah dari laptop
+    ke sistem Galeri / Aset Media ke dalam folder 'Logo Klien & Mitra'.
+    """
+    if not client_group or not client_group.logo:
+        return
+    try:
+        from datetime import datetime
+        from django.utils import timezone
+        folder, _ = Folder.objects.get_or_create(
+            nama="Logo Klien & Mitra",
+            defaults={
+                'nama_ind': 'Logo Klien & Mitra',
+                'nama_en': 'Client & Partner Logos',
+                'tahun': datetime.now().year,
+            }
+        )
+        caption = f"Logo {client_group.nama}"
+        # Cek apakah sudah pernah ada di gallery dengan file yang sama agar tidak duplikat
+        if not Gallery.objects.filter(gambar=client_group.logo.name).exists():
+            Gallery.objects.create(
+                caption=caption,
+                caption_ind=caption,
+                caption_en=caption,
+                gambar=client_group.logo.name,
+                folder=folder,
+                tanggal_upload=timezone.now().date(),
+            )
+    except Exception as e:
+        logger.warning(f"Gagal auto-save logo ke galeri: {e}")
+
 # --- CLIENT GROUP (Perusahaan Utama) ---
 class ClientGroupListView(AdminRequiredMixin, ListView):
     model = ClientGroup
@@ -642,8 +677,11 @@ class ClientGroupCreateView(AdminRequiredMixin, MediaAssetPickerMixin, CreateVie
     success_url = reverse_lazy('client_group_list')
 
     def form_valid(self, form):
+        response = super().form_valid(form)
+        if self.request.FILES.get('logo'):
+            auto_save_logo_to_gallery(self.object)
         messages.success(self.request, 'Group klien baru berhasil ditambahkan!')
-        return super().form_valid(form)
+        return response
 
 class ClientGroupUpdateView(AdminRequiredMixin, MediaAssetPickerMixin, UpdateView):
     model = ClientGroup
@@ -653,8 +691,11 @@ class ClientGroupUpdateView(AdminRequiredMixin, MediaAssetPickerMixin, UpdateVie
     success_url = reverse_lazy('client_group_list')
 
     def form_valid(self, form):
+        response = super().form_valid(form)
+        if self.request.FILES.get('logo'):
+            auto_save_logo_to_gallery(self.object)
         messages.success(self.request, 'Data group klien berhasil diperbarui!')
-        return super().form_valid(form)
+        return response
 
 @login_required(login_url='/be/login/')
 @user_passes_test(lambda u: u.is_staff, login_url='/be/login/')
@@ -689,6 +730,9 @@ def quick_add_client_group_view(request):
             sektor=sektor,
             logo=logo
         )
+
+        if logo:
+            auto_save_logo_to_gallery(group)
 
         if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.POST.get('is_ajax'):
             return JsonResponse({
